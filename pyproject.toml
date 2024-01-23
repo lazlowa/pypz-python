@@ -1,0 +1,49 @@
+[project]
+name = "pypz-python"
+authors = [
+    { name = "Laszlo Anka", email = "laszlo.anka@gmail.com" }
+]
+description = "lightweight Pipeline as Code (PaC) framework"
+readme = "README.md"
+license = { text = "Apache-2.0" }
+requires-python = ">=3.11"
+classifiers = [
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.11"
+]
+keywords = [
+    "pypz"
+]
+
+[project.optional-dependencies]
+static = [
+    "flake8 ~= 7.0.0",
+    "flake8-html ~= 0.4.3",
+    "mypy[reports] ~= 1.8.0",
+    "coverage ~= 7.4.1"
+]
+docs =  [
+    "sphinx-rtd-theme >= 2.0.0",
+    "sphinx ~= 7.2.6",
+    "sphinx-autodoc-typehints >= 1.25.2",
+    "sphinx-copybutton ~= 0.5.2",
+    "graphviz >= 0.20.1",
+    "pydot >= 2.0.0"
+]
+
+[tool.mypy]
+python_version = "3.11"
+files = [
+    "./core/src/**/*.py",
+    "./deployers/k8s/src/**/*.py",
+    "./plugins/kafka_io/src/**/*.py",
+    "./plugins/amq_io/src/**/*.py",
+    "./sniffer/src/**/*.py"
+]
+namespace_packages = "True"
+explicit_package_bases = "True"
+ignore_missing_imports = "True"
+strict_optional = "False"
+allow_redefinition = "True"
+disable_error_code = "no-redef"
