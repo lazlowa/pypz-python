@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pypz-core"
+dynamic = ["version"]
+authors = [
+    { name = "Laszlo Anka", email = "laszlo.anka@gmail.com" }
+]
+description = "Core components of pypz (pipes), which is a lightweight Pipeline as Code (PaC) framework."
+readme = "README.md"
+requires-python = ">=3.11"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.11"
+]
+keywords = [
+    "pypz",
+    "pypz-core"
+]
+dependencies = [
+    "colorlog"
+]
+
+[tool.setuptools.dynamic]
+version = {attr = "pypz.version.PROJECT_VERSION"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+namespaces = true

@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pypz-kafka-io"
+version = "0.9.0b4"
+authors = [
+    { name = "Laszlo Anka", email = "laszlo.anka@gmail.com" }
+]
+description = "Provides a Kafka implementation of the ChannelInput/OutputPort in pypz."
+readme = "README.md"
+requires-python = ">=3.11"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.11"
+]
+keywords = [
+    "pypz",
+    "plugin",
+    "kafka"
+]
+dependencies = [
+    "pypz-core",
+    "avro==1.10.1",
+    "kafka-python==2.0.2",
+    "avro-validator==1.2.1"
+]
+
+
+[tool.setuptools.packages.find]
+where = ["src"]
+namespaces = true

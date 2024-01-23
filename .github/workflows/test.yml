@@ -1,0 +1,132 @@
+name: "Test :: All"
+
+on: push
+
+jobs:
+  check-changes:
+    name: "Check Changes"
+    runs-on: ubuntu-latest
+    outputs:
+      core: ${{ steps.changes.outputs.core }}
+      deployer_k8s: ${{ steps.changes.outputs.deployer_k8s }}
+      plugin_kafka_io: ${{ steps.changes.outputs.plugin_kafka_io }}
+      sniffer: ${{ steps.changes.outputs.sniffer }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            core:
+              - ".github/workflows/test.yml"
+              - "core/**"
+            deployer_k8s:
+              - ".github/workflows/test.yml"
+              - "core/**"
+              - "deployers/k8s/**"
+            plugin_kafka_io:
+              - ".github/workflows/test.yml"
+              - "core/**"
+              - "plugins/kafka_io/**"
+            sniffer:
+              - ".github/workflows/test.yml"
+              - "core/**"
+              - "sniffer/**"
+
+  core:
+    name: "Core"
+    needs: check-changes
+    runs-on: ubuntu-latest
+    if: needs.check-changes.outputs.core == 'true'
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.11"
+    - name: Install
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install pyyaml
+        python -m pip install build
+        python -m pip install -e core/
+    - name: Test
+      run: |
+        python -m unittest discover core/test -p "*.py"
+
+  deployer_k8s:
+    name: "Deployer :: Kubernetes"
+    needs: check-changes
+    runs-on: ubuntu-latest
+    if: needs.check-changes.outputs.deployer_k8s == 'true'
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.11"
+    - name: Install
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install pyyaml
+        python -m pip install build        
+        python -m pip install -e core/
+        python -m pip install -e deployers/k8s/
+    - name: Create k8s Kind Cluster
+      uses: helm/kind-action@v1.5.0
+      with:
+        cluster_name: "kind"
+    - name: Waiting
+      run: sleep 5
+    - name: Build Test Image
+      run: docker build -t pypz-test-image deployers/k8s/test/resources
+    - name: Load Test Image
+      run: kind load docker-image pypz-test-image
+    - name: Test
+      run: python -m unittest discover deployers/k8s/test -p "*.py"
+
+  plugin_kafka_io:
+    name: "Plugin :: Kafka IO"
+    needs: check-changes
+    runs-on: ubuntu-latest
+    if: needs.check-changes.outputs.plugin_kafka_io == 'true'
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.11"
+    - name: Install
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install pyyaml
+        python -m pip install build
+        python -m pip install -e core/
+        python -m pip install -e plugins/kafka_io/
+    - name: Start Local Kafka Cluster
+      run: docker run -d -it --rm -p 9092:9092 confluentinc/confluent-local:7.5.3
+    - name: Waiting
+      run: sleep 5
+    - name: Test
+      run: python -m unittest discover plugins/kafka_io/test -p "*.py"
+
+  sniffer:
+    name: "Sniffer"
+    needs: check-changes
+    runs-on: ubuntu-latest
+    if: needs.check-changes.outputs.sniffer == 'true'
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.11"
+    - name: Install
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install pyyaml
+        python -m pip install build
+        python -m pip install -e core/
+        python -m pip install -e sniffer/
+    - name: Test
+      run: python -m unittest discover sniffer/test -p "*.py"
