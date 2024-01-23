@@ -1,0 +1,4 @@
+-e ./core
+-e ./deployers/k8s
+-e ./plugins/kafka_io
+-e ./sniffer

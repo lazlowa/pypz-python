@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pypz-amq-io"
+version = "0.9.0b9"
+authors = [
+    { name = "Laszlo Anka", email = "laszlo.anka@gmail.com" }
+]
+description = "Provides an Active Message Queue Protocol implementation of the ChannelInput/OutputPort in pypz."
+readme = "README.md"
+license = { text = "Apache-2.0" }
+requires-python = ">=3.11"
+classifiers = [
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.11"
+]
+keywords = [
+    "pypz",
+    "plugin",
+    "amqp"
+]
+dependencies = [
+    "pypz-core",
+    "stomp.py==7.0.0",
+    "stompest==2.3.0"
+]
+
+[project.optional-dependencies]
+static = [
+    "flake8 ~= 7.0.0",
+    "flake8-html ~= 0.4.3",
+    "mypy ~= 1.8.0",
+    "coverage ~= 7.4.1"
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+namespaces = true

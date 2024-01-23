@@ -1,0 +1,58 @@
+<mxfile host="Electron" modified="2024-01-31T14:31:29.723Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.1.21 Chrome/120.0.6099.109 Electron/28.1.0 Safari/537.36" etag="XtUar03BGVJ4-_uy0Yji" version="22.1.21" type="device">
+  <diagram name="Page-1" id="bf55CM-UF1sACK0ydFgU">
+    <mxGraphModel dx="1036" dy="625" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="A-W998lmlx4RPp3HRFfS-11" value="" style="rounded=0;whiteSpace=wrap;html=1;labelPosition=center;verticalLabelPosition=middle;align=center;verticalAlign=top;strokeColor=none;" parent="1" vertex="1">
+          <mxGeometry x="20" y="120" width="810" height="370" as="geometry" />
+        </mxCell>
+        <mxCell id="A-W998lmlx4RPp3HRFfS-10" value="Pipeline" style="rounded=0;whiteSpace=wrap;html=1;labelPosition=center;verticalLabelPosition=middle;align=center;verticalAlign=top;fillColor=none;dashed=1;" parent="1" vertex="1">
+          <mxGeometry x="60" y="170" width="730" height="250" as="geometry" />
+        </mxCell>
+        <mxCell id="6v_vvv1EOwoQ7fwK1Mrw-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="A-W998lmlx4RPp3HRFfS-1" target="A-W998lmlx4RPp3HRFfS-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="A-W998lmlx4RPp3HRFfS-1" value="File Reader" style="rounded=0;whiteSpace=wrap;html=1;labelPosition=center;verticalLabelPosition=middle;align=center;verticalAlign=middle;" parent="1" vertex="1">
+          <mxGeometry x="75" y="230" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="6v_vvv1EOwoQ7fwK1Mrw-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="A-W998lmlx4RPp3HRFfS-2" target="A-W998lmlx4RPp3HRFfS-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="A-W998lmlx4RPp3HRFfS-2" value="KPI Extractor" style="rounded=0;whiteSpace=wrap;html=1;labelPosition=center;verticalLabelPosition=middle;align=center;verticalAlign=middle;" parent="1" vertex="1">
+          <mxGeometry x="335" y="230" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="A-W998lmlx4RPp3HRFfS-7" value="Result Collector" style="rounded=0;whiteSpace=wrap;html=1;labelPosition=center;verticalLabelPosition=middle;align=center;verticalAlign=middle;" parent="1" vertex="1">
+          <mxGeometry x="595" y="230" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="6v_vvv1EOwoQ7fwK1Mrw-3" value="KPI Extractor" style="rounded=0;whiteSpace=wrap;html=1;labelPosition=center;verticalLabelPosition=middle;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="345" y="240" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="6v_vvv1EOwoQ7fwK1Mrw-4" value="KPI Extractor" style="rounded=0;whiteSpace=wrap;html=1;labelPosition=center;verticalLabelPosition=middle;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="355" y="250" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="6v_vvv1EOwoQ7fwK1Mrw-5" value="KPI Extractor" style="rounded=0;whiteSpace=wrap;html=1;labelPosition=center;verticalLabelPosition=middle;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="365" y="260" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="6v_vvv1EOwoQ7fwK1Mrw-6" value="KPI Extractor" style="rounded=0;whiteSpace=wrap;html=1;labelPosition=center;verticalLabelPosition=middle;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="375" y="270" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="6v_vvv1EOwoQ7fwK1Mrw-7" value="KPI Extractor" style="rounded=0;whiteSpace=wrap;html=1;labelPosition=center;verticalLabelPosition=middle;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="385" y="280" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="6v_vvv1EOwoQ7fwK1Mrw-8" value="KPI Extractor" style="rounded=0;whiteSpace=wrap;html=1;labelPosition=center;verticalLabelPosition=middle;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="395" y="290" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="6v_vvv1EOwoQ7fwK1Mrw-9" value="KPI Extractor" style="rounded=0;whiteSpace=wrap;html=1;labelPosition=center;verticalLabelPosition=middle;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="405" y="300" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="6v_vvv1EOwoQ7fwK1Mrw-10" value="KPI Extractor" style="rounded=0;whiteSpace=wrap;html=1;labelPosition=center;verticalLabelPosition=middle;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="415" y="310" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="6v_vvv1EOwoQ7fwK1Mrw-11" value="KPI Extractor" style="rounded=0;whiteSpace=wrap;html=1;labelPosition=center;verticalLabelPosition=middle;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="425" y="320" width="180" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

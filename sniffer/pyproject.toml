@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pypz-io-sniffer"
+version = "0.9.0b9"
+license = { text = "Apache-2.0" }
+authors = [
+    { name = "Laszlo Anka", email = "laszlo.anka@gmail.com" }
+]
+description = "A small tool that is capable to sniff and visualize the control messages between Operators."
+readme = "README.md"
+requires-python = ">=3.11"
+classifiers = [
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.11"
+]
+keywords = [
+    "pypz",
+    "sniffer"
+]
+dependencies = [
+    "pypz-core"
+]
+
+[project.optional-dependencies]
+static = [
+    "flake8 ~= 7.0.0",
+    "flake8-html ~= 0.4.3",
+    "mypy ~= 1.8.0",
+    "coverage ~= 7.4.1"
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+namespaces = true
