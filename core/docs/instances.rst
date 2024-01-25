@@ -2,9 +2,8 @@
 Introduction
 ============
 
-.. raw:: html
-    :file: ./resources/pypz_01.drawio.html
-
+.. image:: ./resources/pypz_01.drawio.png
+  :alt: Alternative text
 
 - structure
 - instances
