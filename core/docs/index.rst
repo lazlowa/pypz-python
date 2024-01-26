@@ -10,24 +10,23 @@ Welcome to pypz's documentation!
    :maxdepth: 2
    :caption: Core:
 
-   overview
-   models
-   parameters
-   data_transfer
-   executor
-   logging
-   deployer
+   core/models
+   core/parameters
+   core/data_transfer
+   core/executor
+   core/logging
+   core/deployer
 
 .. toctree::
    :maxdepth: 2
    :caption: Guides:
 
-   ht_create_pipeline
-   ht_create_plugin
-   ht_create_channel
-   ht_create_deployer
-   ht_build_and_package
-   ht_debug_in_operator
+   guides/ht_create_pipeline
+   guides/ht_create_plugin
+   guides/ht_create_channel
+   guides/ht_create_deployer
+   guides/ht_build_and_package
+   guides/ht_debug_in_operator
 
 .. toctree::
    :maxdepth: 2

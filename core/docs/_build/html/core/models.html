@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Models &#8212; pypz  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=12dfc556" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Parameters" href="parameters.html" />
+    <link rel="prev" title="Welcome to pypz’s documentation!" href="../index.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="models">
+<h1>Models<a class="headerlink" href="#models" title="Link to this heading">¶</a></h1>
+<p>As usual, there is a multi-layered design behind <em>pypz</em>. It means that on the highest level there is
+the pipeline, which contains the operators, which contains the actual business logic. However, it
+is possible to enhance the functionalities of the operators via plugins e.g., the port plugins by
+which the operators can transfer data between each other or the logger plugins that enables the
+operator to send logs to the specified targets.</p>
+<p>Fig - basic diagram about the pipelines</p>
+<section id="instances">
+<h2>Instances<a class="headerlink" href="#instances" title="Link to this heading">¶</a></h2>
+<p>Each runtime entities in pypz (pipelines, operators, plugins) are represented as instances.
+The blueprints of the instances are called specs and are represented as classes in the code.
+In other words, you can consider the specs as the classes and the instances the objects
+created from the classes. This design enables <em>pypz</em> to model the pipelines as code.
+The Instance class itself is the base for every other specs. It contains all the necessary
+logic and feature that is required by the mentioned design.</p>
+<p>Fig - Inheritance model</p>
+<p>The instance class is designed in a way that it could be used on its own, the Pipeline, Operator and
+Plugin classes are specializing and somewhat restricting the base Instance class in a way that is
+necessary for <em>pypz</em>.</p>
+<p>Basically an instance has the following attributes:</p>
+<ul class="simple">
+<li><p>name (required), which identifies the instance in runtime</p></li>
+<li><p>parameters</p></li>
+<li><p>dependencies to other instances</p></li>
+<li><p>nested instances i.e., other instances attached to the current instance’s context e.g., an operator is a nested instance to a pipeline</p></li>
+<li><p>context instance i.e., the parent instance e.g., the pipeline is the context of an operator</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The name of the instance can be provided either as constructor argument or if it has a context and
+the argument is omitted, then the name of instance will be the name of the variable.</p>
+</div>
+</section>
+<section id="operator">
+<h2>Operator<a class="headerlink" href="#operator" title="Link to this heading">¶</a></h2>
+</section>
+<section id="pipeline">
+<h2>Pipeline<a class="headerlink" href="#pipeline" title="Link to this heading">¶</a></h2>
+</section>
+<section id="plugins">
+<h2>Plugins<a class="headerlink" href="#plugins" title="Link to this heading">¶</a></h2>
+</section>
+<section id="working-with-yaml">
+<h2>Working with YAML<a class="headerlink" href="#working-with-yaml" title="Link to this heading">¶</a></h2>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">pypz</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Core:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#instances">Instances</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#operator">Operator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pipeline">Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#plugins">Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#working-with-yaml">Working with YAML</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="parameters.html">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_transfer.html">Data transfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="executor.html">Executor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="logging.html">Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deployer.html">Deployer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guides:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guides/ht_create_pipeline.html">How to create a pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/ht_create_plugin.html">How to create a plugin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/ht_create_channel.html">How to create a channel</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/ht_create_deployer.html">How to create a deployer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/ht_build_and_package.html">How to build and package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/ht_debug_in_operator.html">How to debug in a deployed operator</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lazlowa/pypz-python">Source Code</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lazlowa/pypz-starter-template">Starter Template Project</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lazlowa/pypz-examples">Examples</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../index.html" title="previous chapter">Welcome to pypz’s documentation!</a></li>
+      <li>Next: <a href="parameters.html" title="next chapter">Parameters</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2024, Laszlo Anka.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+      |
+      <a href="../_sources/core/models.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
