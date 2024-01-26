@@ -26,6 +26,13 @@ dependencies = [
     "colorlog"
 ]
 
+[project.optional-dependencies]
+docs = [
+  "furo >= 2023.08.17",
+  "sphinx ~= 7.2.6",
+  "sphinx-autodoc-typehints >= 1.25.2"
+]
+
 [tool.setuptools.dynamic]
 version = {attr = "pypz.version.PROJECT_VERSION"}
 

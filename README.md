@@ -55,11 +55,9 @@ parameters of a SW product with having a customer on your neck.
 Your ETL pipeline has to extract images from millions of videos. The images
 shall be prepared and stored for further processing.
 
-# Documentation
-Check each subproject for the documentation.
-
 # Examples
 Starter project template - https://github.com/lazlowa/pypz-starter-template
+
 Usage examples - https://github.com/lazlowa/pypz-examples
 
 ---
