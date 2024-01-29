@@ -1,2 +1,4 @@
+.. _logging:
+
 Logging
 =======

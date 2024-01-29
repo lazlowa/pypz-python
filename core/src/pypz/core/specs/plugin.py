@@ -29,16 +29,10 @@ if TYPE_CHECKING:
 
 class Plugin(Instance[None], InstanceGroup, RegisteredInterface, ABC):
     """
-    This is interface has the only purpose to separate the plugin interfaces
+    This interface has the only purpose to separate the plugin interfaces
     from other interfaces like the Operator. It is necessary to avoid the
     case, where an Operator could be nested into other Operators. All
     plugin interfaces shall extend this one.
-    There are 3 different types of plugins:
-    - operation plugins
-    - service plugins
-    - addons
-    The difference is in their lifecycle management during the execution.
-    For more information check the docs in the respective classes.
     """
 
     def __init__(self, name: str = None, *args, **kwargs):
@@ -102,7 +96,7 @@ class ResourceHandlerPlugin(Plugin, RegisteredInterface, ABC):
     """
     This plugin interface allows to implement resource management related
     functionalities. The respective methods will be called at specific
-    times during the execution.
+    times during the execution. Check :ref:`executor` for more information.
     """
 
     @abstractmethod
@@ -319,7 +313,8 @@ class ServicePlugin(Plugin, RegisteredInterface, ABC):
 class ExtendedPlugin(Plugin, RegisteredInterface, ABC):
     """
     This interface extends the normal plugin's lifecycle. The methods
-    defined span outside the execution context.
+    defined span outside the execution context, hence it can be used,
+    if you need to perform some action before and after execution.
     """
 
     @abstractmethod

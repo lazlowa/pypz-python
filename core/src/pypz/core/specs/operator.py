@@ -38,7 +38,6 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
         This is a wrapper class for the logging functionality. It wraps all the
         implementations of the LoggerAddons and by invoking either method it
         will invoke the corresponding method of each LoggerAddons.
-        TODO - make the calls multi-threaded and/or asynchronous?
         """
 
         def __init__(self, logger_plugins: set[LoggerPlugin]):
@@ -90,8 +89,12 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
 
     # ========================= parameters =========================
 
-    _operator_image_name = OptionalParameter(str, alt_name="operatorImageName")
+    _operator_image_name = OptionalParameter(str, alt_name="operatorImageName",
+                                             description="The image containing the operator's resources. "
+                                                         "It will be used mainly by the deployers.")
     _replication_factor = OptionalParameter(int, alt_name="replicationFactor",
+                                            description="Determines, how many replicas "
+                                                        "shall be created from the original.",
                                             on_update=lambda instance, val: instance.__replicate())
 
     # ========================= ctor =========================
@@ -147,19 +150,39 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
     def _on_init(self) -> bool:
         """
         This method shall implement the logic to initialize the operation.
-        :return: True succeeded, False if more iteration required (to not block the execution)
+        It will be called after services are started and resources are created.
+
+        :return:
+
+        - True, if finished
+        - False, if more iteration required (to not block the execution)
         """
         pass
 
     @abstractmethod
     def _on_running(self) -> Optional[bool]:
+        """
+        This method shall implement the actual business logic.
+        It will be called after the _on_init has successfully finished
+
+        :return:
+
+        - True, if finished
+        - False, if more iteration required (to not block the execution)
+        - None, if automatically to be determined based on all inputs i.e., if no more input record, then finish
+        """
         pass
 
     @abstractmethod
     def _on_shutdown(self) -> bool:
         """
         This method shall implement the logic to shut down the operation.
-        :return: True succeeded, False if more iteration required (to not block the execution)
+        It will be called, after the _on_running has successfully finished.
+
+        :return:
+
+        - True, if finished
+        - False, if more iteration required (to not block the execution)
         """
         pass
 

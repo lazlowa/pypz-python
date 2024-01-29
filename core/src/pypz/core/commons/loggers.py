@@ -23,6 +23,11 @@ from colorlog import ColoredFormatter
 
 
 class ContextLoggerInterface(ABC):
+    """
+    This interface provides the necessary methods to be able to implement
+    the context logging functionality. Context logging means that there
+    is exactly one logger, which will be (re)used in the given context.
+    """
 
     @abstractmethod
     def _error(self, event: Optional[str] = None, context_stack: list[str] = None, *args: Any, **kw: Any) -> Any:
@@ -45,9 +50,30 @@ class ContextLoggerInterface(ABC):
 
 
 class ContextLogger(ContextLoggerInterface):
+    """
+    This class has the responsibility to provide a simple logging interface, which
+    hides the complexity of maintaining the context information. The user can
+    call the familiar methods without knowing, how the context information are
+    handled by the protected methods.
+
+    By expecting a logger in the constructor we are allowing to reuse existing loggers
+    from higher contexts i.e., a top-level instance can provide it's logger to the
+    nested instances along with the context information. The nested instance can
+    further forward to it's nested instances and so on. Each instance provides itself
+    to the context stack so, if a logger method of the actual context will be called,
+    then the logger itself will get the context information automatically.
+    """
+
     def __init__(self, logger: ContextLoggerInterface, *context_stack: str):
         self._logger: ContextLoggerInterface = logger
+        """
+        The provided logger to use on this context
+        """
+
         self._context_stack: list[str] = [*context_stack]
+        """
+        The context stack, which contains the actual and all parent contexts
+        """
 
     def get_context_stack(self) -> list[str]:
         return self._context_stack

@@ -28,9 +28,10 @@ dependencies = [
 
 [project.optional-dependencies]
 docs = [
-  "furo >= 2023.08.17",
-  "sphinx ~= 7.2.6",
-  "sphinx-autodoc-typehints >= 1.25.2"
+    "furo >= 2023.08.17",
+    "sphinx ~= 7.2.6",
+    "sphinx-autodoc-typehints >= 1.25.2",
+    "graphviz >= 0.20.1"
 ]
 
 [tool.setuptools.dynamic]

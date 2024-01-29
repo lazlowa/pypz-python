@@ -348,6 +348,7 @@ class Instance(Generic[NestedInstanceType], RegisteredInterface, ABC, metaclass=
         The same parent context means that if there is an operatorA with plugin1
         and plugin2 and an operatorB with plugin3, then only plugin1 and plugin2
         can express dependencies to each other, since plugin3 is in another operator.
+
         :param instance: dependency instance
         """
 
@@ -374,6 +375,7 @@ class Instance(Generic[NestedInstanceType], RegisteredInterface, ABC, metaclass=
     def get_dto(self) -> InstanceDTO:
         """
         Converts the instance information into the corresponding Data Transfer Object (DTO)
+
         :return: DTO from instance
         """
 
@@ -399,6 +401,7 @@ class Instance(Generic[NestedInstanceType], RegisteredInterface, ABC, metaclass=
         This method allows to update certain attributes of the instance based on the
         provided DTO. All attributes can be updated here as well, for which a setter
         exists, in addition one can inject additional nested instances or update existing.
+
         :param source: json string, dict or DTO
         """
 
@@ -558,6 +561,7 @@ class Instance(Generic[NestedInstanceType], RegisteredInterface, ABC, metaclass=
         Creates an instance object from the DTO representation. It is capable
         to retrieve and load specified classes and to update created instances
         according to the DTO.
+
         :param instance_dto: instance DTO
         :return: instance object specified by the DTO
         """
@@ -646,6 +650,11 @@ class Instance(Generic[NestedInstanceType], RegisteredInterface, ABC, metaclass=
 
 
 class InstanceGroup(ABC):
+    """
+    This class provides methods to access instance group related information. It can be
+    implemented on different instance level, since a group might have different meaning
+    on top level and on nested level.
+    """
 
     @abstractmethod
     def get_group_size(self) -> int:
