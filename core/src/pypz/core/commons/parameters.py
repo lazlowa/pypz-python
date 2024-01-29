@@ -33,23 +33,28 @@ class ExpectedParameter(Generic[ParameterType]):
     you need to describe the parameter on class level (which shall be one of the
     RegisteredInterface) then you need to refer with the same name as instance variable.
     Usage:
-        class TestImpl(Instance):
-            required_param = ExpectedParameter(True, str)
-            optional_param = ExpectedParameter(False, str)
 
-            def __init__(self):
-                self.required_param = None
-                self.optional_param = "defaultValue"
+    .. code-block:: python
 
-        This is equivalent to:
+       class TestImpl(Instance):
+           required_param = ExpectedParameter(required=True, parameter_type=str)
+           optional_param = ExpectedParameter(required=False, parameter_type=str)
 
-        class TestImpl(Instance):
-            required_param = RequiredParameter(str)
-            optional_param = OptionalParameter(str)
+           def __init__(self):
+               self.required_param = None
+               self.optional_param = "defaultValue"
 
-            def __init__(self):
-                self.required_param = None
-                self.optional_param = "defaultValue"
+    This is equivalent to:
+
+    .. code-block:: python
+
+       class TestImpl(Instance):
+           required_param = RequiredParameter(str)
+           optional_param = OptionalParameter(str)
+
+           def __init__(self):
+               self.required_param = None
+               self.optional_param = "defaultValue"
     """
 
     NamePrefix = "__private_instance_parameter__"

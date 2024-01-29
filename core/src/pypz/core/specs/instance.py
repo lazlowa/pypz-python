@@ -301,6 +301,7 @@ class Instance(Generic[NestedInstanceType], RegisteredInterface, ABC, metaclass=
         """
         Convenience parameter setter method for dicts, where all key value pair will be
         set separately
+
         :param parameters: parameter dict
         """
 
@@ -308,6 +309,21 @@ class Instance(Generic[NestedInstanceType], RegisteredInterface, ABC, metaclass=
             self.set_parameter(name, value)
 
     def get_expected_parameters(self) -> dict | str:
+        """
+        Returns all the expected parameters as dictionary. Each parameter has the following types:
+
+        .. code-block:: python
+
+           result = {
+               'name': {
+                   'type': 'str | int | float | set | list | dict | type(None)',
+                   'required': 'True | False',
+                   'description': 'str',
+                   'currentValue': 'str | int | float | set | list | dict | None'
+               }
+           }
+        """
+
         expected_parameters = dict()
         [expected_parameters.update(param.to_dict(self))
          for param in self.__expected_parameters.values()]
@@ -503,6 +519,7 @@ class Instance(Generic[NestedInstanceType], RegisteredInterface, ABC, metaclass=
         expected nested instance type, then it retrieves the instance's
         simple name if not given, and then it links the both the parent and
         the nested context to each other
+
         :param name: name of the variable
         :param value: value of the variable
         """
@@ -643,6 +660,7 @@ class Instance(Generic[NestedInstanceType], RegisteredInterface, ABC, metaclass=
         """
         Helper method to provide the functionality to create an instance from
         a json model specified either as string or as dict.
+
         :param source: model as string
         :return: instance object specified by the DTO
         """

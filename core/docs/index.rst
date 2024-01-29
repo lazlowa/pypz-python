@@ -7,7 +7,7 @@ Welcome to pypz's documentation!
 ================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Core:
 
    core/models
@@ -18,18 +18,17 @@ Welcome to pypz's documentation!
    core/deployer
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Guides:
 
    guides/ht_create_pipeline
    guides/ht_create_plugin
    guides/ht_create_channel
-   guides/ht_create_deployer
    guides/ht_build_and_package
    guides/ht_debug_in_operator
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Links:
 
    Source Code <https://github.com/lazlowa/pypz-python>

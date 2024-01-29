@@ -9,6 +9,8 @@ operator to send logs to the specified targets. The plugins are on the lowest le
 
 !!!Fig - basic diagram about the pipelines
 
+.. _instances:
+
 Instances
 ---------
 
@@ -83,24 +85,41 @@ You can define expected parameters for your Instance spec. You can expect both r
 optional parameters to be set for your instance. Check the :ref:`parameters section <parameters>`
 for a more detailed explanation.
 
-Data Transfer Object
-++++++++++++++++++++
+Data Transfer Object (DTO)
+++++++++++++++++++++++++++
 
-If you want to deploy your pipelines remotely, it is necessary to transfer all the information
-about the Instance i.e., the entire Instance with all its nested Instances shall be serialized
-before sending and deserialized after receiving and before creating the actual Instance object
-again. Since the amount of data for a pipeline is not huge and since we want to ensure that
-the serialized format of an Instance is human-readable, we are using YAML.
+If you want to transfer Instances to outside of the current process, we need to convert it
+into a representation, which can then be serialized. This representation is an additional
+model called the DTO. By having an intermediate model, we can ensure that only those information
+are transmitted that is really necessary to be able to reconstruct an instance object.
 
-To serialize an Instance, you can use
+To get the DTO of an Instance, you can use:
 
 .. automethod:: pypz.core.specs.instance.Instance.get_dto
 
-To deserialize and to create an Instance object, you can use
+To construct an Instance object from a DTO, you can use:
 
 .. automethod:: pypz.core.specs.instance.Instance.create_from_dto
 
-You can find an example `here <https://github.com/lazlowa/pypz-examples>`_
+Working with YAML
+~~~~~~~~~~~~~~~~~
+
+Currently *pypz* serializes the DTOs into YAML, since it is human readable and provides features
+out of the box, which JSON lacks the support of (e.g., representing sets).
+
+To convert an Instance into a YAML string, you can use:
+
+.. code-block:: python
+
+   yaml_string = str(instance)
+
+In the background, the instance will be converted into a DTO, which then will be converted into a YAML string.
+
+To construct an Instance from a YAML string, you can use:
+
+.. automethod:: pypz.core.specs.instance.Instance.create_from_string
+
+You can find a usage example `here <https://github.com/lazlowa/pypz-examples>`_
 
 Instance Groups
 +++++++++++++++
