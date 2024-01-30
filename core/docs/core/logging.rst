@@ -64,6 +64,7 @@ a logger plugin, then you actually implement the `ContextLoggerInterface`.
 Furthermore, there is a `ContextLoggerInterface` implementation in the Operator:
 
 .. autoclass:: pypz.core.specs.operator.Operator.Logger
+   :no-index:
 
 This class implements the functionality to abstract the method call of all LoggerPlugins in the operator context.
 
