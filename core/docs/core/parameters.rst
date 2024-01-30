@@ -22,6 +22,8 @@ For this a descriptor class is used:
 
 .. autoclass:: pypz.core.commons.parameters.ExpectedParameter
 
+   .. automethod:: __init__
+
 As you can see, the expected parameters shall be defined both as class and instance variable, where
 the class variable has the type of the descriptor class and the instance variable the actual
 parameter value.
@@ -55,5 +57,76 @@ all existing plugins in the pipeline like this:
 
    pipeline.set_parameter(">>channelLocation", "valid_url")
 
+There are two types of cascading parameters:
+
+- **including**, if the parameter name is prefixed by "`#`", then the parameter will not just be cascaded, but will be applied on the level, where it was set
+- **excluding**, if the parameter name is prefixed by "`>`", then the parameter will be cascaded, but it will not be applied on the level, where it was set
+
+The number of prefixes determines, how many levels will a parameter be cascaded.
+
+The example above is a two-level, excluding cascading parameter i.e., it will be cascaded from pipeline to plugin
+level without applying it to either pipeline or operator level.
+
+Examples:
+
+.. code-block:: python
+
+   # Set on pipeline and operator level
+   pipeline.set_parameter("#param", "value")
+
+   # Set on pipeline, operator and plugin level
+   pipeline.set_parameter("##param", "value")
+
+   # Set on operator and plugin level
+   operator.set_parameter("##param", "value")
+
+   # Set on plugin level
+   operator.set_parameter(">param", "value")
+
+   # Set on operator and plugin level
+   pipeline.set_parameter(">#param", "value")
+
+   # Set on pipeline and plugin level
+   pipeline.set_parameter("#>param", "value")
+
 Template parameters
 -------------------
+
+Imagine the case, where your operator has to access secured resources and it needs the appropriate
+credentials. Obviously, there are options like using some credential store solutions like key-vaults
+or using third-party libs. However, *pypz* provides a template interpolation features for parameters.
+
+Based on the time, when the templates are interpolated, there are two different templating syntax.
+
+.. note::
+   Note that currently only environment variables can be resolved. It is planned to extend this feature
+   to resolve files and remote locations as well in the future.
+
+Instance time templates
++++++++++++++++++++++++
+
+Syntax: `${}`
+
+.. code-block:: python
+
+   # Set on pipeline and operator level
+   instance.set_parameter("secret", "${env:SECRET}")
+
+In this case the template is resolved as soon as the parameter is on the instance. This can be used,
+if you deploy a pipeline from your system, where you can set the value for the environment variable.
+**However, the secret will be visible in the serialized configuration.**
+
+Execution time templates
+++++++++++++++++++++++++
+
+Syntax: `$()`
+
+.. code-block:: python
+
+   # Set on pipeline and operator level
+   instance.set_parameter("secret", "$(env:SECRET)")
+
+In this case the template is resolved by the executor itself i.e., on the machine, where the executor
+is started. This requires the capability to control the environment variables on that machine. Unlike
+in case of the instance time template parameters, the value of the execution time template is not
+visible in the serialized configuration.

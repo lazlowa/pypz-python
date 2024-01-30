@@ -69,10 +69,9 @@ class ExpectedParameter(Generic[ParameterType]):
                  description: Optional[str] = None,
                  on_update: Callable[[Any], None] = None):
         """
-        GenericParameter descriptor ctor.
         :param required: true, if parameter required, false if not
-        :param parameter_type: type of the parameter to be expected
-        :param alt_name: alternative name for the parameter
+        :param parameter_type: (str, int, float, set, list, dict, type(None))
+        :param alt_name: alternative name for the parameter, if specified it acts as reference to the parameter
         :param on_update: callback to react on value update
         """
 
