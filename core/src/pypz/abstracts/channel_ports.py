@@ -41,11 +41,20 @@ class ChannelInputPort(InputPortPlugin, ResourceHandlerPlugin, ExtendedPlugin, A
 
     # ======================= parameter descriptors =======================
 
-    _channel_location = RequiredParameter(str, alt_name=ParamKeyChannelLocationConfig)
-    _channel_config = OptionalParameter(dict, alt_name=ParamKeyChannelConfig)
-    _sequential_mode_enabled = OptionalParameter(bool, alt_name=ParamKeySequentialModeEnabled)
-    _port_open_timeout_ms = OptionalParameter(int, alt_name=ParamKeyPortOpenTimeoutMs)
-    _sync_connections_open = OptionalParameter(bool, alt_name=ParamKeySyncConnectionsOpen)
+    _channel_location = RequiredParameter(str, alt_name=ParamKeyChannelLocationConfig,
+                                          description="Location of the channel resource")
+    _channel_config = OptionalParameter(dict, alt_name=ParamKeyChannelConfig,
+                                        description="Configuration of the channel as dictionary")
+    _sequential_mode_enabled = OptionalParameter(bool, alt_name=ParamKeySequentialModeEnabled,
+                                                 description="If set to True, then this port will wait with the "
+                                                             "processing start until all the connected output "
+                                                             "ports are finished")
+    _port_open_timeout_ms = OptionalParameter(int, alt_name=ParamKeyPortOpenTimeoutMs,
+                                              description="Specifies, how long the port shall wait for incoming"
+                                                          "connections")
+    _sync_connections_open = OptionalParameter(bool, alt_name=ParamKeySyncConnectionsOpen,
+                                               description="If set to True, the port will wait for every expected"
+                                                           "output ports to be connected")
 
     # ======================= ctor =======================
 
@@ -255,9 +264,13 @@ class ChannelOutputPort(OutputPortPlugin, ResourceHandlerPlugin, ExtendedPlugin,
 
     # ======================= parameter descriptors =======================
 
-    _channel_location = RequiredParameter(str, alt_name=ParamKeyChannelLocationConfig)
-    _channel_config = OptionalParameter(dict, alt_name=ParamKeyChannelConfig)
-    _port_open_timeout_ms = OptionalParameter(int, alt_name=ParamKeyPortOpenTimeoutMs)
+    _channel_location = RequiredParameter(str, alt_name=ParamKeyChannelLocationConfig,
+                                          description="Location of the channel resource")
+    _channel_config = OptionalParameter(dict, alt_name=ParamKeyChannelConfig,
+                                        description="Configuration of the channel as dictionary")
+    _port_open_timeout_ms = OptionalParameter(int, alt_name=ParamKeyPortOpenTimeoutMs,
+                                              description="Specifies, how long the port shall wait for incoming"
+                                                          "connections")
 
     # ======================= ctor =======================
 

@@ -123,12 +123,15 @@ To construct an Instance from a YAML string, you can use:
 
 You can find a usage example `here <https://github.com/lazlowa/pypz-examples>`_
 
+.. _instance_group:
+
 Instance Groups
 +++++++++++++++
 
 Instances can be grouped together. For example, if you :ref:`replicate <operator_replication>` an operator, then
-you are creating a group of operators. The class InstanceGroup provides the methods to access useful
-group related information.
+you are creating a group of operators. The original instance in this case is called "principal".
+
+The class InstanceGroup provides the methods to access useful group related information.
 
 .. autoclass:: pypz.core.specs.instance.InstanceGroup
 
@@ -161,14 +164,14 @@ Expected Parameters
 A more detailed explanation about the expected parameters can be found in :ref:`parameters section <parameters>`.
 This section presents only the expected parameters of the Operator instances.
 
-*operatorImageName*
-~~~~~~~~~~~~~~~~~~~
+*operatorImageName* (default: None)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The name of the Docker image, where you included the implemented Operator. This will mainly be used by the
 container related deployers.
 
-*replicationFactor*
-~~~~~~~~~~~~~~~~~~~
+*replicationFactor* (default: 0)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This value will determine, how many replicas shall be created from an operator.
 

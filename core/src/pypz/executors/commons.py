@@ -26,28 +26,29 @@ class ExecutionMode(Enum):
 
     Standard = "Standard"
     """
-    In this mode the ESM will perform its standard execution.
-    VERY IMPORTANT NOTE, Standard means that resources will be created and deleted up automatically by ESM. If
+    In this mode the state machine will follow its standard route.
+    Note that `Standard` means that resources will be created and deleted up automatically. If
     you want to have a standard mode, where resources are only created, but not deleted, then use the
-    StandardModeWithoutResourceDeletion
+    WithoutResourceDeletion
     """
 
     WithoutResourceDeletion = "WithoutResourceDeletion"
     """
-    In this mode the ESM will perform its standard execution. However the StateDeleteResources will be skipped. This
-    is a relevant use-case, if you want to trigger centralized resource cleanup after the operations are done.
+    In this mode the state machine will follow its standard route. 
+    However the StateResourceDeletion will be skipped. This is a relevant use-case, 
+    if you want to trigger centralized resource cleanup after the operations are done.
     """
 
     ResourceCreationOnly = "ResourceCreationOnly"
     """
-    In this mode only resource creation will be considered. ESM is having the following plan:
-    StateEntry->StateStartServices->StateCreateResources->StateShutdownServices->StateKilled
+    In this mode the state machine will execute resource creation only. Note that services
+    will be started before and stopped after resource creation.
     """
 
     ResourceDeletionOnly = "ResourceDeletionOnly"
     """
-    In this mode only resource deletion will be considered. ESM is having the following plan:
-    StateEntry->StateStartServices->StateDeleteResources->StateShutdownServices->StateKilled
+    In this mode the state machine will execute resource deletion only. Note that services
+    will be started before and stopped after resource creation.
     """
 
 

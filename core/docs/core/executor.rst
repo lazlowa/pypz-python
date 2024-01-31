@@ -4,7 +4,24 @@ Executor
 ========
 
 Since the operator entity in *pypz* is self-contained, an executor is required, which controls the execution
-flow of the entire operator incl. plugins. This is achieved through a simple state machine.
+flow of the entire operator incl. plugins. The executor has the following main components:
+
+- execution context
+- state machine
+
+Execution Context
+-----------------
+
+The execution context is responsible to maintain all the necessary information during execution.
+It can be forwarded to the states of the state machine as well.
+
+The execution context has the following responsibilities:
+
+- check, if all required parameters are set
+- maintain exit code
+- register plugins along their types
+- traverse plugin dependency graph
+- store information about execution mode
 
 State machine
 -------------
@@ -70,3 +87,16 @@ State machine
 
 Execution modes
 ---------------
+
+As you might see on the state machine diagram, there are different routes from start to end.
+Which route the state machine will take depends not just on the execution results of the
+states, but on the specified execution mode as well.
+
+Imagine the case, where your one or more operators in your pipeline crashed. Resources might
+not have been released in this case. Since *pypz* does not know anything about your resources,
+only you do, *pypz* cannot provide an integrated feature to clean up your resources. However,
+what *pypz* can provide is an execution mode, where only resources will be deleted instead
+of running the actual business logic.
+
+.. autoclass:: pypz.executors.commons.ExecutionMode
+   :members:
