@@ -6,12 +6,16 @@ Data transfer
 Data transfer between operations in a pipeline is essential, without it we would speak about workflows.
 In *pypz* data transfer is possible between operators through so called *ports*.
 
-!!! Fig pipeline with operators and ports
+.. figure:: ../resources/images/basic_pipeline.png
+   :alt: Basic pipeline
+   :align: center
+
+   Basic pipeline
 
 Ports
 -----
 
-A an input and output port in *pypz* is an actual implementation of the corresponding interfaces:
+An input and output port in *pypz* is an actual implementation of the corresponding interfaces:
 
 .. inheritance-diagram::
    pypz.core.specs.plugin.InputPortPlugin
@@ -29,7 +33,7 @@ Basically, you are free to implement any technology behind ports as long as you 
    :members:
    :no-index:
 
-.. warning::
+.. important::
    Note that although *pypz* has a lot of builtin guards and trails to ensure execution stability,
    it does not have quality guarantees for custom interface implementations i.e., *pypz* will not
    take responsibility to any damage caused during execution of a custom plugin.
@@ -48,7 +52,21 @@ view on how data can be transferred across ports.
 In *pypz*'s view, each connection between ports can/shall be isolated. Such a connection can be represented
 as a *channel*.
 
-!!! Fig pipeline,operators,ports,channels
+.. figure:: ../resources/images/pipeline_w_ports_and_channels.png
+   :alt: Pipeline with ports and channels
+   :align: center
+
+   Pipeline with ports and channels
+
+Actually, in the reality the channel is a virtual model, it exists due to the fact, that there is a resource
+somewhere, where the data is written to and read from. The actual functionality is put into so called channel
+readers and channel writers.
+
+.. figure:: ../resources/images/channel_w_reader_writer.png
+   :alt: ChannelReader/-Writer
+   :align: center
+
+   ChannelReader/-Writer
 
 Channels provide a solution to the following challenges:
 
@@ -116,7 +134,11 @@ Although `ChannelOutputPort` and `ChannelInputPort` have an N-to-M relation, the
 i.e., a `ChannelOutputPort` will create as many `ChannelWriters` as many `ChannelInputPort`
 is connected, but the `ChannelInputPort` creates only one `ChannelReader`.
 
-!!! Fig show the concept
+.. figure:: ../resources/images/multiple_channel_w_reader_writer.png
+   :alt: ChannelWriter-ChannelReader N-1
+   :align: center
+
+   ChannelWriter-ChannelReader N-1
 
 The reason is that from `ChannelInputPort` perspective you have certain expectations w.r.t. records, so there
 is no reason to create different `ChannelReader` entities, because all the `ChannelWriters` shall meet your

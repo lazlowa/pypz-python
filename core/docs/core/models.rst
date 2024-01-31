@@ -7,9 +7,13 @@ There is a multi-layered design behind *pypz*. It means that on the highest leve
 the pipeline, which contains the operators one level deeper with the actual business logic.
 It is possible to enhance the functionalities of the operators via plugins e.g., the port plugins by
 which the operators can transfer data between each other or the logger plugins that enables the
-operator to send logs to the specified targets. The plugins are on the lowest level.
+operator to send logs to the specified targets. The plugins are on the third, lowest level.
 
-!!!Fig - basic diagram about the pipelines
+.. figure:: ../resources/images/basic_pipeline.png
+   :alt: Basic pipeline
+   :align: center
+
+   Basic pipeline
 
 .. _instances:
 
@@ -90,7 +94,7 @@ for a more detailed explanation.
 Data Transfer Object (DTO)
 ++++++++++++++++++++++++++
 
-If you want to transfer Instances to outside of the current process, we need to convert it
+If you want to transfer Instances to outside of the current process, you need to convert it
 into a representation, which can then be serialized. This representation is an additional
 model called the DTO. By having an intermediate model, we can ensure that only those information
 are transmitted that is really necessary to be able to reconstruct an instance object.
@@ -107,7 +111,7 @@ Working with YAML
 ~~~~~~~~~~~~~~~~~
 
 Currently *pypz* serializes the DTOs into YAML, since it is human readable and provides features
-out of the box, which JSON lacks the support of (e.g., representing sets).
+out of the box, which JSON lacks the support of (e.g., interpreting sets).
 
 To convert an Instance into a YAML string, you can use:
 
@@ -134,6 +138,10 @@ you are creating a group of operators. The original instance in this case is cal
 The class InstanceGroup provides the methods to access useful group related information.
 
 .. autoclass:: pypz.core.specs.instance.InstanceGroup
+   :members:
+   :undoc-members:
+
+Notice that this interface shall be implemented by the instance types that can form groups e.g. Operator and Plugin.
 
 Pipeline
 --------
@@ -142,9 +150,6 @@ As its name suggests, the Pipeline class represents a pipeline in *pypz*. Its ne
 defined as the Operator class. Basically it does not alter or extend the functionality of the
 Instance class, since unlike the operators and plugins, the pipeline is a virtual organization
 of the Operators.
-
-You can define your operators in the constructor along with some intentionally static configuration
-like the :ref:`connection <operator_connection>` between operators.
 
 Operator
 --------
@@ -184,12 +189,29 @@ Connections
 
 You can connect operators by the so called :ref:`port plugins <port_plugins>`.
 
-!!! Fig - operators with port plugins
-
 The connection can be defined on pipeline level, where you shall specify, which operator's which port plugin
 shall be connected to which other operator's which port plugin.
 
-!!! Fig - code block
+.. code-block:: python
+
+   class WriterOperator(Operator):
+       def __init__(self, name: str = None, *args, **kwargs):
+           super().__init__(name, *args, **kwargs)
+           self.output_port = OutputPortPlugin()
+
+   class ReaderOperator(Operator):
+       def __init__(self, name: str = None, *args, **kwargs):
+           super().__init__(name, *args, **kwargs)
+           self.input_port = InputPortPlugin()
+
+   class CustomPipeline(Pipeline):
+       def __init__(self, name: str, *args, **kwargs):
+           super().__init__(name, *args, **kwargs)
+
+           self.reader_operator = ReaderOperator()
+           self.writer_operator = WriterOperator()
+
+           self.reader_operator.input_port.connect(self.writer_operator.output_port)
 
 Check :ref:`data_transfer` for more details.
 
@@ -200,7 +222,11 @@ Replication
 
 Let's take the following pipeline as example:
 
-!!!Fig - pipeline FileReader Processor Aggregator
+.. figure:: ../resources/images/sample_pipeline_wo_replication.png
+   :alt: Without replication
+   :align: center
+
+   Without replication
 
 The first operator reads the files from some share, the second operator performs
 some KPI extraction and the third operator aggregates the results and stores
@@ -212,7 +238,11 @@ provides the feature of operator replication. This enables selective scaling
 in the pipeline. For example, let's replicate the KPI extractor operator 99
 times, which will result in total 100 operator (original + replicas):
 
-!!! Fig - replicated operator in pipeline
+.. figure:: ../resources/images/sample_pipeline_w_replication.png
+   :alt: With replication
+   :align: center
+
+   With replication
 
 The output of the FileReader operator will distribute the files evenly across
 all the processor operator, hence those will share the load, which will result

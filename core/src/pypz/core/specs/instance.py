@@ -264,6 +264,7 @@ class Instance(Generic[NestedInstanceType], RegisteredInterface, ABC, metaclass=
         Parameter setter method, which interprets the templates and handles cascading
         parameters. One can ignore setting values for existing parameters via the
         provided flag.
+
         :param name: parameter name
         :param value: parameter value
         """

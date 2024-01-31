@@ -98,10 +98,6 @@ or using third-party libs. However, *pypz* provides a template interpolation fea
 
 Based on the time, when the templates are interpolated, there are two different templating syntax.
 
-.. note::
-   Note that currently only environment variables can be resolved. It is planned to extend this feature
-   to resolve files and remote locations as well in the future.
-
 Instance time templates
 +++++++++++++++++++++++
 
@@ -130,3 +126,9 @@ In this case the template is resolved by the executor itself i.e., on the machin
 is started. This requires the capability to control the environment variables on that machine. Unlike
 in case of the instance time template parameters, the value of the execution time template is not
 visible in the serialized configuration.
+
+-----------------------------------------------------------------------------------------------------------
+
+.. note::
+   Note that currently only environment variables can be resolved. It is planned to extend this feature
+   to resolve files and remote locations as well in the future.
