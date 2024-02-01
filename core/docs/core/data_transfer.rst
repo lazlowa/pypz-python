@@ -155,6 +155,8 @@ Further information:
 - in shutdown phase it is made sure that all channels have at least one attempt to shut down itself even it a previous
   channel threw an exception
 
+.. _channel_expected_parameters:
+
 Expected Parameters
 +++++++++++++++++++
 

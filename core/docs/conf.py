@@ -19,7 +19,8 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.inheritance_diagram',
-    'sphinx.ext.graphviz'
+    'sphinx.ext.graphviz',
+    'sphinx_copybutton'
 ]
 
 # -- Options for HTML output -------------------------------------------------

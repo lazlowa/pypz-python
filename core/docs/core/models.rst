@@ -67,6 +67,8 @@ the nested instances. It is important, since at construction time all attributes
 and if one of them has the type of the expected nested instance type, then it will be automatically
 identified as a nested instance.
 
+.. _instance_metaclass:
+
 Metaclass
 +++++++++
 

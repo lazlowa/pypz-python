@@ -44,6 +44,8 @@ parameter value.
    Note that although you can define an initial value for the required parameters, a value setting
    will still be required.
 
+.. _cascading_parameters:
+
 Cascading parameters
 --------------------
 

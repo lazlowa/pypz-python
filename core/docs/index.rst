@@ -23,8 +23,6 @@ Welcome to pypz's documentation!
 
    guides/ht_create_pipeline
    guides/ht_create_plugin
-   guides/ht_create_channel
-   guides/ht_build_and_package
    guides/ht_debug_in_operator
 
 .. toctree::
