@@ -1,7 +1,7 @@
 How to create a pipeline
 ========================
 
-What you will learn
+What You Will Learn
 -------------------
 
 - The basics of pypz in python
@@ -16,8 +16,8 @@ What you will learn
    TLDR: you can find the completed exercise along with other examples in the
    `example repository <https://github.com/lazlowa/pypz-examples>`_
 
-You will need
--------------
+What You Will Need
+------------------
 
 - Python 3.11+
 - an IDE of your choice, however PyCharm CE has been used for this guide
@@ -26,7 +26,7 @@ You will need
 - (optional) access to a Kubernetes Cluster (you can use `Kind <https://kind.sigs.k8s.io>`_ locally)
 - (optional) access to a Docker image registry (not necessary if Kind used)
 
-Setting up the project
+Setting Up The Project
 ----------------------
 
 1. Create a project based on this `template <https://github.com/lazlowa/pypz-starter-template>`_
@@ -37,7 +37,7 @@ Setting up the project
 
 4. Install the dependencies and the current project in editable mode: ``pip install -e .``
 
-The plan
+The Plan
 --------
 
 We are going to create the following "Hello world" pipeline:
@@ -694,7 +694,7 @@ Run ``sniffer.py``
 
 Run ``deploy.py``
 
-Play with replication
+Play with Replication
 ---------------------
 
 You can :ref:`replicate <operator_replication>` operators by setting the replication factor as parameter.
@@ -756,3 +756,86 @@ Adapt the ``sniffer.py`` accordingly.
 You can now run the ``deploy.py`` and ``sniffer.py`` scripts. If everything is ok, you should see something like this:
 
 .. image:: ../resources/images/ht_cp_sniffer_2.gif
+
+Additional Optimizations
+------------------------
+
+Expected Parameters
++++++++++++++++++++
+
+In the ``DemoWriterOperator`` we are using hardcoded values for both the message and the maximal record count.
+These values should actually be parameters that the user can set from outside, so we are introducing the following
+:ref:`expected_parameters`:
+
+- recordCount, which will be a required parameter
+- message, which will be an optional parameter with the default value of "HelloWorld"
+
+Adapt the code in the ``writer.py`` file:
+
+.. code-block:: python
+   :emphasize-lines: 14,15,16,27,32,41,50
+
+   import time
+   from typing import Optional
+
+   from pypz.core.commons.parameters import OptionalParameter, RequiredParameter
+   from pypz.core.specs.operator import Operator
+   from pypz.plugins.kafka_io.ports import KafkaChannelOutputPort
+   from pypz.plugins.loggers.default import DefaultLoggerPlugin
+
+
+   class DemoWriterOperator(Operator):
+
+       ...
+
+       record_count = RequiredParameter(int, alt_name="recordCount",
+                                        description="Specifies number of records to send")
+       message = OptionalParameter(str, description="Specifies the message prefix for the record")
+
+       def __init__(self, name: str = None, *args, **kwargs):
+           super().__init__(name, *args, **kwargs)
+
+           self.output_port = KafkaChannelOutputPort(schema=DemoWriterOperator.AvroSchemaString)
+
+           self.output_record_count: int = 0
+
+           self.logger = DefaultLoggerPlugin()
+
+           self.record_count = None
+           """
+           Since it is a required parameter, the initial value does not matter.
+           """
+
+           self.message = "HelloWorld"
+           """
+           This is an optional parameter, the default value is the initial value of the variable.
+           """
+
+       ...
+
+       def _on_running(self) -> Optional[bool]:
+           record_to_send = {
+               "text": f"{self.message}_{self.output_record_count}"
+           }
+
+           self.get_logger().info(f"Generated record: {record_to_send}")
+
+           self.output_port.send([record_to_send])
+
+           self.output_record_count += 1
+
+           if self.record_count == self.output_record_count:
+               return True
+
+           time.sleep(1)
+
+           return False
+
+       ...
+
+Then you can set the parameters outside of the pipeline in either ``execute.py`` or ``deploy.py``.
+
+.. code-block:: python
+
+   pipeline.writer.set_parameter("recordCount", 30)
+   pipeline.writer.set_parameter("message", "Other message")

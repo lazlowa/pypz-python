@@ -22,7 +22,6 @@ Welcome to pypz's documentation!
    :caption: Guides:
 
    guides/ht_create_pipeline
-   guides/ht_create_plugin
    guides/ht_debug_in_operator
 
 .. toctree::
