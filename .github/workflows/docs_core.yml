@@ -19,6 +19,7 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install pyyaml
         python -m pip install -e ./core/.[docs]
+        apt install graphviz
     - name: Build
       run: |
         sphinx-build ./core/docs ./core/docs/_build
