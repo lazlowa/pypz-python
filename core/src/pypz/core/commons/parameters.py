@@ -204,13 +204,15 @@ class RequiredParameter(ExpectedParameter[ParameterType]):
     """
     Convenience class to represent a required parameter
     Usage:
-        class TestImpl(Instance):
-            required_param = RequiredParameter(str)
-            optional_param = OptionalParameter(str)
 
-            def __init__(self):
-                self.required_param = None
-                self.optional_param = "defaultValue"
+    .. code-block::
+
+       class TestImpl(Instance):
+           required_param = RequiredParameter(str)
+           optional_param = OptionalParameter(str)
+           def __init__(self):
+               self.required_param = None
+               self.optional_param = "defaultValue"
     """
 
     def __init__(self,
@@ -225,13 +227,15 @@ class OptionalParameter(ExpectedParameter[ParameterType]):
     """
     Convenience class to represent an optional parameter
     Usage:
-        class TestImpl(Instance):
-            required_param = RequiredParameter(str)
-            optional_param = OptionalParameter(str)
 
-            def __init__(self):
-                self.required_param = None
-                self.optional_param = "defaultValue"
+    .. code-block::
+
+       class TestImpl(Instance):
+           required_param = RequiredParameter(str)
+           optional_param = OptionalParameter(str)
+           def __init__(self):
+               self.required_param = None
+               self.optional_param = "defaultValue"
     """
 
     def __init__(self,
@@ -247,6 +251,7 @@ def retrieve_parameters(input_val, parameter_type: Type[ExpectedParameter]) -> d
     This method attempts to retrieve all described parameters with
     either public or protected scope. Private scoped parameters are
     ignored.
+
     :param input_val: object or class to be mapped
     :param parameter_type: parameter type to look for
     :return: dict of parameter names to parameter objects
@@ -364,6 +369,7 @@ class ParameterSchemaBuilder:
             If the type is class type, then it will be checked, whether it is an Enum.
             If not, then generic parameters will be attempted to be extracted. Then
             the actual type will be converted to string.
+
             :param param_type: type to be converted
             :param generic_parameters: optional generic parameters
             :return: next builder phase

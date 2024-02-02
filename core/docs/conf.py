@@ -37,3 +37,7 @@ inheritance_node_attrs = dict(shape='ellipse',
                               color='dodgerblue1',
                               style='filled',
                               height=0.8)
+
+import os
+import sys
+sys.path.insert(0, os.path.abspath('../src/pypz'))
