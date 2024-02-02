@@ -169,41 +169,14 @@ each logger plugins’ corresponding methods manually, we want to abstract this,
 is one call.</p>
 <p>The following diagram shows the inheritance map of the logging-relevant classes:</p>
 <figure class="align-default" id="id2">
-digraph inheritance694f7133b1 {
-bgcolor=transparent;
-rankdir=TB;
-ratio=fill;
-size=&quot;16.0, 10.0&quot;;
-  &quot;ABC&quot; [color=dodgerblue1,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=32,height=0.8,shape=ellipse,style=filled,tooltip=&quot;Helper class that provides a standard way to create an ABC using&quot;];
-  &quot;ContextLogger&quot; [URL=&quot;#pypz.core.commons.loggers.ContextLogger&quot;,color=dodgerblue1,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=32,height=0.8,shape=ellipse,style=filled,target=&quot;_top&quot;,tooltip=&quot;This class has the responsibility to provide a simple logging interface, which&quot;];
-  &quot;ContextLoggerInterface&quot; -&gt; &quot;ContextLogger&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;ContextLoggerInterface&quot; [URL=&quot;#pypz.core.commons.loggers.ContextLoggerInterface&quot;,color=dodgerblue1,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=32,height=0.8,shape=ellipse,style=filled,target=&quot;_top&quot;,tooltip=&quot;This interface provides the necessary methods to be able to implement&quot;];
-  &quot;ABC&quot; -&gt; &quot;ContextLoggerInterface&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;DefaultContextLogger&quot; [color=dodgerblue1,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=32,height=0.8,shape=ellipse,style=filled];
-  &quot;ContextLoggerInterface&quot; -&gt; &quot;DefaultContextLogger&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;DefaultLoggerPlugin&quot; [color=dodgerblue1,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=32,height=0.8,shape=ellipse,style=filled];
-  &quot;LoggerPlugin&quot; -&gt; &quot;DefaultLoggerPlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;DefaultContextLogger&quot; -&gt; &quot;DefaultLoggerPlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;Generic&quot; [color=dodgerblue1,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=32,height=0.8,shape=ellipse,style=filled,tooltip=&quot;Abstract base class for generic types.&quot;];
-  &quot;Instance&quot; [color=dodgerblue1,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=32,height=0.8,shape=ellipse,style=filled,tooltip=&quot;This class represents the instance specs that serves as base for&quot;];
-  &quot;Generic&quot; -&gt; &quot;Instance&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;RegisteredInterface&quot; -&gt; &quot;Instance&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;ABC&quot; -&gt; &quot;Instance&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;InstanceGroup&quot; [URL=&quot;models.html#pypz.core.specs.instance.InstanceGroup&quot;,color=dodgerblue1,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=32,height=0.8,shape=ellipse,style=filled,target=&quot;_top&quot;,tooltip=&quot;This class provides methods to access instance group related information. It can be&quot;];
-  &quot;ABC&quot; -&gt; &quot;InstanceGroup&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;LoggerPlugin&quot; [URL=&quot;models.html#pypz.core.specs.plugin.LoggerPlugin&quot;,color=dodgerblue1,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=32,height=0.8,shape=ellipse,style=filled,target=&quot;_top&quot;,tooltip=&quot;This addon interface allows to implement different logging technologies&quot;];
-  &quot;Plugin&quot; -&gt; &quot;LoggerPlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;ContextLoggerInterface&quot; -&gt; &quot;LoggerPlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;RegisteredInterface&quot; -&gt; &quot;LoggerPlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;ABC&quot; -&gt; &quot;LoggerPlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;Plugin&quot; [URL=&quot;models.html#pypz.core.specs.plugin.Plugin&quot;,color=dodgerblue1,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=32,height=0.8,shape=ellipse,style=filled,target=&quot;_top&quot;,tooltip=&quot;This interface has the only purpose to separate the plugin interfaces&quot;];
-  &quot;Instance&quot; -&gt; &quot;Plugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;InstanceGroup&quot; -&gt; &quot;Plugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;RegisteredInterface&quot; -&gt; &quot;Plugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;ABC&quot; -&gt; &quot;Plugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;RegisteredInterface&quot; [color=dodgerblue1,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=32,height=0.8,shape=ellipse,style=filled,tooltip=&quot;This is a marker interface with the sole purpose to identify the native specs interfaces.&quot;];
-}
-<figcaption>
+<div class="graphviz"><img src="../_images/inheritance-9afe5187dd6128e38dd8b7df4eaff56c8bcb237c.png" alt="Inheritance diagram of pypz.core.specs.plugin.LoggerPlugin, pypz.core.commons.loggers.ContextLogger, pypz.plugins.loggers.default.DefaultLoggerPlugin" usemap="#inheritance694f7133b1" class="inheritance graphviz" /></div>
+<map id="inheritance694f7133b1" name="inheritance694f7133b1">
+<area shape="poly" id="node3" href="#pypz.core.commons.loggers.ContextLoggerInterface" target="_top" title="This interface provides the necessary methods to be able to implement" alt="" coords="677,480,665,472,630,465,577,459,509,455,434,454,359,455,291,459,238,465,203,472,191,480,203,488,238,496,291,502,359,505,434,507,509,505,577,502,630,496,665,488"/>
+<area shape="poly" id="node6" href="models.html#pypz.core.specs.plugin.LoggerPlugin" target="_top" title="This addon interface allows to implement different logging technologies" alt="" coords="1075,686,1068,678,1048,671,1018,665,979,661,936,660,894,661,855,665,824,671,805,678,798,686,805,694,824,702,855,708,894,711,936,713,979,711,1018,708,1048,702,1068,694"/>
+<area shape="poly" id="node10" href="models.html#pypz.core.specs.instance.InstanceGroup" target="_top" title="This class provides methods to access instance group related information. It can be" alt="" coords="1033,274,1025,266,1003,259,969,253,926,249,879,248,832,249,789,253,755,259,733,266,725,274,733,282,755,290,789,296,832,299,879,301,926,299,969,296,1003,290,1025,282"/>
+<area shape="poly" id="node11" href="models.html#pypz.core.specs.plugin.Plugin" target="_top" title="This interface has the only purpose to separate the plugin interfaces" alt="" coords="1128,480,1124,472,1114,465,1099,459,1079,455,1057,454,1035,455,1016,459,1000,465,990,472,987,480,990,488,1000,496,1016,502,1035,505,1057,507,1079,505,1099,502,1114,496,1124,488"/>
+<area shape="poly" id="node2" href="#pypz.core.commons.loggers.ContextLogger" target="_top" title="This class has the responsibility to provide a simple logging interface, which" alt="" coords="313,686,306,678,284,671,249,665,206,661,158,660,111,661,67,665,33,671,11,678,3,686,11,694,33,702,67,708,111,711,158,713,206,711,249,708,284,702,306,694"/>
+</map><figcaption>
 <p><span class="caption-text">Inheritance diagram</span><a class="headerlink" href="#id2" title="Link to this image"></a></p>
 </figcaption>
 </figure>

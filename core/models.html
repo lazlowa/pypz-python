@@ -174,62 +174,18 @@ created from the classes. This design enables <em>pypz</em> to model the pipelin
 The Instance class itself is the base for every other specs. It contains all the necessary
 logic and feature that is required by the mentioned design.</p>
 <figure class="align-default" id="id5">
-<span id="inheritance-diagram"></span>digraph inheritance70fd585c5a {
-bgcolor=transparent;
-rankdir=TB;
-ratio=fill;
-size=&quot;16.0, 10.0&quot;;
-  &quot;ABC&quot; [color=dodgerblue1,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=32,height=0.8,shape=ellipse,style=filled,tooltip=&quot;Helper class that provides a standard way to create an ABC using&quot;];
-  &quot;ContextLoggerInterface&quot; [URL=&quot;logging.html#pypz.core.commons.loggers.ContextLoggerInterface&quot;,color=dodgerblue1,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=32,height=0.8,shape=ellipse,style=filled,target=&quot;_top&quot;,tooltip=&quot;This interface provides the necessary methods to be able to implement&quot;];
-  &quot;ABC&quot; -&gt; &quot;ContextLoggerInterface&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;ExtendedPlugin&quot; [URL=&quot;#pypz.core.specs.plugin.ExtendedPlugin&quot;,color=dodgerblue1,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=32,height=0.8,shape=ellipse,style=filled,target=&quot;_top&quot;,tooltip=&quot;This interface extends the normal plugin's lifecycle. The methods&quot;];
-  &quot;Plugin&quot; -&gt; &quot;ExtendedPlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;RegisteredInterface&quot; -&gt; &quot;ExtendedPlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;ABC&quot; -&gt; &quot;ExtendedPlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;Generic&quot; [color=dodgerblue1,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=32,height=0.8,shape=ellipse,style=filled,tooltip=&quot;Abstract base class for generic types.&quot;];
-  &quot;InputPortPlugin&quot; [URL=&quot;#pypz.core.specs.plugin.InputPortPlugin&quot;,color=dodgerblue1,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=32,height=0.8,shape=ellipse,style=filled,target=&quot;_top&quot;,tooltip=&quot;This plugin interface allows to implement data transfer input port for an operator.&quot;];
-  &quot;PortPlugin&quot; -&gt; &quot;InputPortPlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;RegisteredInterface&quot; -&gt; &quot;InputPortPlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;ABC&quot; -&gt; &quot;InputPortPlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;Instance&quot; [color=dodgerblue1,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=32,height=0.8,shape=ellipse,style=filled,tooltip=&quot;This class represents the instance specs that serves as base for&quot;];
-  &quot;Generic&quot; -&gt; &quot;Instance&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;RegisteredInterface&quot; -&gt; &quot;Instance&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;ABC&quot; -&gt; &quot;Instance&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;InstanceGroup&quot; [URL=&quot;#pypz.core.specs.instance.InstanceGroup&quot;,color=dodgerblue1,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=32,height=0.8,shape=ellipse,style=filled,target=&quot;_top&quot;,tooltip=&quot;This class provides methods to access instance group related information. It can be&quot;];
-  &quot;ABC&quot; -&gt; &quot;InstanceGroup&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;LoggerPlugin&quot; [URL=&quot;#pypz.core.specs.plugin.LoggerPlugin&quot;,color=dodgerblue1,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=32,height=0.8,shape=ellipse,style=filled,target=&quot;_top&quot;,tooltip=&quot;This addon interface allows to implement different logging technologies&quot;];
-  &quot;Plugin&quot; -&gt; &quot;LoggerPlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;ContextLoggerInterface&quot; -&gt; &quot;LoggerPlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;RegisteredInterface&quot; -&gt; &quot;LoggerPlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;ABC&quot; -&gt; &quot;LoggerPlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;Operator&quot; [color=dodgerblue1,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=32,height=0.8,shape=ellipse,style=filled];
-  &quot;Instance&quot; -&gt; &quot;Operator&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;InstanceGroup&quot; -&gt; &quot;Operator&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;RegisteredInterface&quot; -&gt; &quot;Operator&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;ABC&quot; -&gt; &quot;Operator&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;OutputPortPlugin&quot; [URL=&quot;#pypz.core.specs.plugin.OutputPortPlugin&quot;,color=dodgerblue1,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=32,height=0.8,shape=ellipse,style=filled,target=&quot;_top&quot;,tooltip=&quot;This plugin interface allows to implement data transfer output port for an operator.&quot;];
-  &quot;PortPlugin&quot; -&gt; &quot;OutputPortPlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;RegisteredInterface&quot; -&gt; &quot;OutputPortPlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;ABC&quot; -&gt; &quot;OutputPortPlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;Pipeline&quot; [color=dodgerblue1,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=32,height=0.8,shape=ellipse,style=filled];
-  &quot;Instance&quot; -&gt; &quot;Pipeline&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;RegisteredInterface&quot; -&gt; &quot;Pipeline&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;Plugin&quot; [URL=&quot;#pypz.core.specs.plugin.Plugin&quot;,color=dodgerblue1,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=32,height=0.8,shape=ellipse,style=filled,target=&quot;_top&quot;,tooltip=&quot;This interface has the only purpose to separate the plugin interfaces&quot;];
-  &quot;Instance&quot; -&gt; &quot;Plugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;InstanceGroup&quot; -&gt; &quot;Plugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;RegisteredInterface&quot; -&gt; &quot;Plugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;ABC&quot; -&gt; &quot;Plugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;PortPlugin&quot; [URL=&quot;#pypz.core.specs.plugin.PortPlugin&quot;,color=dodgerblue1,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=32,height=0.8,shape=ellipse,style=filled,target=&quot;_top&quot;,tooltip=&quot;This plugin interface allows to implement common methods for&quot;];
-  &quot;Plugin&quot; -&gt; &quot;PortPlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;RegisteredInterface&quot; -&gt; &quot;PortPlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;ABC&quot; -&gt; &quot;PortPlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;RegisteredInterface&quot; [color=dodgerblue1,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=32,height=0.8,shape=ellipse,style=filled,tooltip=&quot;This is a marker interface with the sole purpose to identify the native specs interfaces.&quot;];
-  &quot;ServicePlugin&quot; [URL=&quot;#pypz.core.specs.plugin.ServicePlugin&quot;,color=dodgerblue1,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=32,height=0.8,shape=ellipse,style=filled,target=&quot;_top&quot;,tooltip=&quot;This plugin interface allows to implement a service. Services are special entities&quot;];
-  &quot;Plugin&quot; -&gt; &quot;ServicePlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;RegisteredInterface&quot; -&gt; &quot;ServicePlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;ABC&quot; -&gt; &quot;ServicePlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-}
-<figcaption>
+<span id="inheritance-diagram"></span><div class="graphviz"><img src="../_images/inheritance-72576939779a3cacf0c4d043ef825f8df5cab6be.png" alt="Inheritance diagram of pypz.core.specs.pipeline.Pipeline, pypz.core.specs.operator.Operator, pypz.core.specs.plugin.LoggerPlugin, pypz.core.specs.plugin.ExtendedPlugin, pypz.core.specs.plugin.ServicePlugin, pypz.core.specs.plugin.InputPortPlugin, pypz.core.specs.plugin.OutputPortPlugin" usemap="#inheritance70fd585c5a" class="inheritance graphviz" /></div>
+<map id="inheritance70fd585c5a" name="inheritance70fd585c5a">
+<area shape="poly" id="node2" href="logging.html#pypz.core.commons.loggers.ContextLoggerInterface" target="_top" title="This interface provides the necessary methods to be able to implement" alt="" coords="530,261,519,254,487,247,437,242,374,238,305,237,235,238,173,242,123,247,91,254,80,261,91,269,123,276,173,281,235,285,305,286,374,285,437,281,487,276,519,269"/>
+<area shape="poly" id="node3" href="#pypz.core.specs.plugin.ExtendedPlugin" target="_top" title="This interface extends the normal plugin&#39;s lifecycle. The methods" alt="" coords="1406,653,1399,646,1377,639,1344,634,1302,630,1255,629,1208,630,1166,634,1132,639,1111,646,1104,653,1111,661,1132,668,1166,673,1208,677,1255,678,1302,677,1344,673,1377,668,1399,661"/>
+<area shape="poly" id="node4" href="#pypz.core.specs.plugin.Plugin" target="_top" title="This interface has the only purpose to separate the plugin interfaces" alt="" coords="773,457,770,449,760,443,746,437,728,434,708,433,687,434,669,437,655,443,645,449,642,457,645,465,655,471,669,477,687,480,708,481,728,480,746,477,760,471,770,465"/>
+<area shape="poly" id="node7" href="#pypz.core.specs.plugin.InputPortPlugin" target="_top" title="This plugin interface allows to implement data transfer input port for an operator." alt="" coords="1021,849,1014,842,992,835,959,829,918,826,872,825,826,826,784,829,751,835,730,842,723,849,730,857,751,863,784,869,826,872,872,874,918,872,959,869,992,863,1014,857"/>
+<area shape="poly" id="node8" href="#pypz.core.specs.plugin.PortPlugin" target="_top" title="This plugin interface allows to implement common methods for" alt="" coords="809,653,804,646,790,639,767,634,739,630,708,629,676,630,648,634,625,639,611,646,606,653,611,661,625,668,648,673,676,677,708,678,739,677,767,673,790,668,804,661"/>
+<area shape="poly" id="node10" href="#pypz.core.specs.instance.InstanceGroup" target="_top" title="This class provides methods to access instance group related information. It can be" alt="" coords="982,261,975,254,955,247,923,242,884,238,840,237,796,238,756,242,724,247,704,254,697,261,704,269,724,276,756,281,796,285,840,286,884,285,923,281,955,276,975,269"/>
+<area shape="poly" id="node11" href="#pypz.core.specs.plugin.LoggerPlugin" target="_top" title="This addon interface allows to implement different logging technologies" alt="" coords="591,653,585,646,566,639,538,634,502,630,463,629,423,630,387,634,359,639,341,646,335,653,341,661,359,668,387,673,423,677,463,678,502,677,538,673,566,668,585,661"/>
+<area shape="poly" id="node13" href="#pypz.core.specs.plugin.OutputPortPlugin" target="_top" title="This plugin interface allows to implement data transfer output port for an operator." alt="" coords="708,849,700,842,677,835,640,829,594,826,543,825,492,826,446,829,410,835,386,842,378,849,386,857,410,863,446,869,492,872,543,874,594,872,640,869,677,863,700,857"/>
+<area shape="poly" id="node15" href="#pypz.core.specs.plugin.ServicePlugin" target="_top" title="This plugin interface allows to implement a service. Services are special entities" alt="" coords="1089,653,1082,646,1064,639,1034,634,997,630,956,629,915,630,878,634,849,639,830,646,824,653,830,661,849,668,878,673,915,677,956,678,997,677,1034,673,1064,668,1082,661"/>
+</map><figcaption>
 <p><span class="caption-text">Inheritance diagram</span><a class="headerlink" href="#id5" title="Link to this image"></a></p>
 </figcaption>
 </figure>

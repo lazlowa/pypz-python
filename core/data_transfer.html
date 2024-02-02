@@ -132,39 +132,14 @@ In <em>pypz</em> data transfer is possible between operators through so called <
 <h2>Ports<a class="headerlink" href="#ports" title="Link to this heading"></a></h2>
 <p>An input and output port in <em>pypz</em> is an actual implementation of the corresponding interfaces:</p>
 <figure class="align-default" id="id3">
-digraph inheritancef6e8615a06 {
-bgcolor=transparent;
-rankdir=TB;
-ratio=fill;
-size=&quot;16.0, 10.0&quot;;
-  &quot;ABC&quot; [color=dodgerblue1,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=32,height=0.8,shape=ellipse,style=filled,tooltip=&quot;Helper class that provides a standard way to create an ABC using&quot;];
-  &quot;Generic&quot; [color=dodgerblue1,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=32,height=0.8,shape=ellipse,style=filled,tooltip=&quot;Abstract base class for generic types.&quot;];
-  &quot;InputPortPlugin&quot; [URL=&quot;models.html#pypz.core.specs.plugin.InputPortPlugin&quot;,color=dodgerblue1,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=32,height=0.8,shape=ellipse,style=filled,target=&quot;_top&quot;,tooltip=&quot;This plugin interface allows to implement data transfer input port for an operator.&quot;];
-  &quot;PortPlugin&quot; -&gt; &quot;InputPortPlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;RegisteredInterface&quot; -&gt; &quot;InputPortPlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;ABC&quot; -&gt; &quot;InputPortPlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;Instance&quot; [color=dodgerblue1,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=32,height=0.8,shape=ellipse,style=filled,tooltip=&quot;This class represents the instance specs that serves as base for&quot;];
-  &quot;Generic&quot; -&gt; &quot;Instance&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;RegisteredInterface&quot; -&gt; &quot;Instance&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;ABC&quot; -&gt; &quot;Instance&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;InstanceGroup&quot; [URL=&quot;models.html#pypz.core.specs.instance.InstanceGroup&quot;,color=dodgerblue1,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=32,height=0.8,shape=ellipse,style=filled,target=&quot;_top&quot;,tooltip=&quot;This class provides methods to access instance group related information. It can be&quot;];
-  &quot;ABC&quot; -&gt; &quot;InstanceGroup&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;OutputPortPlugin&quot; [URL=&quot;models.html#pypz.core.specs.plugin.OutputPortPlugin&quot;,color=dodgerblue1,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=32,height=0.8,shape=ellipse,style=filled,target=&quot;_top&quot;,tooltip=&quot;This plugin interface allows to implement data transfer output port for an operator.&quot;];
-  &quot;PortPlugin&quot; -&gt; &quot;OutputPortPlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;RegisteredInterface&quot; -&gt; &quot;OutputPortPlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;ABC&quot; -&gt; &quot;OutputPortPlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;Plugin&quot; [URL=&quot;models.html#pypz.core.specs.plugin.Plugin&quot;,color=dodgerblue1,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=32,height=0.8,shape=ellipse,style=filled,target=&quot;_top&quot;,tooltip=&quot;This interface has the only purpose to separate the plugin interfaces&quot;];
-  &quot;Instance&quot; -&gt; &quot;Plugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;InstanceGroup&quot; -&gt; &quot;Plugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;RegisteredInterface&quot; -&gt; &quot;Plugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;ABC&quot; -&gt; &quot;Plugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;PortPlugin&quot; [URL=&quot;models.html#pypz.core.specs.plugin.PortPlugin&quot;,color=dodgerblue1,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=32,height=0.8,shape=ellipse,style=filled,target=&quot;_top&quot;,tooltip=&quot;This plugin interface allows to implement common methods for&quot;];
-  &quot;Plugin&quot; -&gt; &quot;PortPlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;RegisteredInterface&quot; -&gt; &quot;PortPlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;ABC&quot; -&gt; &quot;PortPlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;RegisteredInterface&quot; [color=dodgerblue1,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=32,height=0.8,shape=ellipse,style=filled,tooltip=&quot;This is a marker interface with the sole purpose to identify the native specs interfaces.&quot;];
-}
-<figcaption>
+<div class="graphviz"><img src="../_images/inheritance-c52a336277040c443cbf2f1914bacebd174c70f0.png" alt="Inheritance diagram of pypz.core.specs.plugin.InputPortPlugin, pypz.core.specs.plugin.OutputPortPlugin" usemap="#inheritancef6e8615a06" class="inheritance graphviz" /></div>
+<map id="inheritancef6e8615a06" name="inheritancef6e8615a06">
+<area shape="poly" id="node3" href="models.html#pypz.core.specs.plugin.InputPortPlugin" target="_top" title="This plugin interface allows to implement data transfer input port for an operator." alt="" coords="517,843,506,831,473,820,422,812,357,807,286,805,214,807,150,812,99,820,66,831,54,843,66,854,99,865,150,873,214,879,286,881,357,879,422,873,473,865,506,854"/>
+<area shape="poly" id="node4" href="models.html#pypz.core.specs.plugin.PortPlugin" target="_top" title="This plugin interface allows to implement common methods for" alt="" coords="554,649,546,637,523,627,488,618,444,613,396,611,347,613,303,618,268,627,245,637,238,649,245,661,268,671,303,680,347,685,396,687,444,685,488,680,523,671,546,661"/>
+<area shape="poly" id="node7" href="models.html#pypz.core.specs.instance.InstanceGroup" target="_top" title="This class provides methods to access instance group related information. It can be" alt="" coords="1263,260,1252,248,1221,237,1172,229,1110,224,1042,222,974,224,912,229,864,237,832,248,821,260,832,271,864,282,912,290,974,296,1042,298,1110,296,1172,290,1221,282,1252,271"/>
+<area shape="poly" id="node8" href="models.html#pypz.core.specs.plugin.OutputPortPlugin" target="_top" title="This plugin interface allows to implement data transfer output port for an operator." alt="" coords="1122,843,1110,831,1073,820,1017,812,945,807,866,805,787,807,716,812,659,820,623,831,610,843,623,854,659,865,716,873,787,879,866,881,945,879,1017,873,1073,865,1110,854"/>
+<area shape="poly" id="node9" href="models.html#pypz.core.specs.plugin.Plugin" target="_top" title="This interface has the only purpose to separate the plugin interfaces" alt="" coords="713,454,708,443,694,432,671,424,643,418,611,416,580,418,552,424,529,432,515,443,510,454,515,466,529,477,552,485,580,491,611,492,643,491,671,485,694,477,708,466"/>
+</map><figcaption>
 <p><span class="caption-text">Inheritance diagram</span><a class="headerlink" href="#id3" title="Link to this image"></a></p>
 </figcaption>
 </figure>
@@ -379,57 +354,16 @@ implementation, everything else will be taken care of.</p>
 <p>This is a builtin implementation of the InputPortPlugin and OutputPortPlugin interface that integrates
 channels into <em>pypz</em>. It provides all the necessary method calls of the channels to perform data transmission.</p>
 <figure class="align-default" id="id6">
-digraph inheritanceed7a134ae7 {
-bgcolor=transparent;
-rankdir=TB;
-ratio=fill;
-size=&quot;16.0, 10.0&quot;;
-  &quot;ABC&quot; [color=dodgerblue1,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=32,height=0.8,shape=ellipse,style=filled,tooltip=&quot;Helper class that provides a standard way to create an ABC using&quot;];
-  &quot;ChannelInputPort&quot; [color=dodgerblue1,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=32,height=0.8,shape=ellipse,style=filled,tooltip=&quot;This class represents an abstract InputPortPlugin, which utilizes the channels&quot;];
-  &quot;InputPortPlugin&quot; -&gt; &quot;ChannelInputPort&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;ResourceHandlerPlugin&quot; -&gt; &quot;ChannelInputPort&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;ExtendedPlugin&quot; -&gt; &quot;ChannelInputPort&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;ABC&quot; -&gt; &quot;ChannelInputPort&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;ChannelOutputPort&quot; [color=dodgerblue1,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=32,height=0.8,shape=ellipse,style=filled,tooltip=&quot;This class represents an abstract OutputPortPlugin, which utilizes the channels&quot;];
-  &quot;OutputPortPlugin&quot; -&gt; &quot;ChannelOutputPort&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;ResourceHandlerPlugin&quot; -&gt; &quot;ChannelOutputPort&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;ExtendedPlugin&quot; -&gt; &quot;ChannelOutputPort&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;ABC&quot; -&gt; &quot;ChannelOutputPort&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;ExtendedPlugin&quot; [URL=&quot;models.html#pypz.core.specs.plugin.ExtendedPlugin&quot;,color=dodgerblue1,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=32,height=0.8,shape=ellipse,style=filled,target=&quot;_top&quot;,tooltip=&quot;This interface extends the normal plugin's lifecycle. The methods&quot;];
-  &quot;Plugin&quot; -&gt; &quot;ExtendedPlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;RegisteredInterface&quot; -&gt; &quot;ExtendedPlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;ABC&quot; -&gt; &quot;ExtendedPlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;Generic&quot; [color=dodgerblue1,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=32,height=0.8,shape=ellipse,style=filled,tooltip=&quot;Abstract base class for generic types.&quot;];
-  &quot;InputPortPlugin&quot; [URL=&quot;models.html#pypz.core.specs.plugin.InputPortPlugin&quot;,color=dodgerblue1,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=32,height=0.8,shape=ellipse,style=filled,target=&quot;_top&quot;,tooltip=&quot;This plugin interface allows to implement data transfer input port for an operator.&quot;];
-  &quot;PortPlugin&quot; -&gt; &quot;InputPortPlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;RegisteredInterface&quot; -&gt; &quot;InputPortPlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;ABC&quot; -&gt; &quot;InputPortPlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;Instance&quot; [color=dodgerblue1,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=32,height=0.8,shape=ellipse,style=filled,tooltip=&quot;This class represents the instance specs that serves as base for&quot;];
-  &quot;Generic&quot; -&gt; &quot;Instance&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;RegisteredInterface&quot; -&gt; &quot;Instance&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;ABC&quot; -&gt; &quot;Instance&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;InstanceGroup&quot; [URL=&quot;models.html#pypz.core.specs.instance.InstanceGroup&quot;,color=dodgerblue1,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=32,height=0.8,shape=ellipse,style=filled,target=&quot;_top&quot;,tooltip=&quot;This class provides methods to access instance group related information. It can be&quot;];
-  &quot;ABC&quot; -&gt; &quot;InstanceGroup&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;OutputPortPlugin&quot; [URL=&quot;models.html#pypz.core.specs.plugin.OutputPortPlugin&quot;,color=dodgerblue1,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=32,height=0.8,shape=ellipse,style=filled,target=&quot;_top&quot;,tooltip=&quot;This plugin interface allows to implement data transfer output port for an operator.&quot;];
-  &quot;PortPlugin&quot; -&gt; &quot;OutputPortPlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;RegisteredInterface&quot; -&gt; &quot;OutputPortPlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;ABC&quot; -&gt; &quot;OutputPortPlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;Plugin&quot; [URL=&quot;models.html#pypz.core.specs.plugin.Plugin&quot;,color=dodgerblue1,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=32,height=0.8,shape=ellipse,style=filled,target=&quot;_top&quot;,tooltip=&quot;This interface has the only purpose to separate the plugin interfaces&quot;];
-  &quot;Instance&quot; -&gt; &quot;Plugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;InstanceGroup&quot; -&gt; &quot;Plugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;RegisteredInterface&quot; -&gt; &quot;Plugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;ABC&quot; -&gt; &quot;Plugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;PortPlugin&quot; [URL=&quot;models.html#pypz.core.specs.plugin.PortPlugin&quot;,color=dodgerblue1,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=32,height=0.8,shape=ellipse,style=filled,target=&quot;_top&quot;,tooltip=&quot;This plugin interface allows to implement common methods for&quot;];
-  &quot;Plugin&quot; -&gt; &quot;PortPlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;RegisteredInterface&quot; -&gt; &quot;PortPlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;ABC&quot; -&gt; &quot;PortPlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;RegisteredInterface&quot; [color=dodgerblue1,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=32,height=0.8,shape=ellipse,style=filled,tooltip=&quot;This is a marker interface with the sole purpose to identify the native specs interfaces.&quot;];
-  &quot;ResourceHandlerPlugin&quot; [URL=&quot;models.html#pypz.core.specs.plugin.ResourceHandlerPlugin&quot;,color=dodgerblue1,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=32,height=0.8,shape=ellipse,style=filled,target=&quot;_top&quot;,tooltip=&quot;This plugin interface allows to implement resource management related&quot;];
-  &quot;Plugin&quot; -&gt; &quot;ResourceHandlerPlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;RegisteredInterface&quot; -&gt; &quot;ResourceHandlerPlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;ABC&quot; -&gt; &quot;ResourceHandlerPlugin&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-}
-<figcaption>
+<div class="graphviz"><img src="../_images/inheritance-6f52768b5ab9c9eb7b1b4deb293b31c224afd4da.png" alt="Inheritance diagram of pypz.abstracts.channel_ports.ChannelInputPort, pypz.abstracts.channel_ports.ChannelOutputPort" usemap="#inheritanceed7a134ae7" class="inheritance graphviz" /></div>
+<map id="inheritanceed7a134ae7" name="inheritanceed7a134ae7">
+<area shape="poly" id="node3" href="models.html#pypz.core.specs.plugin.InputPortPlugin" target="_top" title="This plugin interface allows to implement data transfer input port for an operator." alt="" coords="1075,734,1066,725,1042,717,1005,711,958,707,906,706,854,707,807,711,770,717,746,725,738,734,746,742,770,750,807,756,854,760,906,761,958,760,1005,756,1042,750,1066,742"/>
+<area shape="poly" id="node4" href="models.html#pypz.core.specs.plugin.ResourceHandlerPlugin" target="_top" title="This plugin interface allows to implement resource management related" alt="" coords="734,565,722,556,686,548,631,542,562,538,485,537,408,538,339,542,284,548,249,556,236,565,249,573,284,581,339,587,408,591,485,592,562,591,631,587,686,581,722,573"/>
+<area shape="poly" id="node5" href="models.html#pypz.core.specs.plugin.ExtendedPlugin" target="_top" title="This interface extends the normal plugin&#39;s lifecycle. The methods" alt="" coords="1093,565,1084,556,1060,548,1022,542,974,538,922,537,869,538,821,542,783,548,759,556,751,565,759,573,783,581,821,587,869,591,922,592,974,591,1022,587,1060,581,1084,573"/>
+<area shape="poly" id="node7" href="models.html#pypz.core.specs.plugin.OutputPortPlugin" target="_top" title="This plugin interface allows to implement data transfer output port for an operator." alt="" coords="1498,734,1489,725,1462,717,1421,711,1369,707,1312,706,1254,707,1202,711,1161,717,1134,725,1125,734,1134,742,1161,750,1202,756,1254,760,1312,761,1369,760,1421,756,1462,750,1489,742"/>
+<area shape="poly" id="node8" href="models.html#pypz.core.specs.plugin.Plugin" target="_top" title="This interface has the only purpose to separate the plugin interfaces" alt="" coords="951,395,947,387,937,379,920,373,900,369,877,368,854,369,834,373,817,379,807,387,803,395,807,404,817,412,834,418,854,422,877,423,900,422,920,418,937,412,947,404"/>
+<area shape="poly" id="node11" href="models.html#pypz.core.specs.plugin.PortPlugin" target="_top" title="This plugin interface allows to implement common methods for" alt="" coords="1339,565,1334,556,1317,548,1292,542,1260,538,1224,537,1189,538,1157,542,1131,548,1115,556,1109,565,1115,573,1131,581,1157,587,1189,591,1224,592,1260,591,1292,587,1317,581,1334,573"/>
+<area shape="poly" id="node13" href="models.html#pypz.core.specs.instance.InstanceGroup" target="_top" title="This class provides methods to access instance group related information. It can be" alt="" coords="881,226,873,218,851,210,815,204,770,200,721,199,671,200,626,204,591,210,568,218,560,226,568,235,591,243,626,249,671,253,721,254,770,253,815,249,851,243,873,235"/>
+</map><figcaption>
 <p><span class="caption-text">Inheritance diagram</span><a class="headerlink" href="#id6" title="Link to this image"></a></p>
 </figcaption>
 </figure>
