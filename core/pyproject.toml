@@ -32,7 +32,8 @@ docs = [
     "sphinx ~= 7.2.6",
     "sphinx-autodoc-typehints >= 1.25.2",
     "sphinx-copybutton ~= 0.5.2",
-    "graphviz >= 0.20.1"
+    "graphviz >= 0.20.1",
+    "pydot >= 2.0.0"
 ]
 
 [tool.setuptools.dynamic]
