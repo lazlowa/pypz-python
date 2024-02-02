@@ -75,6 +75,7 @@ def resolve_dependency_graph(instances: set | Iterable) -> list[set]:
     if there are instances w/o any dependencies, then those will be placed to level 0, which
     is the list[0]. On level 1 all the instances are placed that has dependencies to level 0
     instances and so on.
+
     :param instances: set of instances to resolve the dependencies across
     :return: list of sets, where the list represents dependency levels and set the instances on it
     """

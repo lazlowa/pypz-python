@@ -78,6 +78,9 @@ class ChannelStatus(Enum):
 
 
 class ChannelStatusMessage:
+    """
+    This class is a Data Transfer Object (DTO) for the status messages sent between the channels.
+    """
 
     def __init__(self,
                  channel_name: str,
@@ -113,6 +116,11 @@ class ChannelStatusMessage:
 
 
 class ChannelStatusMonitor(ChannelFilter):
+    """
+    This class has the responsibility to monitor and track state of the connected channel RW entities.
+    If the counterpart sends a status message, this class has to parse and interpret it. In addition,
+    it provides an implementation for the ``ChannelFilter`` interface to enable certain queries.
+    """
 
     ValidPatienceTimeInMs = 120000
     """
@@ -183,6 +191,18 @@ class ChannelStatusMonitor(ChannelFilter):
         self.status_update_callback = statusUpdateCallback
 
     def update(self, status_message: ChannelStatusMessage):
+        """
+        This method implements the logic to handle status message updates.
+        Note that to overcome messaging issues e.g., missing status update,
+        we don't introduce a state machine. It means that most of the states
+        can overwrite the actual state with one exception. If "error" status
+        has been sent, it can only be overwritten by "open" or "start". This
+        allows us to retain error information until the counterpart has been
+        restarted.
+
+        :param status_message: the status message received from the other ChannelRW entity
+        """
+
         if status_message.get_channel_unique_name() != self.get_channel_unique_name():
             raise AttributeError(f"Invalid status message, "
                                  f"mismatching channel name: {status_message.get_channel_unique_name()}")

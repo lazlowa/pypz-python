@@ -104,6 +104,7 @@ class ResourceHandlerPlugin(Plugin, RegisteredInterface, ABC):
         """
         This method shall implement the logic to create an arbitrary resource
         of any type.
+
         :return: True succeeded, False if more iteration required (to not block the execution)
         """
         pass
@@ -112,6 +113,7 @@ class ResourceHandlerPlugin(Plugin, RegisteredInterface, ABC):
     def _on_resource_deletion(self) -> bool:
         """
         This method shall implement the logic to destroy the created resource.
+
         :return: True succeeded, False if more iteration required (to not block the execution)
         """
         pass
@@ -191,6 +193,7 @@ class PortPlugin(Plugin, RegisteredInterface, ABC):
     def _on_port_open(self) -> bool:
         """
         This method shall implement the logic to initialize the i/o port functionalities.
+
         :return: True succeeded, False if more iteration required (to not block the execution)
         """
         pass
@@ -199,6 +202,7 @@ class PortPlugin(Plugin, RegisteredInterface, ABC):
     def _on_port_close(self) -> bool:
         """
         This method shall implement the logic to shut down the i/o port functionalities.
+
         :return: True succeeded, False if more iteration required (to not block the execution)
         """
         pass
@@ -216,6 +220,7 @@ class OutputPortPlugin(PortPlugin, RegisteredInterface, ABC):
         """
         This method shall implement the logic to send data provided as argument.
         The implementation shall specify the type of the data and the return value.
+
         :param data: data to be sent
         :return: tbd by the implementation
         """
@@ -250,6 +255,7 @@ class InputPortPlugin(PortPlugin, RegisteredInterface, ABC):
         This method shall implement the logic to signalize, whether the InputPort is
         still able to retrieve. Unable can mean for example that the OutputPort
         finished writing. This can be then used to terminate reading.
+
         :return: True if port can retrieve, False if not
         """
         pass
@@ -258,6 +264,7 @@ class InputPortPlugin(PortPlugin, RegisteredInterface, ABC):
     def retrieve(self) -> Any:
         """
         This method shall implement the logic to retrieve data through the port.
+
         :return: tbd by the implementation
         """
         pass
@@ -289,6 +296,7 @@ class ServicePlugin(Plugin, RegisteredInterface, ABC):
         This method shall implement the starting logic of the service. You can consider
         services as example like mounting service, which only mounts a folder to the
         system or a background service, which starts a background thread.
+
         :return: True if logic finished, False if it needs more iteration
         """
         pass
@@ -302,6 +310,7 @@ class ServicePlugin(Plugin, RegisteredInterface, ABC):
         VERY IMPORTANT NOTE - you must always check, if your service start method has
         been called, because it can be that it is never called, if there was an exception
         raised from other entity. However, the shutdown will be called anyway.
+
         :return: True if logic finished, False if it needs more iteration
         """
         pass

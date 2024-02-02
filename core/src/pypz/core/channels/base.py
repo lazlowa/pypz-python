@@ -208,6 +208,7 @@ class ChannelBase(ABC):
         This method shall implement the logic of creating resources of the channel.
         IMPORTANT NOTE - this method shall be invoked before the open_channel() to make sure that the resources
         are existing beforehand.
+
         :return: True, if done, False if it is still in progress
         """
         pass
@@ -217,6 +218,7 @@ class ChannelBase(ABC):
         """
         This method shall implement the logic of deleting resources of the channel.
         IMPORTANT NOTE - this method shall be invoked after the close_channel()
+
         :return: True, if done, False if it is still in progress
         """
         pass
@@ -226,6 +228,7 @@ class ChannelBase(ABC):
         """
         This method shall implement the logic to open a channel. The meaning of 'open' however is to be defined
         by the actual implementation. One developer can define it like an opened connection, other as created file etc.
+
         :return: True, if done, False if it is still in progress
         """
         pass
@@ -235,6 +238,7 @@ class ChannelBase(ABC):
         """
         This method shall implement the logic to close a channel. Normally closing a channel is the last step so
         clean up of used resource shall happen here as well.
+
         :return: True, if done, False if it is still in progress
         """
         pass
@@ -243,6 +247,7 @@ class ChannelBase(ABC):
     def _configure_channel(self, channel_configuration: dict) -> None:
         """
         This method shall implement the logic to interpret the provided configuration.
+
         :param channel_configuration: config string
         """
         pass
@@ -254,6 +259,7 @@ class ChannelBase(ABC):
         state string is provided by the channel itself. Note that there is defined schema, how and what will be
         provided by the channel as string, however you can append your own custom information, you only need to
         append as string separated by StateMessageSeparatorChar.
+
         :param message: message that shall be sent
         """
         pass
@@ -267,6 +273,7 @@ class ChannelBase(ABC):
         shall return a list of messages. Note as well that in case you are using callbacks for your technology,
         you can directly use the method onStatusMessageReceived. In this case simply return null from this method
         to ensure that it will be ignored.
+
         :return: list of retrieved status messages or null if method is not used
         """
         pass
@@ -313,6 +320,7 @@ class ChannelBase(ABC):
         """
         Returns the number of tracked input channels. This can be used to synchronize some activities like starting
         the output.
+
         :return: number of tracked input channels
         """
 
@@ -322,6 +330,7 @@ class ChannelBase(ABC):
         """
         This method returns a set of connected channel names given the evaluation
         criteria passed as argument.
+
         :param filter_function: check_function check the ChannelFilter for more details (nullable)
         :return: Set of channel names that passes the given evaluation
         """
@@ -341,6 +350,7 @@ class ChannelBase(ABC):
         """
         Returns the number of healthy tracked input channels.
         This can be used to synchronize some activities like starting the output.
+
         :return: number of healthy tracked input channels
         """
 
@@ -358,6 +368,7 @@ class ChannelBase(ABC):
         stopped?". This can be seen as opposite of "Is all connected channels stopped or unhealthy?"
         with the strong difference that the latter does not give a proper answer if there is no
         connected channels at all.
+
         :return: True if there is any channel healthy, but not stopped, False if not or no connected channel
         """
 
@@ -372,6 +383,7 @@ class ChannelBase(ABC):
         closed?". This can be seen as opposite of "Is all connected channels closed or unhealthy?"
         with the strong difference that the latter does not give a proper answer if there is no
         connected channels at all.
+
         :return: True if there is any channel healthy, but not closed, False if not or no connected channel
         """
 
@@ -386,8 +398,9 @@ class ChannelBase(ABC):
         stopped and not closed?". This can be seen as opposite of "Is all connected channels closed or
         stopped or unhealthy?" with the strong difference that the latter does not give a proper
         answer if there is no connected channels at all.
+
         :return: True if there is any channel healthy, but not stopped and not closed,
-        False if not or no connected channel
+                 False if not or no connected channel
         """
 
         for status_monitor in list(self._status_map.values()):
@@ -402,6 +415,7 @@ class ChannelBase(ABC):
         This method realises the question "Is there any connected channels unhealthy?". This can be seen
         as opposite of "Is all connected channels healthy?" with the strong difference that the latter
         does not give a proper answer if there is no connected channels at all.
+
         :return: True if there is any channel unhealthy, False if not or no connected channels
         """
 
@@ -415,6 +429,7 @@ class ChannelBase(ABC):
         This method realises the question "Is there any channel healthy?". This can be seen as opposite
         of "Is all channels unhealthy?" with the strong difference that the latter does not give a proper
         answer if there is no connected channels at all.
+
         :return: True if there is any channel healthy, False if not or no connected channel
         """
         for status_monitor in list(self._status_map.values()):
@@ -426,6 +441,7 @@ class ChannelBase(ABC):
         """
         This method sets the corresponding flags and sends the corresponding status message to signalize that
         the channel has been started.
+
         :param send_status_message: if True the status message sending will be called
         """
 
@@ -439,6 +455,7 @@ class ChannelBase(ABC):
         """
         This method sets the corresponding flags and sends the corresponding status message to signalize that
         the channel has been stopped.
+
         :param send_status_message: if True the status message sending will be called
         """
         self._channel_started = False
@@ -451,6 +468,7 @@ class ChannelBase(ABC):
         """
         This method can implement the logic to determine, if the channel can
         be closed or not.
+
         :return: True if the channel can be closed, False otherwise
         """
         return not self.is_any_connected_channel_healthy_and_not_closed()
@@ -460,6 +478,7 @@ class ChannelBase(ABC):
         An invoker method that encapsulates the actual implementation. This method
         MUST be called instead of the implemented method directly to ensure proper
         channel functionality.
+
         :return: True if operation done, False if still in progress
         """
 
@@ -471,6 +490,7 @@ class ChannelBase(ABC):
         An invoker method that encapsulates the actual implementation. This method
         MUST be called instead of the implemented method directly to ensure proper
         channel functionality.
+
         :return: True if operation done, False if still in progress
         """
 
@@ -482,6 +502,7 @@ class ChannelBase(ABC):
         An invoker method that encapsulates the actual implementation. This method
         MUST be called instead of the implemented method directly to ensure proper
         channel functionality.
+
         :return: True if operation done, False if still in progress
         """
 
@@ -507,6 +528,7 @@ class ChannelBase(ABC):
         An invoker method that encapsulates the actual implementation. This method
         MUST be called instead of the implemented method directly to ensure proper
         channel functionality.
+
         :return: True if operation done, False if still in progress
         """
 
@@ -631,6 +653,7 @@ class ChannelBase(ABC):
         """
         Adds a callback to the set of callbacks, which will be executed upon status
         message received.
+
         :param callback: callback Callable[[list[str]], None]
         """
 
@@ -640,6 +663,7 @@ class ChannelBase(ABC):
         """
         This method can be overridden to handle the creation of the new ChannelStatusMonitor e.g.
         registering callbacks.
+
         :param status_monitor: ChannelStatusMonitor object newly created
         """
         pass

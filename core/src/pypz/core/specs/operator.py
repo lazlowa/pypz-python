@@ -210,6 +210,7 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
         """
         If an Operator instance is replicated, then the replication group name
         is the actual instance name of the original instance.
+
         :return: the replication group name
         """
 
@@ -225,6 +226,7 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
         """
         Returns the replica instance by id. The id is the actual place in the
         replica list, which is ensured during the replica creation.
+
         :param replica_id: replica id
         :return: replica specified by the id
         """

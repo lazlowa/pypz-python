@@ -197,9 +197,10 @@ class State(ABC):
         executed after all instance methods have been concluded on the current chain element.
         This method blocks until all the scheduled methods are finished.
         Both plugin and operator instance methods can be scheduled.
+
         :param execution_chain: list of tuples, where [0] is the callable method and [1] is the list of instances
         :param break_on_exception: if True, it will break on the first exception, if False, it will let then chain run
-        and only raise an exception at the end
+                                   and only raise an exception at the end
         :return: True if all methods are finished (returned True), False otherwise
         """
 

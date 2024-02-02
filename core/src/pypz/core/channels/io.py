@@ -117,6 +117,7 @@ class ChannelReader(ChannelBase):
         """
         This method shall implement the logic to retrieve stored read offset from the underlying technology. This
         can be arbitrary, but the method shall return the stored offset.
+
         :return: stored offset
         """
         pass
@@ -125,6 +126,7 @@ class ChannelReader(ChannelBase):
     def has_records(self) -> bool:
         """
         This method shall implement the logic to check, if the reader can still read records.
+
         :return: True if channel has still records, False if not
         """
         return True
@@ -134,6 +136,7 @@ class ChannelReader(ChannelBase):
         """
         This method shall implement the logic to read records from the input channel. An ArrayList of records is
         expected.
+
         :return: list of records OR empty ArrayList if no records read. Null is not accepted.
         """
         pass
@@ -142,6 +145,7 @@ class ChannelReader(ChannelBase):
     def _commit_offset(self, offset: int) -> None:
         """
         This method shall implement the logic that commits the provided offset using the underlying technology.
+
         :param offset: provided offset to commit
         """
         pass
@@ -157,6 +161,7 @@ class ChannelReader(ChannelBase):
     def set_initial_record_offset(self, initial_record_offset: int) -> None:
         """
         This method initializes the internal variables
+
         :param initial_record_offset: value to be initialized to
         """
 
@@ -186,6 +191,7 @@ class ChannelReader(ChannelBase):
         An invoker method that encapsulates the actual implementation. This method
         MUST be called instead of the implemented method directly to ensure proper
         channel functionality.
+
         :return: list of read records or empty list in case no records read
         """
 
@@ -239,6 +245,7 @@ class ChannelReader(ChannelBase):
         offset is committed. Note that this compensation makes only sense in case of crash-restart, since the initial
         values are probably not 0. Note that the provided offset is calculated by the calculateApplicableOffsetFrom
         by breaking down the calculated offset by the framework.
+
         :param offset: offset calculated by the plugin for this channel
         :param compensate_with_initial_offset: if True, the initial offset will be added to the provided offset
         """
@@ -334,6 +341,7 @@ class ChannelWriter(ChannelBase):
         """
         This method shall implement the logic that writes the records to the output resource. It will automatically
         be invoked by the plugin via the corresponding invoker method.
+
         :param records: list of records to be written
         """
         pass
@@ -351,6 +359,7 @@ class ChannelWriter(ChannelBase):
         that the state is maintained entirely by the ChannelWriter i.e. if the ChannelReader sent the proper message,
         a flag will be set in the corresponding entry of the status map. Then this flag will be reset once this
         ChannelWriter produces new data (check invoke_write_records() for more detail).
+
         :return: number of acknowledged InputChannels
         """
 
@@ -364,6 +373,7 @@ class ChannelWriter(ChannelBase):
         """
         This method is used to invoke the implementation of the abstract method. This is necessary to perform some
         additional actions e.g. updating number of outputted records.
+
         :param records: records to be written
         """
 

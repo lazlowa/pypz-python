@@ -130,6 +130,7 @@ class OperatorExecutor:
         Initializes and triggers execution. Note that, since every time, if this method is
         called, the persisted state of the execution and of its context is re-initialized,
         hence this method is idempotent.
+
         :param exec_mode: the run mode if the execution (refer to ExecutorRunMode)
         :return: exit code (refer to ExitCodes)
         """
@@ -203,6 +204,7 @@ class OperatorExecutor:
     def __initialize(self, exec_mode: ExecutionMode = ExecutionMode.Standard) -> None:
         """
         Initializes the execution states and context.
+
         :param exec_mode: the run mode if the execution (refer to ExecutorRunMode)
         """
 

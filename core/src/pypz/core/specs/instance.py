@@ -83,6 +83,7 @@ class InstanceInitInterceptor(ABCMeta):
         - name or context object is not provided
         In these cases is the Instance init intercepted, in any other cases a normal
         init invoked.
+
         :param name: instance name
         :param args: args
         :param kwargs: kwargs
@@ -229,6 +230,7 @@ class Instance(Generic[NestedInstanceType], RegisteredInterface, ABC, metaclass=
         This method can be implemented to react to interrupt signals like
         SIGINT, SIGTERM etc. The specs implementation can then execute interrupt
         logic e.g., early termination of loops.
+
         :param system_signal: id of the system signal that causes interrupt
         """
         pass
@@ -238,7 +240,6 @@ class Instance(Generic[NestedInstanceType], RegisteredInterface, ABC, metaclass=
         """
         This method can be implemented to react to error events during
         execution. The error itself may come from arbitrary sources.
-        :return:
         """
         pass
 
@@ -336,9 +337,10 @@ class Instance(Generic[NestedInstanceType], RegisteredInterface, ABC, metaclass=
         This method returns the missing required parameters recursively
         for all nested instances, hence all parameters will be collected
         in the current scope.
+
         :return: dict, where key is the instance's full name and value is
-        a list of the names of the missing required parameters. If no missing
-        required parameters, then an empty dict will be returned
+                 a list of the names of the missing required parameters. If no missing
+                 required parameters, then an empty dict will be returned
         """
 
         missing_required_parameters = dict()
