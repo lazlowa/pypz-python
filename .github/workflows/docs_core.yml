@@ -17,7 +17,7 @@ jobs:
     - name: Install
       run: |
         python -m pip install --upgrade pip
-        python -m pip install -e ./core.[docs]
+        python -m pip install -e ./core/.[docs]
     - name: Build
       run: |
         sphinx-build ./core/docs ./core/docs/_build
