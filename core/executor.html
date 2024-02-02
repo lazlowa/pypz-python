@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Executor &mdash; pypz  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Logging" href="logging.html" />
+    <link rel="prev" title="Data transfer" href="data_transfer.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            pypz
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Core:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parameters.html">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_transfer.html">Data transfer</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Executor</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#execution-context">Execution Context</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#state-machine">State machine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#execution-modes">Execution modes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pypz.executors.commons.ExecutionMode"><code class="docutils literal notranslate"><span class="pre">ExecutionMode</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pypz.executors.commons.ExecutionMode.ResourceCreationOnly"><code class="docutils literal notranslate"><span class="pre">ExecutionMode.ResourceCreationOnly</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pypz.executors.commons.ExecutionMode.ResourceDeletionOnly"><code class="docutils literal notranslate"><span class="pre">ExecutionMode.ResourceDeletionOnly</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pypz.executors.commons.ExecutionMode.Skip"><code class="docutils literal notranslate"><span class="pre">ExecutionMode.Skip</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pypz.executors.commons.ExecutionMode.Standard"><code class="docutils literal notranslate"><span class="pre">ExecutionMode.Standard</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pypz.executors.commons.ExecutionMode.WithoutResourceDeletion"><code class="docutils literal notranslate"><span class="pre">ExecutionMode.WithoutResourceDeletion</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="logging.html">Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deployer.html">Deployer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guides:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guides/ht_create_pipeline.html">How to create a pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/ht_debug_in_operator.html">How to debug in a deployed operator</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lazlowa/pypz-python">Source Code</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lazlowa/pypz-starter-template">Starter Template Project</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lazlowa/pypz-examples">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Index:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modindex/modules.html">pypz</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pypz</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Executor</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/core/executor.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="executor">
+<span id="id1"></span><h1>Executor<a class="headerlink" href="#executor" title="Link to this heading"></a></h1>
+<p>Since the operator entity in <em>pypz</em> is self-contained, an executor is required, which controls the execution
+flow of the entire operator incl. plugins. The executor has the following main components:</p>
+<ul class="simple">
+<li><p>execution context</p></li>
+<li><p>state machine</p></li>
+</ul>
+<section id="execution-context">
+<h2>Execution Context<a class="headerlink" href="#execution-context" title="Link to this heading"></a></h2>
+<p>The execution context is responsible to maintain all the necessary information during execution.
+It can be forwarded to the states of the state machine as well.</p>
+<p>The execution context has the following responsibilities:</p>
+<ul class="simple">
+<li><p>check, if all required parameters are set</p></li>
+<li><p>maintain exit code</p></li>
+<li><p>register plugins along their types</p></li>
+<li><p>traverse plugin dependency graph</p></li>
+<li><p>store information about execution mode</p></li>
+</ul>
+</section>
+<section id="state-machine">
+<h2>State machine<a class="headerlink" href="#state-machine" title="Link to this heading"></a></h2>
+digraph state_machine {
+    size=&quot;10,20&quot;;
+    ratio=&quot;auto&quot;;
+    ranksep=&quot;2&quot;;
+    rankdir=&quot;TB&quot;;
+    graph [fontname=&quot;Verdana&quot;, fontsize=&quot;28&quot;];
+
+    start [shape=circle, label=&quot;&quot;, style=filled, color=black, width=0.2, height=0.2];
+    end [shape=circle, label=&quot;&quot;, width=0.2, height=0.2, style=filled, color=black, fillcolor=black, peripheries=2];
+    entry [shape=rect, label=&quot;StateEntry&quot;, style=rounded, width=2, height=0.6];
+    killed [shape=rect, label=&quot;StateKilled&quot;, style=rounded, width=2, height=0.6];
+    service_start [shape=rect, label=&quot;StateServiceStart&quot;, style=rounded, width=2, height=0.6];
+    service_shutdown [shape=rect, label=&quot;StateServiceShutdown&quot;, style=rounded, width=2, height=0.6];
+    resource_creation [shape=rect, label=&quot;StateResourceCreation&quot;, style=rounded, width=2, height=0.6];
+    resource_deletion [shape=rect, label=&quot;StateResourceDeletion&quot;, style=rounded, width=2, height=0.6];
+    operation_init [shape=rect, label=&quot;StateOperationInit&quot;, style=rounded, width=2, height=0.6];
+    operation_running [shape=rect, label=&quot;StateOperationRunning&quot;, style=rounded, width=2, height=0.6];
+    operation_shutdown [shape=rect, label=&quot;StateOperationShutdown&quot;, style=rounded, width=2, height=0.6];
+
+    start -&gt; entry;
+
+    entry -&gt; service_start [label=&quot;SignalServiceStart&quot;];
+    entry -&gt; killed [label=&quot;SignalShutdown&quot;];
+
+    service_start -&gt; resource_creation [label=&quot;SignalResourcesCreation&quot;];
+    service_start -&gt; resource_deletion [label=&quot;SignalResourcesDeletion&quot;];
+    service_start -&gt; service_shutdown [label=&quot;SignalError&quot;];
+    service_start -&gt; service_shutdown [label=&quot;SignalShutdown&quot;];
+
+    resource_creation -&gt; operation_init [label=&quot;SignalOperationInit&quot;];
+    resource_creation -&gt; resource_deletion [label=&quot;SignalError&quot;];
+    resource_creation -&gt; service_shutdown [label=&quot;SignalServicesStop&quot;];
+    resource_creation -&gt; resource_deletion [label=&quot;SignalShutdown&quot;];
+
+    operation_init -&gt; operation_running [label=&quot;SignalOperationStart&quot;];
+    operation_init -&gt; operation_shutdown [label=&quot;SignalError&quot;];
+    operation_init -&gt; operation_shutdown [label=&quot;SignalShutdown&quot;];
+
+    operation_running -&gt; operation_shutdown [label=&quot;SignalOperationStop&quot;];
+    operation_running -&gt; operation_shutdown [label=&quot;SignalError&quot;];
+    operation_running -&gt; operation_shutdown [label=&quot;SignalShutdown&quot;];
+
+    operation_shutdown -&gt; resource_deletion [label=&quot;SignalResourcesDeletion&quot;];
+    operation_shutdown -&gt; service_shutdown [label=&quot;SignalServicesStop&quot;];
+    operation_shutdown -&gt; resource_deletion [label=&quot;SignalError&quot;];
+
+    resource_deletion -&gt; service_shutdown [label=&quot;SignalServicesStop&quot;];
+    resource_deletion -&gt; service_shutdown [label=&quot;SignalError&quot;];
+
+    service_shutdown -&gt; killed [label=&quot;SignalKill&quot;];
+    service_shutdown -&gt; killed [label=&quot;SignalError&quot;];
+
+    killed -&gt; end;
+}</section>
+<section id="execution-modes">
+<h2>Execution modes<a class="headerlink" href="#execution-modes" title="Link to this heading"></a></h2>
+<p>As you might see on the state machine diagram, there are different routes from start to end.
+Which route the state machine will take depends not just on the execution results of the
+states, but on the specified execution mode as well.</p>
+<p>Imagine the case, where your one or more operators in your pipeline crashed. Resources might
+not have been released in this case. Since <em>pypz</em> does not know anything about your resources,
+only you do, <em>pypz</em> cannot provide an integrated feature to clean up your resources. However,
+what <em>pypz</em> can provide is an execution mode, where only resources will be deleted instead
+of running the actual business logic.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pypz.executors.commons.ExecutionMode">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.executors.commons.</span></span><span class="sig-name descname"><span class="pre">ExecutionMode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.executors.commons.ExecutionMode" title="Link to this definition"></a></dt>
+<dd><dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.commons.ExecutionMode.ResourceCreationOnly">
+<span class="sig-name descname"><span class="pre">ResourceCreationOnly</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ResourceCreationOnly'</span></em><a class="headerlink" href="#pypz.executors.commons.ExecutionMode.ResourceCreationOnly" title="Link to this definition"></a></dt>
+<dd><p>In this mode the state machine will execute resource creation only. Note that services
+will be started before and stopped after resource creation.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.commons.ExecutionMode.ResourceDeletionOnly">
+<span class="sig-name descname"><span class="pre">ResourceDeletionOnly</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ResourceDeletionOnly'</span></em><a class="headerlink" href="#pypz.executors.commons.ExecutionMode.ResourceDeletionOnly" title="Link to this definition"></a></dt>
+<dd><p>In this mode the state machine will execute resource deletion only. Note that services
+will be started before and stopped after resource creation.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.commons.ExecutionMode.Skip">
+<span class="sig-name descname"><span class="pre">Skip</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Skip'</span></em><a class="headerlink" href="#pypz.executors.commons.ExecutionMode.Skip" title="Link to this definition"></a></dt>
+<dd><p>If this mode is set, then the executor will not be invoked. This is necessary
+e.g., in deployment cases, where we want to ignore the execution of certain operators.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.commons.ExecutionMode.Standard">
+<span class="sig-name descname"><span class="pre">Standard</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Standard'</span></em><a class="headerlink" href="#pypz.executors.commons.ExecutionMode.Standard" title="Link to this definition"></a></dt>
+<dd><p>In this mode the state machine will follow its standard route.
+Note that <cite>Standard</cite> means that resources will be created and deleted up automatically. If
+you want to have a standard mode, where resources are only created, but not deleted, then use the
+WithoutResourceDeletion</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.commons.ExecutionMode.WithoutResourceDeletion">
+<span class="sig-name descname"><span class="pre">WithoutResourceDeletion</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'WithoutResourceDeletion'</span></em><a class="headerlink" href="#pypz.executors.commons.ExecutionMode.WithoutResourceDeletion" title="Link to this definition"></a></dt>
+<dd><p>In this mode the state machine will follow its standard route. 
+However the StateResourceDeletion will be skipped. This is a relevant use-case, 
+if you want to trigger centralized resource cleanup after the operations are done.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="data_transfer.html" class="btn btn-neutral float-left" title="Data transfer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="logging.html" class="btn btn-neutral float-right" title="Logging" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Laszlo Anka.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

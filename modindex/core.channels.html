@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>core.channels package &mdash; pypz  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="core.commons package" href="core.commons.html" />
+    <link rel="prev" title="core package" href="core.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            pypz
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Core:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../core/models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core/parameters.html">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core/data_transfer.html">Data transfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core/executor.html">Executor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core/logging.html">Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core/deployer.html">Deployer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guides:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guides/ht_create_pipeline.html">How to create a pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/ht_debug_in_operator.html">How to debug in a deployed operator</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lazlowa/pypz-python">Source Code</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lazlowa/pypz-starter-template">Starter Template Project</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lazlowa/pypz-examples">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Index:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">pypz</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="abstracts.html">abstracts package</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="core.html">core package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="core.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">core.channels package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.commons.html">core.commons package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html">core.specs package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#module-core">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="executors.html">executors package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="runnables.html">runnables package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version.html">version module</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pypz</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">pypz</a></li>
+          <li class="breadcrumb-item"><a href="core.html">core package</a></li>
+      <li class="breadcrumb-item active">core.channels package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/modindex/core.channels.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="core-channels-package">
+<h1>core.channels package<a class="headerlink" href="#core-channels-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-core.channels.base">
+<span id="core-channels-base-module"></span><h2>core.channels.base module<a class="headerlink" href="#module-core.channels.base" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="core.channels.base.ChannelBase">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">core.channels.base.</span></span><span class="sig-name descname"><span class="pre">ChannelBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../core/models.html#pypz.core.specs.plugin.PortPlugin" title="pypz.core.specs.plugin.PortPlugin"><span class="pre">PortPlugin</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">executor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ThreadPoolExecutor</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.channels.base.ChannelBase" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="core.channels.base.ChannelBase.ControlLoopExceptionTimeoutInMs">
+<span class="sig-name descname"><span class="pre">ControlLoopExceptionTimeoutInMs</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">60000</span></em><a class="headerlink" href="#core.channels.base.ChannelBase.ControlLoopExceptionTimeoutInMs" title="Link to this definition"></a></dt>
+<dd><p>This value defines the timeout for having unhandled exception in the control loop.
+After expiration, the control loop will be terminated.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="core.channels.base.ChannelBase.DefaultStatusThreadIntervalInMs">
+<span class="sig-name descname"><span class="pre">DefaultStatusThreadIntervalInMs</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2000</span></em><a class="headerlink" href="#core.channels.base.ChannelBase.DefaultStatusThreadIntervalInMs" title="Link to this definition"></a></dt>
+<dd><p>This value defines in how many ms the status messages (health check) will be sent to the
+counterpart channel.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="core.channels.base.ChannelBase.ParamKeyLogLevel">
+<span class="sig-name descname"><span class="pre">ParamKeyLogLevel</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'logLevel'</span></em><a class="headerlink" href="#core.channels.base.ChannelBase.ParamKeyLogLevel" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="core.channels.base.ChannelBase.ParamKeyMetricsEnabled">
+<span class="sig-name descname"><span class="pre">ParamKeyMetricsEnabled</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'metricsEnabled'</span></em><a class="headerlink" href="#core.channels.base.ChannelBase.ParamKeyMetricsEnabled" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.base.ChannelBase.can_close">
+<span class="sig-name descname"><span class="pre">can_close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#core.channels.base.ChannelBase.can_close" title="Link to this definition"></a></dt>
+<dd><p>This method can implement the logic to determine, if the channel can
+be closed or not.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if the channel can be closed, False otherwise</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.base.ChannelBase.get_channel_name">
+<span class="sig-name descname"><span class="pre">get_channel_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#core.channels.base.ChannelBase.get_channel_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.base.ChannelBase.get_configuration">
+<span class="sig-name descname"><span class="pre">get_configuration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#core.channels.base.ChannelBase.get_configuration" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.base.ChannelBase.get_context">
+<span class="sig-name descname"><span class="pre">get_context</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../core/models.html#pypz.core.specs.plugin.PortPlugin" title="pypz.core.specs.plugin.PortPlugin"><span class="pre">PortPlugin</span></a></span></span><a class="headerlink" href="#core.channels.base.ChannelBase.get_context" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.base.ChannelBase.get_location">
+<span class="sig-name descname"><span class="pre">get_location</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#core.channels.base.ChannelBase.get_location" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.base.ChannelBase.get_logger">
+<span class="sig-name descname"><span class="pre">get_logger</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#core.channels.base.ChannelBase.get_logger" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.base.ChannelBase.get_unique_name">
+<span class="sig-name descname"><span class="pre">get_unique_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#core.channels.base.ChannelBase.get_unique_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.base.ChannelBase.invoke_close_channel">
+<span class="sig-name descname"><span class="pre">invoke_close_channel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#core.channels.base.ChannelBase.invoke_close_channel" title="Link to this definition"></a></dt>
+<dd><p>An invoker method that encapsulates the actual implementation. This method
+MUST be called instead of the implemented method directly to ensure proper
+channel functionality.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if operation done, False if still in progress</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.base.ChannelBase.invoke_configure_channel">
+<span class="sig-name descname"><span class="pre">invoke_configure_channel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_configuration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#core.channels.base.ChannelBase.invoke_configure_channel" title="Link to this definition"></a></dt>
+<dd><p>An invoker method that encapsulates the actual implementation. This method
+MUST be called instead of the implemented method directly to ensure proper
+channel functionality.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.base.ChannelBase.invoke_open_channel">
+<span class="sig-name descname"><span class="pre">invoke_open_channel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#core.channels.base.ChannelBase.invoke_open_channel" title="Link to this definition"></a></dt>
+<dd><p>An invoker method that encapsulates the actual implementation. This method
+MUST be called instead of the implemented method directly to ensure proper
+channel functionality.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if operation done, False if still in progress</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.base.ChannelBase.invoke_resource_creation">
+<span class="sig-name descname"><span class="pre">invoke_resource_creation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#core.channels.base.ChannelBase.invoke_resource_creation" title="Link to this definition"></a></dt>
+<dd><p>An invoker method that encapsulates the actual implementation. This method
+MUST be called instead of the implemented method directly to ensure proper
+channel functionality.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if operation done, False if still in progress</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.base.ChannelBase.invoke_resource_deletion">
+<span class="sig-name descname"><span class="pre">invoke_resource_deletion</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#core.channels.base.ChannelBase.invoke_resource_deletion" title="Link to this definition"></a></dt>
+<dd><p>An invoker method that encapsulates the actual implementation. This method
+MUST be called instead of the implemented method directly to ensure proper
+channel functionality.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if operation done, False if still in progress</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.base.ChannelBase.invoke_sync_send_status_message">
+<span class="sig-name descname"><span class="pre">invoke_sync_send_status_message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ChannelStatus</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#core.channels.base.ChannelBase.invoke_sync_send_status_message" title="Link to this definition"></a></dt>
+<dd><p>An invoker method that encapsulates the actual implementation. This method
+MUST be called instead of the implemented method directly to ensure proper
+channel functionality.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.base.ChannelBase.invoke_sync_status_update">
+<span class="sig-name descname"><span class="pre">invoke_sync_status_update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#core.channels.base.ChannelBase.invoke_sync_status_update" title="Link to this definition"></a></dt>
+<dd><p>An invoker method that encapsulates the actual implementation. This method
+MUST be called instead of the implemented method directly to ensure proper
+channel functionality.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.base.ChannelBase.is_any_connected_channel_healthy_and_not_closed">
+<span class="sig-name descname"><span class="pre">is_any_connected_channel_healthy_and_not_closed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#core.channels.base.ChannelBase.is_any_connected_channel_healthy_and_not_closed" title="Link to this definition"></a></dt>
+<dd><p>This method realises the question “Is there any connected channel that is healthy, but not
+closed?”. This can be seen as opposite of “Is all connected channels closed or unhealthy?”
+with the strong difference that the latter does not give a proper answer if there is no
+connected channels at all.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if there is any channel healthy, but not closed, False if not or no connected channel</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.base.ChannelBase.is_any_connected_channel_healthy_and_not_stopped">
+<span class="sig-name descname"><span class="pre">is_any_connected_channel_healthy_and_not_stopped</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#core.channels.base.ChannelBase.is_any_connected_channel_healthy_and_not_stopped" title="Link to this definition"></a></dt>
+<dd><p>This method realises the question “Is there any connected channel that is healthy, but not
+stopped?”. This can be seen as opposite of “Is all connected channels stopped or unhealthy?”
+with the strong difference that the latter does not give a proper answer if there is no
+connected channels at all.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if there is any channel healthy, but not stopped, False if not or no connected channel</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.base.ChannelBase.is_any_connected_channel_healthy_and_not_stopped_and_not_closed">
+<span class="sig-name descname"><span class="pre">is_any_connected_channel_healthy_and_not_stopped_and_not_closed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#core.channels.base.ChannelBase.is_any_connected_channel_healthy_and_not_stopped_and_not_closed" title="Link to this definition"></a></dt>
+<dd><p>This method realises the question “Is there any connected channel that is healthy, but not
+stopped and not closed?”. This can be seen as opposite of “Is all connected channels closed or
+stopped or unhealthy?” with the strong difference that the latter does not give a proper
+answer if there is no connected channels at all.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if there is any channel healthy, but not stopped and not closed,
+False if not or no connected channel</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.base.ChannelBase.is_any_connected_channels_healthy">
+<span class="sig-name descname"><span class="pre">is_any_connected_channels_healthy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#core.channels.base.ChannelBase.is_any_connected_channels_healthy" title="Link to this definition"></a></dt>
+<dd><p>This method realises the question “Is there any channel healthy?”. This can be seen as opposite
+of “Is all channels unhealthy?” with the strong difference that the latter does not give a proper
+answer if there is no connected channels at all.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if there is any channel healthy, False if not or no connected channel</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.base.ChannelBase.is_any_connected_channels_unhealthy">
+<span class="sig-name descname"><span class="pre">is_any_connected_channels_unhealthy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#core.channels.base.ChannelBase.is_any_connected_channels_unhealthy" title="Link to this definition"></a></dt>
+<dd><p>This method realises the question “Is there any connected channels unhealthy?”. This can be seen
+as opposite of “Is all connected channels healthy?” with the strong difference that the latter
+does not give a proper answer if there is no connected channels at all.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if there is any channel unhealthy, False if not or no connected channels</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.base.ChannelBase.is_channel_open">
+<span class="sig-name descname"><span class="pre">is_channel_open</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#core.channels.base.ChannelBase.is_channel_open" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.base.ChannelBase.is_channel_started">
+<span class="sig-name descname"><span class="pre">is_channel_started</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#core.channels.base.ChannelBase.is_channel_started" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.base.ChannelBase.is_channel_stopped">
+<span class="sig-name descname"><span class="pre">is_channel_stopped</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#core.channels.base.ChannelBase.is_channel_stopped" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.base.ChannelBase.is_resource_created">
+<span class="sig-name descname"><span class="pre">is_resource_created</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#core.channels.base.ChannelBase.is_resource_created" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.base.ChannelBase.is_resource_deleted">
+<span class="sig-name descname"><span class="pre">is_resource_deleted</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#core.channels.base.ChannelBase.is_resource_deleted" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.base.ChannelBase.on_new_channel_status_monitor">
+<span class="sig-name descname"><span class="pre">on_new_channel_status_monitor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">status_monitor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ChannelStatusMonitor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#core.channels.base.ChannelBase.on_new_channel_status_monitor" title="Link to this definition"></a></dt>
+<dd><p>This method can be overridden to handle the creation of the new ChannelStatusMonitor e.g.
+registering callbacks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>status_monitor</strong> – ChannelStatusMonitor object newly created</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.base.ChannelBase.on_status_message_received">
+<span class="sig-name descname"><span class="pre">on_status_message_received</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">ChannelStatusMessage</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#core.channels.base.ChannelBase.on_status_message_received" title="Link to this definition"></a></dt>
+<dd><p>Adds a callback to the set of callbacks, which will be executed upon status
+message received.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>callback</strong> – callback Callable[[list[str]], None]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.base.ChannelBase.on_status_message_send">
+<span class="sig-name descname"><span class="pre">on_status_message_send</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#core.channels.base.ChannelBase.on_status_message_send" title="Link to this definition"></a></dt>
+<dd><p>This method can be implemented to hook into the event of sending status message.
+For example one can use it to calculate aggregated metrics between 2 sending and
+attach the metrics to the healthCheckPayload.
+VERY IMPORTANT NOTE: keep the runtime as low as possible, because the higher the
+runtime the more load on the status message sender thread, which might cause
+double activation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.base.ChannelBase.retrieve_all_connected_channel_count">
+<span class="sig-name descname"><span class="pre">retrieve_all_connected_channel_count</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#core.channels.base.ChannelBase.retrieve_all_connected_channel_count" title="Link to this definition"></a></dt>
+<dd><p>Returns the number of tracked input channels. This can be used to synchronize some activities like starting
+the output.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>number of tracked input channels</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.base.ChannelBase.retrieve_connected_channel_unique_names">
+<span class="sig-name descname"><span class="pre">retrieve_connected_channel_unique_names</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filter_function</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">ChannelFilter</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">set</span></span></span><a class="headerlink" href="#core.channels.base.ChannelBase.retrieve_connected_channel_unique_names" title="Link to this definition"></a></dt>
+<dd><p>This method returns a set of connected channel names given the evaluation
+criteria passed as argument.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filter_function</strong> – check_function check the ChannelFilter for more details (nullable)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Set of channel names that passes the given evaluation</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.base.ChannelBase.retrieve_healthy_connected_channel_count">
+<span class="sig-name descname"><span class="pre">retrieve_healthy_connected_channel_count</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#core.channels.base.ChannelBase.retrieve_healthy_connected_channel_count" title="Link to this definition"></a></dt>
+<dd><p>Returns the number of healthy tracked input channels.
+This can be used to synchronize some activities like starting the output.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>number of healthy tracked input channels</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.base.ChannelBase.set_location">
+<span class="sig-name descname"><span class="pre">set_location</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_location</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.channels.base.ChannelBase.set_location" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.base.ChannelBase.start_channel">
+<span class="sig-name descname"><span class="pre">start_channel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">send_status_message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#core.channels.base.ChannelBase.start_channel" title="Link to this definition"></a></dt>
+<dd><p>This method sets the corresponding flags and sends the corresponding status message to signalize that
+the channel has been started.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>send_status_message</strong> – if True the status message sending will be called</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.base.ChannelBase.stop_channel">
+<span class="sig-name descname"><span class="pre">stop_channel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">send_status_message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#core.channels.base.ChannelBase.stop_channel" title="Link to this definition"></a></dt>
+<dd><p>This method sets the corresponding flags and sends the corresponding status message to signalize that
+the channel has been stopped.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>send_status_message</strong> – if True the status message sending will be called</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="core.channels.base.ChannelMetric">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">core.channels.base.</span></span><span class="sig-name descname"><span class="pre">ChannelMetric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elapsedTimeSinceLastIO</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recordCountInLastIO</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.channels.base.ChannelMetric" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+</section>
+<section id="module-core.channels.io">
+<span id="core-channels-io-module"></span><h2>core.channels.io module<a class="headerlink" href="#module-core.channels.io" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="core.channels.io.ChannelReader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">core.channels.io.</span></span><span class="sig-name descname"><span class="pre">ChannelReader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../core/models.html#pypz.core.specs.plugin.InputPortPlugin" title="pypz.core.specs.plugin.InputPortPlugin"><span class="pre">InputPortPlugin</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">executor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ThreadPoolExecutor</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.channels.io.ChannelReader" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelBase</span></code></p>
+<p>This class is the base of the input channel classes.
+The idea is that the class provides some core, protected abstract methods, which shall be implemented by
+the developer. These implementations then will be invoked by invoker methods. This makes sure that additional
+necessary logic will be performed along the implemented.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="core.channels.io.ChannelReader.MetricsBufferLength">
+<span class="sig-name descname"><span class="pre">MetricsBufferLength</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></em><a class="headerlink" href="#core.channels.io.ChannelReader.MetricsBufferLength" title="Link to this definition"></a></dt>
+<dd><p>This variable specifies the length of the metric buffer and so the averaging window</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="core.channels.io.ChannelReader.NotInitialized">
+<span class="sig-name descname"><span class="pre">NotInitialized</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">-1</span></em><a class="headerlink" href="#core.channels.io.ChannelReader.NotInitialized" title="Link to this definition"></a></dt>
+<dd><p>Some helper static to init or identify if offset is not initialized</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.io.ChannelReader.acknowledge_input">
+<span class="sig-name descname"><span class="pre">acknowledge_input</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#core.channels.io.ChannelReader.acknowledge_input" title="Link to this definition"></a></dt>
+<dd><p>This method sends the corresponding ack signal to the ChannelWriter</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.io.ChannelReader.get_read_record_count">
+<span class="sig-name descname"><span class="pre">get_read_record_count</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#core.channels.io.ChannelReader.get_read_record_count" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.io.ChannelReader.get_read_record_offset">
+<span class="sig-name descname"><span class="pre">get_read_record_offset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#core.channels.io.ChannelReader.get_read_record_offset" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.io.ChannelReader.has_records">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">has_records</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#core.channels.io.ChannelReader.has_records" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic to check, if the reader can still read records.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if channel has still records, False if not</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.io.ChannelReader.invoke_commit_current_read_offset">
+<span class="sig-name descname"><span class="pre">invoke_commit_current_read_offset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#core.channels.io.ChannelReader.invoke_commit_current_read_offset" title="Link to this definition"></a></dt>
+<dd><p>This method is used to invoke the implementation of the abstract method.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.io.ChannelReader.invoke_commit_offset">
+<span class="sig-name descname"><span class="pre">invoke_commit_offset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compensate_with_initial_offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#core.channels.io.ChannelReader.invoke_commit_offset" title="Link to this definition"></a></dt>
+<dd><p>This method is used to invoke the implementation of the abstract method. This is necessary to perform some
+additional actions like compensating the calculated offset with the initial to make sure that the proper
+offset is committed. Note that this compensation makes only sense in case of crash-restart, since the initial
+values are probably not 0. Note that the provided offset is calculated by the calculateApplicableOffsetFrom
+by breaking down the calculated offset by the framework.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>offset</strong> – offset calculated by the plugin for this channel</p></li>
+<li><p><strong>compensate_with_initial_offset</strong> – if True, the initial offset will be added to the provided offset</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.io.ChannelReader.invoke_read_records">
+<span class="sig-name descname"><span class="pre">invoke_read_records</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#core.channels.io.ChannelReader.invoke_read_records" title="Link to this definition"></a></dt>
+<dd><p>An invoker method that encapsulates the actual implementation. This method
+MUST be called instead of the implemented method directly to ensure proper
+channel functionality.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of read records or empty list in case no records read</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.io.ChannelReader.on_status_message_send">
+<span class="sig-name descname"><span class="pre">on_status_message_send</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#core.channels.io.ChannelReader.on_status_message_send" title="Link to this definition"></a></dt>
+<dd><p>This method can be implemented to hook into the event of sending status message.
+For example one can use it to calculate aggregated metrics between 2 sending and
+attach the metrics to the healthCheckPayload.
+VERY IMPORTANT NOTE: keep the runtime as low as possible, because the higher the
+runtime the more load on the status message sender thread, which might cause
+double activation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.io.ChannelReader.set_initial_record_offset">
+<span class="sig-name descname"><span class="pre">set_initial_record_offset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">initial_record_offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#core.channels.io.ChannelReader.set_initial_record_offset" title="Link to this definition"></a></dt>
+<dd><p>This method initializes the internal variables</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>initial_record_offset</strong> – value to be initialized to</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.io.ChannelReader.set_initial_record_offset_auto">
+<span class="sig-name descname"><span class="pre">set_initial_record_offset_auto</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#core.channels.io.ChannelReader.set_initial_record_offset_auto" title="Link to this definition"></a></dt>
+<dd><p>This method sets the initial values of the internal variables to the values retrieved by the implementation.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="core.channels.io.ChannelWriter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">core.channels.io.</span></span><span class="sig-name descname"><span class="pre">ChannelWriter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../core/models.html#pypz.core.specs.plugin.OutputPortPlugin" title="pypz.core.specs.plugin.OutputPortPlugin"><span class="pre">OutputPortPlugin</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">executor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ThreadPoolExecutor</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.channels.io.ChannelWriter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelBase</span></code></p>
+<p>This class is the base of the output channel classes.
+The idea is that the class provides some core, protected abstract methods, which shall be implemented by
+the developer. These implementations then will be invoked by invoker methods. This makes sure that additional
+necessary logic will be performed along the implemented.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="core.channels.io.ChannelWriter.MetricsBufferLength">
+<span class="sig-name descname"><span class="pre">MetricsBufferLength</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></em><a class="headerlink" href="#core.channels.io.ChannelWriter.MetricsBufferLength" title="Link to this definition"></a></dt>
+<dd><p>This variable specifies the length of the metric buffer and so the averaging window</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.io.ChannelWriter.get_written_record_count">
+<span class="sig-name descname"><span class="pre">get_written_record_count</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#core.channels.io.ChannelWriter.get_written_record_count" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.io.ChannelWriter.invoke_write_records">
+<span class="sig-name descname"><span class="pre">invoke_write_records</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">records</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#core.channels.io.ChannelWriter.invoke_write_records" title="Link to this definition"></a></dt>
+<dd><p>This method is used to invoke the implementation of the abstract method. This is necessary to perform some
+additional actions e.g. updating number of outputted records.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>records</strong> – records to be written</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.io.ChannelWriter.is_all_connected_input_channels_acknowledged">
+<span class="sig-name descname"><span class="pre">is_all_connected_input_channels_acknowledged</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#core.channels.io.ChannelWriter.is_all_connected_input_channels_acknowledged" title="Link to this definition"></a></dt>
+<dd><p>This method retrieves the number of InputChannels that have acknowledged their input (i.e. the output of
+this channel). This information can be useful for scenarios, where a synchronization logic needs to be
+implemented e.g. where the output shall not provide more data until the inputs did not acknowledge. Note
+that the state is maintained entirely by the ChannelWriter i.e. if the ChannelReader sent the proper message,
+a flag will be set in the corresponding entry of the status map. Then this flag will be reset once this
+ChannelWriter produces new data (check invoke_write_records() for more detail).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>number of acknowledged InputChannels</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.io.ChannelWriter.on_status_message_send">
+<span class="sig-name descname"><span class="pre">on_status_message_send</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#core.channels.io.ChannelWriter.on_status_message_send" title="Link to this definition"></a></dt>
+<dd><p>This method can be implemented to hook into the event of sending status message.
+For example one can use it to calculate aggregated metrics between 2 sending and
+attach the metrics to the healthCheckPayload.
+VERY IMPORTANT NOTE: keep the runtime as low as possible, because the higher the
+runtime the more load on the status message sender thread, which might cause
+double activation.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-core.channels.misc">
+<span id="core-channels-misc-module"></span><h2>core.channels.misc module<a class="headerlink" href="#module-core.channels.misc" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="core.channels.misc.BlankChannelReader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">core.channels.misc.</span></span><span class="sig-name descname"><span class="pre">BlankChannelReader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../core/models.html#pypz.core.specs.plugin.InputPortPlugin" title="pypz.core.specs.plugin.InputPortPlugin"><span class="pre">InputPortPlugin</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">executor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ThreadPoolExecutor</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.channels.misc.BlankChannelReader" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="../core/data_transfer.html#pypz.core.channels.io.ChannelReader" title="pypz.core.channels.io.ChannelReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelReader</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.misc.BlankChannelReader.has_records">
+<span class="sig-name descname"><span class="pre">has_records</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#core.channels.misc.BlankChannelReader.has_records" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic to check, if the reader can still read records.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if channel has still records, False if not</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="core.channels.misc.BlankChannelWriter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">core.channels.misc.</span></span><span class="sig-name descname"><span class="pre">BlankChannelWriter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../core/models.html#pypz.core.specs.plugin.OutputPortPlugin" title="pypz.core.specs.plugin.OutputPortPlugin"><span class="pre">OutputPortPlugin</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">executor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ThreadPoolExecutor</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.channels.misc.BlankChannelWriter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="../core/data_transfer.html#pypz.core.channels.io.ChannelWriter" title="pypz.core.channels.io.ChannelWriter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelWriter</span></code></a></p>
+</dd></dl>
+
+</section>
+<section id="module-core.channels.status">
+<span id="core-channels-status-module"></span><h2>core.channels.status module<a class="headerlink" href="#module-core.channels.status" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="core.channels.status.ChannelFilter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">core.channels.status.</span></span><span class="sig-name descname"><span class="pre">ChannelFilter</span></span><a class="headerlink" href="#core.channels.status.ChannelFilter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This interface contains the methods that shall implement the checking of different
+statuses. This interface can be used to restrict access to ChannelStatusMonitor
+object.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.status.ChannelFilter.get_channel_context_name">
+<span class="sig-name descname"><span class="pre">get_channel_context_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#core.channels.status.ChannelFilter.get_channel_context_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.status.ChannelFilter.get_channel_group_name">
+<span class="sig-name descname"><span class="pre">get_channel_group_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#core.channels.status.ChannelFilter.get_channel_group_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.status.ChannelFilter.get_channel_unique_name">
+<span class="sig-name descname"><span class="pre">get_channel_unique_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#core.channels.status.ChannelFilter.get_channel_unique_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.status.ChannelFilter.is_channel_closed">
+<span class="sig-name descname"><span class="pre">is_channel_closed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#core.channels.status.ChannelFilter.is_channel_closed" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.status.ChannelFilter.is_channel_error">
+<span class="sig-name descname"><span class="pre">is_channel_error</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#core.channels.status.ChannelFilter.is_channel_error" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.status.ChannelFilter.is_channel_healthy">
+<span class="sig-name descname"><span class="pre">is_channel_healthy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#core.channels.status.ChannelFilter.is_channel_healthy" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.status.ChannelFilter.is_channel_not_initialised">
+<span class="sig-name descname"><span class="pre">is_channel_not_initialised</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#core.channels.status.ChannelFilter.is_channel_not_initialised" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.status.ChannelFilter.is_channel_opened">
+<span class="sig-name descname"><span class="pre">is_channel_opened</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#core.channels.status.ChannelFilter.is_channel_opened" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.status.ChannelFilter.is_channel_started">
+<span class="sig-name descname"><span class="pre">is_channel_started</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#core.channels.status.ChannelFilter.is_channel_started" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.status.ChannelFilter.is_channel_stopped">
+<span class="sig-name descname"><span class="pre">is_channel_stopped</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#core.channels.status.ChannelFilter.is_channel_stopped" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="core.channels.status.ChannelStatus">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">core.channels.status.</span></span><span class="sig-name descname"><span class="pre">ChannelStatus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.channels.status.ChannelStatus" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="core.channels.status.ChannelStatus.Acknowledged">
+<span class="sig-name descname"><span class="pre">Acknowledged</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Acknowledged'</span></em><a class="headerlink" href="#core.channels.status.ChannelStatus.Acknowledged" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="core.channels.status.ChannelStatus.Closed">
+<span class="sig-name descname"><span class="pre">Closed</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Closed'</span></em><a class="headerlink" href="#core.channels.status.ChannelStatus.Closed" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="core.channels.status.ChannelStatus.Error">
+<span class="sig-name descname"><span class="pre">Error</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Error'</span></em><a class="headerlink" href="#core.channels.status.ChannelStatus.Error" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="core.channels.status.ChannelStatus.HealthCheck">
+<span class="sig-name descname"><span class="pre">HealthCheck</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'HealthCheck'</span></em><a class="headerlink" href="#core.channels.status.ChannelStatus.HealthCheck" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="core.channels.status.ChannelStatus.Opened">
+<span class="sig-name descname"><span class="pre">Opened</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Opened'</span></em><a class="headerlink" href="#core.channels.status.ChannelStatus.Opened" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="core.channels.status.ChannelStatus.Started">
+<span class="sig-name descname"><span class="pre">Started</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Started'</span></em><a class="headerlink" href="#core.channels.status.ChannelStatus.Started" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="core.channels.status.ChannelStatus.Stopped">
+<span class="sig-name descname"><span class="pre">Stopped</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Stopped'</span></em><a class="headerlink" href="#core.channels.status.ChannelStatus.Stopped" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="core.channels.status.ChannelStatus.WaitingForSchema">
+<span class="sig-name descname"><span class="pre">WaitingForSchema</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'WaitingForSchema'</span></em><a class="headerlink" href="#core.channels.status.ChannelStatus.WaitingForSchema" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="core.channels.status.ChannelStatusMessage">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">core.channels.status.</span></span><span class="sig-name descname"><span class="pre">ChannelStatusMessage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_context_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_group_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_group_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#core.channels.status.ChannelStatus" title="core.channels.status.ChannelStatus"><span class="pre">ChannelStatus</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestamp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.channels.status.ChannelStatusMessage" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class is a Data Transfer Object (DTO) for the status messages sent between the channels.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.status.ChannelStatusMessage.create_from_json">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_from_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.channels.status.ChannelStatusMessage.create_from_json" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.status.ChannelStatusMessage.get_channel_unique_name">
+<span class="sig-name descname"><span class="pre">get_channel_unique_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#core.channels.status.ChannelStatusMessage.get_channel_unique_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="core.channels.status.ChannelStatusMonitor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">core.channels.status.</span></span><span class="sig-name descname"><span class="pre">ChannelStatusMonitor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_context_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_group_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../core/logging.html#pypz.core.commons.loggers.ContextLogger" title="pypz.core.commons.loggers.ContextLogger"><span class="pre">ContextLogger</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.channels.status.ChannelStatusMonitor" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#core.channels.status.ChannelFilter" title="core.channels.status.ChannelFilter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelFilter</span></code></a></p>
+<p>This class has the responsibility to monitor and track state of the connected channel RW entities.
+If the counterpart sends a status message, this class has to parse and interpret it. In addition,
+it provides an implementation for the <code class="docutils literal notranslate"><span class="pre">ChannelFilter</span></code> interface to enable certain queries.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="core.channels.status.ChannelStatusMonitor.ValidPatienceTimeInMs">
+<span class="sig-name descname"><span class="pre">ValidPatienceTimeInMs</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">120000</span></em><a class="headerlink" href="#core.channels.status.ChannelStatusMonitor.ValidPatienceTimeInMs" title="Link to this definition"></a></dt>
+<dd><p>This is the patience time for not receiving any update from the ChannelReader. Once this time
+is up, the ChannelReader will be invalidated</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.status.ChannelStatusMonitor.get_channel_context_name">
+<span class="sig-name descname"><span class="pre">get_channel_context_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#core.channels.status.ChannelStatusMonitor.get_channel_context_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.status.ChannelStatusMonitor.get_channel_group_name">
+<span class="sig-name descname"><span class="pre">get_channel_group_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#core.channels.status.ChannelStatusMonitor.get_channel_group_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.status.ChannelStatusMonitor.get_channel_unique_name">
+<span class="sig-name descname"><span class="pre">get_channel_unique_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#core.channels.status.ChannelStatusMonitor.get_channel_unique_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.status.ChannelStatusMonitor.is_channel_closed">
+<span class="sig-name descname"><span class="pre">is_channel_closed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#core.channels.status.ChannelStatusMonitor.is_channel_closed" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.status.ChannelStatusMonitor.is_channel_error">
+<span class="sig-name descname"><span class="pre">is_channel_error</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#core.channels.status.ChannelStatusMonitor.is_channel_error" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.status.ChannelStatusMonitor.is_channel_healthy">
+<span class="sig-name descname"><span class="pre">is_channel_healthy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#core.channels.status.ChannelStatusMonitor.is_channel_healthy" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.status.ChannelStatusMonitor.is_channel_not_initialised">
+<span class="sig-name descname"><span class="pre">is_channel_not_initialised</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#core.channels.status.ChannelStatusMonitor.is_channel_not_initialised" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.status.ChannelStatusMonitor.is_channel_opened">
+<span class="sig-name descname"><span class="pre">is_channel_opened</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#core.channels.status.ChannelStatusMonitor.is_channel_opened" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.status.ChannelStatusMonitor.is_channel_started">
+<span class="sig-name descname"><span class="pre">is_channel_started</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#core.channels.status.ChannelStatusMonitor.is_channel_started" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.status.ChannelStatusMonitor.is_channel_stopped">
+<span class="sig-name descname"><span class="pre">is_channel_stopped</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#core.channels.status.ChannelStatusMonitor.is_channel_stopped" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.status.ChannelStatusMonitor.on_status_update">
+<span class="sig-name descname"><span class="pre">on_status_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">statusUpdateCallback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.channels.status.ChannelStatusMonitor.on_status_update" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.channels.status.ChannelStatusMonitor.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">status_message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#core.channels.status.ChannelStatusMessage" title="core.channels.status.ChannelStatusMessage"><span class="pre">ChannelStatusMessage</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.channels.status.ChannelStatusMonitor.update" title="Link to this definition"></a></dt>
+<dd><p>This method implements the logic to handle status message updates.
+Note that to overcome messaging issues e.g., missing status update,
+we don’t introduce a state machine. It means that most of the states
+can overwrite the actual state with one exception. If “error” status
+has been sent, it can only be overwritten by “open” or “start”. This
+allows us to retain error information until the counterpart has been
+restarted.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>status_message</strong> – the status message received from the other ChannelRW entity</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="core.channels.status.NameSeparator">
+<span class="sig-prename descclassname"><span class="pre">core.channels.status.</span></span><span class="sig-name descname"><span class="pre">NameSeparator</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'&#64;'</span></em><a class="headerlink" href="#core.channels.status.NameSeparator" title="Link to this definition"></a></dt>
+<dd><p>Used to construct channel unique name</p>
+</dd></dl>
+
+</section>
+<section id="module-core.channels">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-core.channels" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="core.html" class="btn btn-neutral float-left" title="core package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="core.commons.html" class="btn btn-neutral float-right" title="core.commons package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Laszlo Anka.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

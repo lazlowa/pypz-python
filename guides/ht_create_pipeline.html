@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How to create a pipeline &mdash; pypz  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="How to debug in a deployed operator" href="ht_debug_in_operator.html" />
+    <link rel="prev" title="Deployer" href="../core/deployer.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            pypz
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Core:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../core/models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core/parameters.html">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core/data_transfer.html">Data transfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core/executor.html">Executor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core/logging.html">Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core/deployer.html">Deployer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guides:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">How to create a pipeline</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#what-you-will-learn">What You Will Learn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#what-you-will-need">What You Will Need</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#setting-up-the-project">Setting Up The Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-plan">The Plan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#demowriteroperator">DemoWriterOperator</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#output-schema">Output Schema</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#init"><em>__init__()</em></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#on-init"><em>_on_init()</em></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#on-shutdown"><em>_on_shutdown()</em></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#on-interrupt-system-signal"><em>_on_interrupt(system_signal)</em></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#on-error"><em>_on_error()</em></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#on-running"><em>_on_running()</em></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#demoreaderoperator">DemoReaderOperator</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#input-schema">Input schema</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id1"><em>__init__()</em></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2"><em>_on_running()</em></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#demopipeline">DemoPipeline</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3"><em>__init__()</em></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#optional-kafka-cluster">[Optional] Kafka Cluster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#local-execution">Local execution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sniffer">Sniffer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#build-docker">Build + Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#deploy-to-kubernetes">Deploy to Kubernetes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#prepare-local-deployment-with-kind-optional">Prepare local deployment with Kind (optional)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kubernetes-configuration-optional">Kubernetes configuration (optional)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#certificates-optional">Certificates (optional)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kubernetesdeployer">KubernetesDeployer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#play-with-replication">Play with Replication</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#adapt-the-sniffer">Adapt the Sniffer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#additional-optimizations">Additional Optimizations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#expected-parameters">Expected Parameters</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ht_debug_in_operator.html">How to debug in a deployed operator</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lazlowa/pypz-python">Source Code</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lazlowa/pypz-starter-template">Starter Template Project</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lazlowa/pypz-examples">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Index:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modindex/modules.html">pypz</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pypz</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">How to create a pipeline</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/guides/ht_create_pipeline.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="how-to-create-a-pipeline">
+<h1>How to create a pipeline<a class="headerlink" href="#how-to-create-a-pipeline" title="Link to this heading"></a></h1>
+<section id="what-you-will-learn">
+<h2>What You Will Learn<a class="headerlink" href="#what-you-will-learn" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>The basics of pypz in python</p></li>
+<li><p>How to model operators and pipelines in <em>pypz</em></p></li>
+<li><p>How to execute an operator locally w/o docker and kubernetes</p></li>
+<li><p>How to build and push a docker image of your implementation</p></li>
+<li><p>How to deploy a pipeline to Kubernetes</p></li>
+<li><p>How to sniff the running pipelines</p></li>
+<li><p>How to replicate operators</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>TLDR: you can find the completed exercise along with other examples in the
+<a class="reference external" href="https://github.com/lazlowa/pypz-examples">example repository</a></p>
+</div>
+</section>
+<section id="what-you-will-need">
+<h2>What You Will Need<a class="headerlink" href="#what-you-will-need" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Python 3.11+</p></li>
+<li><p>an IDE of your choice, however PyCharm CE has been used for this guide</p></li>
+<li><p>access to a Kafka cluster or you can simply use the confluent image “confluentinc/confluent-local image” to
+start Kafka locally</p></li>
+<li><p>(optional) access to a Kubernetes Cluster (you can use <a class="reference external" href="https://kind.sigs.k8s.io">Kind</a> locally)</p></li>
+<li><p>(optional) access to a Docker image registry (not necessary if Kind used)</p></li>
+</ul>
+</section>
+<section id="setting-up-the-project">
+<h2>Setting Up The Project<a class="headerlink" href="#setting-up-the-project" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>Create a project based on this <a class="reference external" href="https://github.com/lazlowa/pypz-starter-template">template</a></p></li>
+<li><p>Open with your IDE of your choice</p></li>
+<li><p>Setup required dependencies in the pyproject.toml file</p></li>
+</ol>
+<img alt="../_images/ht_cp_dependencies.png" src="../_images/ht_cp_dependencies.png" />
+<ol class="arabic simple" start="4">
+<li><p>Install the dependencies and the current project in editable mode: <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-e</span> <span class="pre">.</span></code></p></li>
+</ol>
+</section>
+<section id="the-plan">
+<h2>The Plan<a class="headerlink" href="#the-plan" title="Link to this heading"></a></h2>
+<p>We are going to create the following “Hello world” pipeline:</p>
+<figure class="align-center" id="id6">
+<img alt="Demo Pipeline" src="../_images/ht_cp_planned_pipeline.png" />
+<figcaption>
+<p><span class="caption-text">Demo Pipeline</span><a class="headerlink" href="#id6" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>The <cite>DemoWriterOperator</cite> will produce “Hello world” messages and will transmit them over Kafka to the
+<cite>DemoReaderOperator</cite>.</p>
+</section>
+<section id="demowriteroperator">
+<span id="demo-writer-operator"></span><h2>DemoWriterOperator<a class="headerlink" href="#demowriteroperator" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>Create a python file with the name <code class="docutils literal notranslate"><span class="pre">writer.py</span></code></p></li>
+<li><p>Create a class with name <code class="docutils literal notranslate"><span class="pre">DemoWriterOperator</span></code></p></li>
+<li><p>Import the necessary modules (in PyCharm either Ctrl+Space, while typing or Alt+Enter over the importable)</p></li>
+</ol>
+<img alt="../_images/ht_cp_import.png" src="../_images/ht_cp_import.png" />
+<ol class="arabic simple" start="4">
+<li><p>Generate the proper constructor (in PyCharm Alt+Insert &gt; Override methods &gt; select __init__ &gt; Ok)</p></li>
+</ol>
+<img alt="../_images/ht_cp_ctor.png" src="../_images/ht_cp_ctor.png" />
+<ol class="arabic simple" start="5">
+<li><p>Generate the abstract methods (in PyCharm Alt+Insert &gt; Implement methods &gt; select all methods &gt; Ok )</p></li>
+</ol>
+<img alt="../_images/ht_cp_abstracts.png" src="../_images/ht_cp_abstracts.png" />
+<p>Once you are done, you should see something similar:</p>
+<img alt="../_images/ht_cp_empty_writer_operator.png" src="../_images/ht_cp_empty_writer_operator.png" />
+<p>Check <a class="reference internal" href="../core/models.html#models"><span class="std std-ref">Models</span></a> section for more details on the methods.</p>
+<section id="output-schema">
+<h3>Output Schema<a class="headerlink" href="#output-schema" title="Link to this heading"></a></h3>
+<p>The builtin KafkaChannelPorts are sending records in <a class="reference external" href="https://avro.apache.org/docs/1.11.1/specification/_print/">Avro</a>
+format, hence we need to define the schema for the records.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">AvroSchemaString</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">{</span>
+<span class="s2">    &quot;type&quot;: &quot;record&quot;,</span>
+<span class="s2">    &quot;name&quot;: &quot;DemoRecord&quot;,</span>
+<span class="s2">    &quot;fields&quot;: [</span>
+<span class="s2">        {</span>
+<span class="s2">            &quot;name&quot;: &quot;text&quot;,</span>
+<span class="s2">            &quot;type&quot;: &quot;string&quot;</span>
+<span class="s2">        }</span>
+<span class="s2">    ]</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p>This schema will expect a record with the key “text” in type string.</p>
+</section>
+<section id="init">
+<h3><em>__init__()</em><a class="headerlink" href="#init" title="Link to this heading"></a></h3>
+<p>Operators can be enhanced by plugins. For example, the Input-/OutputPortPlugins enable the operators
+to transfer data to and from each other. Hence, we need to create the <code class="docutils literal notranslate"><span class="pre">KafkaChannelOutputPort</span></code> plugin
+in the ctor of the operator.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
+
+<span class="n">AvroSchemaString</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">{</span>
+<span class="s2">    &quot;type&quot;: &quot;record&quot;,</span>
+<span class="s2">    &quot;name&quot;: &quot;DemoRecord&quot;,</span>
+<span class="s2">    &quot;fields&quot;: [</span>
+<span class="s2">        {</span>
+<span class="s2">            &quot;name&quot;: &quot;text&quot;,</span>
+<span class="s2">            &quot;type&quot;: &quot;string&quot;</span>
+<span class="s2">        }</span>
+<span class="s2">    ]</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">output_port</span> <span class="o">=</span> <span class="n">KafkaChannelOutputPort</span><span class="p">(</span><span class="n">schema</span><span class="o">=</span><span class="n">DemoWriterOperator</span><span class="o">.</span><span class="n">AvroSchemaString</span><span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">output_record_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>Additionally, we create a variable to track, how many records have been sent already.</p>
+</section>
+<section id="on-init">
+<h3><em>_on_init()</em><a class="headerlink" href="#on-init" title="Link to this heading"></a></h3>
+<p>Check <a class="reference internal" href="../core/models.html#operator-methods"><span class="std std-ref">Methods</span></a> for the signature explanation.</p>
+<p>This method will be called after services have been started, resources have been created and port plugins
+have been initialized.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Always care for the expected return value!</p>
+</div>
+<p>Since we are not implementing any logic here for this example, simply return True.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_on_init</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">return</span> <span class="kc">True</span>
+</pre></div>
+</div>
+</section>
+<section id="on-shutdown">
+<h3><em>_on_shutdown()</em><a class="headerlink" href="#on-shutdown" title="Link to this heading"></a></h3>
+<p>Check <a class="reference internal" href="../core/models.html#operator-methods"><span class="std std-ref">Methods</span></a> for the signature explanation.</p>
+<p>This method will be called before port plugin are stopped, resources deleted and services shut down.</p>
+<p>Since we are not implementing any logic here for this example, simply return True.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_on_shutdown</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">return</span> <span class="kc">True</span>
+</pre></div>
+</div>
+</section>
+<section id="on-interrupt-system-signal">
+<h3><em>_on_interrupt(system_signal)</em><a class="headerlink" href="#on-interrupt-system-signal" title="Link to this heading"></a></h3>
+<p>This method is called, if a system signal has been caught like SIGINT, SEGTERM etc. You can use it to stop
+your internal logic (e.g., loops), which is not accessible by <em>pypz</em>.
+It does not expect any return value and we are not using it for this example, hence you can leave it.</p>
+</section>
+<section id="on-error">
+<h3><em>_on_error()</em><a class="headerlink" href="#on-error" title="Link to this heading"></a></h3>
+<p>This method is called, if an exception is raised during execution. You can use it to perform a reaction to
+an error.</p>
+</section>
+<section id="on-running">
+<h3><em>_on_running()</em><a class="headerlink" href="#on-running" title="Link to this heading"></a></h3>
+<p>Check <a class="reference internal" href="../core/models.html#operator-methods"><span class="std std-ref">Methods</span></a> for the signature explanation.</p>
+<p>This method is called after the _on_init() has successfully finished and before _on_shutdown(). It runs until:</p>
+<ul class="simple">
+<li><p>the method returns True</p></li>
+<li><p>the method returns None and there is no more records to be received on any of the InputPortPlugins</p></li>
+</ul>
+<p>The following logic is implemented:</p>
+<ol class="arabic simple">
+<li><p>We create the record according to the defined schema</p></li>
+<li><p>For visualization purposes, we print it onto stdout</p></li>
+<li><p>We invoke the send method of the output_port</p></li>
+<li><p>If 30 records were sent, then we terminate</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_on_running</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
+    <span class="n">record_to_send</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;HelloWorld_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_record_count</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Generated record: &quot;</span><span class="p">,</span> <span class="n">record_to_send</span><span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">output_port</span><span class="o">.</span><span class="n">send</span><span class="p">([</span><span class="n">record_to_send</span><span class="p">])</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">output_record_count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">if</span> <span class="mi">30</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_record_count</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="demoreaderoperator">
+<h2>DemoReaderOperator<a class="headerlink" href="#demoreaderoperator" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>Create a python file with the name <code class="docutils literal notranslate"><span class="pre">reader.py</span></code></p></li>
+<li><p>Create a class with name <code class="docutils literal notranslate"><span class="pre">DemoReaderOperator</span></code></p></li>
+<li><p>Repeat the steps 3-5 from the <a class="reference internal" href="#demo-writer-operator"><span class="std std-ref">DemoWriterOperator</span></a></p></li>
+</ol>
+<p>Once done, you should see something similar:</p>
+<img alt="../_images/ht_cp_empty_reader_operator.png" src="../_images/ht_cp_empty_reader_operator.png" />
+<section id="input-schema">
+<h3>Input schema<a class="headerlink" href="#input-schema" title="Link to this heading"></a></h3>
+<p>Since we are reading records from Kafka sent by the DemoWriterOperator, we need to have the same schema.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">AvroSchemaString</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">{</span>
+<span class="s2">    &quot;type&quot;: &quot;record&quot;,</span>
+<span class="s2">    &quot;name&quot;: &quot;DemoRecord&quot;,</span>
+<span class="s2">    &quot;fields&quot;: [</span>
+<span class="s2">        {</span>
+<span class="s2">            &quot;name&quot;: &quot;text&quot;,</span>
+<span class="s2">            &quot;type&quot;: &quot;string&quot;</span>
+<span class="s2">        }</span>
+<span class="s2">    ]</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="id1">
+<h3><em>__init__()</em><a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<p>For the reader operator we need to define the kafka input port.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
+
+<span class="n">AvroSchemaString</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">{</span>
+<span class="s2">    &quot;type&quot;: &quot;record&quot;,</span>
+<span class="s2">    &quot;name&quot;: &quot;DemoRecord&quot;,</span>
+<span class="s2">    &quot;fields&quot;: [</span>
+<span class="s2">        {</span>
+<span class="s2">            &quot;name&quot;: &quot;text&quot;,</span>
+<span class="s2">            &quot;type&quot;: &quot;string&quot;</span>
+<span class="s2">        }</span>
+<span class="s2">    ]</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">input_port</span> <span class="o">=</span> <span class="n">KafkaChannelInputPort</span><span class="p">(</span><span class="n">schema</span><span class="o">=</span><span class="n">DemoReaderOperator</span><span class="o">.</span><span class="n">AvroSchemaString</span><span class="p">)</span>
+
+<span class="o">...</span>
+</pre></div>
+</div>
+</section>
+<section id="id2">
+<h3><em>_on_running()</em><a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<p>In this method we are simply retrieving the records and printing them onto stdout.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_on_running</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
+    <span class="n">records</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_port</span><span class="o">.</span><span class="n">retrieve</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">records</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Received record: &quot;</span><span class="p">,</span> <span class="n">record</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">None</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Notice that the method returns with None. This will force <em>pypz</em> to automatically check, if there are
+records available on any input ports. In this example it is equivalent to:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_port</span><span class="o">.</span><span class="n">can_retrieve</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="demopipeline">
+<h2>DemoPipeline<a class="headerlink" href="#demopipeline" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>Create a new file with the name <code class="docutils literal notranslate"><span class="pre">pipeline.py</span></code></p></li>
+<li><p>Create a class with the name <code class="docutils literal notranslate"><span class="pre">DemoPipeline</span></code></p></li>
+<li><p>Import the modules</p></li>
+<li><p>Generate the constructor</p></li>
+</ol>
+<p>Note that we don’t override or implement any other methods for the pipeline.</p>
+<p>Once you are done, you should see something like this:</p>
+<img alt="../_images/ht_cp_empty_pipeline.png" src="../_images/ht_cp_empty_pipeline.png" />
+<section id="id3">
+<h3><em>__init__()</em><a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<p>Since we are modelling the pipeline in the code, we need to define the operators and its connections:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pypz.core.specs.pipeline</span> <span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="kn">from</span> <span class="nn">pypz.example.reader</span> <span class="kn">import</span> <span class="n">DemoReaderOperator</span>
+<span class="kn">from</span> <span class="nn">pypz.example.writer</span> <span class="kn">import</span> <span class="n">DemoWriterOperator</span>
+
+
+<span class="k">class</span> <span class="nc">DemoPipeline</span><span class="p">(</span><span class="n">Pipeline</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">reader</span> <span class="o">=</span> <span class="n">DemoReaderOperator</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">writer</span> <span class="o">=</span> <span class="n">DemoWriterOperator</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">reader</span><span class="o">.</span><span class="n">input_port</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">output_port</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Notice that we did not specify the name of the operator instances. In this case <em>pypz</em> will use the name
+of the variables as instance names. Check <a class="reference internal" href="../core/models.html#instance-metaclass"><span class="std std-ref">Metaclass</span></a> for more information.</p>
+</div>
+<p>Congratulations, you created your first pipeline in <em>pypz</em>!</p>
+</section>
+</section>
+<section id="optional-kafka-cluster">
+<h2>[Optional] Kafka Cluster<a class="headerlink" href="#optional-kafka-cluster" title="Link to this heading"></a></h2>
+<p>Since we are using Kafka port plugins in the example, you will need access to a Kafka cluster. Should it be not the case,
+you can start a cluster locally from the corresponding confluent image:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>-d<span class="w"> </span>--rm<span class="w"> </span>-p<span class="w"> </span><span class="m">9092</span>:9092<span class="w"> </span>confluentinc/confluent-local
+</pre></div>
+</div>
+<p>Then you can access the broker via <code class="docutils literal notranslate"><span class="pre">localhost:9092</span></code>.</p>
+</section>
+<section id="local-execution">
+<h2>Local execution<a class="headerlink" href="#local-execution" title="Link to this heading"></a></h2>
+<p>In this section you will learn, how to execute your pipeline locally. First, we create an additional file
+with the name <code class="docutils literal notranslate"><span class="pre">execute.py</span></code>. This will be a script file.</p>
+<p>The following logic is implemented:</p>
+<ol class="arabic simple">
+<li><p>Create the DemoPipeline object</p></li>
+<li><p>Create the PipelineExecutor object with the pipeline as ctor argument</p></li>
+<li><p>Start the pipeline execution</p></li>
+<li><p>Shutdown the pipeline execution</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pypz.executors.pipeline.executor</span> <span class="kn">import</span> <span class="n">PipelineExecutor</span>
+
+<span class="kn">from</span> <span class="nn">pypz.example.pipeline</span> <span class="kn">import</span> <span class="n">DemoPipeline</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">pipeline</span> <span class="o">=</span> <span class="n">DemoPipeline</span><span class="p">(</span><span class="s2">&quot;pipeline&quot;</span><span class="p">)</span>
+    <span class="n">executor</span> <span class="o">=</span> <span class="n">PipelineExecutor</span><span class="p">(</span><span class="n">pipeline</span><span class="p">)</span>
+
+    <span class="n">executor</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+    <span class="n">executor</span><span class="o">.</span><span class="n">shutdown</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Notice that we specified the name of the pipeline here. The reason is that automatic name deduction from
+variable names is working only within <em>pypz</em> Instance context i.e., if the caller is a type of the Instance.
+Check <a class="reference internal" href="../core/models.html#instance-metaclass"><span class="std std-ref">Metaclass</span></a> for more information.</p>
+</div>
+<p>If you try to run your script now, you will get the following error:</p>
+<img alt="../_images/ht_cp_missing_req_param.png" src="../_images/ht_cp_missing_req_param.png" />
+<p>This is because the port plugins have not been configured with the Kafka broker location. To do this, we need
+to set the following instance parameters:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pypz.executors.pipeline.executor</span> <span class="kn">import</span> <span class="n">PipelineExecutor</span>
+
+<span class="kn">from</span> <span class="nn">pypz.example.pipeline</span> <span class="kn">import</span> <span class="n">DemoPipeline</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">pipeline</span> <span class="o">=</span> <span class="n">DemoPipeline</span><span class="p">(</span><span class="s2">&quot;pipeline&quot;</span><span class="p">)</span>
+    <span class="n">pipeline</span><span class="o">.</span><span class="n">set_parameter</span><span class="p">(</span><span class="s2">&quot;&gt;&gt;channelLocation&quot;</span><span class="p">,</span> <span class="s2">&quot;localhost:9092&quot;</span><span class="p">)</span>
+
+    <span class="n">executor</span> <span class="o">=</span> <span class="n">PipelineExecutor</span><span class="p">(</span><span class="n">pipeline</span><span class="p">)</span>
+
+    <span class="n">executor</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+    <span class="n">executor</span><span class="o">.</span><span class="n">shutdown</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Notice that we configured the <a class="reference internal" href="../core/data_transfer.html#channel-expected-parameters"><span class="std std-ref">channels</span></a> in the port plugins directly and we
+used two-level, excluding <a class="reference internal" href="../core/parameters.html#cascading-parameters"><span class="std std-ref">cascading paremters</span></a>.</p>
+</div>
+<p>If you start the executor now, you need to see something like this:</p>
+<img alt="../_images/ht_cp_execute_log_1.png" src="../_images/ht_cp_execute_log_1.png" />
+<p>Notice that we used the print method to show some information on stdout, however there is a <a class="reference internal" href="../core/logging.html#logging"><span class="std std-ref">Logging</span></a> system
+in <em>pypz</em>, which allows to send log messages. For this, we need to enhance our operators by logger plugins.
+As next, we will add the <code class="docutils literal notranslate"><span class="pre">DefaultLoggerPlugin</span></code> to each operators and we will modify the code to use the
+new logger. The <code class="docutils literal notranslate"><span class="pre">DefaultLoggerPlugin</span></code> sends the logs to stdout.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
+
+<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">output_port</span> <span class="o">=</span> <span class="n">KafkaChannelOutputPort</span><span class="p">(</span><span class="n">schema</span><span class="o">=</span><span class="n">DemoWriterOperator</span><span class="o">.</span><span class="n">AvroSchemaString</span><span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">output_record_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="hll">    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">DefaultLoggerPlugin</span><span class="p">()</span>
+</span>
+<span class="o">...</span>
+
+<span class="k">def</span> <span class="nf">_on_running</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
+    <span class="n">record_to_send</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;HelloWorld_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_record_count</span><span class="p">)</span>
+    <span class="p">}</span>
+
+<span class="hll">    <span class="bp">self</span><span class="o">.</span><span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Generated record: </span><span class="si">{</span><span class="n">record_to_send</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">output_port</span><span class="o">.</span><span class="n">send</span><span class="p">([</span><span class="n">record_to_send</span><span class="p">])</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">output_record_count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">if</span> <span class="mi">30</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_record_count</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="kc">False</span>
+
+<span class="o">...</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
+
+<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">input_port</span> <span class="o">=</span> <span class="n">KafkaChannelInputPort</span><span class="p">(</span><span class="n">schema</span><span class="o">=</span><span class="n">DemoReaderOperator</span><span class="o">.</span><span class="n">AvroSchemaString</span><span class="p">)</span>
+
+<span class="hll">    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">DefaultLoggerPlugin</span><span class="p">()</span>
+</span>
+<span class="o">...</span>
+
+<span class="k">def</span> <span class="nf">_on_running</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
+    <span class="n">records</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_port</span><span class="o">.</span><span class="n">retrieve</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">records</span><span class="p">:</span>
+<span class="hll">        <span class="bp">self</span><span class="o">.</span><span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Received record: </span><span class="si">{</span><span class="n">record</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span>    <span class="k">return</span> <span class="kc">None</span>
+
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>Notice as well that the default log level is <code class="docutils literal notranslate"><span class="pre">INFO</span></code>. Since we call the debug() method in the <code class="docutils literal notranslate"><span class="pre">DemoReaderOperator</span></code>,
+we need to change the log level via setting the corresponding parameter.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">pipeline</span> <span class="o">=</span> <span class="n">DemoPipeline</span><span class="p">(</span><span class="s2">&quot;pipeline&quot;</span><span class="p">)</span>
+    <span class="n">pipeline</span><span class="o">.</span><span class="n">set_parameter</span><span class="p">(</span><span class="s2">&quot;&gt;&gt;channelLocation&quot;</span><span class="p">,</span> <span class="s2">&quot;localhost:9092&quot;</span><span class="p">)</span>
+<span class="hll">    <span class="n">pipeline</span><span class="o">.</span><span class="n">reader</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">set_parameter</span><span class="p">(</span><span class="s2">&quot;logLevel&quot;</span><span class="p">,</span> <span class="s2">&quot;DEBUG&quot;</span><span class="p">)</span>
+</span>
+    <span class="n">executor</span> <span class="o">=</span> <span class="n">PipelineExecutor</span><span class="p">(</span><span class="n">pipeline</span><span class="p">)</span>
+
+    <span class="n">executor</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+    <span class="n">executor</span><span class="o">.</span><span class="n">shutdown</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>If you now execute the pipeline, you will see the following:</p>
+<img alt="../_images/ht_cp_execute_log_2.png" src="../_images/ht_cp_execute_log_2.png" />
+</section>
+<section id="sniffer">
+<h2>Sniffer<a class="headerlink" href="#sniffer" title="Link to this heading"></a></h2>
+<p>It might be helpful to know, what the operators are doing and how many data they have processed.
+Sniffer is a small tool to visualize the control plane of the operators’ ports i.e., what the ports are doing.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The sniffer is still in an early version. Do not expect perfect functionality or nice GUI!</p>
+</div>
+<ol class="arabic simple">
+<li><p>Create an additional file with the name <code class="docutils literal notranslate"><span class="pre">sniffer.py</span></code>, which will be a script</p></li>
+<li><p>Create the pipeline object</p></li>
+<li><p>Set the parameters as you have done in the <code class="docutils literal notranslate"><span class="pre">execute.py</span></code></p></li>
+<li><p>Create the sniffer object and provide the pipeline as constructor argument</p></li>
+<li><p>Invoke the sniffer’s mainloop() method (based on TK)</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pypz.executors.pipeline.executor</span> <span class="kn">import</span> <span class="n">PipelineExecutor</span>
+
+<span class="kn">from</span> <span class="nn">pypz.example.pipeline</span> <span class="kn">import</span> <span class="n">DemoPipeline</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="hll">    <span class="n">pipeline</span> <span class="o">=</span> <span class="n">DemoPipeline</span><span class="p">(</span><span class="s2">&quot;pipeline&quot;</span><span class="p">)</span>
+</span>    <span class="n">pipeline</span><span class="o">.</span><span class="n">set_parameter</span><span class="p">(</span><span class="s2">&quot;&gt;&gt;channelLocation&quot;</span><span class="p">,</span> <span class="s2">&quot;localhost:9092&quot;</span><span class="p">)</span>
+    <span class="n">pipeline</span><span class="o">.</span><span class="n">reader</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">set_parameter</span><span class="p">(</span><span class="s2">&quot;logLevel&quot;</span><span class="p">,</span> <span class="s2">&quot;DEBUG&quot;</span><span class="p">)</span>
+
+    <span class="n">sniffer</span> <span class="o">=</span> <span class="n">PipelineSnifferViewer</span><span class="p">(</span><span class="n">pipeline</span><span class="p">)</span>
+    <span class="n">sniffer</span><span class="o">.</span><span class="n">mainloop</span><span class="p">()</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="6">
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">sniffer.py</span></code></p></li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">execute.py</span></code></p></li>
+</ol>
+<img alt="../_images/ht_cp_sniffer_1.gif" src="../_images/ht_cp_sniffer_1.gif" />
+</section>
+<section id="build-docker">
+<h2>Build + Docker<a class="headerlink" href="#build-docker" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>To build your project, you will need the <code class="docutils literal notranslate"><span class="pre">build</span></code> tool first:</p></li>
+</ol>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>build
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Then you can build your project by invoking the following command from the project root</p></li>
+</ol>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>build
+</pre></div>
+</div>
+<p>This command will create the sdist and wheel into the dist folder. This is important, since the Dockerfile
+references this folder.</p>
+<ol class="arabic simple" start="3">
+<li><p>Now you can build your docker image via</p></li>
+</ol>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>pypz-demo-pipeline<span class="w"> </span>.
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Obviously your image tag shall be adapted so that it can be later pushed to the registry of your choice.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>You might get the following error messages during building the Docker image.</p>
+<img alt="../_images/ht_cp_docker_error.png" src="../_images/ht_cp_docker_error.png" />
+<p>The following issues can cause this error:</p>
+<ol class="arabic simple">
+<li><p>invalid DNS configuration -&gt; check /etc/resolv.conf on linux</p></li>
+<li><p>you are behind a proxy, but the Docker engine does not know about it -&gt; check ~/.docker/config.json</p></li>
+</ol>
+<p>To include proxy during Docker build you need to modify the ~/.docker/config.json file by adding the following
+configuration to it:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="nt">&quot;proxies&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;default&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;httpProxy&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;HTTP_PROXY_HOST:PORT&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;httpsProxy&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;HTTP_PROXY_HOST:PORT&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;noProxy&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;localhost,127.0.0.*&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Then restart the Docker engine.</p>
+</div>
+<ol class="arabic simple" start="4">
+<li><p>(optional) If you have a Docker image registry, then you can push the built image</p></li>
+<li><p>Now you can set the <code class="docutils literal notranslate"><span class="pre">operatorImageName</span></code> parameter for both operators</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pypz.core.specs.pipeline</span> <span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="kn">from</span> <span class="nn">pypz.example.reader</span> <span class="kn">import</span> <span class="n">DemoReaderOperator</span>
+<span class="kn">from</span> <span class="nn">pypz.example.writer</span> <span class="kn">import</span> <span class="n">DemoWriterOperator</span>
+
+
+<span class="k">class</span> <span class="nc">DemoPipeline</span><span class="p">(</span><span class="n">Pipeline</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">reader</span> <span class="o">=</span> <span class="n">DemoReaderOperator</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">writer</span> <span class="o">=</span> <span class="n">DemoWriterOperator</span><span class="p">()</span>
+
+<span class="hll">        <span class="bp">self</span><span class="o">.</span><span class="n">reader</span><span class="o">.</span><span class="n">set_parameter</span><span class="p">(</span><span class="s2">&quot;operatorImageName&quot;</span><span class="p">,</span> <span class="s2">&quot;pypz-demo-pipeline&quot;</span><span class="p">)</span>
+</span><span class="hll">        <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">set_parameter</span><span class="p">(</span><span class="s2">&quot;operatorImageName&quot;</span><span class="p">,</span> <span class="s2">&quot;pypz-demo-pipeline&quot;</span><span class="p">)</span>
+</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reader</span><span class="o">.</span><span class="n">input_port</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">output_port</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This is important, if you want to deploy your pipeline, since the deployer will use the provided image name to
+start the proper container with your project.</p>
+</section>
+<section id="deploy-to-kubernetes">
+<h2>Deploy to Kubernetes<a class="headerlink" href="#deploy-to-kubernetes" title="Link to this heading"></a></h2>
+<p>The following section will show, how to deploy your pipeline to Kubernetes.</p>
+<section id="prepare-local-deployment-with-kind-optional">
+<h3>Prepare local deployment with Kind (optional)<a class="headerlink" href="#prepare-local-deployment-with-kind-optional" title="Link to this heading"></a></h3>
+<p>If you have no access to a Kubernetes cluster, you can use <a class="reference external" href="https://kind.sigs.k8s.io">Kind</a> locally.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Kind is for testing and demonstration purposes, it should not be used for productive workloads!</p>
+</div>
+<ol class="arabic simple">
+<li><p>Please follow the instruction to install <a class="reference external" href="https://kind.sigs.k8s.io">Kind</a> on your machine.</p></li>
+<li><p>Start your cluster.</p></li>
+</ol>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>kind<span class="w"> </span>create<span class="w"> </span>cluster
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>(optional) If you have no access to a Docker image registry, then load the image into the cluster</p></li>
+</ol>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>kind<span class="w"> </span>load<span class="w"> </span>docker-image<span class="w"> </span>pypz-demo-pipeline
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Note that there is a way to start a registry on Kind, however this guide does not cover that.</p>
+</div>
+<p>Now your cluster is ready, you can follow the rest of the guide.</p>
+</section>
+<section id="kubernetes-configuration-optional">
+<h3>Kubernetes configuration (optional)<a class="headerlink" href="#kubernetes-configuration-optional" title="Link to this heading"></a></h3>
+<p>To make the Kubernetes deployer work in <em>pypz</em>, it requires the Kubernetes configuration file.
+There are different ways, how to obtain it depending on the cluster management, however if you
+installed Kind, then the necessary config file is already prepared under ~/.kube/config.</p>
+</section>
+<section id="certificates-optional">
+<h3>Certificates (optional)<a class="headerlink" href="#certificates-optional" title="Link to this heading"></a></h3>
+<p>If your cluster has a not commonly available certificate, then you need to import it into the certificate
+store of the python. <em>pypz</em> uses <code class="docutils literal notranslate"><span class="pre">certifi</span></code>. To get the location of the cacert file, you can execute
+the following:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import certifi; print(certifi.where())&quot;</span>
+</pre></div>
+</div>
+<p>Then import your certificates into that cacert file.</p>
+</section>
+<section id="kubernetesdeployer">
+<h3>KubernetesDeployer<a class="headerlink" href="#kubernetesdeployer" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p>Create an additional file with the name <code class="docutils literal notranslate"><span class="pre">deploy.py</span></code>, which will be a script</p></li>
+<li><p>Create the pipeline object</p></li>
+<li><p>Set the necessary parameters</p></li>
+<li><p>Create the KubernetesDeployer and specify the namespace</p></li>
+<li><p>Deploy the pipeline only, if it is not yet deployed</p></li>
+<li><p>Attach to the deployed pipeline to block until it is finished</p></li>
+<li><p>Destroy the pipeline and its related resources</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pypz.deployers.k8s</span> <span class="kn">import</span> <span class="n">KubernetesDeployer</span>
+
+<span class="kn">from</span> <span class="nn">pypz.example.pipeline</span> <span class="kn">import</span> <span class="n">DemoPipeline</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">pipeline</span> <span class="o">=</span> <span class="n">DemoPipeline</span><span class="p">(</span><span class="s2">&quot;pipeline&quot;</span><span class="p">)</span>
+    <span class="n">pipeline</span><span class="o">.</span><span class="n">set_parameter</span><span class="p">(</span><span class="s2">&quot;&gt;&gt;channelLocation&quot;</span><span class="p">,</span> <span class="s2">&quot;localhost:9092&quot;</span><span class="p">)</span>
+    <span class="n">pipeline</span><span class="o">.</span><span class="n">reader</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">set_parameter</span><span class="p">(</span><span class="s2">&quot;logLevel&quot;</span><span class="p">,</span> <span class="s2">&quot;DEBUG&quot;</span><span class="p">)</span>
+
+    <span class="n">deployer</span> <span class="o">=</span> <span class="n">KubernetesDeployer</span><span class="p">(</span><span class="n">namespace</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">deployer</span><span class="o">.</span><span class="n">is_deployed</span><span class="p">(</span><span class="n">pipeline</span><span class="o">.</span><span class="n">get_full_name</span><span class="p">()):</span>
+        <span class="n">deployer</span><span class="o">.</span><span class="n">deploy</span><span class="p">(</span><span class="n">pipeline</span><span class="p">)</span>
+
+    <span class="n">deployer</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span><span class="n">pipeline</span><span class="o">.</span><span class="n">get_full_name</span><span class="p">())</span>
+    <span class="n">deployer</span><span class="o">.</span><span class="n">destroy</span><span class="p">(</span><span class="n">pipeline</span><span class="o">.</span><span class="n">get_full_name</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>Run <code class="docutils literal notranslate"><span class="pre">sniffer.py</span></code></p>
+<p>Run <code class="docutils literal notranslate"><span class="pre">deploy.py</span></code></p>
+</section>
+</section>
+<section id="play-with-replication">
+<h2>Play with Replication<a class="headerlink" href="#play-with-replication" title="Link to this heading"></a></h2>
+<p>You can <a class="reference internal" href="../core/models.html#operator-replication"><span class="std std-ref">replicate</span></a> operators by setting the replication factor as parameter.
+Modify your <code class="docutils literal notranslate"><span class="pre">deploy.py</span></code> file:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pypz.deployers.k8s</span> <span class="kn">import</span> <span class="n">KubernetesDeployer</span>
+
+<span class="kn">from</span> <span class="nn">pypz.example.pipeline</span> <span class="kn">import</span> <span class="n">DemoPipeline</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">pipeline</span> <span class="o">=</span> <span class="n">DemoPipeline</span><span class="p">(</span><span class="s2">&quot;pipeline&quot;</span><span class="p">)</span>
+    <span class="n">pipeline</span><span class="o">.</span><span class="n">set_parameter</span><span class="p">(</span><span class="s2">&quot;&gt;&gt;channelLocation&quot;</span><span class="p">,</span> <span class="s2">&quot;localhost:9092&quot;</span><span class="p">)</span>
+    <span class="n">pipeline</span><span class="o">.</span><span class="n">reader</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">set_parameter</span><span class="p">(</span><span class="s2">&quot;logLevel&quot;</span><span class="p">,</span> <span class="s2">&quot;DEBUG&quot;</span><span class="p">)</span>
+
+<span class="hll">    <span class="n">pipeline</span><span class="o">.</span><span class="n">reader</span><span class="o">.</span><span class="n">set_parameter</span><span class="p">(</span><span class="s2">&quot;replicationFactor&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+</span><span class="hll">    <span class="n">pipeline</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">set_parameter</span><span class="p">(</span><span class="s2">&quot;replicationFactor&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+</span>
+    <span class="n">deployer</span> <span class="o">=</span> <span class="n">KubernetesDeployer</span><span class="p">(</span><span class="n">namespace</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">deployer</span><span class="o">.</span><span class="n">is_deployed</span><span class="p">(</span><span class="n">pipeline</span><span class="o">.</span><span class="n">get_full_name</span><span class="p">()):</span>
+        <span class="n">deployer</span><span class="o">.</span><span class="n">deploy</span><span class="p">(</span><span class="n">pipeline</span><span class="p">)</span>
+
+    <span class="n">deployer</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span><span class="n">pipeline</span><span class="o">.</span><span class="n">get_full_name</span><span class="p">())</span>
+    <span class="n">deployer</span><span class="o">.</span><span class="n">destroy</span><span class="p">(</span><span class="n">pipeline</span><span class="o">.</span><span class="n">get_full_name</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If you would deploy the pipeline with replicated operators and start the sniffer from <code class="docutils literal notranslate"><span class="pre">sniffer.py</span></code>,
+you would not see the replicated operators in Sniffer, since the pipeline object created in the <code class="docutils literal notranslate"><span class="pre">sniffer.py</span></code> file
+has no replicated operators.</p>
+</div>
+<section id="adapt-the-sniffer">
+<h3>Adapt the Sniffer<a class="headerlink" href="#adapt-the-sniffer" title="Link to this heading"></a></h3>
+<p>You can either set the parameters as well in <code class="docutils literal notranslate"><span class="pre">sniffer.py</span></code>, but in this case every time you change something in
+the deployed pipeline, you need to replicate the change into your <code class="docutils literal notranslate"><span class="pre">sniffer.py</span></code>.</p>
+<p>There is a more robust solution for that. Instead of creating the sniffed pipeline manually, we can use the
+KubernetesDeployer to retrieve the deployed pipeline for us, which then can be used to sniff.</p>
+<p>Adapt the <code class="docutils literal notranslate"><span class="pre">sniffer.py</span></code> accordingly.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pypz.sniffer.viewer</span> <span class="kn">import</span> <span class="n">PipelineSnifferViewer</span>
+
+<span class="kn">from</span> <span class="nn">pypz.deployers.k8s</span> <span class="kn">import</span> <span class="n">KubernetesDeployer</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">deployer</span> <span class="o">=</span> <span class="n">KubernetesDeployer</span><span class="p">(</span><span class="n">namespace</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">)</span>
+    <span class="n">pipeline</span> <span class="o">=</span> <span class="n">deployer</span><span class="o">.</span><span class="n">retrieve_deployed_pipeline</span><span class="p">(</span><span class="s2">&quot;pipeline&quot;</span><span class="p">)</span>
+
+    <span class="n">sniffer</span> <span class="o">=</span> <span class="n">PipelineSnifferViewer</span><span class="p">(</span><span class="n">pipeline</span><span class="p">)</span>
+    <span class="n">sniffer</span><span class="o">.</span><span class="n">mainloop</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>You can now run the <code class="docutils literal notranslate"><span class="pre">deploy.py</span></code> and <code class="docutils literal notranslate"><span class="pre">sniffer.py</span></code> scripts. If everything is ok, you should see something like this:</p>
+<img alt="../_images/ht_cp_sniffer_2.gif" src="../_images/ht_cp_sniffer_2.gif" />
+</section>
+</section>
+<section id="additional-optimizations">
+<h2>Additional Optimizations<a class="headerlink" href="#additional-optimizations" title="Link to this heading"></a></h2>
+<section id="expected-parameters">
+<h3>Expected Parameters<a class="headerlink" href="#expected-parameters" title="Link to this heading"></a></h3>
+<p>In the <code class="docutils literal notranslate"><span class="pre">DemoWriterOperator</span></code> we are using hardcoded values for both the message and the maximal record count.
+These values should actually be parameters that the user can set from outside, so we are introducing the following
+<a class="reference internal" href="../core/parameters.html#expected-parameters"><span class="std std-ref">Expected parameters</span></a>:</p>
+<ul class="simple">
+<li><p>recordCount, which will be a required parameter</p></li>
+<li><p>message, which will be an optional parameter with the default value of “HelloWorld”</p></li>
+</ul>
+<p>Adapt the code in the <code class="docutils literal notranslate"><span class="pre">writer.py</span></code> file:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+
+<span class="kn">from</span> <span class="nn">pypz.core.commons.parameters</span> <span class="kn">import</span> <span class="n">OptionalParameter</span><span class="p">,</span> <span class="n">RequiredParameter</span>
+<span class="kn">from</span> <span class="nn">pypz.core.specs.operator</span> <span class="kn">import</span> <span class="n">Operator</span>
+<span class="kn">from</span> <span class="nn">pypz.plugins.kafka_io.ports</span> <span class="kn">import</span> <span class="n">KafkaChannelOutputPort</span>
+<span class="kn">from</span> <span class="nn">pypz.plugins.loggers.default</span> <span class="kn">import</span> <span class="n">DefaultLoggerPlugin</span>
+
+
+<span class="k">class</span> <span class="nc">DemoWriterOperator</span><span class="p">(</span><span class="n">Operator</span><span class="p">):</span>
+
+    <span class="o">...</span>
+
+<span class="hll">    <span class="n">record_count</span> <span class="o">=</span> <span class="n">RequiredParameter</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">alt_name</span><span class="o">=</span><span class="s2">&quot;recordCount&quot;</span><span class="p">,</span>
+</span><span class="hll">                                     <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Specifies number of records to send&quot;</span><span class="p">)</span>
+</span><span class="hll">    <span class="n">message</span> <span class="o">=</span> <span class="n">OptionalParameter</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Specifies the message prefix for the record&quot;</span><span class="p">)</span>
+</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_port</span> <span class="o">=</span> <span class="n">KafkaChannelOutputPort</span><span class="p">(</span><span class="n">schema</span><span class="o">=</span><span class="n">DemoWriterOperator</span><span class="o">.</span><span class="n">AvroSchemaString</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_record_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">DefaultLoggerPlugin</span><span class="p">()</span>
+
+<span class="hll">        <span class="bp">self</span><span class="o">.</span><span class="n">record_count</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Since it is a required parameter, the initial value does not matter.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+<span class="hll">        <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;HelloWorld&quot;</span>
+</span><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This is an optional parameter, the default value is the initial value of the variable.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+    <span class="o">...</span>
+
+    <span class="k">def</span> <span class="nf">_on_running</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
+        <span class="n">record_to_send</span> <span class="o">=</span> <span class="p">{</span>
+<span class="hll">            <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">message</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_record_count</span><span class="si">}</span><span class="s2">&quot;</span>
+</span>        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Generated record: </span><span class="si">{</span><span class="n">record_to_send</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_port</span><span class="o">.</span><span class="n">send</span><span class="p">([</span><span class="n">record_to_send</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_record_count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="hll">        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">record_count</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_record_count</span><span class="p">:</span>
+</span>            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="o">...</span>
+</pre></div>
+</div>
+<p>Then you can set the parameters outside of the pipeline in either <code class="docutils literal notranslate"><span class="pre">execute.py</span></code> or <code class="docutils literal notranslate"><span class="pre">deploy.py</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pipeline</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">set_parameter</span><span class="p">(</span><span class="s2">&quot;recordCount&quot;</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+<span class="n">pipeline</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">set_parameter</span><span class="p">(</span><span class="s2">&quot;message&quot;</span><span class="p">,</span> <span class="s2">&quot;Other message&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../core/deployer.html" class="btn btn-neutral float-left" title="Deployer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ht_debug_in_operator.html" class="btn btn-neutral float-right" title="How to debug in a deployed operator" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Laszlo Anka.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>core package &mdash; pypz  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="core.channels package" href="core.channels.html" />
+    <link rel="prev" title="abstracts package" href="abstracts.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            pypz
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Core:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../core/models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core/parameters.html">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core/data_transfer.html">Data transfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core/executor.html">Executor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core/logging.html">Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core/deployer.html">Deployer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guides:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guides/ht_create_pipeline.html">How to create a pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/ht_debug_in_operator.html">How to debug in a deployed operator</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lazlowa/pypz-python">Source Code</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lazlowa/pypz-starter-template">Starter Template Project</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lazlowa/pypz-examples">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Index:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">pypz</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="abstracts.html">abstracts package</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">core package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html">core.channels package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.commons.html">core.commons package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html">core.specs package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-core">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="executors.html">executors package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="runnables.html">runnables package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version.html">version module</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pypz</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">pypz</a></li>
+      <li class="breadcrumb-item active">core package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/modindex/core.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="core-package">
+<h1>core package<a class="headerlink" href="#core-package" title="Link to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="core.channels.html">core.channels package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="core.channels.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core.channels.html#module-core.channels.base">core.channels.base module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core.channels.html#core.channels.base.ChannelBase"><code class="docutils literal notranslate"><span class="pre">ChannelBase</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.base.ChannelBase.ControlLoopExceptionTimeoutInMs"><code class="docutils literal notranslate"><span class="pre">ChannelBase.ControlLoopExceptionTimeoutInMs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.base.ChannelBase.DefaultStatusThreadIntervalInMs"><code class="docutils literal notranslate"><span class="pre">ChannelBase.DefaultStatusThreadIntervalInMs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.base.ChannelBase.ParamKeyLogLevel"><code class="docutils literal notranslate"><span class="pre">ChannelBase.ParamKeyLogLevel</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.base.ChannelBase.ParamKeyMetricsEnabled"><code class="docutils literal notranslate"><span class="pre">ChannelBase.ParamKeyMetricsEnabled</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.base.ChannelBase.can_close"><code class="docutils literal notranslate"><span class="pre">ChannelBase.can_close()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.base.ChannelBase.get_channel_name"><code class="docutils literal notranslate"><span class="pre">ChannelBase.get_channel_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.base.ChannelBase.get_configuration"><code class="docutils literal notranslate"><span class="pre">ChannelBase.get_configuration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.base.ChannelBase.get_context"><code class="docutils literal notranslate"><span class="pre">ChannelBase.get_context()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.base.ChannelBase.get_location"><code class="docutils literal notranslate"><span class="pre">ChannelBase.get_location()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.base.ChannelBase.get_logger"><code class="docutils literal notranslate"><span class="pre">ChannelBase.get_logger()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.base.ChannelBase.get_unique_name"><code class="docutils literal notranslate"><span class="pre">ChannelBase.get_unique_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.base.ChannelBase.invoke_close_channel"><code class="docutils literal notranslate"><span class="pre">ChannelBase.invoke_close_channel()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.base.ChannelBase.invoke_configure_channel"><code class="docutils literal notranslate"><span class="pre">ChannelBase.invoke_configure_channel()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.base.ChannelBase.invoke_open_channel"><code class="docutils literal notranslate"><span class="pre">ChannelBase.invoke_open_channel()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.base.ChannelBase.invoke_resource_creation"><code class="docutils literal notranslate"><span class="pre">ChannelBase.invoke_resource_creation()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.base.ChannelBase.invoke_resource_deletion"><code class="docutils literal notranslate"><span class="pre">ChannelBase.invoke_resource_deletion()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.base.ChannelBase.invoke_sync_send_status_message"><code class="docutils literal notranslate"><span class="pre">ChannelBase.invoke_sync_send_status_message()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.base.ChannelBase.invoke_sync_status_update"><code class="docutils literal notranslate"><span class="pre">ChannelBase.invoke_sync_status_update()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.base.ChannelBase.is_any_connected_channel_healthy_and_not_closed"><code class="docutils literal notranslate"><span class="pre">ChannelBase.is_any_connected_channel_healthy_and_not_closed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.base.ChannelBase.is_any_connected_channel_healthy_and_not_stopped"><code class="docutils literal notranslate"><span class="pre">ChannelBase.is_any_connected_channel_healthy_and_not_stopped()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.base.ChannelBase.is_any_connected_channel_healthy_and_not_stopped_and_not_closed"><code class="docutils literal notranslate"><span class="pre">ChannelBase.is_any_connected_channel_healthy_and_not_stopped_and_not_closed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.base.ChannelBase.is_any_connected_channels_healthy"><code class="docutils literal notranslate"><span class="pre">ChannelBase.is_any_connected_channels_healthy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.base.ChannelBase.is_any_connected_channels_unhealthy"><code class="docutils literal notranslate"><span class="pre">ChannelBase.is_any_connected_channels_unhealthy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.base.ChannelBase.is_channel_open"><code class="docutils literal notranslate"><span class="pre">ChannelBase.is_channel_open()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.base.ChannelBase.is_channel_started"><code class="docutils literal notranslate"><span class="pre">ChannelBase.is_channel_started()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.base.ChannelBase.is_channel_stopped"><code class="docutils literal notranslate"><span class="pre">ChannelBase.is_channel_stopped()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.base.ChannelBase.is_resource_created"><code class="docutils literal notranslate"><span class="pre">ChannelBase.is_resource_created()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.base.ChannelBase.is_resource_deleted"><code class="docutils literal notranslate"><span class="pre">ChannelBase.is_resource_deleted()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.base.ChannelBase.on_new_channel_status_monitor"><code class="docutils literal notranslate"><span class="pre">ChannelBase.on_new_channel_status_monitor()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.base.ChannelBase.on_status_message_received"><code class="docutils literal notranslate"><span class="pre">ChannelBase.on_status_message_received()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.base.ChannelBase.on_status_message_send"><code class="docutils literal notranslate"><span class="pre">ChannelBase.on_status_message_send()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.base.ChannelBase.retrieve_all_connected_channel_count"><code class="docutils literal notranslate"><span class="pre">ChannelBase.retrieve_all_connected_channel_count()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.base.ChannelBase.retrieve_connected_channel_unique_names"><code class="docutils literal notranslate"><span class="pre">ChannelBase.retrieve_connected_channel_unique_names()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.base.ChannelBase.retrieve_healthy_connected_channel_count"><code class="docutils literal notranslate"><span class="pre">ChannelBase.retrieve_healthy_connected_channel_count()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.base.ChannelBase.set_location"><code class="docutils literal notranslate"><span class="pre">ChannelBase.set_location()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.base.ChannelBase.start_channel"><code class="docutils literal notranslate"><span class="pre">ChannelBase.start_channel()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.base.ChannelBase.stop_channel"><code class="docutils literal notranslate"><span class="pre">ChannelBase.stop_channel()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.channels.html#core.channels.base.ChannelMetric"><code class="docutils literal notranslate"><span class="pre">ChannelMetric</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core.channels.html#module-core.channels.io">core.channels.io module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core.channels.html#core.channels.io.ChannelReader"><code class="docutils literal notranslate"><span class="pre">ChannelReader</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.io.ChannelReader.MetricsBufferLength"><code class="docutils literal notranslate"><span class="pre">ChannelReader.MetricsBufferLength</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.io.ChannelReader.NotInitialized"><code class="docutils literal notranslate"><span class="pre">ChannelReader.NotInitialized</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.io.ChannelReader.acknowledge_input"><code class="docutils literal notranslate"><span class="pre">ChannelReader.acknowledge_input()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.io.ChannelReader.get_read_record_count"><code class="docutils literal notranslate"><span class="pre">ChannelReader.get_read_record_count()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.io.ChannelReader.get_read_record_offset"><code class="docutils literal notranslate"><span class="pre">ChannelReader.get_read_record_offset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.io.ChannelReader.has_records"><code class="docutils literal notranslate"><span class="pre">ChannelReader.has_records()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.io.ChannelReader.invoke_commit_current_read_offset"><code class="docutils literal notranslate"><span class="pre">ChannelReader.invoke_commit_current_read_offset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.io.ChannelReader.invoke_commit_offset"><code class="docutils literal notranslate"><span class="pre">ChannelReader.invoke_commit_offset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.io.ChannelReader.invoke_read_records"><code class="docutils literal notranslate"><span class="pre">ChannelReader.invoke_read_records()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.io.ChannelReader.on_status_message_send"><code class="docutils literal notranslate"><span class="pre">ChannelReader.on_status_message_send()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.io.ChannelReader.set_initial_record_offset"><code class="docutils literal notranslate"><span class="pre">ChannelReader.set_initial_record_offset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.io.ChannelReader.set_initial_record_offset_auto"><code class="docutils literal notranslate"><span class="pre">ChannelReader.set_initial_record_offset_auto()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.channels.html#core.channels.io.ChannelWriter"><code class="docutils literal notranslate"><span class="pre">ChannelWriter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.io.ChannelWriter.MetricsBufferLength"><code class="docutils literal notranslate"><span class="pre">ChannelWriter.MetricsBufferLength</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.io.ChannelWriter.get_written_record_count"><code class="docutils literal notranslate"><span class="pre">ChannelWriter.get_written_record_count()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.io.ChannelWriter.invoke_write_records"><code class="docutils literal notranslate"><span class="pre">ChannelWriter.invoke_write_records()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.io.ChannelWriter.is_all_connected_input_channels_acknowledged"><code class="docutils literal notranslate"><span class="pre">ChannelWriter.is_all_connected_input_channels_acknowledged()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.io.ChannelWriter.on_status_message_send"><code class="docutils literal notranslate"><span class="pre">ChannelWriter.on_status_message_send()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core.channels.html#module-core.channels.misc">core.channels.misc module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core.channels.html#core.channels.misc.BlankChannelReader"><code class="docutils literal notranslate"><span class="pre">BlankChannelReader</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.misc.BlankChannelReader.has_records"><code class="docutils literal notranslate"><span class="pre">BlankChannelReader.has_records()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.channels.html#core.channels.misc.BlankChannelWriter"><code class="docutils literal notranslate"><span class="pre">BlankChannelWriter</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core.channels.html#module-core.channels.status">core.channels.status module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core.channels.html#core.channels.status.ChannelFilter"><code class="docutils literal notranslate"><span class="pre">ChannelFilter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.status.ChannelFilter.get_channel_context_name"><code class="docutils literal notranslate"><span class="pre">ChannelFilter.get_channel_context_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.status.ChannelFilter.get_channel_group_name"><code class="docutils literal notranslate"><span class="pre">ChannelFilter.get_channel_group_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.status.ChannelFilter.get_channel_unique_name"><code class="docutils literal notranslate"><span class="pre">ChannelFilter.get_channel_unique_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.status.ChannelFilter.is_channel_closed"><code class="docutils literal notranslate"><span class="pre">ChannelFilter.is_channel_closed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.status.ChannelFilter.is_channel_error"><code class="docutils literal notranslate"><span class="pre">ChannelFilter.is_channel_error()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.status.ChannelFilter.is_channel_healthy"><code class="docutils literal notranslate"><span class="pre">ChannelFilter.is_channel_healthy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.status.ChannelFilter.is_channel_not_initialised"><code class="docutils literal notranslate"><span class="pre">ChannelFilter.is_channel_not_initialised()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.status.ChannelFilter.is_channel_opened"><code class="docutils literal notranslate"><span class="pre">ChannelFilter.is_channel_opened()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.status.ChannelFilter.is_channel_started"><code class="docutils literal notranslate"><span class="pre">ChannelFilter.is_channel_started()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.status.ChannelFilter.is_channel_stopped"><code class="docutils literal notranslate"><span class="pre">ChannelFilter.is_channel_stopped()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.channels.html#core.channels.status.ChannelStatus"><code class="docutils literal notranslate"><span class="pre">ChannelStatus</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.status.ChannelStatus.Acknowledged"><code class="docutils literal notranslate"><span class="pre">ChannelStatus.Acknowledged</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.status.ChannelStatus.Closed"><code class="docutils literal notranslate"><span class="pre">ChannelStatus.Closed</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.status.ChannelStatus.Error"><code class="docutils literal notranslate"><span class="pre">ChannelStatus.Error</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.status.ChannelStatus.HealthCheck"><code class="docutils literal notranslate"><span class="pre">ChannelStatus.HealthCheck</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.status.ChannelStatus.Opened"><code class="docutils literal notranslate"><span class="pre">ChannelStatus.Opened</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.status.ChannelStatus.Started"><code class="docutils literal notranslate"><span class="pre">ChannelStatus.Started</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.status.ChannelStatus.Stopped"><code class="docutils literal notranslate"><span class="pre">ChannelStatus.Stopped</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.status.ChannelStatus.WaitingForSchema"><code class="docutils literal notranslate"><span class="pre">ChannelStatus.WaitingForSchema</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.channels.html#core.channels.status.ChannelStatusMessage"><code class="docutils literal notranslate"><span class="pre">ChannelStatusMessage</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.status.ChannelStatusMessage.create_from_json"><code class="docutils literal notranslate"><span class="pre">ChannelStatusMessage.create_from_json()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.status.ChannelStatusMessage.get_channel_unique_name"><code class="docutils literal notranslate"><span class="pre">ChannelStatusMessage.get_channel_unique_name()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.channels.html#core.channels.status.ChannelStatusMonitor"><code class="docutils literal notranslate"><span class="pre">ChannelStatusMonitor</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.status.ChannelStatusMonitor.ValidPatienceTimeInMs"><code class="docutils literal notranslate"><span class="pre">ChannelStatusMonitor.ValidPatienceTimeInMs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.status.ChannelStatusMonitor.get_channel_context_name"><code class="docutils literal notranslate"><span class="pre">ChannelStatusMonitor.get_channel_context_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.status.ChannelStatusMonitor.get_channel_group_name"><code class="docutils literal notranslate"><span class="pre">ChannelStatusMonitor.get_channel_group_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.status.ChannelStatusMonitor.get_channel_unique_name"><code class="docutils literal notranslate"><span class="pre">ChannelStatusMonitor.get_channel_unique_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.status.ChannelStatusMonitor.is_channel_closed"><code class="docutils literal notranslate"><span class="pre">ChannelStatusMonitor.is_channel_closed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.status.ChannelStatusMonitor.is_channel_error"><code class="docutils literal notranslate"><span class="pre">ChannelStatusMonitor.is_channel_error()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.status.ChannelStatusMonitor.is_channel_healthy"><code class="docutils literal notranslate"><span class="pre">ChannelStatusMonitor.is_channel_healthy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.status.ChannelStatusMonitor.is_channel_not_initialised"><code class="docutils literal notranslate"><span class="pre">ChannelStatusMonitor.is_channel_not_initialised()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.status.ChannelStatusMonitor.is_channel_opened"><code class="docutils literal notranslate"><span class="pre">ChannelStatusMonitor.is_channel_opened()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.status.ChannelStatusMonitor.is_channel_started"><code class="docutils literal notranslate"><span class="pre">ChannelStatusMonitor.is_channel_started()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.status.ChannelStatusMonitor.is_channel_stopped"><code class="docutils literal notranslate"><span class="pre">ChannelStatusMonitor.is_channel_stopped()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.status.ChannelStatusMonitor.on_status_update"><code class="docutils literal notranslate"><span class="pre">ChannelStatusMonitor.on_status_update()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.channels.html#core.channels.status.ChannelStatusMonitor.update"><code class="docutils literal notranslate"><span class="pre">ChannelStatusMonitor.update()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.channels.html#core.channels.status.NameSeparator"><code class="docutils literal notranslate"><span class="pre">NameSeparator</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core.channels.html#module-core.channels">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="core.commons.html">core.commons package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="core.commons.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core.commons.html#module-core.commons.loggers">core.commons.loggers module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core.commons.html#core.commons.loggers.ContextLogger"><code class="docutils literal notranslate"><span class="pre">ContextLogger</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.commons.html#core.commons.loggers.ContextLogger.debug"><code class="docutils literal notranslate"><span class="pre">ContextLogger.debug()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.commons.html#core.commons.loggers.ContextLogger.error"><code class="docutils literal notranslate"><span class="pre">ContextLogger.error()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.commons.html#core.commons.loggers.ContextLogger.get_context_stack"><code class="docutils literal notranslate"><span class="pre">ContextLogger.get_context_stack()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.commons.html#core.commons.loggers.ContextLogger.info"><code class="docutils literal notranslate"><span class="pre">ContextLogger.info()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.commons.html#core.commons.loggers.ContextLogger.set_log_level"><code class="docutils literal notranslate"><span class="pre">ContextLogger.set_log_level()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.commons.html#core.commons.loggers.ContextLogger.warn"><code class="docutils literal notranslate"><span class="pre">ContextLogger.warn()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.commons.html#core.commons.loggers.ContextLoggerInterface"><code class="docutils literal notranslate"><span class="pre">ContextLoggerInterface</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.commons.html#core.commons.loggers.ContextLoggerInterface.set_log_level"><code class="docutils literal notranslate"><span class="pre">ContextLoggerInterface.set_log_level()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.commons.html#core.commons.loggers.DefaultContextLogger"><code class="docutils literal notranslate"><span class="pre">DefaultContextLogger</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.commons.html#core.commons.loggers.DefaultContextLogger.set_log_level"><code class="docutils literal notranslate"><span class="pre">DefaultContextLogger.set_log_level()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core.commons.html#module-core.commons.parameters">core.commons.parameters module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core.commons.html#core.commons.parameters.ExpectedParameter"><code class="docutils literal notranslate"><span class="pre">ExpectedParameter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.commons.html#core.commons.parameters.ExpectedParameter.NamePrefix"><code class="docutils literal notranslate"><span class="pre">ExpectedParameter.NamePrefix</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.commons.html#core.commons.parameters.ExpectedParameter.description"><code class="docutils literal notranslate"><span class="pre">ExpectedParameter.description</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.commons.html#core.commons.parameters.ExpectedParameter.name"><code class="docutils literal notranslate"><span class="pre">ExpectedParameter.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.commons.html#core.commons.parameters.ExpectedParameter.on_update"><code class="docutils literal notranslate"><span class="pre">ExpectedParameter.on_update</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.commons.html#core.commons.parameters.ExpectedParameter.to_dict"><code class="docutils literal notranslate"><span class="pre">ExpectedParameter.to_dict()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.commons.html#core.commons.parameters.OptionalParameter"><code class="docutils literal notranslate"><span class="pre">OptionalParameter</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.commons.html#core.commons.parameters.ParameterSchemaBuilder"><code class="docutils literal notranslate"><span class="pre">ParameterSchemaBuilder</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.commons.html#core.commons.parameters.ParameterSchemaBuilder.BooleanTypeName"><code class="docutils literal notranslate"><span class="pre">ParameterSchemaBuilder.BooleanTypeName</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.commons.html#core.commons.parameters.ParameterSchemaBuilder.BuilderInit"><code class="docutils literal notranslate"><span class="pre">ParameterSchemaBuilder.BuilderInit</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.commons.html#core.commons.parameters.ParameterSchemaBuilder.ByteTypeName"><code class="docutils literal notranslate"><span class="pre">ParameterSchemaBuilder.ByteTypeName</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.commons.html#core.commons.parameters.ParameterSchemaBuilder.DoubleTypeName"><code class="docutils literal notranslate"><span class="pre">ParameterSchemaBuilder.DoubleTypeName</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.commons.html#core.commons.parameters.ParameterSchemaBuilder.FloatTypeName"><code class="docutils literal notranslate"><span class="pre">ParameterSchemaBuilder.FloatTypeName</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.commons.html#core.commons.parameters.ParameterSchemaBuilder.IntTypeName"><code class="docutils literal notranslate"><span class="pre">ParameterSchemaBuilder.IntTypeName</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.commons.html#core.commons.parameters.ParameterSchemaBuilder.ListTypeName"><code class="docutils literal notranslate"><span class="pre">ParameterSchemaBuilder.ListTypeName</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.commons.html#core.commons.parameters.ParameterSchemaBuilder.LongTypeName"><code class="docutils literal notranslate"><span class="pre">ParameterSchemaBuilder.LongTypeName</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.commons.html#core.commons.parameters.ParameterSchemaBuilder.MapTypeName"><code class="docutils literal notranslate"><span class="pre">ParameterSchemaBuilder.MapTypeName</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.commons.html#core.commons.parameters.ParameterSchemaBuilder.ObjectTypeName"><code class="docutils literal notranslate"><span class="pre">ParameterSchemaBuilder.ObjectTypeName</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.commons.html#core.commons.parameters.ParameterSchemaBuilder.RequiredFieldName"><code class="docutils literal notranslate"><span class="pre">ParameterSchemaBuilder.RequiredFieldName</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.commons.html#core.commons.parameters.ParameterSchemaBuilder.SetTypeName"><code class="docutils literal notranslate"><span class="pre">ParameterSchemaBuilder.SetTypeName</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.commons.html#core.commons.parameters.ParameterSchemaBuilder.ShortTypeName"><code class="docutils literal notranslate"><span class="pre">ParameterSchemaBuilder.ShortTypeName</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.commons.html#core.commons.parameters.ParameterSchemaBuilder.StringTypeName"><code class="docutils literal notranslate"><span class="pre">ParameterSchemaBuilder.StringTypeName</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.commons.html#core.commons.parameters.ParameterSchemaBuilder.builder"><code class="docutils literal notranslate"><span class="pre">ParameterSchemaBuilder.builder()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.commons.html#core.commons.parameters.ParameterSchemaBuilder.get_complete_schema"><code class="docutils literal notranslate"><span class="pre">ParameterSchemaBuilder.get_complete_schema()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.commons.html#core.commons.parameters.RequiredParameter"><code class="docutils literal notranslate"><span class="pre">RequiredParameter</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.commons.html#core.commons.parameters.retrieve_parameters"><code class="docutils literal notranslate"><span class="pre">retrieve_parameters()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core.commons.html#module-core.commons.utils">core.commons.utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core.commons.html#core.commons.utils.InterruptableTimer"><code class="docutils literal notranslate"><span class="pre">InterruptableTimer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.commons.html#core.commons.utils.InterruptableTimer.interrupt"><code class="docutils literal notranslate"><span class="pre">InterruptableTimer.interrupt()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.commons.html#core.commons.utils.InterruptableTimer.sleep"><code class="docutils literal notranslate"><span class="pre">InterruptableTimer.sleep()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.commons.html#core.commons.utils.SynchronizedReference"><code class="docutils literal notranslate"><span class="pre">SynchronizedReference</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.commons.html#core.commons.utils.SynchronizedReference.get"><code class="docutils literal notranslate"><span class="pre">SynchronizedReference.get()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.commons.html#core.commons.utils.SynchronizedReference.set"><code class="docutils literal notranslate"><span class="pre">SynchronizedReference.set()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.commons.html#core.commons.utils.TemplateResolver"><code class="docutils literal notranslate"><span class="pre">TemplateResolver</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.commons.html#core.commons.utils.TemplateResolver.m_envVarPattern"><code class="docutils literal notranslate"><span class="pre">TemplateResolver.m_envVarPattern</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.commons.html#core.commons.utils.TemplateResolver.m_templatePattern"><code class="docutils literal notranslate"><span class="pre">TemplateResolver.m_templatePattern</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.commons.html#core.commons.utils.TemplateResolver.resolve"><code class="docutils literal notranslate"><span class="pre">TemplateResolver.resolve()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.commons.html#core.commons.utils.convert_to_dict"><code class="docutils literal notranslate"><span class="pre">convert_to_dict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.commons.html#core.commons.utils.current_time_millis"><code class="docutils literal notranslate"><span class="pre">current_time_millis()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.commons.html#core.commons.utils.ensure_type"><code class="docutils literal notranslate"><span class="pre">ensure_type()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.commons.html#core.commons.utils.is_type_allowed"><code class="docutils literal notranslate"><span class="pre">is_type_allowed()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core.commons.html#module-core.commons">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="core.specs.html">core.specs package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="core.specs.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core.specs.html#module-core.specs.dtos">core.specs.dtos module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core.specs.html#core.specs.dtos.InstanceDTO"><code class="docutils literal notranslate"><span class="pre">InstanceDTO</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.specs.html#core.specs.dtos.OperatorConnection"><code class="docutils literal notranslate"><span class="pre">OperatorConnection</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.specs.html#core.specs.dtos.OperatorConnectionSource"><code class="docutils literal notranslate"><span class="pre">OperatorConnectionSource</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.specs.html#core.specs.dtos.OperatorInstanceDTO"><code class="docutils literal notranslate"><span class="pre">OperatorInstanceDTO</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.specs.html#core.specs.dtos.OperatorSpecDTO"><code class="docutils literal notranslate"><span class="pre">OperatorSpecDTO</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.specs.html#core.specs.dtos.PipelineInstanceDTO"><code class="docutils literal notranslate"><span class="pre">PipelineInstanceDTO</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.specs.html#core.specs.dtos.PipelineSpecDTO"><code class="docutils literal notranslate"><span class="pre">PipelineSpecDTO</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.specs.html#core.specs.dtos.PluginInstanceDTO"><code class="docutils literal notranslate"><span class="pre">PluginInstanceDTO</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.specs.html#core.specs.dtos.PluginSpecDTO"><code class="docutils literal notranslate"><span class="pre">PluginSpecDTO</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.specs.html#core.specs.dtos.SpecDTO"><code class="docutils literal notranslate"><span class="pre">SpecDTO</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core.specs.html#module-core.specs.instance">core.specs.instance module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core.specs.html#core.specs.instance.Instance"><code class="docutils literal notranslate"><span class="pre">Instance</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.instance.Instance.create_from_dto"><code class="docutils literal notranslate"><span class="pre">Instance.create_from_dto()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.instance.Instance.create_from_string"><code class="docutils literal notranslate"><span class="pre">Instance.create_from_string()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.instance.Instance.depends_on"><code class="docutils literal notranslate"><span class="pre">Instance.depends_on()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.instance.Instance.get_context"><code class="docutils literal notranslate"><span class="pre">Instance.get_context()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.instance.Instance.get_dto"><code class="docutils literal notranslate"><span class="pre">Instance.get_dto()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.instance.Instance.get_expected_parameters"><code class="docutils literal notranslate"><span class="pre">Instance.get_expected_parameters()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.instance.Instance.get_full_name"><code class="docutils literal notranslate"><span class="pre">Instance.get_full_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.instance.Instance.get_missing_required_parameters"><code class="docutils literal notranslate"><span class="pre">Instance.get_missing_required_parameters()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.instance.Instance.get_parameter"><code class="docutils literal notranslate"><span class="pre">Instance.get_parameter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.instance.Instance.get_simple_name"><code class="docutils literal notranslate"><span class="pre">Instance.get_simple_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.instance.Instance.has_parameter"><code class="docutils literal notranslate"><span class="pre">Instance.has_parameter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.instance.Instance.set_parameter"><code class="docutils literal notranslate"><span class="pre">Instance.set_parameter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.instance.Instance.set_parameters"><code class="docutils literal notranslate"><span class="pre">Instance.set_parameters()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.instance.Instance.update"><code class="docutils literal notranslate"><span class="pre">Instance.update()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.specs.html#core.specs.instance.InstanceGroup"><code class="docutils literal notranslate"><span class="pre">InstanceGroup</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.instance.InstanceGroup.get_group_index"><code class="docutils literal notranslate"><span class="pre">InstanceGroup.get_group_index()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.instance.InstanceGroup.get_group_name"><code class="docutils literal notranslate"><span class="pre">InstanceGroup.get_group_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.instance.InstanceGroup.get_group_principal"><code class="docutils literal notranslate"><span class="pre">InstanceGroup.get_group_principal()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.instance.InstanceGroup.get_group_size"><code class="docutils literal notranslate"><span class="pre">InstanceGroup.get_group_size()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.instance.InstanceGroup.is_principal"><code class="docutils literal notranslate"><span class="pre">InstanceGroup.is_principal()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.specs.html#core.specs.instance.InstanceInitInterceptor"><code class="docutils literal notranslate"><span class="pre">InstanceInitInterceptor</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.specs.html#core.specs.instance.InterceptedInstance"><code class="docutils literal notranslate"><span class="pre">InterceptedInstance</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.specs.html#core.specs.instance.InterceptedInstanceType"><code class="docutils literal notranslate"><span class="pre">InterceptedInstanceType</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.specs.html#core.specs.instance.RegisteredInterface"><code class="docutils literal notranslate"><span class="pre">RegisteredInterface</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core.specs.html#module-core.specs.misc">core.specs.misc module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core.specs.html#core.specs.misc.BlankInputPortPlugin"><code class="docutils literal notranslate"><span class="pre">BlankInputPortPlugin</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.misc.BlankInputPortPlugin.can_retrieve"><code class="docutils literal notranslate"><span class="pre">BlankInputPortPlugin.can_retrieve()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.misc.BlankInputPortPlugin.commit_current_read_offset"><code class="docutils literal notranslate"><span class="pre">BlankInputPortPlugin.commit_current_read_offset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.misc.BlankInputPortPlugin.retrieve"><code class="docutils literal notranslate"><span class="pre">BlankInputPortPlugin.retrieve()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.specs.html#core.specs.misc.BlankInstance"><code class="docutils literal notranslate"><span class="pre">BlankInstance</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.specs.html#core.specs.misc.BlankOperator"><code class="docutils literal notranslate"><span class="pre">BlankOperator</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.specs.html#core.specs.misc.BlankOutputPortPlugin"><code class="docutils literal notranslate"><span class="pre">BlankOutputPortPlugin</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.misc.BlankOutputPortPlugin.send"><code class="docutils literal notranslate"><span class="pre">BlankOutputPortPlugin.send()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.specs.html#core.specs.misc.BlankPlugin"><code class="docutils literal notranslate"><span class="pre">BlankPlugin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.specs.html#core.specs.misc.BlankPortPlugin"><code class="docutils literal notranslate"><span class="pre">BlankPortPlugin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.specs.html#core.specs.misc.BlankResourceHandlerPlugin"><code class="docutils literal notranslate"><span class="pre">BlankResourceHandlerPlugin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.specs.html#core.specs.misc.BlankServicePlugin"><code class="docutils literal notranslate"><span class="pre">BlankServicePlugin</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core.specs.html#module-core.specs.operator">core.specs.operator module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core.specs.html#core.specs.operator.Operator"><code class="docutils literal notranslate"><span class="pre">Operator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.operator.Operator.Logger"><code class="docutils literal notranslate"><span class="pre">Operator.Logger</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.operator.Operator.create_from_dto"><code class="docutils literal notranslate"><span class="pre">Operator.create_from_dto()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.operator.Operator.create_from_string"><code class="docutils literal notranslate"><span class="pre">Operator.create_from_string()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.operator.Operator.get_context"><code class="docutils literal notranslate"><span class="pre">Operator.get_context()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.operator.Operator.get_dto"><code class="docutils literal notranslate"><span class="pre">Operator.get_dto()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.operator.Operator.get_group_index"><code class="docutils literal notranslate"><span class="pre">Operator.get_group_index()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.operator.Operator.get_group_name"><code class="docutils literal notranslate"><span class="pre">Operator.get_group_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.operator.Operator.get_group_principal"><code class="docutils literal notranslate"><span class="pre">Operator.get_group_principal()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.operator.Operator.get_group_size"><code class="docutils literal notranslate"><span class="pre">Operator.get_group_size()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.operator.Operator.get_logger"><code class="docutils literal notranslate"><span class="pre">Operator.get_logger()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.operator.Operator.get_operator_image_name"><code class="docutils literal notranslate"><span class="pre">Operator.get_operator_image_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.operator.Operator.get_replica"><code class="docutils literal notranslate"><span class="pre">Operator.get_replica()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.operator.Operator.get_replicas"><code class="docutils literal notranslate"><span class="pre">Operator.get_replicas()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.operator.Operator.get_replication_factor"><code class="docutils literal notranslate"><span class="pre">Operator.get_replication_factor()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.operator.Operator.is_principal"><code class="docutils literal notranslate"><span class="pre">Operator.is_principal()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.operator.Operator.update"><code class="docutils literal notranslate"><span class="pre">Operator.update()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core.specs.html#module-core.specs.pipeline">core.specs.pipeline module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core.specs.html#core.specs.pipeline.Pipeline"><code class="docutils literal notranslate"><span class="pre">Pipeline</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.pipeline.Pipeline.create_from_dto"><code class="docutils literal notranslate"><span class="pre">Pipeline.create_from_dto()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.pipeline.Pipeline.create_from_string"><code class="docutils literal notranslate"><span class="pre">Pipeline.create_from_string()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.pipeline.Pipeline.get_dto"><code class="docutils literal notranslate"><span class="pre">Pipeline.get_dto()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core.specs.html#module-core.specs.plugin">core.specs.plugin module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core.specs.html#core.specs.plugin.ExtendedPlugin"><code class="docutils literal notranslate"><span class="pre">ExtendedPlugin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.specs.html#core.specs.plugin.InputPortPlugin"><code class="docutils literal notranslate"><span class="pre">InputPortPlugin</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.plugin.InputPortPlugin.can_retrieve"><code class="docutils literal notranslate"><span class="pre">InputPortPlugin.can_retrieve()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.plugin.InputPortPlugin.commit_current_read_offset"><code class="docutils literal notranslate"><span class="pre">InputPortPlugin.commit_current_read_offset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.plugin.InputPortPlugin.is_in_group_mode"><code class="docutils literal notranslate"><span class="pre">InputPortPlugin.is_in_group_mode()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.plugin.InputPortPlugin.retrieve"><code class="docutils literal notranslate"><span class="pre">InputPortPlugin.retrieve()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.specs.html#core.specs.plugin.LoggerPlugin"><code class="docutils literal notranslate"><span class="pre">LoggerPlugin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.specs.html#core.specs.plugin.OutputPortPlugin"><code class="docutils literal notranslate"><span class="pre">OutputPortPlugin</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.plugin.OutputPortPlugin.send"><code class="docutils literal notranslate"><span class="pre">OutputPortPlugin.send()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.specs.html#core.specs.plugin.Plugin"><code class="docutils literal notranslate"><span class="pre">Plugin</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.plugin.Plugin.create_from_dto"><code class="docutils literal notranslate"><span class="pre">Plugin.create_from_dto()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.plugin.Plugin.create_from_string"><code class="docutils literal notranslate"><span class="pre">Plugin.create_from_string()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.plugin.Plugin.get_context"><code class="docutils literal notranslate"><span class="pre">Plugin.get_context()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.plugin.Plugin.get_dto"><code class="docutils literal notranslate"><span class="pre">Plugin.get_dto()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.plugin.Plugin.get_group_index"><code class="docutils literal notranslate"><span class="pre">Plugin.get_group_index()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.plugin.Plugin.get_group_name"><code class="docutils literal notranslate"><span class="pre">Plugin.get_group_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.plugin.Plugin.get_group_principal"><code class="docutils literal notranslate"><span class="pre">Plugin.get_group_principal()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.plugin.Plugin.get_group_size"><code class="docutils literal notranslate"><span class="pre">Plugin.get_group_size()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.plugin.Plugin.get_logger"><code class="docutils literal notranslate"><span class="pre">Plugin.get_logger()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.plugin.Plugin.is_principal"><code class="docutils literal notranslate"><span class="pre">Plugin.is_principal()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.specs.html#core.specs.plugin.PortPlugin"><code class="docutils literal notranslate"><span class="pre">PortPlugin</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.plugin.PortPlugin.connect"><code class="docutils literal notranslate"><span class="pre">PortPlugin.connect()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.plugin.PortPlugin.get_connected_ports"><code class="docutils literal notranslate"><span class="pre">PortPlugin.get_connected_ports()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.plugin.PortPlugin.get_schema"><code class="docutils literal notranslate"><span class="pre">PortPlugin.get_schema()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.plugin.PortPlugin.set_schema"><code class="docutils literal notranslate"><span class="pre">PortPlugin.set_schema()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.specs.html#core.specs.plugin.ResourceHandlerPlugin"><code class="docutils literal notranslate"><span class="pre">ResourceHandlerPlugin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.specs.html#core.specs.plugin.ServicePlugin"><code class="docutils literal notranslate"><span class="pre">ServicePlugin</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core.specs.html#module-core.specs.utils">core.specs.utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core.specs.html#core.specs.utils.AccessWrapper"><code class="docutils literal notranslate"><span class="pre">AccessWrapper</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.utils.AccessWrapper.PATTERN"><code class="docutils literal notranslate"><span class="pre">AccessWrapper.PATTERN</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.utils.AccessWrapper.get_nested_instance"><code class="docutils literal notranslate"><span class="pre">AccessWrapper.get_nested_instance()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.utils.AccessWrapper.has_nested_instance"><code class="docutils literal notranslate"><span class="pre">AccessWrapper.has_nested_instance()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.specs.html#core.specs.utils.ExcludedCascadingParameterPrefix"><code class="docutils literal notranslate"><span class="pre">ExcludedCascadingParameterPrefix</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.specs.html#core.specs.utils.IncludedCascadingParameterPrefix"><code class="docutils literal notranslate"><span class="pre">IncludedCascadingParameterPrefix</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.specs.html#core.specs.utils.InstanceParameters"><code class="docutils literal notranslate"><span class="pre">InstanceParameters</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.utils.InstanceParameters.on_parameter_update"><code class="docutils literal notranslate"><span class="pre">InstanceParameters.on_parameter_update()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.specs.html#core.specs.utils.InstanceParameters.update"><code class="docutils literal notranslate"><span class="pre">InstanceParameters.update()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.specs.html#core.specs.utils.SingletonAccessWrapper"><code class="docutils literal notranslate"><span class="pre">SingletonAccessWrapper</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.specs.html#core.specs.utils.load_class_by_name"><code class="docutils literal notranslate"><span class="pre">load_class_by_name()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.specs.html#core.specs.utils.remove_super_classes"><code class="docutils literal notranslate"><span class="pre">remove_super_classes()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.specs.html#core.specs.utils.resolve_dependency_graph"><code class="docutils literal notranslate"><span class="pre">resolve_dependency_graph()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core.specs.html#module-core.specs">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="module-core">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-core" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="abstracts.html" class="btn btn-neutral float-left" title="abstracts package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="core.channels.html" class="btn btn-neutral float-right" title="core.channels package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Laszlo Anka.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
