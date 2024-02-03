@@ -8,7 +8,6 @@ dynamic = ["version"]
 authors = [
     { name = "Laszlo Anka", email = "laszlo.anka@gmail.com" }
 ]
-license = "Apache-2.0"
 description = "Core components of pypz (pipes), which is a lightweight Pipeline as Code (PaC) framework."
 readme = "README.md"
 requires-python = ">=3.11"
@@ -34,6 +33,9 @@ docs = [
     "graphviz >= 0.20.1",
     "pydot >= 2.0.0"
 ]
+
+[tool.setuptools]
+license-files = ["../LICENSE"]
 
 [tool.setuptools.dynamic]
 version = {attr = "pypz.version.PROJECT_VERSION"}

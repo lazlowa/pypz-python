@@ -8,7 +8,6 @@ version = "0.9.0b4"
 authors = [
     { name = "Laszlo Anka", email = "laszlo.anka@gmail.com" }
 ]
-license = "Apache-2.0"
 description = "Provides an Active Message Queue Protocol implementation of the ChannelInput/OutputPort in pypz."
 readme = "README.md"
 requires-python = ">=3.11"
@@ -28,6 +27,8 @@ dependencies = [
     "stompest==2.3.0"
 ]
 
+[tool.setuptools]
+license-files = ["../LICENSE"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

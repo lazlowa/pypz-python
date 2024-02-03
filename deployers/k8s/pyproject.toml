@@ -8,7 +8,6 @@ version = "0.9.0b4"
 authors = [
     { name = "Laszlo Anka", email = "laszlo.anka@gmail.com" }
 ]
-license = "Apache-2.0"
 description = "This package provides the Kubernetes implementation of the deployer interface for pypz."
 readme = "README.md"
 requires-python = ">=3.11"
@@ -29,6 +28,8 @@ dependencies = [
     "certifi~=2023.7.22"
 ]
 
+[tool.setuptools]
+license-files = ["../LICENSE"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

@@ -19,18 +19,19 @@ jobs:
           filters: |
             core:
               - ".github/workflows/test.yml"
-              - "core/**"
+              - "core/src/**"
+              - "core/test/**"
             deployer_k8s:
               - ".github/workflows/test.yml"
-              - "core/**"
+              - "core/src/**"
               - "deployers/k8s/**"
             plugin_kafka_io:
               - ".github/workflows/test.yml"
-              - "core/**"
+              - "core/src/**"
               - "plugins/kafka_io/**"
             sniffer:
               - ".github/workflows/test.yml"
-              - "core/**"
+              - "core/src/**"
               - "sniffer/**"
 
   core:
