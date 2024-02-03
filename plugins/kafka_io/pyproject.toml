@@ -8,12 +8,11 @@ version = "0.9.0b4"
 authors = [
     { name = "Laszlo Anka", email = "laszlo.anka@gmail.com" }
 ]
+license = "Apache-2.0"
 description = "Provides a Kafka implementation of the ChannelInput/OutputPort in pypz."
 readme = "README.md"
 requires-python = ">=3.11"
 classifiers = [
-    "Development Status :: 3 - Alpha",
-    "Environment :: Console",
     "Natural Language :: English",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3.11"
