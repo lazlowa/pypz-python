@@ -1,3 +1,10 @@
+from pypz.version import PROJECT_VERSION
+
+import os
+import sys
+
+sys.path.insert(0, os.path.abspath('../src/pypz'))
+
 # Configuration file for the Sphinx documentation builder.
 #
 # For the full list of built-in configuration values, see the documentation:
@@ -9,6 +16,7 @@
 project = 'pypz'
 copyright = '2024, Laszlo Anka'
 author = 'Laszlo Anka'
+version = PROJECT_VERSION
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -38,6 +46,3 @@ inheritance_node_attrs = dict(shape='ellipse',
                               style='filled',
                               height=0.8)
 
-import os
-import sys
-sys.path.insert(0, os.path.abspath('../src/pypz'))

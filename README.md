@@ -4,6 +4,8 @@
 Its purpose is to simplify and speed up the process of developing **data processing** pipelines by taking 
 care most of the challenges and repetitive tasks, so you can focus on the development of the business logic.
 
+Documentation: https://lazlowa.github.io/pypz-python/index.html
+
 # Disclaimer
 
 Originally, *pypz* has been designed to address some data processing related challenges in
