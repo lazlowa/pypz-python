@@ -4,10 +4,6 @@
 Its purpose is to simplify and speed up the process of developing **data processing** pipelines by taking 
 care most of the challenges and repetitive tasks, so you can focus on the development of the business logic.
 
-Documentation: https://lazlowa.github.io/pypz-python/index.html
-
-# Disclaimer
-
 Originally, *pypz* has been designed to address some data processing related challenges in
 both home and work environment, like:
 - how could we speed up and modularize the development of such data processing tasks
@@ -27,40 +23,34 @@ to split into more (reusable) operations
 - you are struggling scaling out your data processing
 - you want to speed up your ETL pipelines
 - and more ...
-- 
-# *Why should I consider using it?*
 
-Inspired by many different opensource workflow/pipeline frameworks, *pypz* has to
-following advantages:
-- No dedicated executor infrastructure is necessary, since pypz operators are self-contained
-i.e., the executor is integrated
-- The entire development workflow can remain in code context from development of the operators
-until the design and deployment of the pipelines 
-- Natively supports data transfer between operators even in streaming mode
-- Natively supports deployment of pipelines onto Kubernetes
-- Very easy to extend its functionalities through its modular design
-
-## More concrete use-cases
+<ins>**Realistic use-cases:**</ins>
 
 Your car fleet sends continuously signals to your backend. For each million
 signals you want to compute some KPIs as fast as possible to be able to 
 present it to your managers.
 
+---
+
 You are developing some image processing algorithms, which you want to test 
 with different parameters on millions of images stored somewhere, and you
 want to have as fast iterations as possible.
 
+---
+
 You are an application engineer, who tries to fine-tune the application
 parameters of a software product with having a customer on your neck.
+
+---
 
 Your ETL pipeline has to extract images from millions of videos. The images
 shall be prepared and stored for further processing.
 
-# Examples
+# Links
 
-Starter project template - https://github.com/lazlowa/pypz-starter-template
-
-Usage examples - https://github.com/lazlowa/pypz-examples
+- [documentation](https://lazlowa.github.io/pypz-python/index.html)
+- [starter project template](https://github.com/lazlowa/pypz-starter-template)
+- [examples](https://github.com/lazlowa/pypz-examples)
 
 ---
 
