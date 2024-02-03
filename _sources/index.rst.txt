@@ -8,7 +8,14 @@ Welcome to pypz's documentation!
 
 .. toctree::
    :maxdepth: 1
-   :caption: Core:
+   :caption: General
+
+   general/overview
+   general/changelog
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Core
 
    core/models
    core/parameters
@@ -19,14 +26,14 @@ Welcome to pypz's documentation!
 
 .. toctree::
    :maxdepth: 1
-   :caption: Guides:
+   :caption: Guides
 
    guides/ht_create_pipeline
    guides/ht_debug_in_operator
 
 .. toctree::
    :maxdepth: 1
-   :caption: Links:
+   :caption: Links
 
    Source Code <https://github.com/lazlowa/pypz-python>
    Starter Template Project <https://github.com/lazlowa/pypz-starter-template>
@@ -34,7 +41,7 @@ Welcome to pypz's documentation!
 
 .. toctree::
    :maxdepth: 1
-   :caption: Index:
+   :caption: Index
 
    modindex/modules
 

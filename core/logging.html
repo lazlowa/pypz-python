@@ -51,7 +51,12 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Core:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">General</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../general/overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../general/changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="models.html">Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="parameters.html">Parameters</a></li>
@@ -68,18 +73,18 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="deployer.html">Deployer</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Guides:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Guides</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../guides/ht_create_pipeline.html">How to create a pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../guides/ht_debug_in_operator.html">How to debug in a deployed operator</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Links:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/lazlowa/pypz-python">Source Code</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/lazlowa/pypz-starter-template">Starter Template Project</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/lazlowa/pypz-examples">Examples</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Index:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Index</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../modindex/modules.html">pypz</a></li>
 </ul>
@@ -202,6 +207,11 @@ then it creates its own <cite>ContextLogger</cite> object, however as the logger
 the operator, while adding its own context to the context list. Hence, if any logger method will be called inside
 the plugin, it will be routed to the operator’s <cite>ContextLogger</cite>, which invokes the implemented method of the
 Operator.Logger, which will call all the LoggerPlugins’ corresponding method.</p>
+<p>To access the logger in either the operator or plugin context, you simply need to invoke the <code class="docutils literal notranslate"><span class="pre">get_logger()</span></code> method.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">operator</span><span class="o">.</span><span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;something&quot;</span><span class="p">)</span>
+<span class="n">plugin</span><span class="o">.</span><span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;something&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Currently there is a guard in Operator.Logger, which will trace back the call stack and will throw an exception

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>How to debug in a deployed operator &mdash; pypz  documentation</title>
+  <title>Changelog &mdash; pypz  documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=eafc0fe6" />
@@ -25,8 +25,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="pypz" href="../modindex/modules.html" />
-    <link rel="prev" title="How to create a pipeline" href="ht_create_pipeline.html" /> 
+    <link rel="next" title="Models" href="../core/models.html" />
+    <link rel="prev" title="Overview" href="overview.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -52,9 +52,9 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">General</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../general/overview.html">Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../general/changelog.html">Changelog</a></li>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Core</span></p>
 <ul>
@@ -66,9 +66,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../core/deployer.html">Deployer</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Guides</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="ht_create_pipeline.html">How to create a pipeline</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">How to debug in a deployed operator</a></li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guides/ht_create_pipeline.html">How to create a pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/ht_debug_in_operator.html">How to debug in a deployed operator</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Links</span></p>
 <ul>
@@ -95,9 +95,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">How to debug in a deployed operator</li>
+      <li class="breadcrumb-item active">Changelog</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/guides/ht_debug_in_operator.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/general/changelog.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -105,57 +105,16 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="how-to-debug-in-a-deployed-operator">
-<h1>How to debug in a deployed operator<a class="headerlink" href="#how-to-debug-in-a-deployed-operator" title="Link to this heading"></a></h1>
-<p>If you test a pipeline, then usually you would do it locally with the local Operator-/PipelineExecutor.
-However, there are cases, where the pipeline works fine locally, but behaves strange, if deployed e.g.,
-it is running, but seems to be stuck somewhere. Although there is no remote debugging capability
-integrated into <em>pypz</em> yet, it is still possible to step into the code via
-<a class="reference external" href="https://www.sourceware.org/gdb/">GDB</a>.</p>
-<p>There are currently 2 python base images for <em>pypz</em>:</p>
-<ul class="simple">
-<li><p><strong>pypz-python-alpine</strong> (default in the template project), which contains only the necessary libs
-that is required by pypz, everything else needs to be installed by the operator image</p></li>
-<li><p><strong>pypz-python-dev</strong>, which inherits from the normal python image and contains amongst more debug symbols</p></li>
-</ul>
-<p>The <strong>pypz-python-dev</strong> includes GDB already. To be able to step into the code with GDB, you will need to perform
-the following steps.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>For this example a Rancher managed Kubernetes cluster is used i.e., the shell is opened from the Rancher’s GUI.
-Nevertheless, once you opened the shell by any means (e.g., docker exec), the same process applies.</p>
-</div>
-<ol class="arabic simple">
-<li><p>Open the shell</p></li>
-<li><p>Get the process id (PID) of the <em>pypz</em> process</p></li>
-</ol>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>ps<span class="w"> </span>x
-</pre></div>
-</div>
-<ol class="arabic simple">
-<li><p>Start GDB with the acquired PID</p></li>
-</ol>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>gdb<span class="w"> </span>python<span class="w"> </span>&lt;PID&gt;
-</pre></div>
-</div>
-<img alt="../_images/ht_d_gdb_1.png" src="../_images/ht_d_gdb_1.png" />
-<ol class="arabic simple">
-<li><p>Once you are in GDB, you can invoke the following command to get the call trace</p></li>
-</ol>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>py-bt
-</pre></div>
-</div>
-<img alt="../_images/ht_d_gdb_2.png" src="../_images/ht_d_gdb_2.png" />
-<p>You can find more useful commands for GDB in their documentation like
-<a class="reference external" href="https://sourceware.org/gdb/current/onlinedocs/gdb.html/Continuing-and-Stepping.html#Continuing-and-Stepping">continuing and stepping</a></p>
+  <section id="changelog">
+<h1>Changelog<a class="headerlink" href="#changelog" title="Link to this heading"></a></h1>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="ht_create_pipeline.html" class="btn btn-neutral float-left" title="How to create a pipeline" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../modindex/modules.html" class="btn btn-neutral float-right" title="pypz" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="overview.html" class="btn btn-neutral float-left" title="Overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../core/models.html" class="btn btn-neutral float-right" title="Models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

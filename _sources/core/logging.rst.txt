@@ -76,6 +76,13 @@ the operator, while adding its own context to the context list. Hence, if any lo
 the plugin, it will be routed to the operator's `ContextLogger`, which invokes the implemented method of the
 Operator.Logger, which will call all the LoggerPlugins' corresponding method.
 
+To access the logger in either the operator or plugin context, you simply need to invoke the ``get_logger()`` method.
+
+.. code-block:: python
+
+   operator.get_logger().info("something")
+   plugin.get_logger().info("something")
+
 .. warning::
    Currently there is a guard in Operator.Logger, which will trace back the call stack and will throw an exception
    if a LoggerPlugin tries to invoke any of the logger methods. This will prevent recursion at a cost of some
