@@ -1,11 +1,9 @@
 # Contributing
 
 Every contribution is very much appreciated and credited. 
-Before you begin, please read carefully the following document.
+Before you begin, please read carefully the following sections.
 
-# Before you begin
-
-## Check your goals
+# Check your goals
 
 It is important to understand that *pypz* is an extensible framework. Different
 interfaces are provided to allow you to integrate your custom implementation
@@ -19,10 +17,16 @@ deployer or the Kafka IO port plugins), then you are at the right place.
 If you think that your implementation should be part of the base package
 then contact me.
 
-## Follow these steps
+# Code of conduct
 
-1. Read and accept the [Contributor Covenant Code of Conduct](COC.md)
-2. Read and accept the [Contributor License Agreement](CLA.md)
-3. Read the [Documentation](https://lazlowa.github.io/pypz-python/index.html)
-4. Read the [Contributor's Guide](https://lazlowa.github.io/pypz-python/guides/ht_contribute.html#)
-5. Read the [Developer's Guide](https://lazlowa.github.io/pypz-python/guides/ht_develop.html#)
+By contributing to this project you agree and abide the terms and 
+conditions of the [Contributor Covenant Code of Conduct](COC.md).
+
+# Contributor License Agreement
+
+Read and accept the [Contributor License Agreement](CLA.md)
+
+# Guides
+
+- Read the [Contributor's Guide](https://lazlowa.github.io/pypz-python/guides/ht_contribute.html#)
+- Read the [Developer's Guide](https://lazlowa.github.io/pypz-python/guides/ht_develop.html#)
