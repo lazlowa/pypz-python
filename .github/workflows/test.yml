@@ -24,15 +24,18 @@ jobs:
             deployer_k8s:
               - ".github/workflows/test.yml"
               - "core/src/**"
-              - "deployers/k8s/**"
+              - "deployers/k8s/src/**"
+              - "deployers/k8s/test/**"
             plugin_kafka_io:
               - ".github/workflows/test.yml"
               - "core/src/**"
-              - "plugins/kafka_io/**"
+              - "plugins/kafka_io/src/**"
+              - "plugins/kafka_io/test/**"
             sniffer:
               - ".github/workflows/test.yml"
               - "core/src/**"
-              - "sniffer/**"
+              - "sniffer/src/**"
+              - "sniffer/test/**"
 
   core:
     name: "Core"
