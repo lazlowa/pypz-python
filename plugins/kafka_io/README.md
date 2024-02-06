@@ -28,13 +28,13 @@ You can run tests against an existing Kafka cluster, however, it is
 more convenient and safe to use a local test cluster.
 
 
-1. Install the subproject in editable more.
-```shell
-pip install -e ./plugins/kafka_io
-```
-2. Run the [confluent image](https://hub.docker.com/r/confluentinc/confluent-local) to start a local cluster
+1. Run the [confluent image](https://hub.docker.com/r/confluentinc/confluent-local) to start a local cluster
 ```shell
 docker run --name kafka-test-cluster -d --rm -p 9092:9092 confluentinc/confluent-local
+```
+2. Install the subproject in editable more.
+```shell
+pip install -e ./plugins/kafka_io
 ```
 3. To run the tests locally, you need to execute the following command:
 ```shell
