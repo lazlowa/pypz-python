@@ -105,3 +105,11 @@ Additionally, you need to install the dependencies for the Sphinx extensions:
 
 As last, you need to install `GraphViz <https://graphviz.org/>`_, since its features are used
 by Sphinx to generate images in the documentation.
+
+Once all the dependencies are installed, you can build the documentation with the following command:
+
+.. code-block:: shell
+
+   sphinx-build ./docs ./docs/_build
+
+Then you can open the generated index.html under ./docs/_build/index.html
