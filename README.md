@@ -10,7 +10,7 @@ both home and work environment, like:
 - how could we easily perform data processing on huge scale
 - how could we speed up the data processing itself
 
-# *When should I consider using it?*
+# *"When should I consider using it?"*
 You might consider using *pypz* in the following scenarios:
 - you are not a data engineer, but you want to be able to implement and deploy
 your data processing logic on your own without caring about data engineering "stuff"
@@ -18,6 +18,7 @@ your data processing logic on your own without caring about data engineering "st
 conditions to be able to develop data processing pipelines
 - you are having data processing workflows (each step executed sequentially)
 and you would like to move to data processing pipelines (each step runs parallel)
+with interoperation (stream) data transfer
 - you are having a monolithic data processing job, which you would like
 to split into more (reusable) operations
 - you are struggling scaling out your data processing

@@ -1,17 +1,49 @@
-# Overview
+# Description
 
-This is an experimental tool be able to sniff the control information of the channels between the
-operators.
-This sniffer is only capable to sniff kafka based channels i.e., if 2 or more operators are 
-connected via KafkaInput/OutputChannels (evtl. plugins).
-The sniffer uses tkInter for visualization.
+This package contains the experimental implementation of the IO Sniffer.
+The Sniffer allows you to visualize the control plane of the IO ports of
+the operators, so you can have a better understanding, what happens during
+the execution of your pipeline.
 
-# Building into exe
+Check the [documentation](https://lazlowa.github.io/pypz-python/sniffer/overview.html) for
+more details.
 
-The sniffer can be built into an executable. The package pyinstaller was tested, hence it is proposed
-to be used for this purpose. You can install the pyinstaller via pip.
-Once it is installed, you shall execute the following command:
-```console pyinstaller -F path/to/SnifferRunnable.py```
-or you can navigate to the folder containing the script and simply execute:
-```console pyinstaller -F SnifferRunnable.py```
-The final executable will be placed into ./dist folder in the execution's location.
+# Install
+
+The python artifact are hosted on https://pypi.org/, so you can install
+it via pip:
+
+```shell
+pip install pypz-io-sniffer
+```
+
+If you want to work on it locally, then you should install in editable mode:
+
+```shell
+pip install -e ./sniffer
+```
+
+# Test
+
+Before you run the tests, you need to install the subproject in editable mode.
+To run the tests locally, you need to execute the following command:
+
+```shell
+python -m unittest discover .\sniffer\test\ -p "*.py"
+```
+
+# Build
+
+Before you build, you will need to install the "build" package:
+
+```shell
+pip install build
+```
+
+Then from the subproject's root, you will need to execute the following command:
+
+```shell
+python -m build
+```
+
+It will create the source distribution and the wheel file in the "dist" folder.
