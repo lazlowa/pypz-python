@@ -94,6 +94,8 @@ class KafkaIOPortTest(unittest.TestCase):
 
             self.assertTrue(reader.input_port._on_resource_creation())
 
+            time.sleep(1)
+
             # Case #2
             # Principal reader instance cannot open, until at least
             # one writer is not connected. If the parameter
@@ -106,6 +108,9 @@ class KafkaIOPortTest(unittest.TestCase):
             # All resources created and all channels are opened,
             # hence principal reader can open as well.
             self.assertTrue(writer.output_port._on_port_open())
+
+            time.sleep(1)
+
             self.assertTrue(reader_0.input_port._on_port_open())
             self.assertTrue(reader.input_port._on_port_open())
             self.assertTrue(writer_0.output_port._on_port_open())
