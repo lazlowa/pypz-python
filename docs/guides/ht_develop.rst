@@ -57,7 +57,8 @@ can execute the following command to install the subprojects:
    pip install -e ./plugins/kafka_io/
    ...
 
-Or you can install everything via the prepared `requirements.txt <>` file.
+Or you can install everything via the prepared
+`requirements.txt <https://github.com/lazlowa/pypz-python/blob/main/requirements.txt>`_ file.
 
 .. code-block:: shell
 
