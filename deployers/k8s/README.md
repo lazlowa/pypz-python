@@ -8,7 +8,7 @@ more details.
 
 # Install
 
-The python artifact are hosted on https://pypi.org/, so you can install
+The python artifact is hosted on https://pypi.org/, so you can install
 it via pip:
 
 ```shell
