@@ -25,8 +25,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="pypz" href="../modindex/modules.html" />
-    <link rel="prev" title="Developer’s Guide" href="ht_dev.html" /> 
+    <link rel="next" title="Developer’s Guide" href="ht_develop.html" />
+    <link rel="prev" title="How to debug in a deployed operator" href="ht_debug_in_operator.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -81,8 +81,24 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="ht_create_pipeline.html">How to create a pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ht_debug_in_operator.html">How to debug in a deployed operator</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ht_dev.html">Developer’s Guide</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Contributor’s Guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Contributor’s Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#before-you-begin">Before You Begin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#code-of-conduct">Code of conduct</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#contributor-license-agreement">Contributor License Agreement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#workflow">Workflow</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#fork-the-repository">Fork the Repository</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#setting-up-the-development">Setting up the Development</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#prepare-and-submit-the-pull-request">Prepare and Submit the Pull Request</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#requirements">Requirements</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#styling">styling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#unit-tests">Unit Tests</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ht_develop.html">Developer’s Guide</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Links</span></p>
 <ul>
@@ -120,15 +136,61 @@
            <div itemprop="articleBody">
              
   <section id="contributor-s-guide">
-<h1>Contributor’s Guide<a class="headerlink" href="#contributor-s-guide" title="Link to this heading"></a></h1>
+<span id="contributors-guide"></span><h1>Contributor’s Guide<a class="headerlink" href="#contributor-s-guide" title="Link to this heading"></a></h1>
+<p>Every contribution is very much appreciated and credited.
+Before you begin, please read carefully the following sections.</p>
+<section id="before-you-begin">
+<h2>Before You Begin<a class="headerlink" href="#before-you-begin" title="Link to this heading"></a></h2>
+<p>It is important to understand that <em>pypz</em> is an extensible framework. Different
+interfaces are provided to allow you to integrate your custom implementation
+with <em>pypz</em>. These implementations shall be maintained separately from <em>pypz</em>’s
+core. In other words, if you want to implement your own operator, plugin,
+deployer or channels, you don’t need to contribute to this project, but you
+shall create your own repository for that. On the other hand, if you want
+to improve <em>pypz</em>’s core functionality or the builtin assets (e.g., K8s
+deployer or the Kafka IO port plugins), then you are at the right place.</p>
+<p>If you think that your implementation should be part of the base package
+then contact me.</p>
+</section>
+<section id="code-of-conduct">
+<h2>Code of conduct<a class="headerlink" href="#code-of-conduct" title="Link to this heading"></a></h2>
+<p>By contributing to this project you agree and abide the terms and
+conditions of the <a class="reference external" href="https://github.com/lazlowa/pypz-python/blob/main/COC.md">Contributor Covenant Code of Conduct</a>.</p>
+</section>
+<section id="contributor-license-agreement">
+<h2>Contributor License Agreement<a class="headerlink" href="#contributor-license-agreement" title="Link to this heading"></a></h2>
+<p>Read and understand the <a class="reference external" href="https://github.com/lazlowa/pypz-python/blob/main/CLA.md">Contributor License Agreement</a></p>
+</section>
+<section id="workflow">
+<h2>Workflow<a class="headerlink" href="#workflow" title="Link to this heading"></a></h2>
+<section id="fork-the-repository">
+<h3>Fork the Repository<a class="headerlink" href="#fork-the-repository" title="Link to this heading"></a></h3>
+</section>
+<section id="setting-up-the-development">
+<h3>Setting up the Development<a class="headerlink" href="#setting-up-the-development" title="Link to this heading"></a></h3>
+<p>Follow the <a class="reference internal" href="ht_develop.html#developers-guide"><span class="std std-ref">Developer’s Guide</span></a> to set up your development environment.</p>
+</section>
+<section id="prepare-and-submit-the-pull-request">
+<h3>Prepare and Submit the Pull Request<a class="headerlink" href="#prepare-and-submit-the-pull-request" title="Link to this heading"></a></h3>
+</section>
+</section>
+<section id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Link to this heading"></a></h2>
+<section id="styling">
+<h3>styling<a class="headerlink" href="#styling" title="Link to this heading"></a></h3>
+</section>
+<section id="unit-tests">
+<h3>Unit Tests<a class="headerlink" href="#unit-tests" title="Link to this heading"></a></h3>
+</section>
+</section>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="ht_dev.html" class="btn btn-neutral float-left" title="Developer’s Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../modindex/modules.html" class="btn btn-neutral float-right" title="pypz" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="ht_debug_in_operator.html" class="btn btn-neutral float-left" title="How to debug in a deployed operator" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ht_develop.html" class="btn btn-neutral float-right" title="Developer’s Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

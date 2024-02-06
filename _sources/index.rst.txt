@@ -48,8 +48,8 @@ Welcome to pypz's documentation!
 
    guides/ht_create_pipeline
    guides/ht_debug_in_operator
-   guides/ht_dev
    guides/ht_contribute
+   guides/ht_develop
 
 .. toctree::
    :maxdepth: 1
