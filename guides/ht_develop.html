@@ -85,8 +85,9 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Developer’s Guide</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#getting-the-source-code">Getting the Source Code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#project-structure">Project Structure</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#build-the-project">Build the Project</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#run-unit-tests">Run Unit Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#work-in-the-project">Work in the Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#run-tests">Run Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#build">Build</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#build-the-documentation">Build the Documentation</a></li>
 </ul>
 </li>
@@ -130,18 +131,89 @@
 <span id="developers-guide"></span><h1>Developer’s Guide<a class="headerlink" href="#developer-s-guide" title="Link to this heading"></a></h1>
 <section id="getting-the-source-code">
 <h2>Getting the Source Code<a class="headerlink" href="#getting-the-source-code" title="Link to this heading"></a></h2>
+<p>To get a local copy of the source code, you simply need to clone it using this command:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/lazlowa/pypz-python.git
+</pre></div>
+</div>
 </section>
 <section id="project-structure">
 <h2>Project Structure<a class="headerlink" href="#project-structure" title="Link to this heading"></a></h2>
+<p>As you can see, <em>pypz</em> follows the monorepo structure i.e., there is a root project called “pypz-python”, which
+contains several subprojects organized into their independent packages. Each subproject follows the
+<a class="reference external" href="https://packaging.python.org/en/latest/discussions/src-layout-vs-flat-layout/">src layout</a> i.e., the packages
+are organized into a “src” folder in the subproject.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In the following, you will see the term <strong>“builtin”</strong> used several times. It refers to interface implementations
+that are considered as part of <em>pypz</em>’s base project. These implementations are maintained by this project. This
+does not limit you to have your own implementations of the interfaces, however those shall be maintained by you
+in your own repository.</p>
+<p>If you think that your implementation should be part of the base project, then please contact the maintainers.</p>
+</div>
+<p><strong>Folder structure:</strong></p>
+<ul class="simple">
+<li><p><strong>core</strong>, contains the core components and features that makes <em>pypz</em> work</p></li>
+<li><p><strong>deployers</strong>, logical grouping of subprojects that are implementing the deployer interface</p></li>
+<li><p><strong>plugins</strong>, logical grouping of subprojects that are implementing the plugin interfaces</p></li>
+<li><p><strong>sniffer</strong>, contains the sniffer subproject</p></li>
+<li><p><strong>docs</strong>, contains the documentation</p></li>
+<li><p><strong>.docker</strong>, contains the Dockerfiles and necessary image resources</p></li>
+<li><p><strong>.github</strong>, contains the github actions scripts</p></li>
+</ul>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Notice that the modules are organized in namespace packages. This enables us to reuse package names in different
+subprojects. For example, the deployer interface is provided by the module “pypz.deployers.base”, the Kubernetes
+implementation is provided by the module “pypz.deployers.k8s”.</p>
+</div>
 </section>
-<section id="build-the-project">
-<h2>Build the Project<a class="headerlink" href="#build-the-project" title="Link to this heading"></a></h2>
+<section id="work-in-the-project">
+<h2>Work in the Project<a class="headerlink" href="#work-in-the-project" title="Link to this heading"></a></h2>
+<p>Due to the project structure, if you want to test/run components of <em>pypz</em>, you need to install the related <em>pypz</em>
+dependencies in editable mode. You can achieve this via pip. For example, given you are in the project root, you
+can execute the following command to install the subprojects:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>./core/
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>./deployers/k8s/
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>./plugins/kafka_io/
+...
+</pre></div>
+</div>
+<p>Or you can install everything via the prepared
+<a class="reference external" href="https://github.com/lazlowa/pypz-python/blob/main/requirements.txt">requirements.txt</a> file.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+</pre></div>
+</div>
 </section>
-<section id="run-unit-tests">
-<h2>Run Unit Tests<a class="headerlink" href="#run-unit-tests" title="Link to this heading"></a></h2>
+<section id="run-tests">
+<h2>Run Tests<a class="headerlink" href="#run-tests" title="Link to this heading"></a></h2>
+<p>Different subprojects might have different steps to take, before you can run the tests. Please check the
+corresponding README for more information.</p>
+</section>
+<section id="build">
+<h2>Build<a class="headerlink" href="#build" title="Link to this heading"></a></h2>
+<p>To build your project, you will need the <code class="docutils literal notranslate"><span class="pre">build</span></code> tool first:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>build
+</pre></div>
+</div>
+<p>Then you can build your project by invoking the following command from the subproject’s root</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>build
+</pre></div>
+</div>
+<p>This command will create the sdist and wheel into the dist folder.</p>
 </section>
 <section id="build-the-documentation">
 <h2>Build the Documentation<a class="headerlink" href="#build-the-documentation" title="Link to this heading"></a></h2>
+<p>Since the documentation is generated with Sphinx and refers to all subprojects, you need to make sure
+that every subproject is installed.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+</pre></div>
+</div>
+<p>Additionally, you need to install the dependencies for the Sphinx extensions:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements-docs.txt
+</pre></div>
+</div>
+<p>As last, you need to install <a class="reference external" href="https://graphviz.org/">GraphViz</a>, since its features are used
+by Sphinx to generate images in the documentation.</p>
 </section>
 </section>
 

@@ -88,12 +88,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#workflow">Workflow</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#fork-the-repository">Fork the Repository</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#setting-up-the-development">Setting up the Development</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#prepare-and-submit-the-pull-request">Prepare and Submit the Pull Request</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#requirements">Requirements</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#styling">styling</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#unit-tests">Unit Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#prepare-the-pull-request">Prepare the Pull Request</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pass-pr-review">Pass PR Review</a></li>
 </ul>
 </li>
 </ul>
@@ -163,24 +159,55 @@ conditions of the <a class="reference external" href="https://github.com/lazlowa
 </section>
 <section id="workflow">
 <h2>Workflow<a class="headerlink" href="#workflow" title="Link to this heading"></a></h2>
+<div align="center" class="align-center"><div class="graphviz"><img src="../_images/graphviz-d20262df3e40e73d5b237da8be21509c68a8914c.png" alt="digraph state_machine {
+    size=&quot;10,20&quot;;
+    ratio=&quot;auto&quot;;
+    rankdir=&quot;LR&quot;;
+    graph [fontname=&quot;Verdana&quot;, fontsize=&quot;28&quot;];
+    margin=&quot;0.0,0.5&quot;;
+
+    fork [shape=rect, label=&quot;Fork pypz-python/main&quot;];
+    setup [shape=rect, label=&quot;Setup the development&quot;];
+    implement [shape=rect, label=&quot;Implement&quot;];
+    pr [shape=rect, label=&quot;Prepare PR&quot;];
+    review [shape=rect, label=&quot;PR Review&quot;];
+
+    fork -&gt; setup;
+    setup -&gt; implement;
+    implement -&gt; pr;
+    pr -&gt; review;
+}" class="graphviz" /></div>
+</div>
 <section id="fork-the-repository">
 <h3>Fork the Repository<a class="headerlink" href="#fork-the-repository" title="Link to this heading"></a></h3>
+<p><a class="reference external" href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo">Fork</a>
+the <a class="reference external" href="https://github.com/lazlowa/pypz-python">pypz repository</a>.</p>
 </section>
 <section id="setting-up-the-development">
 <h3>Setting up the Development<a class="headerlink" href="#setting-up-the-development" title="Link to this heading"></a></h3>
 <p>Follow the <a class="reference internal" href="ht_develop.html#developers-guide"><span class="std std-ref">Developer’s Guide</span></a> to set up your development environment.</p>
 </section>
-<section id="prepare-and-submit-the-pull-request">
-<h3>Prepare and Submit the Pull Request<a class="headerlink" href="#prepare-and-submit-the-pull-request" title="Link to this heading"></a></h3>
+<section id="prepare-the-pull-request">
+<h3>Prepare the Pull Request<a class="headerlink" href="#prepare-the-pull-request" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p>Always make sure that your fork is synced with the main branch of <em>pypz</em></p></li>
+<li><p>It is advised to create your own development branch instead of committing your changes directly to the
+main branch</p></li>
+<li><p>Implement your fix, feature etc.</p></li>
+<li><p>Implement the necessary unittests</p></li>
+<li><p>Run the corresponding tests</p></li>
+<li><p>Rebase your fork, squash commits and resolve conflicts</p></li>
+<li><p>Commit message shall have a clear description of the changes (emphasis on the answers to “why”)</p></li>
+</ol>
 </section>
-</section>
-<section id="requirements">
-<h2>Requirements<a class="headerlink" href="#requirements" title="Link to this heading"></a></h2>
-<section id="styling">
-<h3>styling<a class="headerlink" href="#styling" title="Link to this heading"></a></h3>
-</section>
-<section id="unit-tests">
-<h3>Unit Tests<a class="headerlink" href="#unit-tests" title="Link to this heading"></a></h3>
+<section id="pass-pr-review">
+<h3>Pass PR Review<a class="headerlink" href="#pass-pr-review" title="Link to this heading"></a></h3>
+<p>Given the availability of the maintainer(s), your PR will be reviewed as soon as possible. During the review,
+both parties shall be open minded for feedbacks and comments. Everybody can have opinions or ideology,
+but facts and proofs are preferred, so don’t get irritated or offended, if there are comments or requests to
+your PR.</p>
+<p>It makes the review process much easier, if you provide your intentions behind your changes e.g., as
+code docs.</p>
 </section>
 </section>
 </section>
