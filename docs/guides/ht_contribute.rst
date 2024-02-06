@@ -35,22 +35,60 @@ Read and understand the `Contributor License Agreement <https://github.com/lazlo
 Workflow
 --------
 
+.. graphviz::
+   :name: Contribution Workflow
+   :align: center
+
+   digraph state_machine {
+       size="10,20";
+       ratio="auto";
+       rankdir="LR";
+       graph [fontname="Verdana", fontsize="28"];
+       margin="0.0,0.5";
+
+       fork [shape=rect, label="Fork pypz-python/main"];
+       setup [shape=rect, label="Setup the development"];
+       implement [shape=rect, label="Implement"];
+       pr [shape=rect, label="Prepare PR"];
+       review [shape=rect, label="PR Review"];
+
+       fork -> setup;
+       setup -> implement;
+       implement -> pr;
+       pr -> review;
+   }
+
+
 Fork the Repository
 +++++++++++++++++++
+
+`Fork <https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo>`_
+the `pypz repository <https://github.com/lazlowa/pypz-python>`_.
 
 Setting up the Development
 ++++++++++++++++++++++++++
 
 Follow the :ref:`Developer's Guide <developers_guide>` to set up your development environment.
 
-Prepare and Submit the Pull Request
-+++++++++++++++++++++++++++++++++++
+Prepare the Pull Request
+++++++++++++++++++++++++
 
-Requirements
-------------
+1. Always make sure that your fork is synced with the main branch of *pypz*
+2. It is advised to create your own development branch instead of committing your changes directly to the
+   main branch
+3. Implement your fix, feature etc.
+4. Implement the necessary unittests
+5. Run the corresponding tests
+6. Rebase your fork, squash commits and resolve conflicts
+7. Commit message shall have a clear description of the changes (emphasis on the answers to "why")
 
-styling
-+++++++
+Pass PR Review
+++++++++++++++
 
-Unit Tests
-++++++++++
+Given the availability of the maintainer(s), your PR will be reviewed as soon as possible. During the review,
+both parties shall be open minded for feedbacks and comments. Everybody can have opinions or ideology,
+but facts and proofs are preferred, so don't get irritated or offended, if there are comments or requests to
+your PR.
+
+It makes the review process much easier, if you provide your intentions behind your changes e.g., as
+code docs.

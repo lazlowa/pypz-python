@@ -48,9 +48,14 @@ shall be prepared and stored for further processing.
 
 # Links
 
-- [documentation](https://lazlowa.github.io/pypz-python/index.html)
-- [starter project template](https://github.com/lazlowa/pypz-starter-template)
-- [examples](https://github.com/lazlowa/pypz-examples)
+- [Documentation](https://lazlowa.github.io/pypz-python/index.html)
+- [Starter project template](https://github.com/lazlowa/pypz-starter-template)
+- [Example bundle](https://github.com/lazlowa/pypz-examples)
+
+# Contact
+
+Should you have any questions or feedbacks, please use the project's
+[Google Group](https://groups.google.com/g/pypz/) to get into contact.
 
 ---
 
