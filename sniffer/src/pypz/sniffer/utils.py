@@ -51,24 +51,32 @@ def order_operators_by_connections(pipeline: Pipeline) -> list[set[Operator]]:
     """
     This function attempts to order the operators along their connections. Consider
     the following example with connection directions from top to bottom:
-    A   B
-     \ /
-      C
-     / \
-    D   E
-    |  /
-    F /
-    |/
-    G
+
+    ::
+
+       | A   B |
+       |  \ /  |
+       |   C   |
+       |  / \  |
+       | D   E |
+       | |  /  |
+       | F /   |
+       | |/    |
+       | G     |
+
     Dependencies can be expressed along the connections. The expected result from this
     function orders these dependencies into list of sets, where the list represents
     the dependency levels and the set the independent operators on each level.
     Expected result for the example:
-    [0] - {A,B}
-    [1] - {C}
-    [2] - {D,E}
-    [3] - {F}
-    [4] - {G}
+
+    ::
+
+       [0] - {A,B}
+       [1] - {C}
+       [2] - {D,E}
+       [3] - {F}
+       [4] - {G}
+
     This information can then be used amongst more to draw the operators in the proper
     order and position to visualize their connections.
     Note that this method is capable to handle circular dependencies.

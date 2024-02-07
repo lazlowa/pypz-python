@@ -16,13 +16,11 @@ jobs:
         python-version: "3.11"
     - name: Install
       run: |
+        sudo apt install graphviz
         python -m pip install --upgrade pip
         python -m pip install pyyaml
-        python -m pip install -e ./core/.[docs]
-        python -m pip install -e ./deployers/k8s
-        python -m pip install -e ./plugins/kafka_io
-        python -m pip install -e ./sniffer
-        sudo apt install graphviz
+        python -m pip install -r requirements.txt
+        python -m pip install -r ./docs/requirements.txt
     - name: Build
       run: |
         sphinx-build ./docs ./docs/_build

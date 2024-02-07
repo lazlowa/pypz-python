@@ -101,7 +101,7 @@ Additionally, you need to install the dependencies for the Sphinx extensions:
 
 .. code-block:: shell
 
-   pip install -r requirements-docs.txt
+   pip install -r ./docs/requirements.txt
 
 As last, you need to install `GraphViz <https://graphviz.org/>`_, since its features are used
 by Sphinx to generate images in the documentation.
