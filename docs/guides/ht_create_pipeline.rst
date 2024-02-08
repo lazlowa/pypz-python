@@ -79,7 +79,9 @@ Check :ref:`models` section for more details on the methods.
 Output Schema
 +++++++++++++
 
-The builtin KafkaChannelPorts are sending records in `Avro <https://avro.apache.org/docs/1.11.1/specification/_print/>`_
+The builtin kafka ports (:class:`KafkaChannelInputPort <pypz.plugins.kafka_io.ports.KafkaChannelInputPort>`,
+:class:`KafkaChannelOutputPort <pypz.plugins.kafka_io.ports.KafkaChannelOutputPort>`)
+are sending records in `Avro <https://avro.apache.org/docs/1.11.1/specification/_print/>`_
 format, hence we need to define the schema for the records.
 
 .. code-block:: python
@@ -103,8 +105,8 @@ This schema will expect a record with the key "text" in type string.
 ++++++++++++
 
 Operators can be enhanced by plugins. For example, the Input-/OutputPortPlugins enable the operators
-to transfer data to and from each other. Hence, we need to create the ``KafkaChannelOutputPort`` plugin
-in the ctor of the operator.
+to transfer data to and from each other. Hence, we need to create the
+:class:`KafkaChannelInputPort <pypz.plugins.kafka_io.ports.KafkaChannelInputPort>` plugin in the ctor of the operator.
 
 .. code-block:: python
 
@@ -359,7 +361,7 @@ with the name ``execute.py``. This will be a script file.
 The following logic is implemented:
 
 1. Create the DemoPipeline object
-2. Create the PipelineExecutor object with the pipeline as ctor argument
+2. Create the :class:`PipelineExecutor <pypz.executors.pipeline.executor.PipelineExecutor>` object with the pipeline as ctor argument
 3. Start the pipeline execution
 4. Shutdown the pipeline execution
 
@@ -413,8 +415,9 @@ If you start the executor now, you need to see something like this:
 
 Notice that we used the print method to show some information on stdout, however there is a :ref:`logging` system
 in *pypz*, which allows to send log messages. For this, we need to enhance our operators by logger plugins.
-As next, we will add the ``DefaultLoggerPlugin`` to each operators and we will modify the code to use the
-new logger. The ``DefaultLoggerPlugin`` sends the logs to stdout.
+As next, we will add the :class:`DefaultLoggerPlugin <pypz.plugins.loggers.default.DefaultLoggerPlugin>`
+to each operators and we will modify the code to use the
+new logger. The :class:`DefaultLoggerPlugin <pypz.plugins.loggers.default.DefaultLoggerPlugin>` sends the logs to stdout.
 
 .. code-block:: python
    :emphasize-lines: 10,19
@@ -508,13 +511,13 @@ Sniffer is a small tool to visualize the control plane of the operators' ports i
 1. Create an additional file with the name ``sniffer.py``, which will be a script
 2. Create the pipeline object
 3. Set the parameters as you have done in the ``execute.py``
-4. Create the sniffer object and provide the pipeline as constructor argument
+4. Create the :class:`sniffer object <pypz.sniffer.viewer.PipelineSnifferViewer>` and provide the pipeline as constructor argument
 5. Invoke the sniffer's mainloop() method (based on TK)
 
 .. code-block:: python
    :emphasize-lines: 6
 
-   from pypz.executors.pipeline.executor import PipelineExecutor
+   from pypz.sniffer.viewer import PipelineSnifferViewer
 
    from pypz.example.pipeline import DemoPipeline
 
@@ -666,7 +669,7 @@ KubernetesDeployer
 #. Create an additional file with the name ``deploy.py``, which will be a script
 #. Create the pipeline object
 #. Set the necessary parameters
-#. Create the KubernetesDeployer and specify the namespace
+#. Create the :class:`KubernetesDeployer <pypz.deployers.k8s.KubernetesDeployer>` and specify the namespace
 #. Deploy the pipeline only, if it is not yet deployed
 #. Attach to the deployed pipeline to block until it is finished
 #. Destroy the pipeline and its related resources
