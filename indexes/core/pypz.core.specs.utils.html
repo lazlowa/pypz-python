@@ -126,6 +126,11 @@ attributes into publicly accessible methods.</p>
 <span class="sig-name descname"><span class="pre">PATTERN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'^(_[a-zA-Z0-9]+__|_(?!_))'</span></em><a class="headerlink" href="#pypz.core.specs.utils.AccessWrapper.PATTERN" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.utils.AccessWrapper._SingletonAccessWrapper__singletons">
+<span class="sig-name descname"><span class="pre">_SingletonAccessWrapper__singletons</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#pypz.core.specs.utils.AccessWrapper" title="pypz.core.specs.utils.AccessWrapper"><span class="pre">AccessWrapper</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pypz.core.specs.utils.AccessWrapper._SingletonAccessWrapper__singletons" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="pypz.core.specs.utils.AccessWrapper.get_nested_instance">
 <span class="sig-name descname"><span class="pre">get_nested_instance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.specs.utils.AccessWrapper.get_nested_instance" title="Link to this definition"></a></dt>
@@ -184,6 +189,11 @@ In either case, this is followed by: for k in F:  D[k] = F[k]</p>
 <p>This metaclass extends the AccessWrapper class with the functionality
 of caching AccessWrapper objects based on the Instance object. This
 allows to reuse the AccessWrapper object instead of creating a new one.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.utils.SingletonAccessWrapper.__singletons">
+<span class="sig-name descname"><span class="pre">__singletons</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#pypz.core.specs.utils.AccessWrapper" title="pypz.core.specs.utils.AccessWrapper"><span class="pre">AccessWrapper</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pypz.core.specs.utils.SingletonAccessWrapper.__singletons" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="py function">

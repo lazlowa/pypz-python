@@ -5,3 +5,4 @@ pypz.deployers.k8s module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:

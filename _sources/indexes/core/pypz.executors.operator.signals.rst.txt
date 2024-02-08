@@ -5,3 +5,4 @@ pypz.executors.operator.signals module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:

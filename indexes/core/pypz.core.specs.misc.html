@@ -119,6 +119,11 @@
 <dt class="sig sig-object py" id="pypz.core.specs.misc.BlankInputPortPlugin">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.misc.</span></span><span class="sig-name descname"><span class="pre">BlankInputPortPlugin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.specs.misc.BlankInputPortPlugin" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="pypz.core.specs.plugin.html#pypz.core.specs.plugin.InputPortPlugin" title="pypz.core.specs.plugin.InputPortPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">InputPortPlugin</span></code></a>, <a class="reference internal" href="#pypz.core.specs.misc.BlankPortPlugin" title="pypz.core.specs.misc.BlankPortPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">BlankPortPlugin</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankInputPortPlugin._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pypz.core.specs.misc.BlankInputPortPlugin._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="pypz.core.specs.misc.BlankInputPortPlugin.can_retrieve">
 <span class="sig-name descname"><span class="pre">can_retrieve</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.core.specs.misc.BlankInputPortPlugin.can_retrieve" title="Link to this definition"></a></dt>
@@ -156,18 +161,250 @@ read offset based on the technology used.</p>
 <dt class="sig sig-object py" id="pypz.core.specs.misc.BlankInstance">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.misc.</span></span><span class="sig-name descname"><span class="pre">BlankInstance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.specs.misc.BlankInstance" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="pypz.core.specs.instance.html#pypz.core.specs.instance.Instance" title="pypz.core.specs.instance.Instance"><code class="xref py py-class docutils literal notranslate"><span class="pre">Instance</span></code></a>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">NestedInstanceType</span></code>]</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankInstance.__context">
+<span class="sig-name descname"><span class="pre">__context</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.core.specs.instance.html#pypz.core.specs.instance.Instance" title="pypz.core.specs.instance.Instance"><span class="pre">Instance</span></a></em><a class="headerlink" href="#pypz.core.specs.misc.BlankInstance.__context" title="Link to this definition"></a></dt>
+<dd><p>Reference to the context aka parent object. Derived automatically
+in the override implementation of __setattr__.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankInstance.__depends_on">
+<span class="sig-name descname"><span class="pre">__depends_on</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">set</span></em><a class="headerlink" href="#pypz.core.specs.misc.BlankInstance.__depends_on" title="Link to this definition"></a></dt>
+<dd><p>Set of other instances that is this instance depending on. Note however that
+the type of the dependencies are checked dynamically in runtime, since dependencies
+can only be defined on the same type of instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankInstance.__expected_parameters">
+<span class="sig-name descname"><span class="pre">__expected_parameters</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="pypz.core.commons.parameters.html#pypz.core.commons.parameters.ExpectedParameter" title="pypz.core.commons.parameters.ExpectedParameter"><span class="pre">ExpectedParameter</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.core.specs.misc.BlankInstance.__expected_parameters" title="Link to this definition"></a></dt>
+<dd><p>Map of expected parameters defined as descriptor of the class. Key is the name of the parameter,
+value is the parameter descriptor. Used to check, if an expected (described) parameter value
+shall be set upon instance parameter setting.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankInstance.__full_name">
+<span class="sig-name descname"><span class="pre">__full_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pypz.core.specs.misc.BlankInstance.__full_name" title="Link to this definition"></a></dt>
+<dd><p>Full name of the instance which uniquely identifies it up to its topmost context.
+For example, if an instance A has a parent context B, which has a parent context C,
+then the full name of A is ‘C.B.A’. This value is calculated and the result is
+stored after the first calculation to avoid recalculation every time.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankInstance.__nested_instance_type">
+<span class="sig-name descname"><span class="pre">__nested_instance_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">NestedInstanceType</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.core.specs.misc.BlankInstance.__nested_instance_type" title="Link to this definition"></a></dt>
+<dd><p>Stores the specified type of the nested instances. This is required to
+be able to discover those instances</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankInstance.__nested_instances">
+<span class="sig-name descname"><span class="pre">__nested_instances</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">NestedInstanceType</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.core.specs.misc.BlankInstance.__nested_instances" title="Link to this definition"></a></dt>
+<dd><p>This dictionary holds all the instances that are nested in the context
+of this instance object</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankInstance.__parameters">
+<span class="sig-name descname"><span class="pre">__parameters</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.core.specs.utils.html#pypz.core.specs.utils.InstanceParameters" title="pypz.core.specs.utils.InstanceParameters"><span class="pre">InstanceParameters</span></a></em><a class="headerlink" href="#pypz.core.specs.misc.BlankInstance.__parameters" title="Link to this definition"></a></dt>
+<dd><p>The interpreted instance parameters i.e., cascading and templates are interpreted</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankInstance.__simple_name">
+<span class="sig-name descname"><span class="pre">__simple_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pypz.core.specs.misc.BlankInstance.__simple_name" title="Link to this definition"></a></dt>
+<dd><p>Name of the instance, which is represented by the object created from the 
+implementation class. If not provided and there is a parent context, then
+the parent context will use the name of the variable.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankInstance.__spec_classes">
+<span class="sig-name descname"><span class="pre">__spec_classes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">set</span></em><a class="headerlink" href="#pypz.core.specs.misc.BlankInstance.__spec_classes" title="Link to this definition"></a></dt>
+<dd><p>Set of specs classes that are in the class hierarchy i.e., which specs classes are
+contributing to the implementation of this class</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankInstance.__spec_name">
+<span class="sig-name descname"><span class="pre">__spec_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pypz.core.specs.misc.BlankInstance.__spec_name" title="Link to this definition"></a></dt>
+<dd><p>The name of the spec constructed of module and qualified class name. Notice that we separate
+the module name and the class name so that we can identify them at loading by name.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankInstance._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pypz.core.specs.misc.BlankInstance._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankInstance._on_error">
+<span class="sig-name descname"><span class="pre">_on_error</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.core.specs.misc.BlankInstance._on_error" title="Link to this definition"></a></dt>
+<dd><p>This method can be implemented to react to error events during
+execution. The error itself may come from arbitrary sources.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankInstance._on_interrupt">
+<span class="sig-name descname"><span class="pre">_on_interrupt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">system_signal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.core.specs.misc.BlankInstance._on_interrupt" title="Link to this definition"></a></dt>
+<dd><p>This method can be implemented to react to interrupt signals like
+SIGINT, SIGTERM etc. The specs implementation can then execute interrupt
+logic e.g., early termination of loops.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>system_signal</strong> – id of the system signal that causes interrupt</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pypz.core.specs.misc.BlankOperator">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.misc.</span></span><span class="sig-name descname"><span class="pre">BlankOperator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.specs.misc.BlankOperator" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="pypz.core.specs.operator.html#pypz.core.specs.operator.Operator" title="pypz.core.specs.operator.Operator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Operator</span></code></a>, <a class="reference internal" href="#pypz.core.specs.misc.BlankInstance" title="pypz.core.specs.misc.BlankInstance"><code class="xref py py-class docutils literal notranslate"><span class="pre">BlankInstance</span></code></a>[<a class="reference internal" href="pypz.core.specs.plugin.html#pypz.core.specs.plugin.Plugin" title="pypz.core.specs.plugin.Plugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">Plugin</span></code></a>]</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankOperator.__context">
+<span class="sig-name descname"><span class="pre">__context</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.core.specs.instance.html#pypz.core.specs.instance.Instance" title="pypz.core.specs.instance.Instance"><span class="pre">Instance</span></a></em><a class="headerlink" href="#pypz.core.specs.misc.BlankOperator.__context" title="Link to this definition"></a></dt>
+<dd><p>Reference to the context aka parent object. Derived automatically
+in the override implementation of __setattr__.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankOperator.__depends_on">
+<span class="sig-name descname"><span class="pre">__depends_on</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">set</span></em><a class="headerlink" href="#pypz.core.specs.misc.BlankOperator.__depends_on" title="Link to this definition"></a></dt>
+<dd><p>Set of other instances that is this instance depending on. Note however that
+the type of the dependencies are checked dynamically in runtime, since dependencies
+can only be defined on the same type of instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankOperator.__expected_parameters">
+<span class="sig-name descname"><span class="pre">__expected_parameters</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="pypz.core.commons.parameters.html#pypz.core.commons.parameters.ExpectedParameter" title="pypz.core.commons.parameters.ExpectedParameter"><span class="pre">ExpectedParameter</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.core.specs.misc.BlankOperator.__expected_parameters" title="Link to this definition"></a></dt>
+<dd><p>Map of expected parameters defined as descriptor of the class. Key is the name of the parameter,
+value is the parameter descriptor. Used to check, if an expected (described) parameter value
+shall be set upon instance parameter setting.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankOperator.__full_name">
+<span class="sig-name descname"><span class="pre">__full_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pypz.core.specs.misc.BlankOperator.__full_name" title="Link to this definition"></a></dt>
+<dd><p>Full name of the instance which uniquely identifies it up to its topmost context.
+For example, if an instance A has a parent context B, which has a parent context C,
+then the full name of A is ‘C.B.A’. This value is calculated and the result is
+stored after the first calculation to avoid recalculation every time.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankOperator.__nested_instance_type">
+<span class="sig-name descname"><span class="pre">__nested_instance_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">NestedInstanceType</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.core.specs.misc.BlankOperator.__nested_instance_type" title="Link to this definition"></a></dt>
+<dd><p>Stores the specified type of the nested instances. This is required to
+be able to discover those instances</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankOperator.__nested_instances">
+<span class="sig-name descname"><span class="pre">__nested_instances</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">NestedInstanceType</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.core.specs.misc.BlankOperator.__nested_instances" title="Link to this definition"></a></dt>
+<dd><p>This dictionary holds all the instances that are nested in the context
+of this instance object</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankOperator.__parameters">
+<span class="sig-name descname"><span class="pre">__parameters</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.core.specs.utils.html#pypz.core.specs.utils.InstanceParameters" title="pypz.core.specs.utils.InstanceParameters"><span class="pre">InstanceParameters</span></a></em><a class="headerlink" href="#pypz.core.specs.misc.BlankOperator.__parameters" title="Link to this definition"></a></dt>
+<dd><p>The interpreted instance parameters i.e., cascading and templates are interpreted</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankOperator.__simple_name">
+<span class="sig-name descname"><span class="pre">__simple_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pypz.core.specs.misc.BlankOperator.__simple_name" title="Link to this definition"></a></dt>
+<dd><p>Name of the instance, which is represented by the object created from the 
+implementation class. If not provided and there is a parent context, then
+the parent context will use the name of the variable.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankOperator.__spec_classes">
+<span class="sig-name descname"><span class="pre">__spec_classes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">set</span></em><a class="headerlink" href="#pypz.core.specs.misc.BlankOperator.__spec_classes" title="Link to this definition"></a></dt>
+<dd><p>Set of specs classes that are in the class hierarchy i.e., which specs classes are
+contributing to the implementation of this class</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankOperator.__spec_name">
+<span class="sig-name descname"><span class="pre">__spec_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pypz.core.specs.misc.BlankOperator.__spec_name" title="Link to this definition"></a></dt>
+<dd><p>The name of the spec constructed of module and qualified class name. Notice that we separate
+the module name and the class name so that we can identify them at loading by name.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankOperator._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pypz.core.specs.misc.BlankOperator._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankOperator._on_init">
+<span class="sig-name descname"><span class="pre">_on_init</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.core.specs.misc.BlankOperator._on_init" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic to initialize the operation.
+It will be called after services are started and resources are created.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+<ul class="simple">
+<li><p>True, if finished</p></li>
+<li><p>False, if more iteration required (to not block the execution)</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankOperator._on_running">
+<span class="sig-name descname"><span class="pre">_on_running</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.core.specs.misc.BlankOperator._on_running" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the actual business logic.
+It will be called after the _on_init has successfully finished</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+<ul class="simple">
+<li><p>True, if finished</p></li>
+<li><p>False, if more iteration required (to not block the execution)</p></li>
+<li><p>None, if automatically to be determined based on all inputs i.e., if no more input record, then finish</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankOperator._on_shutdown">
+<span class="sig-name descname"><span class="pre">_on_shutdown</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.core.specs.misc.BlankOperator._on_shutdown" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic to shut down the operation.
+It will be called, after the _on_running has successfully finished.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+<ul class="simple">
+<li><p>True, if finished</p></li>
+<li><p>False, if more iteration required (to not block the execution)</p></li>
+</ul>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pypz.core.specs.misc.BlankOutputPortPlugin">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.misc.</span></span><span class="sig-name descname"><span class="pre">BlankOutputPortPlugin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.specs.misc.BlankOutputPortPlugin" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="pypz.core.specs.plugin.html#pypz.core.specs.plugin.OutputPortPlugin" title="pypz.core.specs.plugin.OutputPortPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">OutputPortPlugin</span></code></a>, <a class="reference internal" href="#pypz.core.specs.misc.BlankPortPlugin" title="pypz.core.specs.misc.BlankPortPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">BlankPortPlugin</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankOutputPortPlugin._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pypz.core.specs.misc.BlankOutputPortPlugin._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="pypz.core.specs.misc.BlankOutputPortPlugin.send">
 <span class="sig-name descname"><span class="pre">send</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="headerlink" href="#pypz.core.specs.misc.BlankOutputPortPlugin.send" title="Link to this definition"></a></dt>
@@ -189,24 +426,192 @@ The implementation shall specify the type of the data and the return value.</p>
 <dt class="sig sig-object py" id="pypz.core.specs.misc.BlankPlugin">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.misc.</span></span><span class="sig-name descname"><span class="pre">BlankPlugin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.specs.misc.BlankPlugin" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pypz.core.specs.misc.BlankInstance" title="pypz.core.specs.misc.BlankInstance"><code class="xref py py-class docutils literal notranslate"><span class="pre">BlankInstance</span></code></a>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code>]</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankPlugin.__context">
+<span class="sig-name descname"><span class="pre">__context</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.core.specs.instance.html#pypz.core.specs.instance.Instance" title="pypz.core.specs.instance.Instance"><span class="pre">Instance</span></a></em><a class="headerlink" href="#pypz.core.specs.misc.BlankPlugin.__context" title="Link to this definition"></a></dt>
+<dd><p>Reference to the context aka parent object. Derived automatically
+in the override implementation of __setattr__.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankPlugin.__depends_on">
+<span class="sig-name descname"><span class="pre">__depends_on</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">set</span></em><a class="headerlink" href="#pypz.core.specs.misc.BlankPlugin.__depends_on" title="Link to this definition"></a></dt>
+<dd><p>Set of other instances that is this instance depending on. Note however that
+the type of the dependencies are checked dynamically in runtime, since dependencies
+can only be defined on the same type of instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankPlugin.__expected_parameters">
+<span class="sig-name descname"><span class="pre">__expected_parameters</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="pypz.core.commons.parameters.html#pypz.core.commons.parameters.ExpectedParameter" title="pypz.core.commons.parameters.ExpectedParameter"><span class="pre">ExpectedParameter</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.core.specs.misc.BlankPlugin.__expected_parameters" title="Link to this definition"></a></dt>
+<dd><p>Map of expected parameters defined as descriptor of the class. Key is the name of the parameter,
+value is the parameter descriptor. Used to check, if an expected (described) parameter value
+shall be set upon instance parameter setting.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankPlugin.__full_name">
+<span class="sig-name descname"><span class="pre">__full_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pypz.core.specs.misc.BlankPlugin.__full_name" title="Link to this definition"></a></dt>
+<dd><p>Full name of the instance which uniquely identifies it up to its topmost context.
+For example, if an instance A has a parent context B, which has a parent context C,
+then the full name of A is ‘C.B.A’. This value is calculated and the result is
+stored after the first calculation to avoid recalculation every time.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankPlugin.__nested_instance_type">
+<span class="sig-name descname"><span class="pre">__nested_instance_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">NestedInstanceType</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.core.specs.misc.BlankPlugin.__nested_instance_type" title="Link to this definition"></a></dt>
+<dd><p>Stores the specified type of the nested instances. This is required to
+be able to discover those instances</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankPlugin.__nested_instances">
+<span class="sig-name descname"><span class="pre">__nested_instances</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">NestedInstanceType</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.core.specs.misc.BlankPlugin.__nested_instances" title="Link to this definition"></a></dt>
+<dd><p>This dictionary holds all the instances that are nested in the context
+of this instance object</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankPlugin.__parameters">
+<span class="sig-name descname"><span class="pre">__parameters</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.core.specs.utils.html#pypz.core.specs.utils.InstanceParameters" title="pypz.core.specs.utils.InstanceParameters"><span class="pre">InstanceParameters</span></a></em><a class="headerlink" href="#pypz.core.specs.misc.BlankPlugin.__parameters" title="Link to this definition"></a></dt>
+<dd><p>The interpreted instance parameters i.e., cascading and templates are interpreted</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankPlugin.__simple_name">
+<span class="sig-name descname"><span class="pre">__simple_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pypz.core.specs.misc.BlankPlugin.__simple_name" title="Link to this definition"></a></dt>
+<dd><p>Name of the instance, which is represented by the object created from the 
+implementation class. If not provided and there is a parent context, then
+the parent context will use the name of the variable.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankPlugin.__spec_classes">
+<span class="sig-name descname"><span class="pre">__spec_classes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">set</span></em><a class="headerlink" href="#pypz.core.specs.misc.BlankPlugin.__spec_classes" title="Link to this definition"></a></dt>
+<dd><p>Set of specs classes that are in the class hierarchy i.e., which specs classes are
+contributing to the implementation of this class</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankPlugin.__spec_name">
+<span class="sig-name descname"><span class="pre">__spec_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pypz.core.specs.misc.BlankPlugin.__spec_name" title="Link to this definition"></a></dt>
+<dd><p>The name of the spec constructed of module and qualified class name. Notice that we separate
+the module name and the class name so that we can identify them at loading by name.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankPlugin._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pypz.core.specs.misc.BlankPlugin._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pypz.core.specs.misc.BlankPortPlugin">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.misc.</span></span><span class="sig-name descname"><span class="pre">BlankPortPlugin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.specs.misc.BlankPortPlugin" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="pypz.core.specs.plugin.html#pypz.core.specs.plugin.PortPlugin" title="pypz.core.specs.plugin.PortPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">PortPlugin</span></code></a>, <a class="reference internal" href="#pypz.core.specs.misc.BlankPlugin" title="pypz.core.specs.misc.BlankPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">BlankPlugin</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankPortPlugin._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pypz.core.specs.misc.BlankPortPlugin._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankPortPlugin._on_port_close">
+<span class="sig-name descname"><span class="pre">_on_port_close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.core.specs.misc.BlankPortPlugin._on_port_close" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic to shut down the i/o port functionalities.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True succeeded, False if more iteration required (to not block the execution)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankPortPlugin._on_port_open">
+<span class="sig-name descname"><span class="pre">_on_port_open</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.core.specs.misc.BlankPortPlugin._on_port_open" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic to initialize the i/o port functionalities.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True succeeded, False if more iteration required (to not block the execution)</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pypz.core.specs.misc.BlankResourceHandlerPlugin">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.misc.</span></span><span class="sig-name descname"><span class="pre">BlankResourceHandlerPlugin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.specs.misc.BlankResourceHandlerPlugin" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="pypz.core.specs.plugin.html#pypz.core.specs.plugin.ResourceHandlerPlugin" title="pypz.core.specs.plugin.ResourceHandlerPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">ResourceHandlerPlugin</span></code></a>, <a class="reference internal" href="#pypz.core.specs.misc.BlankPlugin" title="pypz.core.specs.misc.BlankPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">BlankPlugin</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankResourceHandlerPlugin._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pypz.core.specs.misc.BlankResourceHandlerPlugin._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankResourceHandlerPlugin._on_resource_creation">
+<span class="sig-name descname"><span class="pre">_on_resource_creation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.core.specs.misc.BlankResourceHandlerPlugin._on_resource_creation" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic to create an arbitrary resource
+of any type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True succeeded, False if more iteration required (to not block the execution)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankResourceHandlerPlugin._on_resource_deletion">
+<span class="sig-name descname"><span class="pre">_on_resource_deletion</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.core.specs.misc.BlankResourceHandlerPlugin._on_resource_deletion" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic to destroy the created resource.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True succeeded, False if more iteration required (to not block the execution)</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pypz.core.specs.misc.BlankServicePlugin">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.misc.</span></span><span class="sig-name descname"><span class="pre">BlankServicePlugin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.specs.misc.BlankServicePlugin" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="pypz.core.specs.plugin.html#pypz.core.specs.plugin.ServicePlugin" title="pypz.core.specs.plugin.ServicePlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">ServicePlugin</span></code></a>, <a class="reference internal" href="#pypz.core.specs.misc.BlankPlugin" title="pypz.core.specs.misc.BlankPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">BlankPlugin</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankServicePlugin._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pypz.core.specs.misc.BlankServicePlugin._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankServicePlugin._on_service_shutdown">
+<span class="sig-name descname"><span class="pre">_on_service_shutdown</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.core.specs.misc.BlankServicePlugin._on_service_shutdown" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic of stopping the service and clean up the
+residuals. E.g., a mounting service could unmount or a background thread could
+be stopped.
+VERY IMPORTANT NOTE - you must always check, if your service start method has
+been called, because it can be that it is never called, if there was an exception
+raised from other entity. However, the shutdown will be called anyway.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if logic finished, False if it needs more iteration</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.specs.misc.BlankServicePlugin._on_service_start">
+<span class="sig-name descname"><span class="pre">_on_service_start</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.core.specs.misc.BlankServicePlugin._on_service_start" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the starting logic of the service. You can consider
+services as example like mounting service, which only mounts a folder to the
+system or a background service, which starts a background thread.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if logic finished, False if it needs more iteration</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </section>

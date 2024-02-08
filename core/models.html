@@ -213,23 +213,8 @@ identified as a nested instance.</p>
 </section>
 <section id="metaclass">
 <span id="instance-metaclass"></span><h3>Metaclass<a class="headerlink" href="#metaclass" title="Link to this heading"></a></h3>
-<p>Notice that a custom metaclass is used to be able to intercept the creation of the Instance object.</p>
-<dl class="py class">
-<dt class="sig sig-object py">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.instance.</span></span><span class="sig-name descname"><span class="pre">InterceptedInstance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">instance_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context_class</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../indexes/core/pypz.core.specs.instance.html#pypz.core.specs.instance.Instance" title="pypz.core.specs.instance.Instance"><span class="pre">Instance</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span></dt>
-<dd><p>This class represents an intercepted instance at init. Part of the feature set is that
-if you don’t provide a name to an instance in its parent context, then its variable name
-is used as name. However, since there is no convenient way to provide the name of the variable
-holding the reference to the object into the object’s __init__, we need to work around this.
-The concept is that we intercept the instance creation, if no name has been provided through
-a metaclass. This metaclass creates an InterceptedInstance object instead of the real
-object. As next step, the Instance’s __setattr__ is modified (since that is the only place,
-where the variable name is given) so that, if it sees that an InterceptedInstance is to
-be assigned, it instead creates the original object, but this time with the name and the
-context object already provided. Hence, all the (nested) instances’ __init__ will be
-performed with already available name and context.</p>
-</dd></dl>
-
+<p>Notice that a custom metaclass is used (<a class="reference internal" href="../indexes/core/pypz.core.specs.instance.html#pypz.core.specs.instance.InterceptedInstance" title="pypz.core.specs.instance.InterceptedInstance"><code class="xref py py-class docutils literal notranslate"><span class="pre">pypz.core.specs.instance.InterceptedInstance</span></code></a>)
+to be able to intercept the creation of the Instance object.</p>
 </section>
 <section id="dependencies">
 <h3>Dependencies<a class="headerlink" href="#dependencies" title="Link to this heading"></a></h3>
@@ -253,34 +238,9 @@ into a representation, which can then be serialized. This representation is an a
 model called the DTO. By having an intermediate model, we can ensure that only those information
 are transmitted that is really necessary to be able to reconstruct an instance object.</p>
 <p>To get the DTO of an Instance, you can use:</p>
-<dl class="py method">
-<dt class="sig sig-object py">
-<span class="sig-prename descclassname"><span class="pre">Instance.</span></span><span class="sig-name descname"><span class="pre">get_dto</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../indexes/core/pypz.core.specs.dtos.html#pypz.core.specs.dtos.InstanceDTO" title="pypz.core.specs.dtos.InstanceDTO"><span class="pre">InstanceDTO</span></a></span></span></dt>
-<dd><p>Converts the instance information into the corresponding Data Transfer Object (DTO)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>DTO from instance</p>
-</dd>
-</dl>
-</dd></dl>
-
+<p><a class="reference internal" href="../indexes/core/pypz.core.specs.instance.html#pypz.core.specs.instance.Instance.get_dto" title="pypz.core.specs.instance.Instance.get_dto"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pypz.core.specs.instance.Instance.get_dto()</span></code></a></p>
 <p>To construct an Instance object from a DTO, you can use:</p>
-<dl class="py method">
-<dt class="sig sig-object py">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Instance.</span></span><span class="sig-name descname"><span class="pre">create_from_dto</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">instance_dto</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../indexes/core/pypz.core.specs.dtos.html#pypz.core.specs.dtos.InstanceDTO" title="pypz.core.specs.dtos.InstanceDTO"><span class="pre">InstanceDTO</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../indexes/core/pypz.core.specs.instance.html#pypz.core.specs.instance.Instance" title="pypz.core.specs.instance.Instance"><span class="pre">Instance</span></a></span></span></dt>
-<dd><p>Creates an instance object from the DTO representation. It is capable
-to retrieve and load specified classes and to update created instances
-according to the DTO.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>instance_dto</strong> – instance DTO</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>instance object specified by the DTO</p>
-</dd>
-</dl>
-</dd></dl>
-
+<p><a class="reference internal" href="../indexes/core/pypz.core.specs.instance.html#pypz.core.specs.instance.Instance.create_from_dto" title="pypz.core.specs.instance.Instance.create_from_dto"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pypz.core.specs.instance.Instance.create_from_dto()</span></code></a></p>
 <section id="working-with-yaml">
 <h4>Working with YAML<a class="headerlink" href="#working-with-yaml" title="Link to this heading"></a></h4>
 <p>Currently <em>pypz</em> serializes the DTOs into YAML, since it is human readable and provides features
@@ -291,21 +251,7 @@ out of the box, which JSON lacks the support of (e.g., interpreting sets).</p>
 </div>
 <p>In the background, the instance will be converted into a DTO, which then will be converted into a YAML string.</p>
 <p>To construct an Instance from a YAML string, you can use:</p>
-<dl class="py method">
-<dt class="sig sig-object py">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Instance.</span></span><span class="sig-name descname"><span class="pre">create_from_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../indexes/core/pypz.core.specs.instance.html#pypz.core.specs.instance.Instance" title="pypz.core.specs.instance.Instance"><span class="pre">Instance</span></a></span></span></dt>
-<dd><p>Helper method to provide the functionality to create an instance from
-a json model specified either as string or as dict.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>source</strong> – model as string</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>instance object specified by the DTO</p>
-</dd>
-</dl>
-</dd></dl>
-
+<p><a class="reference internal" href="../indexes/core/pypz.core.specs.instance.html#pypz.core.specs.instance.Instance.create_from_string" title="pypz.core.specs.instance.Instance.create_from_string"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pypz.core.specs.instance.Instance.create_from_string()</span></code></a></p>
 <p>You can find a usage example <a class="reference external" href="https://github.com/lazlowa/pypz-examples">here</a></p>
 </section>
 </section>
@@ -313,41 +259,11 @@ a json model specified either as string or as dict.</p>
 <span id="instance-group"></span><h3>Instance Groups<a class="headerlink" href="#instance-groups" title="Link to this heading"></a></h3>
 <p>Instances can be grouped together. For example, if you <a class="reference internal" href="#operator-replication"><span class="std std-ref">replicate</span></a> an operator, then
 you are creating a group of operators. The original instance in this case is called “principal”.</p>
-<p>The class InstanceGroup provides the methods to access useful group related information.</p>
-<dl class="py class">
-<dt class="sig sig-object py">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.instance.</span></span><span class="sig-name descname"><span class="pre">InstanceGroup</span></span></dt>
-<dd><p>This class provides methods to access instance group related information. It can be
-implemented on different instance level, since a group might have different meaning
-on top level and on nested level.</p>
-<dl class="py method">
-<dt class="sig sig-object py">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_group_index</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_group_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_group_principal</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../indexes/core/pypz.core.specs.instance.html#pypz.core.specs.instance.Instance" title="pypz.core.specs.instance.Instance"><span class="pre">Instance</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_group_size</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_principal</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
+<p>The class <a class="reference internal" href="../indexes/core/pypz.core.specs.instance.html#pypz.core.specs.instance.InstanceGroup" title="pypz.core.specs.instance.InstanceGroup"><code class="xref py py-class docutils literal notranslate"><span class="pre">pypz.core.specs.instance.InstanceGroup</span></code></a> provides the methods to access useful group related information.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
 <p>Notice that this interface shall be implemented by the instance types that can form groups e.g. Operator and Plugin.</p>
+</div>
 </section>
 </section>
 <section id="pipeline">
@@ -385,7 +301,9 @@ container related deployers.</p>
 </section>
 <section id="connections">
 <span id="operator-connection"></span><h3>Connections<a class="headerlink" href="#connections" title="Link to this heading"></a></h3>
-<p>You can connect operators by the so called <a class="reference internal" href="#port-plugins"><span class="std std-ref">port plugins</span></a>.</p>
+<p>You can connect operators by the so called port plugins
+(<a class="reference internal" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.InputPortPlugin" title="pypz.core.specs.plugin.InputPortPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">InputPortPlugin</span></code></a>,
+<a class="reference internal" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.OutputPortPlugin" title="pypz.core.specs.plugin.OutputPortPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">OutputPortPlugin</span></code></a>).</p>
 <p>The connection can be defined on pipeline level, where you shall specify, which operator’s which port plugin
 shall be connected to which other operator’s which port plugin.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">WriterOperator</span><span class="p">(</span><span class="n">Operator</span><span class="p">):</span>
@@ -455,55 +373,11 @@ replication factor = 0 means no replication, only the original.</p>
 <span id="operator-methods"></span><h3>Methods<a class="headerlink" href="#methods" title="Link to this heading"></a></h3>
 <p>The Operator class provides methods to implement your business logic. Each method
 is called in specific order based on the <a class="reference internal" href="executor.html#executor"><span class="std std-ref">executor</span></a> implementation.</p>
-<dl class="py method">
-<dt class="sig sig-object py">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Operator.</span></span><span class="sig-name descname"><span class="pre">_on_init</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span></dt>
-<dd><p>This method shall implement the logic to initialize the operation.
-It will be called after services are started and resources are created.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p></p>
-</dd>
-</dl>
 <ul class="simple">
-<li><p>True, if finished</p></li>
-<li><p>False, if more iteration required (to not block the execution)</p></li>
+<li><p><a class="reference internal" href="../indexes/core/pypz.core.specs.operator.html#pypz.core.specs.operator.Operator._on_init" title="pypz.core.specs.operator.Operator._on_init"><code class="xref py py-meth docutils literal notranslate"><span class="pre">_on_init()</span></code></a></p></li>
+<li><p><a class="reference internal" href="../indexes/core/pypz.core.specs.operator.html#pypz.core.specs.operator.Operator._on_running" title="pypz.core.specs.operator.Operator._on_running"><code class="xref py py-meth docutils literal notranslate"><span class="pre">_on_running()</span></code></a></p></li>
+<li><p><a class="reference internal" href="../indexes/core/pypz.core.specs.operator.html#pypz.core.specs.operator.Operator._on_shutdown" title="pypz.core.specs.operator.Operator._on_shutdown"><code class="xref py py-meth docutils literal notranslate"><span class="pre">_on_shutdown()</span></code></a></p></li>
 </ul>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Operator.</span></span><span class="sig-name descname"><span class="pre">_on_running</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span></dt>
-<dd><p>This method shall implement the actual business logic.
-It will be called after the _on_init has successfully finished</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p></p>
-</dd>
-</dl>
-<ul class="simple">
-<li><p>True, if finished</p></li>
-<li><p>False, if more iteration required (to not block the execution)</p></li>
-<li><p>None, if automatically to be determined based on all inputs i.e., if no more input record, then finish</p></li>
-</ul>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Operator.</span></span><span class="sig-name descname"><span class="pre">_on_shutdown</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span></dt>
-<dd><p>This method shall implement the logic to shut down the operation.
-It will be called, after the _on_running has successfully finished.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p></p>
-</dd>
-</dl>
-<ul class="simple">
-<li><p>True, if finished</p></li>
-<li><p>False, if more iteration required (to not block the execution)</p></li>
-</ul>
-</dd></dl>
-
 </section>
 <section id="logging">
 <span id="operator-logging"></span><h3>Logging<a class="headerlink" href="#logging" title="Link to this heading"></a></h3>
@@ -514,15 +388,7 @@ method will be called in the background:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Text to log&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The aggregated logger is realized by:</p>
-<dl class="py class">
-<dt class="sig sig-object py">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.operator.Operator.</span></span><span class="sig-name descname"><span class="pre">Logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logger_plugins</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.LoggerPlugin" title="pypz.core.specs.plugin.LoggerPlugin"><span class="pre">LoggerPlugin</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span></dt>
-<dd><p>This is a wrapper class for the logging functionality. It wraps all the
-implementations of the LoggerAddons and by invoking either method it
-will invoke the corresponding method of each LoggerAddons.</p>
-</dd></dl>
-
+<p>The aggregated logger is realized by the class <a class="reference internal" href="../indexes/core/pypz.core.specs.operator.html#pypz.core.specs.operator.Operator.Logger" title="pypz.core.specs.operator.Operator.Logger"><code class="xref py py-class docutils literal notranslate"><span class="pre">pypz.core.specs.operator.Operator.Logger</span></code></a>.</p>
 <p>Check the <a class="reference internal" href="logging.html#logging"><span class="std std-ref">Logging</span></a> section for more information.</p>
 </section>
 </section>
@@ -530,74 +396,15 @@ will invoke the corresponding method of each LoggerAddons.</p>
 <span id="id3"></span><h2>Plugins<a class="headerlink" href="#plugins" title="Link to this heading"></a></h2>
 <p>Plugins are the lowest level entities in <em>pypz</em>. They allow to extend an enhance the functionality
 of an operator. As you can check on the <a class="reference internal" href="#inheritance-diagram"><span class="std std-ref">Inheritance diagram</span></a>,
-there are several plugin interfaces with different purposes.</p>
-<dl class="py class">
-<dt class="sig sig-object py">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.plugin.</span></span><span class="sig-name descname"><span class="pre">Plugin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span></dt>
-<dd><p>This interface has the only purpose to separate the plugin interfaces
-from other interfaces like the Operator. It is necessary to avoid the
-case, where an Operator could be nested into other Operators. All
-plugin interfaces shall extend this one.</p>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.plugin.</span></span><span class="sig-name descname"><span class="pre">ResourceHandlerPlugin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span></dt>
-<dd><p>This plugin interface allows to implement resource management related
-functionalities. The respective methods will be called at specific
-times during the execution. Check <a class="reference internal" href="executor.html#executor"><span class="std std-ref">Executor</span></a> for more information.</p>
-</dd></dl>
-
-<dl class="py class" id="port-plugins">
-<dt class="sig sig-object py">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.plugin.</span></span><span class="sig-name descname"><span class="pre">PortPlugin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span></dt>
-<dd><p>This plugin interface allows to implement common methods for
-port both input and output port plugins.</p>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.plugin.</span></span><span class="sig-name descname"><span class="pre">InputPortPlugin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span></dt>
-<dd><p>This plugin interface allows to implement data transfer input port for an operator.
-Operators can communicate via ports. Different technologies can be implemented
-allowing operators to talk through them.</p>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.plugin.</span></span><span class="sig-name descname"><span class="pre">OutputPortPlugin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span></dt>
-<dd><p>This plugin interface allows to implement data transfer output port for an operator.
-Operators can communicate via ports. Different technologies can be implemented
-allowing operators to talk through them.</p>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.plugin.</span></span><span class="sig-name descname"><span class="pre">ServicePlugin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span></dt>
-<dd><p>This plugin interface allows to implement a service. Services are special entities
-in the execution, since those are decoupled from the execution life-cycle, hence
-can run in the background. Examples:
-- mounting service, which mounts and unmounts a remote location
-- listener service, which starts a background thread to listen for something
-- etc.</p>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.plugin.</span></span><span class="sig-name descname"><span class="pre">ExtendedPlugin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span></dt>
-<dd><p>This interface extends the normal plugin’s lifecycle. The methods
-defined span outside the execution context, hence it can be used,
-if you need to perform some action before and after execution.</p>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.plugin.</span></span><span class="sig-name descname"><span class="pre">LoggerPlugin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span></dt>
-<dd><p>This addon interface allows to implement different logging technologies
-to be used during the execution. Notice that the logger methods are
-coming from the ContextLogger class.</p>
-</dd></dl>
-
+there are several plugin interfaces with different purposes:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.InputPortPlugin" title="pypz.core.specs.plugin.InputPortPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">InputPortPlugin</span></code></a></p></li>
+<li><p><a class="reference internal" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.OutputPortPlugin" title="pypz.core.specs.plugin.OutputPortPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">OutputPortPlugin</span></code></a></p></li>
+<li><p><a class="reference internal" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.ResourceHandlerPlugin" title="pypz.core.specs.plugin.ResourceHandlerPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">ResourceHandlerPlugin</span></code></a></p></li>
+<li><p><a class="reference internal" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.ServicePlugin" title="pypz.core.specs.plugin.ServicePlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">ServicePlugin</span></code></a></p></li>
+<li><p><a class="reference internal" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.ExtendedPlugin" title="pypz.core.specs.plugin.ExtendedPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExtendedPlugin</span></code></a></p></li>
+<li><p><a class="reference internal" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.LoggerPlugin" title="pypz.core.specs.plugin.LoggerPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">LoggerPlugin</span></code></a></p></li>
+</ul>
 </section>
 </section>
 

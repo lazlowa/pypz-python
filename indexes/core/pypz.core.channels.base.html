@@ -144,6 +144,256 @@ counterpart channel.</p>
 <dd></dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase.__executor_thread_handler">
+<span class="sig-name descname"><span class="pre">__executor_thread_handler</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.channels.base.ChannelBase.__executor_thread_handler" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase.__silent_mode">
+<span class="sig-name descname"><span class="pre">__silent_mode</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pypz.core.channels.base.ChannelBase.__silent_mode" title="Link to this definition"></a></dt>
+<dd><p>If this flag is set, then this channel will not send status messages. One use-case is,
+if a channelRW is created to sniff the status of channels.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pypz.core.channels.base.ChannelBase._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase._channel_name">
+<span class="sig-name descname"><span class="pre">_channel_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pypz.core.channels.base.ChannelBase._channel_name" title="Link to this definition"></a></dt>
+<dd><p>This member stores the name of the channel, which normally reflects to the resource’s name.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase._channel_opened">
+<span class="sig-name descname"><span class="pre">_channel_opened</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pypz.core.channels.base.ChannelBase._channel_opened" title="Link to this definition"></a></dt>
+<dd><p>This member is a flag to signalize, whether a channel is open and ready to use.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase._channel_started">
+<span class="sig-name descname"><span class="pre">_channel_started</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pypz.core.channels.base.ChannelBase._channel_started" title="Link to this definition"></a></dt>
+<dd><p>Status flag to signalize, whether the channel has been started.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase._channel_state_update_lock">
+<span class="sig-name descname"><span class="pre">_channel_state_update_lock</span></span><a class="headerlink" href="#pypz.core.channels.base.ChannelBase._channel_state_update_lock" title="Link to this definition"></a></dt>
+<dd><p>This lock is used to synchronize the logic that updates channel states</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase._channel_stopped">
+<span class="sig-name descname"><span class="pre">_channel_stopped</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pypz.core.channels.base.ChannelBase._channel_stopped" title="Link to this definition"></a></dt>
+<dd><p>Status flag to signalize, whether the channel has been stopped. Note that this additional flag is
+necessary, since having the _channel_started on false does not necessarily mean that the
+output was ever started and is now finished.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase._close_channel">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_close_channel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.core.channels.base.ChannelBase._close_channel" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic to close a channel. Normally closing a channel is the last step so
+clean up of used resource shall happen here as well.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True, if done, False if it is still in progress</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase._configuration">
+<span class="sig-name descname"><span class="pre">_configuration</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#pypz.core.channels.base.ChannelBase._configuration" title="Link to this definition"></a></dt>
+<dd><p>This member stores the configuration string of the channel. This is a kind of serialized storage, since
+the configuration can be an arbitrary type with arbitrary schema as long as the interpretation is knonw.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase._configure_channel">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_configure_channel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_configuration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.core.channels.base.ChannelBase._configure_channel" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic to interpret the provided configuration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>channel_configuration</strong> – config string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase._context">
+<span class="sig-name descname"><span class="pre">_context</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.core.specs.plugin.html#pypz.core.specs.plugin.PortPlugin" title="pypz.core.specs.plugin.PortPlugin"><span class="pre">PortPlugin</span></a></em><a class="headerlink" href="#pypz.core.channels.base.ChannelBase._context" title="Link to this definition"></a></dt>
+<dd><p>The context of this channel, which shall be an object of PortPlugin type</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase._control_loop_exception_timer">
+<span class="sig-name descname"><span class="pre">_control_loop_exception_timer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pypz.core.channels.base.ChannelBase._control_loop_exception_timer" title="Link to this definition"></a></dt>
+<dd><p>Control loop is, where the control information are sent to the counter channel. Should
+there an exception occur, we need to make sure that we give some time to recover, before
+terminating the channel. This timer defines that grace period.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase._create_resources">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_create_resources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.core.channels.base.ChannelBase._create_resources" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic of creating resources of the channel.
+IMPORTANT NOTE - this method shall be invoked before the open_channel() to make sure that the resources
+are existing beforehand.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True, if done, False if it is still in progress</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase._delete_resources">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_delete_resources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.core.channels.base.ChannelBase._delete_resources" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic of deleting resources of the channel.
+IMPORTANT NOTE - this method shall be invoked after the close_channel()</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True, if done, False if it is still in progress</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase._executor">
+<span class="sig-name descname"><span class="pre">_executor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">concurrent.futures.ThreadPoolExecutor</span></em><a class="headerlink" href="#pypz.core.channels.base.ChannelBase._executor" title="Link to this definition"></a></dt>
+<dd><p>This executor is used to execute the background thread, which will invoke the sendHealthStatus method</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase._executor_started">
+<span class="sig-name descname"><span class="pre">_executor_started</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pypz.core.channels.base.ChannelBase._executor_started" title="Link to this definition"></a></dt>
+<dd><p>Flag to signalize, whether the executor thread started</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase._executor_stopped">
+<span class="sig-name descname"><span class="pre">_executor_stopped</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.core.commons.utils.html#pypz.core.commons.utils.SynchronizedReference" title="pypz.core.commons.utils.SynchronizedReference"><span class="pre">SynchronizedReference</span></a><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.core.channels.base.ChannelBase._executor_stopped" title="Link to this definition"></a></dt>
+<dd><p>Flag to signalize that the executor thread has been terminated. This flag is necessary along wi
+_stopping_executor to synchronize the termination. Otherwise it can happen that the 
+thread did not terminate yet, but the channel has already been closed resulting in exceptions.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase._health_check_payload">
+<span class="sig-name descname"><span class="pre">_health_check_payload</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.core.channels.base.ChannelBase._health_check_payload" title="Link to this definition"></a></dt>
+<dd><p>It is possible to send additional information along with health check events. This
+member serves as the storage of this additional payload.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase._location">
+<span class="sig-name descname"><span class="pre">_location</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.core.channels.base.ChannelBase._location" title="Link to this definition"></a></dt>
+<dd><p>This member stores the location string of the channel. The location depends on the technology. It can refer
+to either a remote or a local URL as well.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase._log_level">
+<span class="sig-name descname"><span class="pre">_log_level</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pypz.core.channels.base.ChannelBase._log_level" title="Link to this definition"></a></dt>
+<dd><p>Default log level. This is ok to set here, since if Operator’s context logger is present,
+its log level cannot be overriden, but if not, the DefaultContextLogger’s can be.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase._logger">
+<span class="sig-name descname"><span class="pre">_logger</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.core.commons.loggers.html#pypz.core.commons.loggers.ContextLogger" title="pypz.core.commons.loggers.ContextLogger"><span class="pre">ContextLogger</span></a></em><a class="headerlink" href="#pypz.core.channels.base.ChannelBase._logger" title="Link to this definition"></a></dt>
+<dd><p>Channel logger</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase._metrics_enabled">
+<span class="sig-name descname"><span class="pre">_metrics_enabled</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pypz.core.channels.base.ChannelBase._metrics_enabled" title="Link to this definition"></a></dt>
+<dd><p>Enables metric calculation i.e., to calculate additional i/o related information</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase._on_status_message_received_callbacks">
+<span class="sig-name descname"><span class="pre">_on_status_message_received_callbacks</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">set</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.ChannelStatusMessage" title="pypz.core.channels.status.ChannelStatusMessage"><span class="pre">ChannelStatusMessage</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.core.channels.base.ChannelBase._on_status_message_received_callbacks" title="Link to this definition"></a></dt>
+<dd><p>Stores the callbacks, which will be executed, if status messages received</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase._open_channel">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_open_channel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.core.channels.base.ChannelBase._open_channel" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic to open a channel. The meaning of ‘open’ however is to be defined
+by the actual implementation. One developer can define it like an opened connection, other as created file etc.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True, if done, False if it is still in progress</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase._resources_created">
+<span class="sig-name descname"><span class="pre">_resources_created</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pypz.core.channels.base.ChannelBase._resources_created" title="Link to this definition"></a></dt>
+<dd><p>Status flag to signalize that the channel’s resources are created</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase._resources_deleted">
+<span class="sig-name descname"><span class="pre">_resources_deleted</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pypz.core.channels.base.ChannelBase._resources_deleted" title="Link to this definition"></a></dt>
+<dd><p>Status flag to signalize that the channel’s resources are deleted</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase._retrieve_status_messages">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_retrieve_status_messages</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="headerlink" href="#pypz.core.channels.base.ChannelBase._retrieve_status_messages" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic that retrieves the status messages published by the counterpart
+channel. Notice that in case of ChannelWriter, there can be multiple InputChannels sending messages and
+in case of ChannelReader there can be multiple messages sent by the ChannelWriter, therefore this method
+shall return a list of messages. Note as well that in case you are using callbacks for your technology,
+you can directly use the method onStatusMessageReceived. In this case simply return null from this method
+to ensure that it will be ignored.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of retrieved status messages or null if method is not used</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase._send_status_message">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_send_status_message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.core.channels.base.ChannelBase._send_status_message" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic that publishes the channel’s state to the counterpart channel. The
+state string is provided by the channel itself. Note that there is defined schema, how and what will be
+provided by the channel as string, however you can append your own custom information, you only need to
+append as string separated by StateMessageSeparatorChar.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>message</strong> – message that shall be sent</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase._status_map">
+<span class="sig-name descname"><span class="pre">_status_map</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.ChannelStatusMonitor" title="pypz.core.channels.status.ChannelStatusMonitor"><span class="pre">ChannelStatusMonitor</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.core.channels.base.ChannelBase._status_map" title="Link to this definition"></a></dt>
+<dd><p>This map stores the health statuses of all connected channels</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase._stopping_executor">
+<span class="sig-name descname"><span class="pre">_stopping_executor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pypz.core.channels.base.ChannelBase._stopping_executor" title="Link to this definition"></a></dt>
+<dd><p>Flag to signalize the termination attempt of the executor thread</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase._unique_name">
+<span class="sig-name descname"><span class="pre">_unique_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pypz.core.channels.base.ChannelBase._unique_name" title="Link to this definition"></a></dt>
+<dd><p>This name identifies the channel in its context. It is necessary, since channel name on
+its own is not unique, can be reused by different owners.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase.can_close">
 <span class="sig-name descname"><span class="pre">can_close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.core.channels.base.ChannelBase.can_close" title="Link to this definition"></a></dt>
 <dd><p>This method can implement the logic to determine, if the channel can

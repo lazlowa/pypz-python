@@ -98,6 +98,4 @@ only you do, *pypz* cannot provide an integrated feature to clean up your resour
 what *pypz* can provide is an execution mode, where only resources will be deleted instead
 of running the actual business logic.
 
-.. autoclass:: pypz.executors.commons.ExecutionMode
-   :no-index:
-   :members:
+Check :class:`pypz.executors.commons.ExecutionMode` for more details.

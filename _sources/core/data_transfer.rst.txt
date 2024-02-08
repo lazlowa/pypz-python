@@ -3,7 +3,7 @@
 Data transfer
 =============
 
-Data transfer between operations in a pipeline is essential, without it we would speak about workflows.
+Data transfer between operations in a pipeline is essential.
 In *pypz* data transfer is possible between operators through so called *ports*.
 
 .. figure:: ../resources/images/basic_pipeline.png
@@ -23,15 +23,10 @@ An input and output port in *pypz* is an actual implementation of the correspond
    :parts: 1
    :caption: Inheritance diagram
 
-Basically, you are free to implement any technology behind ports as long as you comply to the interfaces.
+Basically, you are free to implement any technology behind ports as long as you comply to the interfaces:
 
-.. autoclass:: pypz.core.specs.plugin.InputPortPlugin
-   :members:
-   :no-index:
-
-.. autoclass:: pypz.core.specs.plugin.OutputPortPlugin
-   :members:
-   :no-index:
+- :class:`pypz.core.specs.plugin.InputPortPlugin`
+- :class:`pypz.core.specs.plugin.OutputPortPlugin`
 
 .. important::
    Note that although *pypz* has a lot of builtin guards and trails to ensure execution stability,
@@ -78,28 +73,21 @@ Channels provide a solution to the following challenges:
 If you want to utilize channels, then you shall implement the abstract methods of the corresponding classes
 instead of the port interfaces.
 
-.. autoclass:: pypz.core.channels.io.ChannelReader
-   :no-index:
+:class:`pypz.core.channels.io.ChannelReader`
+++++++++++++++++++++++++++++++++++++++++++++
 
-   .. automethod:: _load_input_record_offset
-      :no-index:
+- :meth:`pypz.core.channels.io.ChannelReader._load_input_record_offset`
+- :meth:`pypz.core.channels.io.ChannelReader.has_records`
+- :meth:`pypz.core.channels.io.ChannelReader._read_records`
+- :meth:`pypz.core.channels.io.ChannelReader._commit_offset`
 
-   .. automethod:: has_records
-      :no-index:
+:class:`pypz.core.channels.io.ChannelWriter`
+++++++++++++++++++++++++++++++++++++++++++++
 
-   .. automethod:: _read_records
-      :no-index:
-
-   .. automethod:: _commit_offset
-      :no-index:
-
-.. autoclass:: pypz.core.channels.io.ChannelWriter
-   :no-index:
-
-   .. automethod:: _write_records
+- :meth:`pypz.core.channels.io.ChannelWriter._write_records`
 
 .. note::
-   Notice that the abstract methods a protected and shall not be called directly. The channel classes are providing
+   Notice that the abstract methods are protected and shall not be called directly. The channel classes are providing
    invoker methods that will invoke the protected methods along with other code that abstracts a lot of complexity
    for you. For more information, check the code.
 
@@ -120,8 +108,8 @@ implementation, everything else will be taken care of.
 .. note::
    *pypz* ships with a channel implementation for Kafka
 
-ChannelInputPort, ChannelOutputPort
------------------------------------
+:class:`ChannelInputPort <pypz.abstracts.channel_ports.ChannelInputPort>`, :class:`ChannelOutputPort <pypz.abstracts.channel_ports.ChannelOutputPort>`
+------------------------------------------------------------------------------------------------------------------------------------------------------
 
 This is a builtin implementation of the InputPortPlugin and OutputPortPlugin interface that integrates
 channels into *pypz*. It provides all the necessary method calls of the channels to perform data transmission.
@@ -132,16 +120,21 @@ channels into *pypz*. It provides all the necessary method calls of the channels
    :parts: 1
    :caption: Inheritance diagram
 
-Notice that both plugins are implementing the `ResourceHandlerPlugin` interface as well, which allows to
-create and delete resources for the channels.
+Notice that both plugins are implementing the :class:`pypz.core.specs.plugin.ResourceHandlerPlugin`
+interface as well, which allows to create and delete resources for the channels.
 
 .. note::
    Note that it is not mandatory to use this plugin. If you have a better idea, how to integrate channels
    into *pypz*, feel free to implement it.
 
-Although `ChannelOutputPort` and `ChannelInputPort` have an N-to-M relation, there is an N-to-1 relation on channel level
-i.e., a `ChannelOutputPort` will create as many `ChannelWriters` as many `ChannelInputPort`
-is connected, but the `ChannelInputPort` creates only one `ChannelReader`.
+Although :class:`ChannelOutputPort <pypz.abstracts.channel_ports.ChannelOutputPort>` and
+:class:`ChannelInputPort <pypz.abstracts.channel_ports.ChannelInputPort>` has an N-to-M relation,
+there is an N-to-1 relation on channel level
+i.e., a :class:`ChannelOutputPort <pypz.abstracts.channel_ports.ChannelOutputPort>` will create as many
+:class:`ChannelWriter <pypz.core.channels.io.ChannelWriter>` as many
+:class:`ChannelInputPort <pypz.abstracts.channel_ports.ChannelInputPort>`
+is connected, but the :class:`ChannelInputPort <pypz.abstracts.channel_ports.ChannelInputPort>` creates only one
+:class:`ChannelReader <pypz.core.channels.io.ChannelReader>`.
 
 .. figure:: ../resources/images/multiple_channel_w_reader_writer.png
    :alt: ChannelWriter-ChannelReader N-1
@@ -149,11 +142,13 @@ is connected, but the `ChannelInputPort` creates only one `ChannelReader`.
 
    ChannelWriter-ChannelReader N-1
 
-The reason is that from `ChannelInputPort` perspective you have certain expectations w.r.t. records, so there
-is no reason to create different `ChannelReader` entities, because all the `ChannelWriters` shall meet your
-expectations. In other words, by invoking the `retrieve()` method on the `InputPortPlugin`, you will then get all the
-records from all the outputs anyhow. This means as well that you need to manually care for ordering, if you have
-such a requirement.
+The reason is that from :class:`ChannelInputPort <pypz.abstracts.channel_ports.ChannelInputPort>`
+perspective you have certain expectations w.r.t. records, so there
+is no reason to create different :class:`ChannelReader <pypz.core.channels.io.ChannelReader>` entities,
+because all the :class:`ChannelWriter <pypz.core.channels.io.ChannelWriter>` shall meet your expectations.
+In other words, by invoking the :meth:`pypz.abstracts.channel_ports.ChannelInputPort.retrieve()` method,
+you will then get all the records from all the outputs anyhow. This means as well that you need to manually
+care for ordering, if you have such a requirement.
 
 Further information:
 
@@ -169,7 +164,7 @@ Further information:
 Expected Parameters
 +++++++++++++++++++
 
-ChannelInputPort:
+:class:`ChannelInputPort <pypz.abstracts.channel_ports.ChannelInputPort>`:
 
 - **channelLocation**, location of the channel resource
 - **channelConfig**, configuration of the channel as dictionary (default: {})
@@ -178,7 +173,7 @@ ChannelInputPort:
 - **portOpenTimeoutMs**, specifies, how long the port shall wait for incoming connections; 0 means no timeout (default: 0)
 - **syncConnectionsOpen**, if set to True, the port will wait for every expected output ports to be connected (default: False)
 
-ChannelOutputPort:
+:class:`ChannelOutputPort <pypz.abstracts.channel_ports.ChannelOutputPort>`:
 
 - **channelLocation**, location of the channel resource
 - **channelConfig**, configuration of the channel as dictionary (default: {})

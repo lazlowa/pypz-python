@@ -5,3 +5,4 @@ pypz.plugins.kafka\_io.ports module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:

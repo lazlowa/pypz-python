@@ -211,10 +211,10 @@ that every subproject is installed.</p>
 by Sphinx to generate images in the documentation.</p>
 <p>The indexes are regenerated in the publish action. However, if you want to rebuild them locally,
 you can do it with the following commands from the docs folder:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>sphinx-apidoc<span class="w"> </span>--implicit-namespaces<span class="w"> </span>-e<span class="w"> </span>-f<span class="w"> </span>-o<span class="w"> </span>./indexes/core<span class="w"> </span>../core/src/pypz/
-sphinx-apidoc<span class="w"> </span>--implicit-namespaces<span class="w"> </span>-e<span class="w"> </span>-f<span class="w"> </span>-o<span class="w"> </span>./indexes/sniffer<span class="w"> </span>../sniffer/src/pypz/
-sphinx-apidoc<span class="w"> </span>--implicit-namespaces<span class="w"> </span>-e<span class="w"> </span>-f<span class="w"> </span>-o<span class="w"> </span>./indexes/plugins/kafka_io<span class="w"> </span>../plugins/kafka_io/src/pypz/
-sphinx-apidoc<span class="w"> </span>--implicit-namespaces<span class="w"> </span>-e<span class="w"> </span>-f<span class="w"> </span>-o<span class="w"> </span>./indexes/deployers/k8s<span class="w"> </span>../deployers/k8s/src/pypz/
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>sphinx-apidoc<span class="w"> </span>--implicit-namespaces<span class="w"> </span>-e<span class="w"> </span>-f<span class="w"> </span>--private<span class="w"> </span>-o<span class="w"> </span>./indexes/core<span class="w"> </span>../core/src/pypz/
+sphinx-apidoc<span class="w"> </span>--implicit-namespaces<span class="w"> </span>-e<span class="w"> </span>-f<span class="w"> </span>--private<span class="w"> </span>-o<span class="w"> </span>./indexes/sniffer<span class="w"> </span>../sniffer/src/pypz/
+sphinx-apidoc<span class="w"> </span>--implicit-namespaces<span class="w"> </span>-e<span class="w"> </span>-f<span class="w"> </span>--private<span class="w"> </span>-o<span class="w"> </span>./indexes/plugins/kafka_io<span class="w"> </span>../plugins/kafka_io/src/pypz/
+sphinx-apidoc<span class="w"> </span>--implicit-namespaces<span class="w"> </span>-e<span class="w"> </span>-f<span class="w"> </span>--private<span class="w"> </span>-o<span class="w"> </span>./indexes/deployers/k8s<span class="w"> </span>../deployers/k8s/src/pypz/
 </pre></div>
 </div>
 <div class="admonition warning">

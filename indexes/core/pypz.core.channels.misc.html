@@ -119,6 +119,136 @@
 <dt class="sig sig-object py" id="pypz.core.channels.misc.BlankChannelReader">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.channels.misc.</span></span><span class="sig-name descname"><span class="pre">BlankChannelReader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pypz.core.specs.plugin.html#pypz.core.specs.plugin.InputPortPlugin" title="pypz.core.specs.plugin.InputPortPlugin"><span class="pre">InputPortPlugin</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">executor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ThreadPoolExecutor</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.channels.misc.BlankChannelReader" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="pypz.core.channels.io.html#pypz.core.channels.io.ChannelReader" title="pypz.core.channels.io.ChannelReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelReader</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.misc.BlankChannelReader._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pypz.core.channels.misc.BlankChannelReader._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.misc.BlankChannelReader._close_channel">
+<span class="sig-name descname"><span class="pre">_close_channel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.core.channels.misc.BlankChannelReader._close_channel" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic to close a channel. Normally closing a channel is the last step so
+clean up of used resource shall happen here as well.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True, if done, False if it is still in progress</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.misc.BlankChannelReader._commit_offset">
+<span class="sig-name descname"><span class="pre">_commit_offset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.core.channels.misc.BlankChannelReader._commit_offset" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic that commits the provided offset using the underlying technology.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>offset</strong> – provided offset to commit</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.misc.BlankChannelReader._configure_channel">
+<span class="sig-name descname"><span class="pre">_configure_channel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_configuration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.core.channels.misc.BlankChannelReader._configure_channel" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic to interpret the provided configuration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>channel_configuration</strong> – config string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.misc.BlankChannelReader._create_resources">
+<span class="sig-name descname"><span class="pre">_create_resources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.core.channels.misc.BlankChannelReader._create_resources" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic of creating resources of the channel.
+IMPORTANT NOTE - this method shall be invoked before the open_channel() to make sure that the resources
+are existing beforehand.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True, if done, False if it is still in progress</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.misc.BlankChannelReader._delete_resources">
+<span class="sig-name descname"><span class="pre">_delete_resources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.core.channels.misc.BlankChannelReader._delete_resources" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic of deleting resources of the channel.
+IMPORTANT NOTE - this method shall be invoked after the close_channel()</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True, if done, False if it is still in progress</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.misc.BlankChannelReader._load_input_record_offset">
+<span class="sig-name descname"><span class="pre">_load_input_record_offset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#pypz.core.channels.misc.BlankChannelReader._load_input_record_offset" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic to retrieve stored read offset from the underlying technology. This
+can be arbitrary, but the method shall return the stored offset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>stored offset</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.misc.BlankChannelReader._open_channel">
+<span class="sig-name descname"><span class="pre">_open_channel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.core.channels.misc.BlankChannelReader._open_channel" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic to open a channel. The meaning of ‘open’ however is to be defined
+by the actual implementation. One developer can define it like an opened connection, other as created file etc.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True, if done, False if it is still in progress</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.misc.BlankChannelReader._read_records">
+<span class="sig-name descname"><span class="pre">_read_records</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#pypz.core.channels.misc.BlankChannelReader._read_records" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic to read records from the input channel. An ArrayList of records is
+expected.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of records OR empty ArrayList if no records read. Null is not accepted.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.misc.BlankChannelReader._retrieve_status_messages">
+<span class="sig-name descname"><span class="pre">_retrieve_status_messages</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="headerlink" href="#pypz.core.channels.misc.BlankChannelReader._retrieve_status_messages" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic that retrieves the status messages published by the counterpart
+channel. Notice that in case of ChannelWriter, there can be multiple InputChannels sending messages and
+in case of ChannelReader there can be multiple messages sent by the ChannelWriter, therefore this method
+shall return a list of messages. Note as well that in case you are using callbacks for your technology,
+you can directly use the method onStatusMessageReceived. In this case simply return null from this method
+to ensure that it will be ignored.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of retrieved status messages or null if method is not used</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.misc.BlankChannelReader._send_status_message">
+<span class="sig-name descname"><span class="pre">_send_status_message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.core.channels.misc.BlankChannelReader._send_status_message" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic that publishes the channel’s state to the counterpart channel. The
+state string is provided by the channel itself. Note that there is defined schema, how and what will be
+provided by the channel as string, however you can append your own custom information, you only need to
+append as string separated by StateMessageSeparatorChar.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>message</strong> – message that shall be sent</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="pypz.core.channels.misc.BlankChannelReader.has_records">
 <span class="sig-name descname"><span class="pre">has_records</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.core.channels.misc.BlankChannelReader.has_records" title="Link to this definition"></a></dt>
@@ -136,6 +266,113 @@
 <dt class="sig sig-object py" id="pypz.core.channels.misc.BlankChannelWriter">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.channels.misc.</span></span><span class="sig-name descname"><span class="pre">BlankChannelWriter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pypz.core.specs.plugin.html#pypz.core.specs.plugin.OutputPortPlugin" title="pypz.core.specs.plugin.OutputPortPlugin"><span class="pre">OutputPortPlugin</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">executor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ThreadPoolExecutor</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.channels.misc.BlankChannelWriter" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="pypz.core.channels.io.html#pypz.core.channels.io.ChannelWriter" title="pypz.core.channels.io.ChannelWriter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelWriter</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.misc.BlankChannelWriter._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pypz.core.channels.misc.BlankChannelWriter._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.misc.BlankChannelWriter._close_channel">
+<span class="sig-name descname"><span class="pre">_close_channel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.core.channels.misc.BlankChannelWriter._close_channel" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic to close a channel. Normally closing a channel is the last step so
+clean up of used resource shall happen here as well.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True, if done, False if it is still in progress</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.misc.BlankChannelWriter._configure_channel">
+<span class="sig-name descname"><span class="pre">_configure_channel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_configuration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.core.channels.misc.BlankChannelWriter._configure_channel" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic to interpret the provided configuration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>channel_configuration</strong> – config string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.misc.BlankChannelWriter._create_resources">
+<span class="sig-name descname"><span class="pre">_create_resources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.core.channels.misc.BlankChannelWriter._create_resources" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic of creating resources of the channel.
+IMPORTANT NOTE - this method shall be invoked before the open_channel() to make sure that the resources
+are existing beforehand.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True, if done, False if it is still in progress</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.misc.BlankChannelWriter._delete_resources">
+<span class="sig-name descname"><span class="pre">_delete_resources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.core.channels.misc.BlankChannelWriter._delete_resources" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic of deleting resources of the channel.
+IMPORTANT NOTE - this method shall be invoked after the close_channel()</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True, if done, False if it is still in progress</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.misc.BlankChannelWriter._open_channel">
+<span class="sig-name descname"><span class="pre">_open_channel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.core.channels.misc.BlankChannelWriter._open_channel" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic to open a channel. The meaning of ‘open’ however is to be defined
+by the actual implementation. One developer can define it like an opened connection, other as created file etc.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True, if done, False if it is still in progress</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.misc.BlankChannelWriter._retrieve_status_messages">
+<span class="sig-name descname"><span class="pre">_retrieve_status_messages</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="headerlink" href="#pypz.core.channels.misc.BlankChannelWriter._retrieve_status_messages" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic that retrieves the status messages published by the counterpart
+channel. Notice that in case of ChannelWriter, there can be multiple InputChannels sending messages and
+in case of ChannelReader there can be multiple messages sent by the ChannelWriter, therefore this method
+shall return a list of messages. Note as well that in case you are using callbacks for your technology,
+you can directly use the method onStatusMessageReceived. In this case simply return null from this method
+to ensure that it will be ignored.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of retrieved status messages or null if method is not used</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.misc.BlankChannelWriter._send_status_message">
+<span class="sig-name descname"><span class="pre">_send_status_message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.core.channels.misc.BlankChannelWriter._send_status_message" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic that publishes the channel’s state to the counterpart channel. The
+state string is provided by the channel itself. Note that there is defined schema, how and what will be
+provided by the channel as string, however you can append your own custom information, you only need to
+append as string separated by StateMessageSeparatorChar.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>message</strong> – message that shall be sent</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.misc.BlankChannelWriter._write_records">
+<span class="sig-name descname"><span class="pre">_write_records</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">records</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.core.channels.misc.BlankChannelWriter._write_records" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic that writes the records to the output resource. It will automatically
+be invoked by the plugin via the corresponding invoker method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>records</strong> – list of records to be written</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </section>

@@ -123,6 +123,199 @@
 to realize transfer functionalities. It means that once there is a proper
 channel implementation, a fully functional InputPortPlugin can be made by
 providing that implementation in the abstract new_input_channel() method.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.abstracts.channel_ports.ChannelInputPort._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pypz.abstracts.channel_ports.ChannelInputPort._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.abstracts.channel_ports.ChannelInputPort._channel_config">
+<span class="sig-name descname"><span class="pre">_channel_config</span></span><a class="headerlink" href="#pypz.abstracts.channel_ports.ChannelInputPort._channel_config" title="Link to this definition"></a></dt>
+<dd><p>Convenience class to represent an optional parameter
+Usage:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">TestImpl</span><span class="p">(</span><span class="n">Instance</span><span class="p">):</span>
+    <span class="n">required_param</span> <span class="o">=</span> <span class="n">RequiredParameter</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="n">optional_param</span> <span class="o">=</span> <span class="n">OptionalParameter</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">required_param</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optional_param</span> <span class="o">=</span> <span class="s2">&quot;defaultValue&quot;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.abstracts.channel_ports.ChannelInputPort._channel_location">
+<span class="sig-name descname"><span class="pre">_channel_location</span></span><a class="headerlink" href="#pypz.abstracts.channel_ports.ChannelInputPort._channel_location" title="Link to this definition"></a></dt>
+<dd><p>Convenience class to represent a required parameter
+Usage:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">TestImpl</span><span class="p">(</span><span class="n">Instance</span><span class="p">):</span>
+    <span class="n">required_param</span> <span class="o">=</span> <span class="n">RequiredParameter</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="n">optional_param</span> <span class="o">=</span> <span class="n">OptionalParameter</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">required_param</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optional_param</span> <span class="o">=</span> <span class="s2">&quot;defaultValue&quot;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.abstracts.channel_ports.ChannelInputPort._channel_reader">
+<span class="sig-name descname"><span class="pre">_channel_reader</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.core.channels.io.html#pypz.core.channels.io.ChannelReader" title="pypz.core.channels.io.ChannelReader"><span class="pre">ChannelReader</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.abstracts.channel_ports.ChannelInputPort._channel_reader" title="Link to this definition"></a></dt>
+<dd><p>The only channel reader maintained by this plugin.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.abstracts.channel_ports.ChannelInputPort._error_occurred">
+<span class="sig-name descname"><span class="pre">_error_occurred</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pypz.abstracts.channel_ports.ChannelInputPort._error_occurred" title="Link to this definition"></a></dt>
+<dd><p>Helper flag to register, if error occurred during execution. This flag will
+be used to prevent resource deletion on error.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.abstracts.channel_ports.ChannelInputPort._expected_output_count">
+<span class="sig-name descname"><span class="pre">_expected_output_count</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.abstracts.channel_ports.ChannelInputPort._expected_output_count" title="Link to this definition"></a></dt>
+<dd><p>During _on_port_open the expected number of connected outputs will be calculated.
+It then will be used in cases, where we need to wait for all outputs.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.abstracts.channel_ports.ChannelInputPort._interrupted">
+<span class="sig-name descname"><span class="pre">_interrupted</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pypz.abstracts.channel_ports.ChannelInputPort._interrupted" title="Link to this definition"></a></dt>
+<dd><p>Helper flag to register, if the execution has been interrupted.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.abstracts.channel_ports.ChannelInputPort._need_to_check_connections_opened">
+<span class="sig-name descname"><span class="pre">_need_to_check_connections_opened</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pypz.abstracts.channel_ports.ChannelInputPort._need_to_check_connections_opened" title="Link to this definition"></a></dt>
+<dd><p>Helper flag to signalize, if the channel shall be opened. This is necessary
+to maintain state in _on_port_open().</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.abstracts.channel_ports.ChannelInputPort._on_error">
+<span class="sig-name descname"><span class="pre">_on_error</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.abstracts.channel_ports.ChannelInputPort._on_error" title="Link to this definition"></a></dt>
+<dd><p>This method can be implemented to react to error events during
+execution. The error itself may come from arbitrary sources.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.abstracts.channel_ports.ChannelInputPort._on_interrupt">
+<span class="sig-name descname"><span class="pre">_on_interrupt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">system_signal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.abstracts.channel_ports.ChannelInputPort._on_interrupt" title="Link to this definition"></a></dt>
+<dd><p>This method can be implemented to react to interrupt signals like
+SIGINT, SIGTERM etc. The specs implementation can then execute interrupt
+logic e.g., early termination of loops.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>system_signal</strong> – id of the system signal that causes interrupt</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.abstracts.channel_ports.ChannelInputPort._on_port_close">
+<span class="sig-name descname"><span class="pre">_on_port_close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.abstracts.channel_ports.ChannelInputPort._on_port_close" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic to shut down the i/o port functionalities.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True succeeded, False if more iteration required (to not block the execution)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.abstracts.channel_ports.ChannelInputPort._on_port_open">
+<span class="sig-name descname"><span class="pre">_on_port_open</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.abstracts.channel_ports.ChannelInputPort._on_port_open" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic to initialize the i/o port functionalities.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True succeeded, False if more iteration required (to not block the execution)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.abstracts.channel_ports.ChannelInputPort._on_resource_creation">
+<span class="sig-name descname"><span class="pre">_on_resource_creation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.abstracts.channel_ports.ChannelInputPort._on_resource_creation" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic to create an arbitrary resource
+of any type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True succeeded, False if more iteration required (to not block the execution)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.abstracts.channel_ports.ChannelInputPort._on_resource_deletion">
+<span class="sig-name descname"><span class="pre">_on_resource_deletion</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.abstracts.channel_ports.ChannelInputPort._on_resource_deletion" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic to destroy the created resource.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True succeeded, False if more iteration required (to not block the execution)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.abstracts.channel_ports.ChannelInputPort._port_open_timeout_ms">
+<span class="sig-name descname"><span class="pre">_port_open_timeout_ms</span></span><a class="headerlink" href="#pypz.abstracts.channel_ports.ChannelInputPort._port_open_timeout_ms" title="Link to this definition"></a></dt>
+<dd><p>Convenience class to represent an optional parameter
+Usage:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">TestImpl</span><span class="p">(</span><span class="n">Instance</span><span class="p">):</span>
+    <span class="n">required_param</span> <span class="o">=</span> <span class="n">RequiredParameter</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="n">optional_param</span> <span class="o">=</span> <span class="n">OptionalParameter</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">required_param</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optional_param</span> <span class="o">=</span> <span class="s2">&quot;defaultValue&quot;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.abstracts.channel_ports.ChannelInputPort._post_execution">
+<span class="sig-name descname"><span class="pre">_post_execution</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.abstracts.channel_ports.ChannelInputPort._post_execution" title="Link to this definition"></a></dt>
+<dd><p>This method is called after the executor and its state machine exited, but
+before the program exits. It can be used to perform finalization/shutdown
+logic that is outside the execution context.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.abstracts.channel_ports.ChannelInputPort._pre_execution">
+<span class="sig-name descname"><span class="pre">_pre_execution</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.abstracts.channel_ports.ChannelInputPort._pre_execution" title="Link to this definition"></a></dt>
+<dd><p>This method will be called before the executor state machine starts. It
+can be used to perform initialization that is required before the execution.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.abstracts.channel_ports.ChannelInputPort._sequential_mode_enabled">
+<span class="sig-name descname"><span class="pre">_sequential_mode_enabled</span></span><a class="headerlink" href="#pypz.abstracts.channel_ports.ChannelInputPort._sequential_mode_enabled" title="Link to this definition"></a></dt>
+<dd><p>Convenience class to represent an optional parameter
+Usage:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">TestImpl</span><span class="p">(</span><span class="n">Instance</span><span class="p">):</span>
+    <span class="n">required_param</span> <span class="o">=</span> <span class="n">RequiredParameter</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="n">optional_param</span> <span class="o">=</span> <span class="n">OptionalParameter</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">required_param</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optional_param</span> <span class="o">=</span> <span class="s2">&quot;defaultValue&quot;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.abstracts.channel_ports.ChannelInputPort._sync_connections_open">
+<span class="sig-name descname"><span class="pre">_sync_connections_open</span></span><a class="headerlink" href="#pypz.abstracts.channel_ports.ChannelInputPort._sync_connections_open" title="Link to this definition"></a></dt>
+<dd><p>Convenience class to represent an optional parameter
+Usage:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">TestImpl</span><span class="p">(</span><span class="n">Instance</span><span class="p">):</span>
+    <span class="n">required_param</span> <span class="o">=</span> <span class="n">RequiredParameter</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="n">optional_param</span> <span class="o">=</span> <span class="n">OptionalParameter</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">required_param</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optional_param</span> <span class="o">=</span> <span class="s2">&quot;defaultValue&quot;</span>
+</pre></div>
+</div>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="pypz.abstracts.channel_ports.ChannelInputPort.can_retrieve">
 <span class="sig-name descname"><span class="pre">can_retrieve</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.abstracts.channel_ports.ChannelInputPort.can_retrieve" title="Link to this definition"></a></dt>
@@ -170,6 +363,170 @@ read offset based on the technology used.</p>
 to realize transfer functionalities. It means that once there is a proper
 channel implementation, a fully functional OutputPortPlugin can be made by
 providing that implementation in the abstract new_output_channel() method.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.abstracts.channel_ports.ChannelOutputPort._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pypz.abstracts.channel_ports.ChannelOutputPort._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.abstracts.channel_ports.ChannelOutputPort._channel_config">
+<span class="sig-name descname"><span class="pre">_channel_config</span></span><a class="headerlink" href="#pypz.abstracts.channel_ports.ChannelOutputPort._channel_config" title="Link to this definition"></a></dt>
+<dd><p>Convenience class to represent an optional parameter
+Usage:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">TestImpl</span><span class="p">(</span><span class="n">Instance</span><span class="p">):</span>
+    <span class="n">required_param</span> <span class="o">=</span> <span class="n">RequiredParameter</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="n">optional_param</span> <span class="o">=</span> <span class="n">OptionalParameter</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">required_param</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optional_param</span> <span class="o">=</span> <span class="s2">&quot;defaultValue&quot;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.abstracts.channel_ports.ChannelOutputPort._channel_location">
+<span class="sig-name descname"><span class="pre">_channel_location</span></span><a class="headerlink" href="#pypz.abstracts.channel_ports.ChannelOutputPort._channel_location" title="Link to this definition"></a></dt>
+<dd><p>Convenience class to represent a required parameter
+Usage:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">TestImpl</span><span class="p">(</span><span class="n">Instance</span><span class="p">):</span>
+    <span class="n">required_param</span> <span class="o">=</span> <span class="n">RequiredParameter</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="n">optional_param</span> <span class="o">=</span> <span class="n">OptionalParameter</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">required_param</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optional_param</span> <span class="o">=</span> <span class="s2">&quot;defaultValue&quot;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.abstracts.channel_ports.ChannelOutputPort._channel_writers">
+<span class="sig-name descname"><span class="pre">_channel_writers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pypz.core.channels.io.html#pypz.core.channels.io.ChannelWriter" title="pypz.core.channels.io.ChannelWriter"><span class="pre">ChannelWriter</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.abstracts.channel_ports.ChannelOutputPort._channel_writers" title="Link to this definition"></a></dt>
+<dd><p>The channel writers to be maintained by this plugin. Note that a channel
+writer will be created for each connection from this output port plugin.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.abstracts.channel_ports.ChannelOutputPort._error_occurred">
+<span class="sig-name descname"><span class="pre">_error_occurred</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pypz.abstracts.channel_ports.ChannelOutputPort._error_occurred" title="Link to this definition"></a></dt>
+<dd><p>Helper flag to register, if error occurred during execution. This flag will
+be used to prevent resource deletion on error.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.abstracts.channel_ports.ChannelOutputPort._interrupted">
+<span class="sig-name descname"><span class="pre">_interrupted</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pypz.abstracts.channel_ports.ChannelOutputPort._interrupted" title="Link to this definition"></a></dt>
+<dd><p>Helper flag to register, if the execution has been interrupted.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.abstracts.channel_ports.ChannelOutputPort._on_error">
+<span class="sig-name descname"><span class="pre">_on_error</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.abstracts.channel_ports.ChannelOutputPort._on_error" title="Link to this definition"></a></dt>
+<dd><p>This method can be implemented to react to error events during
+execution. The error itself may come from arbitrary sources.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.abstracts.channel_ports.ChannelOutputPort._on_interrupt">
+<span class="sig-name descname"><span class="pre">_on_interrupt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">system_signal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.abstracts.channel_ports.ChannelOutputPort._on_interrupt" title="Link to this definition"></a></dt>
+<dd><p>This method can be implemented to react to interrupt signals like
+SIGINT, SIGTERM etc. The specs implementation can then execute interrupt
+logic e.g., early termination of loops.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>system_signal</strong> – id of the system signal that causes interrupt</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.abstracts.channel_ports.ChannelOutputPort._on_port_close">
+<span class="sig-name descname"><span class="pre">_on_port_close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.abstracts.channel_ports.ChannelOutputPort._on_port_close" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic to shut down the i/o port functionalities.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True succeeded, False if more iteration required (to not block the execution)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.abstracts.channel_ports.ChannelOutputPort._on_port_open">
+<span class="sig-name descname"><span class="pre">_on_port_open</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.abstracts.channel_ports.ChannelOutputPort._on_port_open" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic to initialize the i/o port functionalities.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True succeeded, False if more iteration required (to not block the execution)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.abstracts.channel_ports.ChannelOutputPort._on_resource_creation">
+<span class="sig-name descname"><span class="pre">_on_resource_creation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.abstracts.channel_ports.ChannelOutputPort._on_resource_creation" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic to create an arbitrary resource
+of any type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True succeeded, False if more iteration required (to not block the execution)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.abstracts.channel_ports.ChannelOutputPort._on_resource_deletion">
+<span class="sig-name descname"><span class="pre">_on_resource_deletion</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.abstracts.channel_ports.ChannelOutputPort._on_resource_deletion" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic to destroy the created resource.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True succeeded, False if more iteration required (to not block the execution)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.abstracts.channel_ports.ChannelOutputPort._port_close_errors">
+<span class="sig-name descname"><span class="pre">_port_close_errors</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pypz.core.channels.io.html#pypz.core.channels.io.ChannelWriter" title="pypz.core.channels.io.ChannelWriter"><span class="pre">ChannelWriter</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.abstracts.channel_ports.ChannelOutputPort._port_close_errors" title="Link to this definition"></a></dt>
+<dd><p>Set to store the channels that had errors on port closure. It is necessary
+to be able not to reschedule those channels in re-execution of the state.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.abstracts.channel_ports.ChannelOutputPort._port_open_timeout_ms">
+<span class="sig-name descname"><span class="pre">_port_open_timeout_ms</span></span><a class="headerlink" href="#pypz.abstracts.channel_ports.ChannelOutputPort._port_open_timeout_ms" title="Link to this definition"></a></dt>
+<dd><p>Convenience class to represent an optional parameter
+Usage:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">TestImpl</span><span class="p">(</span><span class="n">Instance</span><span class="p">):</span>
+    <span class="n">required_param</span> <span class="o">=</span> <span class="n">RequiredParameter</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="n">optional_param</span> <span class="o">=</span> <span class="n">OptionalParameter</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">required_param</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optional_param</span> <span class="o">=</span> <span class="s2">&quot;defaultValue&quot;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.abstracts.channel_ports.ChannelOutputPort._post_execution">
+<span class="sig-name descname"><span class="pre">_post_execution</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.abstracts.channel_ports.ChannelOutputPort._post_execution" title="Link to this definition"></a></dt>
+<dd><p>This method is called after the executor and its state machine exited, but
+before the program exits. It can be used to perform finalization/shutdown
+logic that is outside the execution context.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.abstracts.channel_ports.ChannelOutputPort._pre_execution">
+<span class="sig-name descname"><span class="pre">_pre_execution</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.abstracts.channel_ports.ChannelOutputPort._pre_execution" title="Link to this definition"></a></dt>
+<dd><p>This method will be called before the executor state machine starts. It
+can be used to perform initialization that is required before the execution.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.abstracts.channel_ports.ChannelOutputPort._resource_deletion_errors">
+<span class="sig-name descname"><span class="pre">_resource_deletion_errors</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pypz.core.channels.io.html#pypz.core.channels.io.ChannelWriter" title="pypz.core.channels.io.ChannelWriter"><span class="pre">ChannelWriter</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.abstracts.channel_ports.ChannelOutputPort._resource_deletion_errors" title="Link to this definition"></a></dt>
+<dd><p>Set to store the channels that had errors on resource deletion. It is necessary
+to be able not to reschedule those channels in re-execution of the state.</p>
+</dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pypz.abstracts.channel_ports.ChannelOutputPort.channel_writer_type">
 <span class="sig-name descname"><span class="pre">channel_writer_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pypz.core.channels.io.html#pypz.core.channels.io.ChannelWriter" title="pypz.core.channels.io.ChannelWriter"><span class="pre">ChannelWriter</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.abstracts.channel_ports.ChannelOutputPort.channel_writer_type" title="Link to this definition"></a></dt>

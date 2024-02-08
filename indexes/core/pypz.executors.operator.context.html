@@ -121,6 +121,41 @@
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>This class is intended to store context information and helper methods for
 the actual execution. The context itself is based on the current Operator.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.context.ExecutionContext.__exec_mode">
+<span class="sig-name descname"><span class="pre">__exec_mode</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.executors.commons.html#pypz.executors.commons.ExecutionMode" title="pypz.executors.commons.ExecutionMode"><span class="pre">ExecutionMode</span></a></em><a class="headerlink" href="#pypz.executors.operator.context.ExecutionContext.__exec_mode" title="Link to this definition"></a></dt>
+<dd><p>The run mode of the execution. For more information refer to the ExecutorRunMode class</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.context.ExecutionContext.__exit_code">
+<span class="sig-name descname"><span class="pre">__exit_code</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.executors.commons.html#pypz.executors.commons.ExitCodes" title="pypz.executors.commons.ExitCodes"><span class="pre">ExitCodes</span></a></em><a class="headerlink" href="#pypz.executors.operator.context.ExecutionContext.__exit_code" title="Link to this definition"></a></dt>
+<dd><p>Exit code of the state machine, which can be modified among the states</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.context.ExecutionContext.__operator">
+<span class="sig-name descname"><span class="pre">__operator</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.core.specs.operator.html#pypz.core.specs.operator.Operator" title="pypz.core.specs.operator.Operator"><span class="pre">Operator</span></a></em><a class="headerlink" href="#pypz.executors.operator.context.ExecutionContext.__operator" title="Link to this definition"></a></dt>
+<dd><p>The operator of the context</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.context.ExecutionContext.__plugin_type_registry">
+<span class="sig-name descname"><span class="pre">__plugin_type_registry</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">PluginType</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">set</span><span class="p"><span class="pre">[</span></span><span class="pre">PluginType</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.executors.operator.context.ExecutionContext.__plugin_type_registry" title="Link to this definition"></a></dt>
+<dd><p>This member holds all the context entities along their implemented interfaces. It allows
+simple type based iteration/execution.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.context.ExecutionContext.__typed_dependency_graphs">
+<span class="sig-name descname"><span class="pre">__typed_dependency_graphs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">PluginType</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">set</span><span class="p"><span class="pre">[</span></span><span class="pre">PluginType</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.executors.operator.context.ExecutionContext.__typed_dependency_graphs" title="Link to this definition"></a></dt>
+<dd><p>This member holds the nested instances ordered by their resolved dependency list along
+their types. The key holds the instance type, the value is a list of set, where each list
+element represents a dependency level i.e., the 0th element holds the instances w/o
+dependencies, the 1st element holds the instances that are dependent on instances on
+the 0th level and so on.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="pypz.executors.operator.context.ExecutionContext.for_each_plugin_instances">
 <span class="sig-name descname"><span class="pre">for_each_plugin_instances</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">consumer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">PluginType</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.executors.operator.context.ExecutionContext.for_each_plugin_instances" title="Link to this definition"></a></dt>

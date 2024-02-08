@@ -72,10 +72,8 @@ identified as a nested instance.
 Metaclass
 +++++++++
 
-Notice that a custom metaclass is used to be able to intercept the creation of the Instance object.
-
-.. autoclass:: pypz.core.specs.instance.InterceptedInstance
-   :no-index:
+Notice that a custom metaclass is used (:class:`pypz.core.specs.instance.InterceptedInstance`)
+to be able to intercept the creation of the Instance object.
 
 Dependencies
 ++++++++++++
@@ -104,13 +102,11 @@ are transmitted that is really necessary to be able to reconstruct an instance o
 
 To get the DTO of an Instance, you can use:
 
-.. automethod:: pypz.core.specs.instance.Instance.get_dto
-   :no-index:
+:meth:`pypz.core.specs.instance.Instance.get_dto`
 
 To construct an Instance object from a DTO, you can use:
 
-.. automethod:: pypz.core.specs.instance.Instance.create_from_dto
-   :no-index:
+:meth:`pypz.core.specs.instance.Instance.create_from_dto`
 
 Working with YAML
 ~~~~~~~~~~~~~~~~~
@@ -128,8 +124,7 @@ In the background, the instance will be converted into a DTO, which then will be
 
 To construct an Instance from a YAML string, you can use:
 
-.. automethod:: pypz.core.specs.instance.Instance.create_from_string
-   :no-index:
+:meth:`pypz.core.specs.instance.Instance.create_from_string`
 
 You can find a usage example `here <https://github.com/lazlowa/pypz-examples>`_
 
@@ -141,14 +136,10 @@ Instance Groups
 Instances can be grouped together. For example, if you :ref:`replicate <operator_replication>` an operator, then
 you are creating a group of operators. The original instance in this case is called "principal".
 
-The class InstanceGroup provides the methods to access useful group related information.
+The class :class:`pypz.core.specs.instance.InstanceGroup` provides the methods to access useful group related information.
 
-.. autoclass:: pypz.core.specs.instance.InstanceGroup
-   :no-index:
-   :members:
-   :undoc-members:
-
-Notice that this interface shall be implemented by the instance types that can form groups e.g. Operator and Plugin.
+.. note::
+   Notice that this interface shall be implemented by the instance types that can form groups e.g. Operator and Plugin.
 
 Pipeline
 --------
@@ -194,7 +185,9 @@ Check `operator replication <operator_replication>` for more information.
 Connections
 +++++++++++
 
-You can connect operators by the so called :ref:`port plugins <port_plugins>`.
+You can connect operators by the so called port plugins
+(:class:`InputPortPlugin <pypz.core.specs.plugin.InputPortPlugin>`,
+:class:`OutputPortPlugin <pypz.core.specs.plugin.OutputPortPlugin>`).
 
 The connection can be defined on pipeline level, where you shall specify, which operator's which port plugin
 shall be connected to which other operator's which port plugin.
@@ -277,14 +270,9 @@ Methods
 The Operator class provides methods to implement your business logic. Each method
 is called in specific order based on the :ref:`executor <executor>` implementation.
 
-.. automethod:: pypz.core.specs.operator.Operator._on_init
-   :no-index:
-
-.. automethod:: pypz.core.specs.operator.Operator._on_running
-   :no-index:
-
-.. automethod:: pypz.core.specs.operator.Operator._on_shutdown
-   :no-index:
+- :meth:`_on_init() <pypz.core.specs.operator.Operator._on_init>`
+- :meth:`_on_running() <pypz.core.specs.operator.Operator._on_running>`
+- :meth:`_on_shutdown() <pypz.core.specs.operator.Operator._on_shutdown>`
 
 .. _operator_logging:
 
@@ -300,10 +288,7 @@ method will be called in the background:
 
    self.get_logger().info("Text to log")
 
-The aggregated logger is realized by:
-
-.. autoclass:: pypz.core.specs.operator.Operator.Logger
-   :no-index:
+The aggregated logger is realized by the class :class:`pypz.core.specs.operator.Operator.Logger`.
 
 Check the :ref:`logging` section for more information.
 
@@ -314,30 +299,14 @@ Plugins
 
 Plugins are the lowest level entities in *pypz*. They allow to extend an enhance the functionality
 of an operator. As you can check on the :ref:`inheritance_diagram`,
-there are several plugin interfaces with different purposes.
+there are several plugin interfaces with different purposes:
 
-.. autoclass:: pypz.core.specs.plugin.Plugin
-   :no-index:
+- :class:`InputPortPlugin <pypz.core.specs.plugin.InputPortPlugin>`
+- :class:`OutputPortPlugin <pypz.core.specs.plugin.OutputPortPlugin>`
+- :class:`ResourceHandlerPlugin <pypz.core.specs.plugin.ResourceHandlerPlugin>`
+- :class:`ServicePlugin <pypz.core.specs.plugin.ServicePlugin>`
+- :class:`ExtendedPlugin <pypz.core.specs.plugin.ExtendedPlugin>`
+- :class:`LoggerPlugin <pypz.core.specs.plugin.LoggerPlugin>`
 
-.. autoclass:: pypz.core.specs.plugin.ResourceHandlerPlugin
-   :no-index:
 
-.. _port_plugins:
 
-.. autoclass:: pypz.core.specs.plugin.PortPlugin
-   :no-index:
-
-.. autoclass:: pypz.core.specs.plugin.InputPortPlugin
-   :no-index:
-
-.. autoclass:: pypz.core.specs.plugin.OutputPortPlugin
-   :no-index:
-
-.. autoclass:: pypz.core.specs.plugin.ServicePlugin
-   :no-index:
-
-.. autoclass:: pypz.core.specs.plugin.ExtendedPlugin
-   :no-index:
-
-.. autoclass:: pypz.core.specs.plugin.LoggerPlugin
-   :no-index:

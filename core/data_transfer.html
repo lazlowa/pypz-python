@@ -63,10 +63,11 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Data transfer</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#ports">Ports</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#channels">Channels</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#pypz.core.channels.io.ChannelWriter._write_records"><code class="docutils literal notranslate"><span class="pre">ChannelWriter._write_records()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pypz-core-channels-io-channelreader"><code class="xref py py-class docutils literal notranslate"><span class="pre">pypz.core.channels.io.ChannelReader</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pypz-core-channels-io-channelwriter"><code class="xref py py-class docutils literal notranslate"><span class="pre">pypz.core.channels.io.ChannelWriter</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#channelinputport-channeloutputport">ChannelInputPort, ChannelOutputPort</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#channelinputport-channeloutputport"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelInputPort</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelOutputPort</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#expected-parameters">Expected Parameters</a></li>
 </ul>
 </li>
@@ -128,7 +129,7 @@
              
   <section id="data-transfer">
 <span id="id1"></span><h1>Data transfer<a class="headerlink" href="#data-transfer" title="Link to this heading"></a></h1>
-<p>Data transfer between operations in a pipeline is essential, without it we would speak about workflows.
+<p>Data transfer between operations in a pipeline is essential.
 In <em>pypz</em> data transfer is possible between operators through so called <em>ports</em>.</p>
 <figure class="align-center" id="id2">
 <img alt="Basic pipeline" src="../_images/basic_pipeline.png" />
@@ -153,69 +154,11 @@ In <em>pypz</em> data transfer is possible between operators through so called <
 <p><span class="caption-text">Inheritance diagram</span><a class="headerlink" href="#id3" title="Link to this image"></a></p>
 </figcaption>
 </figure>
-<p>Basically, you are free to implement any technology behind ports as long as you comply to the interfaces.</p>
-<dl class="py class">
-<dt class="sig sig-object py">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.plugin.</span></span><span class="sig-name descname"><span class="pre">InputPortPlugin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span></dt>
-<dd><p>This plugin interface allows to implement data transfer input port for an operator.
-Operators can communicate via ports. Different technologies can be implemented
-allowing operators to talk through them.</p>
-<dl class="py method">
-<dt class="sig sig-object py">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">can_retrieve</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span></dt>
-<dd><p>This method shall implement the logic to signalize, whether the InputPort is
-still able to retrieve. Unable can mean for example that the OutputPort
-finished writing. This can be then used to terminate reading.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>True if port can retrieve, False if not</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">commit_current_read_offset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span></dt>
-<dd><p>This method shall implement the logic of committing the current
-read offset based on the technology used.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">retrieve</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span></dt>
-<dd><p>This method shall implement the logic to retrieve data through the port.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>tbd by the implementation</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.plugin.</span></span><span class="sig-name descname"><span class="pre">OutputPortPlugin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span></dt>
-<dd><p>This plugin interface allows to implement data transfer output port for an operator.
-Operators can communicate via ports. Different technologies can be implemented
-allowing operators to talk through them.</p>
-<dl class="py method">
-<dt class="sig sig-object py">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">send</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span></dt>
-<dd><p>This method shall implement the logic to send data provided as argument.
-The implementation shall specify the type of the data and the return value.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>data</strong> – data to be sent</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>tbd by the implementation</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
+<p>Basically, you are free to implement any technology behind ports as long as you comply to the interfaces:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.InputPortPlugin" title="pypz.core.specs.plugin.InputPortPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">pypz.core.specs.plugin.InputPortPlugin</span></code></a></p></li>
+<li><p><a class="reference internal" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.OutputPortPlugin" title="pypz.core.specs.plugin.OutputPortPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">pypz.core.specs.plugin.OutputPortPlugin</span></code></a></p></li>
+</ul>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
 <p>Note that although <em>pypz</em> has a lot of builtin guards and trails to ensure execution stability,
@@ -259,85 +202,23 @@ readers and channel writers.</p>
 </ul>
 <p>If you want to utilize channels, then you shall implement the abstract methods of the corresponding classes
 instead of the port interfaces.</p>
-<dl class="py class">
-<dt class="sig sig-object py">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.channels.io.</span></span><span class="sig-name descname"><span class="pre">ChannelReader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.InputPortPlugin" title="pypz.core.specs.plugin.InputPortPlugin"><span class="pre">InputPortPlugin</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">executor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ThreadPoolExecutor</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span></dt>
-<dd><p>This class is the base of the input channel classes.
-The idea is that the class provides some core, protected abstract methods, which shall be implemented by
-the developer. These implementations then will be invoked by invoker methods. This makes sure that additional
-necessary logic will be performed along the implemented.</p>
-<dl class="py method">
-<dt class="sig sig-object py">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_load_input_record_offset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span></dt>
-<dd><p>This method shall implement the logic to retrieve stored read offset from the underlying technology. This
-can be arbitrary, but the method shall return the stored offset.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>stored offset</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">has_records</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span></dt>
-<dd><p>This method shall implement the logic to check, if the reader can still read records.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>True if channel has still records, False if not</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_read_records</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span></dt>
-<dd><p>This method shall implement the logic to read records from the input channel. An ArrayList of records is
-expected.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>list of records OR empty ArrayList if no records read. Null is not accepted.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_commit_offset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span></dt>
-<dd><p>This method shall implement the logic that commits the provided offset using the underlying technology.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>offset</strong> – provided offset to commit</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.channels.io.</span></span><span class="sig-name descname"><span class="pre">ChannelWriter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.OutputPortPlugin" title="pypz.core.specs.plugin.OutputPortPlugin"><span class="pre">OutputPortPlugin</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">executor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ThreadPoolExecutor</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span></dt>
-<dd><p>This class is the base of the output channel classes.
-The idea is that the class provides some core, protected abstract methods, which shall be implemented by
-the developer. These implementations then will be invoked by invoker methods. This makes sure that additional
-necessary logic will be performed along the implemented.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="pypz.core.channels.io.ChannelWriter._write_records">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_write_records</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">records</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.core.channels.io.ChannelWriter._write_records" title="Link to this definition"></a></dt>
-<dd><p>This method shall implement the logic that writes the records to the output resource. It will automatically
-be invoked by the plugin via the corresponding invoker method.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>records</strong> – list of records to be written</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
+<section id="pypz-core-channels-io-channelreader">
+<h3><a class="reference internal" href="../indexes/core/pypz.core.channels.io.html#pypz.core.channels.io.ChannelReader" title="pypz.core.channels.io.ChannelReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">pypz.core.channels.io.ChannelReader</span></code></a><a class="headerlink" href="#pypz-core-channels-io-channelreader" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="../indexes/core/pypz.core.channels.io.html#pypz.core.channels.io.ChannelReader._load_input_record_offset" title="pypz.core.channels.io.ChannelReader._load_input_record_offset"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pypz.core.channels.io.ChannelReader._load_input_record_offset()</span></code></a></p></li>
+<li><p><a class="reference internal" href="../indexes/core/pypz.core.channels.io.html#pypz.core.channels.io.ChannelReader.has_records" title="pypz.core.channels.io.ChannelReader.has_records"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pypz.core.channels.io.ChannelReader.has_records()</span></code></a></p></li>
+<li><p><a class="reference internal" href="../indexes/core/pypz.core.channels.io.html#pypz.core.channels.io.ChannelReader._read_records" title="pypz.core.channels.io.ChannelReader._read_records"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pypz.core.channels.io.ChannelReader._read_records()</span></code></a></p></li>
+<li><p><a class="reference internal" href="../indexes/core/pypz.core.channels.io.html#pypz.core.channels.io.ChannelReader._commit_offset" title="pypz.core.channels.io.ChannelReader._commit_offset"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pypz.core.channels.io.ChannelReader._commit_offset()</span></code></a></p></li>
+</ul>
+</section>
+<section id="pypz-core-channels-io-channelwriter">
+<h3><a class="reference internal" href="../indexes/core/pypz.core.channels.io.html#pypz.core.channels.io.ChannelWriter" title="pypz.core.channels.io.ChannelWriter"><code class="xref py py-class docutils literal notranslate"><span class="pre">pypz.core.channels.io.ChannelWriter</span></code></a><a class="headerlink" href="#pypz-core-channels-io-channelwriter" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="../indexes/core/pypz.core.channels.io.html#pypz.core.channels.io.ChannelWriter._write_records" title="pypz.core.channels.io.ChannelWriter._write_records"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pypz.core.channels.io.ChannelWriter._write_records()</span></code></a></p></li>
+</ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Notice that the abstract methods a protected and shall not be called directly. The channel classes are providing
+<p>Notice that the abstract methods are protected and shall not be called directly. The channel classes are providing
 invoker methods that will invoke the protected methods along with other code that abstracts a lot of complexity
 for you. For more information, check the code.</p>
 </div>
@@ -359,8 +240,9 @@ implementation, everything else will be taken care of.</p>
 <p><em>pypz</em> ships with a channel implementation for Kafka</p>
 </div>
 </section>
+</section>
 <section id="channelinputport-channeloutputport">
-<h2>ChannelInputPort, ChannelOutputPort<a class="headerlink" href="#channelinputport-channeloutputport" title="Link to this heading"></a></h2>
+<h2><a class="reference internal" href="../indexes/core/pypz.abstracts.channel_ports.html#pypz.abstracts.channel_ports.ChannelInputPort" title="pypz.abstracts.channel_ports.ChannelInputPort"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelInputPort</span></code></a>, <a class="reference internal" href="../indexes/core/pypz.abstracts.channel_ports.html#pypz.abstracts.channel_ports.ChannelOutputPort" title="pypz.abstracts.channel_ports.ChannelOutputPort"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelOutputPort</span></code></a><a class="headerlink" href="#channelinputport-channeloutputport" title="Link to this heading"></a></h2>
 <p>This is a builtin implementation of the InputPortPlugin and OutputPortPlugin interface that integrates
 channels into <em>pypz</em>. It provides all the necessary method calls of the channels to perform data transmission.</p>
 <figure class="align-default" id="id6">
@@ -381,27 +263,34 @@ channels into <em>pypz</em>. It provides all the necessary method calls of the c
 <p><span class="caption-text">Inheritance diagram</span><a class="headerlink" href="#id6" title="Link to this image"></a></p>
 </figcaption>
 </figure>
-<p>Notice that both plugins are implementing the <cite>ResourceHandlerPlugin</cite> interface as well, which allows to
-create and delete resources for the channels.</p>
+<p>Notice that both plugins are implementing the <a class="reference internal" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.ResourceHandlerPlugin" title="pypz.core.specs.plugin.ResourceHandlerPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">pypz.core.specs.plugin.ResourceHandlerPlugin</span></code></a>
+interface as well, which allows to create and delete resources for the channels.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Note that it is not mandatory to use this plugin. If you have a better idea, how to integrate channels
 into <em>pypz</em>, feel free to implement it.</p>
 </div>
-<p>Although <cite>ChannelOutputPort</cite> and <cite>ChannelInputPort</cite> have an N-to-M relation, there is an N-to-1 relation on channel level
-i.e., a <cite>ChannelOutputPort</cite> will create as many <cite>ChannelWriters</cite> as many <cite>ChannelInputPort</cite>
-is connected, but the <cite>ChannelInputPort</cite> creates only one <cite>ChannelReader</cite>.</p>
+<p>Although <a class="reference internal" href="../indexes/core/pypz.abstracts.channel_ports.html#pypz.abstracts.channel_ports.ChannelOutputPort" title="pypz.abstracts.channel_ports.ChannelOutputPort"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelOutputPort</span></code></a> and
+<a class="reference internal" href="../indexes/core/pypz.abstracts.channel_ports.html#pypz.abstracts.channel_ports.ChannelInputPort" title="pypz.abstracts.channel_ports.ChannelInputPort"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelInputPort</span></code></a> has an N-to-M relation,
+there is an N-to-1 relation on channel level
+i.e., a <a class="reference internal" href="../indexes/core/pypz.abstracts.channel_ports.html#pypz.abstracts.channel_ports.ChannelOutputPort" title="pypz.abstracts.channel_ports.ChannelOutputPort"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelOutputPort</span></code></a> will create as many
+<a class="reference internal" href="../indexes/core/pypz.core.channels.io.html#pypz.core.channels.io.ChannelWriter" title="pypz.core.channels.io.ChannelWriter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelWriter</span></code></a> as many
+<a class="reference internal" href="../indexes/core/pypz.abstracts.channel_ports.html#pypz.abstracts.channel_ports.ChannelInputPort" title="pypz.abstracts.channel_ports.ChannelInputPort"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelInputPort</span></code></a>
+is connected, but the <a class="reference internal" href="../indexes/core/pypz.abstracts.channel_ports.html#pypz.abstracts.channel_ports.ChannelInputPort" title="pypz.abstracts.channel_ports.ChannelInputPort"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelInputPort</span></code></a> creates only one
+<a class="reference internal" href="../indexes/core/pypz.core.channels.io.html#pypz.core.channels.io.ChannelReader" title="pypz.core.channels.io.ChannelReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelReader</span></code></a>.</p>
 <figure class="align-center" id="id7">
 <img alt="ChannelWriter-ChannelReader N-1" src="../_images/multiple_channel_w_reader_writer.png" />
 <figcaption>
 <p><span class="caption-text">ChannelWriter-ChannelReader N-1</span><a class="headerlink" href="#id7" title="Link to this image"></a></p>
 </figcaption>
 </figure>
-<p>The reason is that from <cite>ChannelInputPort</cite> perspective you have certain expectations w.r.t. records, so there
-is no reason to create different <cite>ChannelReader</cite> entities, because all the <cite>ChannelWriters</cite> shall meet your
-expectations. In other words, by invoking the <cite>retrieve()</cite> method on the <cite>InputPortPlugin</cite>, you will then get all the
-records from all the outputs anyhow. This means as well that you need to manually care for ordering, if you have
-such a requirement.</p>
+<p>The reason is that from <a class="reference internal" href="../indexes/core/pypz.abstracts.channel_ports.html#pypz.abstracts.channel_ports.ChannelInputPort" title="pypz.abstracts.channel_ports.ChannelInputPort"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelInputPort</span></code></a>
+perspective you have certain expectations w.r.t. records, so there
+is no reason to create different <a class="reference internal" href="../indexes/core/pypz.core.channels.io.html#pypz.core.channels.io.ChannelReader" title="pypz.core.channels.io.ChannelReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelReader</span></code></a> entities,
+because all the <a class="reference internal" href="../indexes/core/pypz.core.channels.io.html#pypz.core.channels.io.ChannelWriter" title="pypz.core.channels.io.ChannelWriter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelWriter</span></code></a> shall meet your expectations.
+In other words, by invoking the <a class="reference internal" href="../indexes/core/pypz.abstracts.channel_ports.html#pypz.abstracts.channel_ports.ChannelInputPort.retrieve" title="pypz.abstracts.channel_ports.ChannelInputPort.retrieve"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pypz.abstracts.channel_ports.ChannelInputPort.retrieve()</span></code></a> method,
+you will then get all the records from all the outputs anyhow. This means as well that you need to manually
+care for ordering, if you have such a requirement.</p>
 <p>Further information:</p>
 <ul class="simple">
 <li><p>if an operator is <a class="reference internal" href="models.html#operator-replication"><span class="std std-ref">replicated</span></a>, then it forms an <a class="reference internal" href="models.html#instance-group"><span class="std std-ref">instance group</span></a>;
@@ -413,7 +302,7 @@ channel threw an exception</p></li>
 </ul>
 <section id="expected-parameters">
 <span id="channel-expected-parameters"></span><h3>Expected Parameters<a class="headerlink" href="#expected-parameters" title="Link to this heading"></a></h3>
-<p>ChannelInputPort:</p>
+<p><a class="reference internal" href="../indexes/core/pypz.abstracts.channel_ports.html#pypz.abstracts.channel_ports.ChannelInputPort" title="pypz.abstracts.channel_ports.ChannelInputPort"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelInputPort</span></code></a>:</p>
 <ul class="simple">
 <li><p><strong>channelLocation</strong>, location of the channel resource</p></li>
 <li><p><strong>channelConfig</strong>, configuration of the channel as dictionary (default: {})</p></li>
@@ -422,7 +311,7 @@ connected output ports are finished (default: False)</p></li>
 <li><p><strong>portOpenTimeoutMs</strong>, specifies, how long the port shall wait for incoming connections; 0 means no timeout (default: 0)</p></li>
 <li><p><strong>syncConnectionsOpen</strong>, if set to True, the port will wait for every expected output ports to be connected (default: False)</p></li>
 </ul>
-<p>ChannelOutputPort:</p>
+<p><a class="reference internal" href="../indexes/core/pypz.abstracts.channel_ports.html#pypz.abstracts.channel_ports.ChannelOutputPort" title="pypz.abstracts.channel_ports.ChannelOutputPort"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelOutputPort</span></code></a>:</p>
 <ul class="simple">
 <li><p><strong>channelLocation</strong>, location of the channel resource</p></li>
 <li><p><strong>channelConfig</strong>, configuration of the channel as dictionary (default: {})</p></li>

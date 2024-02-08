@@ -128,22 +128,7 @@
 <span id="id1"></span><h1>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h1>
 <p>Operators and plugins may define parameters to allow it’s users to tune the functionality.
 As matter of fact, parameters can be set for each <a class="reference internal" href="models.html#instances"><span class="std std-ref">instance</span></a> via the following method:</p>
-<dl class="py method">
-<dt class="sig sig-object py">
-<span class="sig-prename descclassname"><span class="pre">Instance.</span></span><span class="sig-name descname"><span class="pre">set_parameter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span></dt>
-<dd><p>Parameter setter method, which interprets the templates and handles cascading
-parameters. One can ignore setting values for existing parameters via the
-provided flag.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> – parameter name</p></li>
-<li><p><strong>value</strong> – parameter value</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
+<p><a class="reference internal" href="../indexes/core/pypz.core.specs.instance.html#pypz.core.specs.instance.Instance.set_parameter" title="pypz.core.specs.instance.Instance.set_parameter"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pypz.core.specs.instance.Instance.set_parameter()</span></code></a></p>
 <p>In the following section it will be explained:</p>
 <ul class="simple">
 <li><p>how an instance can define expected parameters</p></li>
@@ -154,49 +139,7 @@ provided flag.</p>
 <span id="id2"></span><h2>Expected parameters<a class="headerlink" href="#expected-parameters" title="Link to this heading"></a></h2>
 <p>Your instance implementation can expect parameters either as required or as optional.
 For this a descriptor class is used:</p>
-<dl class="py class">
-<dt class="sig sig-object py">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.commons.parameters.</span></span><span class="sig-name descname"><span class="pre">ExpectedParameter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">required</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameter_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">ParameterType</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alt_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_update</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span></dt>
-<dd><p>This is a descriptor class, which describes an instance parameter. To do that
-you need to describe the parameter on class level (which shall be one of the
-RegisteredInterface) then you need to refer with the same name as instance variable.
-Usage:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">TestImpl</span><span class="p">(</span><span class="n">Instance</span><span class="p">):</span>
-    <span class="n">required_param</span> <span class="o">=</span> <span class="n">ExpectedParameter</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">parameter_type</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
-    <span class="n">optional_param</span> <span class="o">=</span> <span class="n">ExpectedParameter</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">parameter_type</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">required_param</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">optional_param</span> <span class="o">=</span> <span class="s2">&quot;defaultValue&quot;</span>
-</pre></div>
-</div>
-<p>This is equivalent to:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">TestImpl</span><span class="p">(</span><span class="n">Instance</span><span class="p">):</span>
-    <span class="n">required_param</span> <span class="o">=</span> <span class="n">RequiredParameter</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
-    <span class="n">optional_param</span> <span class="o">=</span> <span class="n">OptionalParameter</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">required_param</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">optional_param</span> <span class="o">=</span> <span class="s2">&quot;defaultValue&quot;</span>
-</pre></div>
-</div>
-<dl class="py method">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">required</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameter_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">ParameterType</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alt_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_update</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>required</strong> – true, if parameter required, false if not</p></li>
-<li><p><strong>parameter_type</strong> – (str, int, float, set, list, dict, type(None))</p></li>
-<li><p><strong>alt_name</strong> – alternative name for the parameter, if specified it acts as reference to the parameter</p></li>
-<li><p><strong>on_update</strong> – callback to react on value update</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
+<p><a class="reference internal" href="../indexes/core/pypz.core.commons.parameters.html#pypz.core.commons.parameters.ExpectedParameter" title="pypz.core.commons.parameters.ExpectedParameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">pypz.core.commons.parameters.ExpectedParameter</span></code></a></p>
 <p>As you can see, the expected parameters shall be defined both as class and instance variable, where
 the class variable has the type of the descriptor class and the instance variable the actual
 parameter value.</p>
@@ -205,29 +148,10 @@ parameter value.</p>
 <p><strong>Only the execution context will check required parameters automatically.</strong> You can
 invoke instance methods outside of the executor without providing required parameters.
 However, you can always check manually, if all the required parameters have been set by the following method…</p>
-<dl class="py method">
-<dt class="sig sig-object py">
-<span class="sig-prename descclassname"><span class="pre">Instance.</span></span><span class="sig-name descname"><span class="pre">get_expected_parameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></span></dt>
-<dd><p>Returns all the expected parameters as dictionary. Each parameter has the following types:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;str | int | float | set | list | dict | type(None)&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;required&#39;</span><span class="p">:</span> <span class="s1">&#39;True | False&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="s1">&#39;str&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;currentValue&#39;</span><span class="p">:</span> <span class="s1">&#39;str | int | float | set | list | dict | None&#39;</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-</dd></dl>
-
+<p><a class="reference internal" href="../indexes/core/pypz.core.specs.instance.html#pypz.core.specs.instance.Instance.get_expected_parameters" title="pypz.core.specs.instance.Instance.get_expected_parameters"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pypz.core.specs.instance.Instance.get_expected_parameters()</span></code></a></p>
 <p>… by looping through all the expected parameters, where <cite>required = True</cite> and check, if there is already
 a parameter set with that name via:</p>
-<dl class="py method">
-<dt class="sig sig-object py">
-<span class="sig-prename descclassname"><span class="pre">Instance.</span></span><span class="sig-name descname"><span class="pre">has_parameter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span></dt>
-<dd></dd></dl>
-
+<p><a class="reference internal" href="../indexes/core/pypz.core.specs.instance.html#pypz.core.specs.instance.Instance.has_parameter" title="pypz.core.specs.instance.Instance.has_parameter"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pypz.core.specs.instance.Instance.has_parameter()</span></code></a></p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>

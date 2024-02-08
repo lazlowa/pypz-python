@@ -126,6 +126,208 @@
 <p>This is a wrapper class for the logging functionality. It wraps all the
 implementations of the LoggerAddons and by invoking either method it
 will invoke the corresponding method of each LoggerAddons.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.operator.Operator.Logger._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pypz.core.specs.operator.Operator.Logger._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.specs.operator.Operator.Logger._debug">
+<span class="sig-name descname"><span class="pre">_debug</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context_stack</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="headerlink" href="#pypz.core.specs.operator.Operator.Logger._debug" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.specs.operator.Operator.Logger._error">
+<span class="sig-name descname"><span class="pre">_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context_stack</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="headerlink" href="#pypz.core.specs.operator.Operator.Logger._error" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.specs.operator.Operator.Logger._info">
+<span class="sig-name descname"><span class="pre">_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context_stack</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="headerlink" href="#pypz.core.specs.operator.Operator.Logger._info" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.specs.operator.Operator.Logger._warn">
+<span class="sig-name descname"><span class="pre">_warn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context_stack</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="headerlink" href="#pypz.core.specs.operator.Operator.Logger._warn" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.operator.Operator.__context">
+<span class="sig-name descname"><span class="pre">__context</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.core.specs.instance.html#pypz.core.specs.instance.Instance" title="pypz.core.specs.instance.Instance"><span class="pre">Instance</span></a></em><a class="headerlink" href="#pypz.core.specs.operator.Operator.__context" title="Link to this definition"></a></dt>
+<dd><p>Reference to the context aka parent object. Derived automatically
+in the override implementation of __setattr__.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.operator.Operator.__depends_on">
+<span class="sig-name descname"><span class="pre">__depends_on</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">set</span></em><a class="headerlink" href="#pypz.core.specs.operator.Operator.__depends_on" title="Link to this definition"></a></dt>
+<dd><p>Set of other instances that is this instance depending on. Note however that
+the type of the dependencies are checked dynamically in runtime, since dependencies
+can only be defined on the same type of instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.operator.Operator.__expected_parameters">
+<span class="sig-name descname"><span class="pre">__expected_parameters</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="pypz.core.commons.parameters.html#pypz.core.commons.parameters.ExpectedParameter" title="pypz.core.commons.parameters.ExpectedParameter"><span class="pre">ExpectedParameter</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.core.specs.operator.Operator.__expected_parameters" title="Link to this definition"></a></dt>
+<dd><p>Map of expected parameters defined as descriptor of the class. Key is the name of the parameter,
+value is the parameter descriptor. Used to check, if an expected (described) parameter value
+shall be set upon instance parameter setting.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.operator.Operator.__full_name">
+<span class="sig-name descname"><span class="pre">__full_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pypz.core.specs.operator.Operator.__full_name" title="Link to this definition"></a></dt>
+<dd><p>Full name of the instance which uniquely identifies it up to its topmost context.
+For example, if an instance A has a parent context B, which has a parent context C,
+then the full name of A is ‘C.B.A’. This value is calculated and the result is
+stored after the first calculation to avoid recalculation every time.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.operator.Operator.__logger">
+<span class="sig-name descname"><span class="pre">__logger</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.core.commons.loggers.html#pypz.core.commons.loggers.ContextLogger" title="pypz.core.commons.loggers.ContextLogger"><span class="pre">ContextLogger</span></a></em><a class="headerlink" href="#pypz.core.specs.operator.Operator.__logger" title="Link to this definition"></a></dt>
+<dd><p>Context logger. For more information refer to Operator.Logger class</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.operator.Operator.__logger_plugins">
+<span class="sig-name descname"><span class="pre">__logger_plugins</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pypz.core.specs.plugin.html#pypz.core.specs.plugin.LoggerPlugin" title="pypz.core.specs.plugin.LoggerPlugin"><span class="pre">LoggerPlugin</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.core.specs.operator.Operator.__logger_plugins" title="Link to this definition"></a></dt>
+<dd><p>Collection of logger addons to store for context logging</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.operator.Operator.__nested_instance_type">
+<span class="sig-name descname"><span class="pre">__nested_instance_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">NestedInstanceType</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.core.specs.operator.Operator.__nested_instance_type" title="Link to this definition"></a></dt>
+<dd><p>Stores the specified type of the nested instances. This is required to
+be able to discover those instances</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.operator.Operator.__nested_instances">
+<span class="sig-name descname"><span class="pre">__nested_instances</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">NestedInstanceType</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.core.specs.operator.Operator.__nested_instances" title="Link to this definition"></a></dt>
+<dd><p>This dictionary holds all the instances that are nested in the context
+of this instance object</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.operator.Operator.__parameters">
+<span class="sig-name descname"><span class="pre">__parameters</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.core.specs.utils.html#pypz.core.specs.utils.InstanceParameters" title="pypz.core.specs.utils.InstanceParameters"><span class="pre">InstanceParameters</span></a></em><a class="headerlink" href="#pypz.core.specs.operator.Operator.__parameters" title="Link to this definition"></a></dt>
+<dd><p>The interpreted instance parameters i.e., cascading and templates are interpreted</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.operator.Operator.__replicas">
+<span class="sig-name descname"><span class="pre">__replicas</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pypz.core.specs.operator.Operator" title="pypz.core.specs.operator.Operator"><span class="pre">Operator</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.core.specs.operator.Operator.__replicas" title="Link to this definition"></a></dt>
+<dd><p>List of replica instances</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.specs.operator.Operator.__replicate">
+<span class="sig-name descname"><span class="pre">__replicate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.specs.operator.Operator.__replicate" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.operator.Operator.__replication_group_index">
+<span class="sig-name descname"><span class="pre">__replication_group_index</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pypz.core.specs.operator.Operator.__replication_group_index" title="Link to this definition"></a></dt>
+<dd><p>Specifies the group index, if the operator is replicated.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.operator.Operator.__replication_origin">
+<span class="sig-name descname"><span class="pre">__replication_origin</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pypz.core.specs.operator.Operator" title="pypz.core.specs.operator.Operator"><span class="pre">Operator</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.core.specs.operator.Operator.__replication_origin" title="Link to this definition"></a></dt>
+<dd><p>Reference to the original instance, which was the base for the replication</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.operator.Operator.__simple_name">
+<span class="sig-name descname"><span class="pre">__simple_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pypz.core.specs.operator.Operator.__simple_name" title="Link to this definition"></a></dt>
+<dd><p>Name of the instance, which is represented by the object created from the 
+implementation class. If not provided and there is a parent context, then
+the parent context will use the name of the variable.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.operator.Operator.__spec_classes">
+<span class="sig-name descname"><span class="pre">__spec_classes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">set</span></em><a class="headerlink" href="#pypz.core.specs.operator.Operator.__spec_classes" title="Link to this definition"></a></dt>
+<dd><p>Set of specs classes that are in the class hierarchy i.e., which specs classes are
+contributing to the implementation of this class</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.operator.Operator.__spec_name">
+<span class="sig-name descname"><span class="pre">__spec_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pypz.core.specs.operator.Operator.__spec_name" title="Link to this definition"></a></dt>
+<dd><p>The name of the spec constructed of module and qualified class name. Notice that we separate
+the module name and the class name so that we can identify them at loading by name.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.operator.Operator._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pypz.core.specs.operator.Operator._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.specs.operator.Operator._on_init">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_on_init</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.core.specs.operator.Operator._on_init" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic to initialize the operation.
+It will be called after services are started and resources are created.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+<ul class="simple">
+<li><p>True, if finished</p></li>
+<li><p>False, if more iteration required (to not block the execution)</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.specs.operator.Operator._on_running">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_on_running</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.core.specs.operator.Operator._on_running" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the actual business logic.
+It will be called after the _on_init has successfully finished</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+<ul class="simple">
+<li><p>True, if finished</p></li>
+<li><p>False, if more iteration required (to not block the execution)</p></li>
+<li><p>None, if automatically to be determined based on all inputs i.e., if no more input record, then finish</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.specs.operator.Operator._on_shutdown">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_on_shutdown</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.core.specs.operator.Operator._on_shutdown" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic to shut down the operation.
+It will be called, after the _on_running has successfully finished.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+<ul class="simple">
+<li><p>True, if finished</p></li>
+<li><p>False, if more iteration required (to not block the execution)</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.operator.Operator._operator_image_name">
+<span class="sig-name descname"><span class="pre">_operator_image_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.core.specs.operator.Operator._operator_image_name" title="Link to this definition"></a></dt>
+<dd><p>PARAMETER - Name of the docker image, where the operator can be found. This is optional for the execution,
+but is required at deployment.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.operator.Operator._replication_factor">
+<span class="sig-name descname"><span class="pre">_replication_factor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pypz.core.specs.operator.Operator._replication_factor" title="Link to this definition"></a></dt>
+<dd><p>PARAMETER - The replication factor specifies, how many replicas shall be created along
+the original instance.</p>
 </dd></dl>
 
 <dl class="py method">

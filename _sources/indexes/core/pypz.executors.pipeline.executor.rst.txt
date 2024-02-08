@@ -5,3 +5,4 @@ pypz.executors.pipeline.executor module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:

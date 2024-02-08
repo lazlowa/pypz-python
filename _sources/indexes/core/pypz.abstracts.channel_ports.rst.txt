@@ -5,3 +5,4 @@ pypz.abstracts.channel\_ports module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:

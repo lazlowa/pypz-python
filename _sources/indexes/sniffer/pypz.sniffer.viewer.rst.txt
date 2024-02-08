@@ -5,3 +5,4 @@ pypz.sniffer.viewer module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:

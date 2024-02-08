@@ -5,3 +5,4 @@ pypz.core.channels.misc module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:

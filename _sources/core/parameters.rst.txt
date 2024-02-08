@@ -6,8 +6,7 @@ Parameters
 Operators and plugins may define parameters to allow it's users to tune the functionality.
 As matter of fact, parameters can be set for each :ref:`instance <instances>` via the following method:
 
-.. automethod:: pypz.core.specs.instance.Instance.set_parameter
-   :no-index:
+:meth:`pypz.core.specs.instance.Instance.set_parameter`
 
 In the following section it will be explained:
 
@@ -23,11 +22,7 @@ Expected parameters
 Your instance implementation can expect parameters either as required or as optional.
 For this a descriptor class is used:
 
-.. autoclass:: pypz.core.commons.parameters.ExpectedParameter
-   :no-index:
-
-   .. automethod:: __init__
-      :no-index:
+:class:`pypz.core.commons.parameters.ExpectedParameter`
 
 As you can see, the expected parameters shall be defined both as class and instance variable, where
 the class variable has the type of the descriptor class and the instance variable the actual
@@ -38,14 +33,12 @@ parameter value.
    invoke instance methods outside of the executor without providing required parameters.
    However, you can always check manually, if all the required parameters have been set by the following method...
 
-   .. automethod:: pypz.core.specs.instance.Instance.get_expected_parameters
-      :no-index:
+   :meth:`pypz.core.specs.instance.Instance.get_expected_parameters`
 
    ... by looping through all the expected parameters, where `required = True` and check, if there is already
    a parameter set with that name via:
 
-   .. automethod:: pypz.core.specs.instance.Instance.has_parameter
-      :no-index:
+   :meth:`pypz.core.specs.instance.Instance.has_parameter`
 
 .. note::
    Note that although you can define an initial value for the required parameters, a value setting

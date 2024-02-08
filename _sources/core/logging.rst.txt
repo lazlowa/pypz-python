@@ -32,16 +32,15 @@ So we have the following requirements:
 
 The concept involves the following classes:
 
-.. autoclass:: pypz.core.commons.loggers.ContextLoggerInterface
-   :no-index:
+- :class:`pypz.core.commons.loggers.ContextLoggerInterface`
+- :class:`pypz.core.commons.loggers.ContextLogger`
 
-.. autoclass:: pypz.core.commons.loggers.ContextLogger
-   :no-index:
-
-The `ContextLoggerInterface` shall be used to implement the actual logging functionality. Notice that
-this class provides protected methods that shall not be called directly. The `ContextLogger` provides
-the functionality to call the methods of `ContextLoggerInterface` so that it supplies the context
-information in the background. You will then use a `ContextLogger` object to perform logging.
+The :class:`ContextLoggerInterface <pypz.core.commons.loggers.ContextLoggerInterface>` shall be used to implement
+the actual logging functionality. Notice that this class provides protected methods that shall not be called directly.
+The :class:`ContextLogger <pypz.core.commons.loggers.ContextLogger>` provides the functionality to call the methods
+of :class:`ContextLoggerInterface <pypz.core.commons.loggers.ContextLoggerInterface>` so that it supplies the context
+information in the background. You will then use a :class:`ContextLogger <pypz.core.commons.loggers.ContextLogger>`
+object to perform logging.
 
 Operator Logging
 ----------------
@@ -61,23 +60,26 @@ The following diagram shows the inheritance map of the logging-relevant classes:
    :parts: 1
    :caption: Inheritance diagram
 
-Notice that the `LoggerPlugin` interface inherits from the `ContextLoggerInterface`, so if you implement
-a logger plugin, then you actually implement the `ContextLoggerInterface`.
+Notice that the :class:`LoggerPlugin <pypz.core.specs.plugin.LoggerPlugin>` interface inherits from the
+:class:`ContextLoggerInterface <pypz.core.commons.loggers.ContextLoggerInterface>`, so if you implement
+a logger plugin, then you actually implement the
+:class:`ContextLoggerInterface <pypz.core.commons.loggers.ContextLoggerInterface>`.
 
-Furthermore, there is a `ContextLoggerInterface` implementation in the Operator:
-
-.. autoclass:: pypz.core.specs.operator.Operator.Logger
-   :no-index:
+Furthermore, there is a :class:`ContextLoggerInterface <pypz.core.commons.loggers.ContextLoggerInterface>`
+implementation in the Operator: :class:`pypz.core.specs.operator.Operator.Logger`.
 
 This class implements the functionality to abstract the method call of all LoggerPlugins in the operator context.
 
-If you check the Operator's constructor, you will notice the member `self.__logger`. This is actually a `ContextLogger`
-object, where the Operator.Logger is provided as logger implementation and the context is the full name of the
+If you check the Operator's constructor, you will notice the member `self.__logger`.
+This is actually a :class:`ContextLogger <pypz.core.commons.loggers.ContextLogger>`
+object, where the :class:`Operator.Logger <pypz.core.specs.operator.Operator.Logger>`
+is provided as logger implementation and the context is the full name of the
 operator. This is the one and only logger in the entire operator context. If a plugin is created within this context,
-then it creates its own `ContextLogger` object, however as the logger implementation it will take the logger of
+then it creates its own :class:`ContextLogger <pypz.core.commons.loggers.ContextLogger>` object, however as the logger
+implementation it will take the logger of
 the operator, while adding its own context to the context list. Hence, if any logger method will be called inside
-the plugin, it will be routed to the operator's `ContextLogger`, which invokes the implemented method of the
-Operator.Logger, which will call all the LoggerPlugins' corresponding method.
+the plugin, it will be routed to the operator's :class:`ContextLogger <pypz.core.commons.loggers.ContextLogger>`,
+which invokes the implemented method of the Operator.Logger, which will call all the LoggerPlugins' corresponding method.
 
 To access the logger in either the operator or plugin context, you simply need to invoke the ``get_logger()`` method.
 

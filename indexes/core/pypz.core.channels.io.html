@@ -135,6 +135,112 @@ necessary logic will be performed along the implemented.</p>
 <dd><p>Some helper static to init or identify if offset is not initialized</p>
 </dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.io.ChannelReader._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pypz.core.channels.io.ChannelReader._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.io.ChannelReader._aggregated_record_count">
+<span class="sig-name descname"><span class="pre">_aggregated_record_count</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pypz.core.channels.io.ChannelReader._aggregated_record_count" title="Link to this definition"></a></dt>
+<dd><p>Metric value to store the summed up record count</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.io.ChannelReader._aggregated_time_between_reads">
+<span class="sig-name descname"><span class="pre">_aggregated_time_between_reads</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pypz.core.channels.io.ChannelReader._aggregated_time_between_reads" title="Link to this definition"></a></dt>
+<dd><p>Metric value to store the summed up times between reads</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.io.ChannelReader._commit_offset">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_commit_offset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.core.channels.io.ChannelReader._commit_offset" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic that commits the provided offset using the underlying technology.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>offset</strong> – provided offset to commit</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.io.ChannelReader._current_read_record_count">
+<span class="sig-name descname"><span class="pre">_current_read_record_count</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pypz.core.channels.io.ChannelReader._current_read_record_count" title="Link to this definition"></a></dt>
+<dd><p>Stores the record count of the most current read</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.io.ChannelReader._current_read_timestamp">
+<span class="sig-name descname"><span class="pre">_current_read_timestamp</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pypz.core.channels.io.ChannelReader._current_read_timestamp" title="Link to this definition"></a></dt>
+<dd><p>Stores the timestamp of the most current read to be able to calculate elapsed time</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.io.ChannelReader._initial_input_record_offset">
+<span class="sig-name descname"><span class="pre">_initial_input_record_offset</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pypz.core.channels.io.ChannelReader._initial_input_record_offset" title="Link to this definition"></a></dt>
+<dd><p>This is variable stores the initial offset, which can be different than 0 in case of crash-restart. In this
+case this value is actually the difference by which the framework calculated offset shall be compensated.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.io.ChannelReader._last_offset_committed">
+<span class="sig-name descname"><span class="pre">_last_offset_committed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pypz.core.channels.io.ChannelReader._last_offset_committed" title="Link to this definition"></a></dt>
+<dd><p>This value tracks the last committed offset. The main use-case of this variable is to prevent offset commit
+if the new offset equals the last committed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.io.ChannelReader._load_input_record_offset">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_load_input_record_offset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#pypz.core.channels.io.ChannelReader._load_input_record_offset" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic to retrieve stored read offset from the underlying technology. This
+can be arbitrary, but the method shall return the stored offset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>stored offset</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.io.ChannelReader._metrics_buffer">
+<span class="sig-name descname"><span class="pre">_metrics_buffer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pypz.core.channels.base.html#pypz.core.channels.base.ChannelMetric" title="pypz.core.channels.base.ChannelMetric"><span class="pre">ChannelMetric</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.core.channels.io.ChannelReader._metrics_buffer" title="Link to this definition"></a></dt>
+<dd><p>This list holds metric elements, however the only purpose is to be aware of the first
+element to discard like in a circular buffer</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.io.ChannelReader._read_record_count">
+<span class="sig-name descname"><span class="pre">_read_record_count</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pypz.core.channels.io.ChannelReader._read_record_count" title="Link to this definition"></a></dt>
+<dd><p>Counter for how many records have been read by this channel. Note that this value can differ from the
+offset value in case of crash-restart. Still the framework maintains the difference between this value
+and the loaded offset and will compensate the framework calculated offset by that difference.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.io.ChannelReader._read_record_offset">
+<span class="sig-name descname"><span class="pre">_read_record_offset</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pypz.core.channels.io.ChannelReader._read_record_offset" title="Link to this definition"></a></dt>
+<dd><p>The actual write offset of the read records. Eg. if 10 records have been read and provided to the plugin
+then the offset is 10. Note that this might differ from the m_inputRecordCount_i64 in case of crash-restart.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.io.ChannelReader._read_records">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_read_records</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#pypz.core.channels.io.ChannelReader._read_records" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic to read records from the input channel. An ArrayList of records is
+expected.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of records OR empty ArrayList if no records read. Null is not accepted.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.io.ChannelReader._status_sender_lock">
+<span class="sig-name descname"><span class="pre">_status_sender_lock</span></span><a class="headerlink" href="#pypz.core.channels.io.ChannelReader._status_sender_lock" title="Link to this definition"></a></dt>
+<dd><p>This lock is used to prevent concurrent modification of metrics</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="pypz.core.channels.io.ChannelReader.acknowledge_input">
 <span class="sig-name descname"><span class="pre">acknowledge_input</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.core.channels.io.ChannelReader.acknowledge_input" title="Link to this definition"></a></dt>
@@ -241,6 +347,66 @@ necessary logic will be performed along the implemented.</p>
 <dt class="sig sig-object py" id="pypz.core.channels.io.ChannelWriter.MetricsBufferLength">
 <span class="sig-name descname"><span class="pre">MetricsBufferLength</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></em><a class="headerlink" href="#pypz.core.channels.io.ChannelWriter.MetricsBufferLength" title="Link to this definition"></a></dt>
 <dd><p>This variable specifies the length of the metric buffer and so the averaging window</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.io.ChannelWriter._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pypz.core.channels.io.ChannelWriter._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.io.ChannelWriter._aggregated_record_count">
+<span class="sig-name descname"><span class="pre">_aggregated_record_count</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pypz.core.channels.io.ChannelWriter._aggregated_record_count" title="Link to this definition"></a></dt>
+<dd><p>Metric value to store the summed up record count</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.io.ChannelWriter._aggregated_time_between_outputs">
+<span class="sig-name descname"><span class="pre">_aggregated_time_between_outputs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pypz.core.channels.io.ChannelWriter._aggregated_time_between_outputs" title="Link to this definition"></a></dt>
+<dd><p>Metric value to store the summed up times between reads</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.io.ChannelWriter._current_output_record_count">
+<span class="sig-name descname"><span class="pre">_current_output_record_count</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pypz.core.channels.io.ChannelWriter._current_output_record_count" title="Link to this definition"></a></dt>
+<dd><p>Stores the record count of the most current read</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.io.ChannelWriter._current_output_timestamp">
+<span class="sig-name descname"><span class="pre">_current_output_timestamp</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pypz.core.channels.io.ChannelWriter._current_output_timestamp" title="Link to this definition"></a></dt>
+<dd><p>Stores the timestamp of the most current read to be able to calculate elapsed time</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.io.ChannelWriter._metrics_buffer">
+<span class="sig-name descname"><span class="pre">_metrics_buffer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pypz.core.channels.base.html#pypz.core.channels.base.ChannelMetric" title="pypz.core.channels.base.ChannelMetric"><span class="pre">ChannelMetric</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.core.channels.io.ChannelWriter._metrics_buffer" title="Link to this definition"></a></dt>
+<dd><p>This list holds metric elements, however the only purpose is to be aware of the first
+element to discard like in a circular buffer</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.io.ChannelWriter._status_sender_lock">
+<span class="sig-name descname"><span class="pre">_status_sender_lock</span></span><a class="headerlink" href="#pypz.core.channels.io.ChannelWriter._status_sender_lock" title="Link to this definition"></a></dt>
+<dd><p>This lock is used to prevent concurrent modification of metrics</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.io.ChannelWriter._write_records">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_write_records</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">records</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.core.channels.io.ChannelWriter._write_records" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic that writes the records to the output resource. It will automatically
+be invoked by the plugin via the corresponding invoker method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>records</strong> – list of records to be written</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.io.ChannelWriter._written_record_count">
+<span class="sig-name descname"><span class="pre">_written_record_count</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pypz.core.channels.io.ChannelWriter._written_record_count" title="Link to this definition"></a></dt>
+<dd><p>Number of outputted records.</p>
 </dd></dl>
 
 <dl class="py method">

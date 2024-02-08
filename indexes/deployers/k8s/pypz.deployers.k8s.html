@@ -137,6 +137,81 @@
 <dt class="sig sig-object py" id="pypz.deployers.k8s.KubernetesDeployer">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.deployers.k8s.</span></span><span class="sig-name descname"><span class="pre">KubernetesDeployer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">namespace</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">configuration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Configuration</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.deployers.k8s.KubernetesDeployer" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="../../core/pypz.deployers.base.html#pypz.deployers.base.Deployer" title="pypz.deployers.base.Deployer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Deployer</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.deployers.k8s.KubernetesDeployer._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pypz.deployers.k8s.KubernetesDeployer._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.deployers.k8s.KubernetesDeployer._env_var_operator_exec_mode">
+<span class="sig-name descname"><span class="pre">_env_var_operator_exec_mode</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'PYPZ_OPERATOR_EXEC_MODE'</span></em><a class="headerlink" href="#pypz.deployers.k8s.KubernetesDeployer._env_var_operator_exec_mode" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.deployers.k8s.KubernetesDeployer._env_var_operator_name">
+<span class="sig-name descname"><span class="pre">_env_var_operator_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'PYPZ_OPERATOR_INSTANCE_NAME'</span></em><a class="headerlink" href="#pypz.deployers.k8s.KubernetesDeployer._env_var_operator_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.deployers.k8s.KubernetesDeployer._generate_pod_manifest">
+<span class="sig-name descname"><span class="pre">_generate_pod_manifest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">operator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../core/pypz.core.specs.operator.html#pypz.core.specs.operator.Operator" title="pypz.core.specs.operator.Operator"><span class="pre">Operator</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">execution_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../core/pypz.executors.commons.html#pypz.executors.commons.ExecutionMode" title="pypz.executors.commons.ExecutionMode"><span class="pre">ExecutionMode</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#pypz.deployers.k8s.KubernetesDeployer._generate_pod_manifest" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.deployers.k8s.KubernetesDeployer._label_key_exec_mode">
+<span class="sig-name descname"><span class="pre">_label_key_exec_mode</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'pypz.io/exec-mode'</span></em><a class="headerlink" href="#pypz.deployers.k8s.KubernetesDeployer._label_key_exec_mode" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.deployers.k8s.KubernetesDeployer._label_key_instance_name">
+<span class="sig-name descname"><span class="pre">_label_key_instance_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'pypz.io/instance-name'</span></em><a class="headerlink" href="#pypz.deployers.k8s.KubernetesDeployer._label_key_instance_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.deployers.k8s.KubernetesDeployer._label_key_instance_type">
+<span class="sig-name descname"><span class="pre">_label_key_instance_type</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'pypz.io/instance-type'</span></em><a class="headerlink" href="#pypz.deployers.k8s.KubernetesDeployer._label_key_instance_type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.deployers.k8s.KubernetesDeployer._label_key_part_of">
+<span class="sig-name descname"><span class="pre">_label_key_part_of</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'pypz.io/part-of'</span></em><a class="headerlink" href="#pypz.deployers.k8s.KubernetesDeployer._label_key_part_of" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.deployers.k8s.KubernetesDeployer._label_value_operator">
+<span class="sig-name descname"><span class="pre">_label_value_operator</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'operator'</span></em><a class="headerlink" href="#pypz.deployers.k8s.KubernetesDeployer._label_value_operator" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.deployers.k8s.KubernetesDeployer._label_value_pipeline">
+<span class="sig-name descname"><span class="pre">_label_value_pipeline</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'pipeline'</span></em><a class="headerlink" href="#pypz.deployers.k8s.KubernetesDeployer._label_value_pipeline" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.deployers.k8s.KubernetesDeployer._pipeline_config_secret_key">
+<span class="sig-name descname"><span class="pre">_pipeline_config_secret_key</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'pipeline-config'</span></em><a class="headerlink" href="#pypz.deployers.k8s.KubernetesDeployer._pipeline_config_secret_key" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.deployers.k8s.KubernetesDeployer._retrieve_config_secret">
+<span class="sig-name descname"><span class="pre">_retrieve_config_secret</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pipeline_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">V1Secret</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.deployers.k8s.KubernetesDeployer._retrieve_config_secret" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.deployers.k8s.KubernetesDeployer._retrieve_deployed_pipeline_from_secret">
+<span class="sig-name descname"><span class="pre">_retrieve_deployed_pipeline_from_secret</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">secret</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">V1Secret</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../core/pypz.core.specs.pipeline.html#pypz.core.specs.pipeline.Pipeline" title="pypz.core.specs.pipeline.Pipeline"><span class="pre">Pipeline</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.deployers.k8s.KubernetesDeployer._retrieve_deployed_pipeline_from_secret" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.deployers.k8s.KubernetesDeployer._retrieve_operator_pod">
+<span class="sig-name descname"><span class="pre">_retrieve_operator_pod</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">operator_full_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">V1Pod</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.deployers.k8s.KubernetesDeployer._retrieve_operator_pod" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.deployers.k8s.KubernetesDeployer._retrieve_operator_pods">
+<span class="sig-name descname"><span class="pre">_retrieve_operator_pods</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pipeline_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">V1Pod</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#pypz.deployers.k8s.KubernetesDeployer._retrieve_operator_pods" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="pypz.deployers.k8s.KubernetesDeployer.deploy">
 <span class="sig-name descname"><span class="pre">deploy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pipeline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../core/pypz.core.specs.pipeline.html#pypz.core.specs.pipeline.Pipeline" title="pypz.core.specs.pipeline.Pipeline"><span class="pre">Pipeline</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">execution_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../core/pypz.executors.commons.html#pypz.executors.commons.ExecutionMode" title="pypz.executors.commons.ExecutionMode"><span class="pre">ExecutionMode</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">ExecutionMode.Standard</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_operators</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../core/pypz.core.specs.operator.html#pypz.core.specs.operator.Operator" title="pypz.core.specs.operator.Operator"><span class="pre">Operator</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wait</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.deployers.k8s.KubernetesDeployer.deploy" title="Link to this definition"></a></dt>

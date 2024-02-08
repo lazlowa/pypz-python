@@ -209,49 +209,7 @@ not have been released in this case. Since <em>pypz</em> does not know anything 
 only you do, <em>pypz</em> cannot provide an integrated feature to clean up your resources. However,
 what <em>pypz</em> can provide is an execution mode, where only resources will be deleted instead
 of running the actual business logic.</p>
-<dl class="py class">
-<dt class="sig sig-object py">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.executors.commons.</span></span><span class="sig-name descname"><span class="pre">ExecutionMode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span></dt>
-<dd><dl class="py attribute">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">ResourceCreationOnly</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ResourceCreationOnly'</span></em></dt>
-<dd><p>In this mode the state machine will execute resource creation only. Note that services
-will be started before and stopped after resource creation.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">ResourceDeletionOnly</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ResourceDeletionOnly'</span></em></dt>
-<dd><p>In this mode the state machine will execute resource deletion only. Note that services
-will be started before and stopped after resource creation.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Skip</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Skip'</span></em></dt>
-<dd><p>If this mode is set, then the executor will not be invoked. This is necessary
-e.g., in deployment cases, where we want to ignore the execution of certain operators.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Standard</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Standard'</span></em></dt>
-<dd><p>In this mode the state machine will follow its standard route.
-Note that <cite>Standard</cite> means that resources will be created and deleted up automatically. If
-you want to have a standard mode, where resources are only created, but not deleted, then use the
-WithoutResourceDeletion</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">WithoutResourceDeletion</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'WithoutResourceDeletion'</span></em></dt>
-<dd><p>In this mode the state machine will follow its standard route. 
-However the StateResourceDeletion will be skipped. This is a relevant use-case, 
-if you want to trigger centralized resource cleanup after the operations are done.</p>
-</dd></dl>
-
-</dd></dl>
-
+<p>Check <a class="reference internal" href="../indexes/core/pypz.executors.commons.html#pypz.executors.commons.ExecutionMode" title="pypz.executors.commons.ExecutionMode"><code class="xref py py-class docutils literal notranslate"><span class="pre">pypz.executors.commons.ExecutionMode</span></code></a> for more details.</p>
 </section>
 </section>
 

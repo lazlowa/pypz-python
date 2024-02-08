@@ -122,6 +122,26 @@
 <p>This interface extends the normal plugin’s lifecycle. The methods
 defined span outside the execution context, hence it can be used,
 if you need to perform some action before and after execution.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.plugin.ExtendedPlugin._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pypz.core.specs.plugin.ExtendedPlugin._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.specs.plugin.ExtendedPlugin._post_execution">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_post_execution</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.core.specs.plugin.ExtendedPlugin._post_execution" title="Link to this definition"></a></dt>
+<dd><p>This method is called after the executor and its state machine exited, but
+before the program exits. It can be used to perform finalization/shutdown
+logic that is outside the execution context.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.specs.plugin.ExtendedPlugin._pre_execution">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_pre_execution</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.core.specs.plugin.ExtendedPlugin._pre_execution" title="Link to this definition"></a></dt>
+<dd><p>This method will be called before the executor state machine starts. It
+can be used to perform initialization that is required before the execution.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -131,6 +151,17 @@ if you need to perform some action before and after execution.</p>
 <p>This plugin interface allows to implement data transfer input port for an operator.
 Operators can communicate via ports. Different technologies can be implemented
 allowing operators to talk through them.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.plugin.InputPortPlugin._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pypz.core.specs.plugin.InputPortPlugin._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.plugin.InputPortPlugin._group_mode">
+<span class="sig-name descname"><span class="pre">_group_mode</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pypz.core.specs.plugin.InputPortPlugin._group_mode" title="Link to this definition"></a></dt>
+<dd><p>If True, the InputPortPlugin shall receive all records sent to the group</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="pypz.core.specs.plugin.InputPortPlugin.can_retrieve">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">can_retrieve</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.core.specs.plugin.InputPortPlugin.can_retrieve" title="Link to this definition"></a></dt>
@@ -176,6 +207,11 @@ read offset based on the technology used.</p>
 <p>This addon interface allows to implement different logging technologies
 to be used during the execution. Notice that the logger methods are
 coming from the ContextLogger class.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.plugin.LoggerPlugin._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pypz.core.specs.plugin.LoggerPlugin._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -185,6 +221,11 @@ coming from the ContextLogger class.</p>
 <p>This plugin interface allows to implement data transfer output port for an operator.
 Operators can communicate via ports. Different technologies can be implemented
 allowing operators to talk through them.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.plugin.OutputPortPlugin._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pypz.core.specs.plugin.OutputPortPlugin._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="pypz.core.specs.plugin.OutputPortPlugin.send">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">send</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="headerlink" href="#pypz.core.specs.plugin.OutputPortPlugin.send" title="Link to this definition"></a></dt>
@@ -210,6 +251,19 @@ The implementation shall specify the type of the data and the return value.</p>
 from other interfaces like the Operator. It is necessary to avoid the
 case, where an Operator could be nested into other Operators. All
 plugin interfaces shall extend this one.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.plugin.Plugin.__logger">
+<span class="sig-name descname"><span class="pre">__logger</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.core.commons.loggers.html#pypz.core.commons.loggers.ContextLogger" title="pypz.core.commons.loggers.ContextLogger"><span class="pre">ContextLogger</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.core.specs.plugin.Plugin.__logger" title="Link to this definition"></a></dt>
+<dd><p>Context logger, which is the Operator’s logger if Operator context existing, otherwise
+it defaults back to the DefaultContextLogger. Note that Plugin without Operator
+context makes only sense in test cases, hence the default log level is set to DEBUG.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.plugin.Plugin._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pypz.core.specs.plugin.Plugin._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="pypz.core.specs.plugin.Plugin.create_from_dto">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_from_dto</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">instance_dto</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pypz.core.specs.dtos.html#pypz.core.specs.dtos.PluginInstanceDTO" title="pypz.core.specs.dtos.PluginInstanceDTO"><span class="pre">PluginInstanceDTO</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pypz.core.specs.plugin.Plugin" title="pypz.core.specs.plugin.Plugin"><span class="pre">Plugin</span></a></span></span><a class="headerlink" href="#pypz.core.specs.plugin.Plugin.create_from_dto" title="Link to this definition"></a></dt>
@@ -295,6 +349,48 @@ a json model specified either as string or as dict.</p>
 <dd><p>Bases: <a class="reference internal" href="#pypz.core.specs.plugin.Plugin" title="pypz.core.specs.plugin.Plugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">Plugin</span></code></a>, <a class="reference internal" href="pypz.core.specs.instance.html#pypz.core.specs.instance.RegisteredInterface" title="pypz.core.specs.instance.RegisteredInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">RegisteredInterface</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
 <p>This plugin interface allows to implement common methods for
 port both input and output port plugins.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.plugin.PortPlugin.__connected_ports">
+<span class="sig-name descname"><span class="pre">__connected_ports</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pypz.core.specs.plugin.PortPlugin" title="pypz.core.specs.plugin.PortPlugin"><span class="pre">PortPlugin</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.core.specs.plugin.PortPlugin.__connected_ports" title="Link to this definition"></a></dt>
+<dd><p>This member holds the information about the connected ports, where
+the key is the replication group names and the value is a list of
+connected ports.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.plugin.PortPlugin.__schema">
+<span class="sig-name descname"><span class="pre">__schema</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#pypz.core.specs.plugin.PortPlugin.__schema" title="Link to this definition"></a></dt>
+<dd><p>The port’s schema, which is used to identify the format of the data
+sent through the port.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.plugin.PortPlugin._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pypz.core.specs.plugin.PortPlugin._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.specs.plugin.PortPlugin._on_port_close">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_on_port_close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.core.specs.plugin.PortPlugin._on_port_close" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic to shut down the i/o port functionalities.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True succeeded, False if more iteration required (to not block the execution)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.specs.plugin.PortPlugin._on_port_open">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_on_port_open</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.core.specs.plugin.PortPlugin._on_port_open" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic to initialize the i/o port functionalities.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True succeeded, False if more iteration required (to not block the execution)</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="pypz.core.specs.plugin.PortPlugin.connect">
 <span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other_port</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pypz.core.specs.plugin.PortPlugin" title="pypz.core.specs.plugin.PortPlugin"><span class="pre">PortPlugin</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.core.specs.plugin.PortPlugin.connect" title="Link to this definition"></a></dt>
@@ -324,6 +420,34 @@ port both input and output port plugins.</p>
 <p>This plugin interface allows to implement resource management related
 functionalities. The respective methods will be called at specific
 times during the execution. Check <a class="reference internal" href="../../core/executor.html#executor"><span class="std std-ref">Executor</span></a> for more information.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.plugin.ResourceHandlerPlugin._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pypz.core.specs.plugin.ResourceHandlerPlugin._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.specs.plugin.ResourceHandlerPlugin._on_resource_creation">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_on_resource_creation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.core.specs.plugin.ResourceHandlerPlugin._on_resource_creation" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic to create an arbitrary resource
+of any type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True succeeded, False if more iteration required (to not block the execution)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.specs.plugin.ResourceHandlerPlugin._on_resource_deletion">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_on_resource_deletion</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.core.specs.plugin.ResourceHandlerPlugin._on_resource_deletion" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic to destroy the created resource.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True succeeded, False if more iteration required (to not block the execution)</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -336,6 +460,122 @@ can run in the background. Examples:
 - mounting service, which mounts and unmounts a remote location
 - listener service, which starts a background thread to listen for something
 - etc.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.plugin.ServicePlugin.__context">
+<span class="sig-name descname"><span class="pre">__context</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.core.specs.instance.html#pypz.core.specs.instance.Instance" title="pypz.core.specs.instance.Instance"><span class="pre">Instance</span></a></em><a class="headerlink" href="#pypz.core.specs.plugin.ServicePlugin.__context" title="Link to this definition"></a></dt>
+<dd><p>Reference to the context aka parent object. Derived automatically
+in the override implementation of __setattr__.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.plugin.ServicePlugin.__depends_on">
+<span class="sig-name descname"><span class="pre">__depends_on</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">set</span></em><a class="headerlink" href="#pypz.core.specs.plugin.ServicePlugin.__depends_on" title="Link to this definition"></a></dt>
+<dd><p>Set of other instances that is this instance depending on. Note however that
+the type of the dependencies are checked dynamically in runtime, since dependencies
+can only be defined on the same type of instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.plugin.ServicePlugin.__expected_parameters">
+<span class="sig-name descname"><span class="pre">__expected_parameters</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="pypz.core.commons.parameters.html#pypz.core.commons.parameters.ExpectedParameter" title="pypz.core.commons.parameters.ExpectedParameter"><span class="pre">ExpectedParameter</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.core.specs.plugin.ServicePlugin.__expected_parameters" title="Link to this definition"></a></dt>
+<dd><p>Map of expected parameters defined as descriptor of the class. Key is the name of the parameter,
+value is the parameter descriptor. Used to check, if an expected (described) parameter value
+shall be set upon instance parameter setting.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.plugin.ServicePlugin.__full_name">
+<span class="sig-name descname"><span class="pre">__full_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pypz.core.specs.plugin.ServicePlugin.__full_name" title="Link to this definition"></a></dt>
+<dd><p>Full name of the instance which uniquely identifies it up to its topmost context.
+For example, if an instance A has a parent context B, which has a parent context C,
+then the full name of A is ‘C.B.A’. This value is calculated and the result is
+stored after the first calculation to avoid recalculation every time.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.plugin.ServicePlugin.__logger">
+<span class="sig-name descname"><span class="pre">__logger</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.core.commons.loggers.html#pypz.core.commons.loggers.ContextLogger" title="pypz.core.commons.loggers.ContextLogger"><span class="pre">ContextLogger</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.core.specs.plugin.ServicePlugin.__logger" title="Link to this definition"></a></dt>
+<dd><p>Context logger, which is the Operator’s logger if Operator context existing, otherwise
+it defaults back to the DefaultContextLogger. Note that Plugin without Operator
+context makes only sense in test cases, hence the default log level is set to DEBUG.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.plugin.ServicePlugin.__nested_instance_type">
+<span class="sig-name descname"><span class="pre">__nested_instance_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">NestedInstanceType</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.core.specs.plugin.ServicePlugin.__nested_instance_type" title="Link to this definition"></a></dt>
+<dd><p>Stores the specified type of the nested instances. This is required to
+be able to discover those instances</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.plugin.ServicePlugin.__nested_instances">
+<span class="sig-name descname"><span class="pre">__nested_instances</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">NestedInstanceType</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.core.specs.plugin.ServicePlugin.__nested_instances" title="Link to this definition"></a></dt>
+<dd><p>This dictionary holds all the instances that are nested in the context
+of this instance object</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.plugin.ServicePlugin.__parameters">
+<span class="sig-name descname"><span class="pre">__parameters</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.core.specs.utils.html#pypz.core.specs.utils.InstanceParameters" title="pypz.core.specs.utils.InstanceParameters"><span class="pre">InstanceParameters</span></a></em><a class="headerlink" href="#pypz.core.specs.plugin.ServicePlugin.__parameters" title="Link to this definition"></a></dt>
+<dd><p>The interpreted instance parameters i.e., cascading and templates are interpreted</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.plugin.ServicePlugin.__simple_name">
+<span class="sig-name descname"><span class="pre">__simple_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pypz.core.specs.plugin.ServicePlugin.__simple_name" title="Link to this definition"></a></dt>
+<dd><p>Name of the instance, which is represented by the object created from the 
+implementation class. If not provided and there is a parent context, then
+the parent context will use the name of the variable.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.plugin.ServicePlugin.__spec_classes">
+<span class="sig-name descname"><span class="pre">__spec_classes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">set</span></em><a class="headerlink" href="#pypz.core.specs.plugin.ServicePlugin.__spec_classes" title="Link to this definition"></a></dt>
+<dd><p>Set of specs classes that are in the class hierarchy i.e., which specs classes are
+contributing to the implementation of this class</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.plugin.ServicePlugin.__spec_name">
+<span class="sig-name descname"><span class="pre">__spec_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pypz.core.specs.plugin.ServicePlugin.__spec_name" title="Link to this definition"></a></dt>
+<dd><p>The name of the spec constructed of module and qualified class name. Notice that we separate
+the module name and the class name so that we can identify them at loading by name.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.specs.plugin.ServicePlugin._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pypz.core.specs.plugin.ServicePlugin._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.specs.plugin.ServicePlugin._on_service_shutdown">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_on_service_shutdown</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.core.specs.plugin.ServicePlugin._on_service_shutdown" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic of stopping the service and clean up the
+residuals. E.g., a mounting service could unmount or a background thread could
+be stopped.
+VERY IMPORTANT NOTE - you must always check, if your service start method has
+been called, because it can be that it is never called, if there was an exception
+raised from other entity. However, the shutdown will be called anyway.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if logic finished, False if it needs more iteration</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.specs.plugin.ServicePlugin._on_service_start">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_on_service_start</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.core.specs.plugin.ServicePlugin._on_service_start" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the starting logic of the service. You can consider
+services as example like mounting service, which only mounts a folder to the
+system or a background service, which starts a background thread.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if logic finished, False if it needs more iteration</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </section>

@@ -5,3 +5,4 @@ pypz.abstracts.misc module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:

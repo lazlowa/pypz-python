@@ -120,6 +120,147 @@
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.plugins.kafka_io.ports.</span></span><span class="sig-name descname"><span class="pre">KafkaChannelInputPort</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.plugins.kafka_io.ports.KafkaChannelInputPort" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="../../core/pypz.abstracts.channel_ports.html#pypz.abstracts.channel_ports.ChannelInputPort" title="pypz.abstracts.channel_ports.ChannelInputPort"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelInputPort</span></code></a></p>
 <dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.kafka_io.ports.KafkaChannelInputPort.__connected_ports">
+<span class="sig-name descname"><span class="pre">__connected_ports</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.PortPlugin" title="pypz.core.specs.plugin.PortPlugin"><span class="pre">PortPlugin</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.plugins.kafka_io.ports.KafkaChannelInputPort.__connected_ports" title="Link to this definition"></a></dt>
+<dd><p>This member holds the information about the connected ports, where
+the key is the replication group names and the value is a list of
+connected ports.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.kafka_io.ports.KafkaChannelInputPort.__context">
+<span class="sig-name descname"><span class="pre">__context</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../../core/pypz.core.specs.instance.html#pypz.core.specs.instance.Instance" title="pypz.core.specs.instance.Instance"><span class="pre">Instance</span></a></em><a class="headerlink" href="#pypz.plugins.kafka_io.ports.KafkaChannelInputPort.__context" title="Link to this definition"></a></dt>
+<dd><p>Reference to the context aka parent object. Derived automatically
+in the override implementation of __setattr__.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.kafka_io.ports.KafkaChannelInputPort.__depends_on">
+<span class="sig-name descname"><span class="pre">__depends_on</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">set</span></em><a class="headerlink" href="#pypz.plugins.kafka_io.ports.KafkaChannelInputPort.__depends_on" title="Link to this definition"></a></dt>
+<dd><p>Set of other instances that is this instance depending on. Note however that
+the type of the dependencies are checked dynamically in runtime, since dependencies
+can only be defined on the same type of instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.kafka_io.ports.KafkaChannelInputPort.__expected_parameters">
+<span class="sig-name descname"><span class="pre">__expected_parameters</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../../core/pypz.core.commons.parameters.html#pypz.core.commons.parameters.ExpectedParameter" title="pypz.core.commons.parameters.ExpectedParameter"><span class="pre">ExpectedParameter</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.plugins.kafka_io.ports.KafkaChannelInputPort.__expected_parameters" title="Link to this definition"></a></dt>
+<dd><p>Map of expected parameters defined as descriptor of the class. Key is the name of the parameter,
+value is the parameter descriptor. Used to check, if an expected (described) parameter value
+shall be set upon instance parameter setting.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.kafka_io.ports.KafkaChannelInputPort.__full_name">
+<span class="sig-name descname"><span class="pre">__full_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pypz.plugins.kafka_io.ports.KafkaChannelInputPort.__full_name" title="Link to this definition"></a></dt>
+<dd><p>Full name of the instance which uniquely identifies it up to its topmost context.
+For example, if an instance A has a parent context B, which has a parent context C,
+then the full name of A is ‘C.B.A’. This value is calculated and the result is
+stored after the first calculation to avoid recalculation every time.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.kafka_io.ports.KafkaChannelInputPort.__logger">
+<span class="sig-name descname"><span class="pre">__logger</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../../core/pypz.core.commons.loggers.html#pypz.core.commons.loggers.ContextLogger" title="pypz.core.commons.loggers.ContextLogger"><span class="pre">ContextLogger</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.plugins.kafka_io.ports.KafkaChannelInputPort.__logger" title="Link to this definition"></a></dt>
+<dd><p>Context logger, which is the Operator’s logger if Operator context existing, otherwise
+it defaults back to the DefaultContextLogger. Note that Plugin without Operator
+context makes only sense in test cases, hence the default log level is set to DEBUG.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.kafka_io.ports.KafkaChannelInputPort.__nested_instance_type">
+<span class="sig-name descname"><span class="pre">__nested_instance_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">NestedInstanceType</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.plugins.kafka_io.ports.KafkaChannelInputPort.__nested_instance_type" title="Link to this definition"></a></dt>
+<dd><p>Stores the specified type of the nested instances. This is required to
+be able to discover those instances</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.kafka_io.ports.KafkaChannelInputPort.__nested_instances">
+<span class="sig-name descname"><span class="pre">__nested_instances</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">NestedInstanceType</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.plugins.kafka_io.ports.KafkaChannelInputPort.__nested_instances" title="Link to this definition"></a></dt>
+<dd><p>This dictionary holds all the instances that are nested in the context
+of this instance object</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.kafka_io.ports.KafkaChannelInputPort.__parameters">
+<span class="sig-name descname"><span class="pre">__parameters</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../../core/pypz.core.specs.utils.html#pypz.core.specs.utils.InstanceParameters" title="pypz.core.specs.utils.InstanceParameters"><span class="pre">InstanceParameters</span></a></em><a class="headerlink" href="#pypz.plugins.kafka_io.ports.KafkaChannelInputPort.__parameters" title="Link to this definition"></a></dt>
+<dd><p>The interpreted instance parameters i.e., cascading and templates are interpreted</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.kafka_io.ports.KafkaChannelInputPort.__schema">
+<span class="sig-name descname"><span class="pre">__schema</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#pypz.plugins.kafka_io.ports.KafkaChannelInputPort.__schema" title="Link to this definition"></a></dt>
+<dd><p>The port’s schema, which is used to identify the format of the data
+sent through the port.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.kafka_io.ports.KafkaChannelInputPort.__simple_name">
+<span class="sig-name descname"><span class="pre">__simple_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pypz.plugins.kafka_io.ports.KafkaChannelInputPort.__simple_name" title="Link to this definition"></a></dt>
+<dd><p>Name of the instance, which is represented by the object created from the 
+implementation class. If not provided and there is a parent context, then
+the parent context will use the name of the variable.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.kafka_io.ports.KafkaChannelInputPort.__spec_classes">
+<span class="sig-name descname"><span class="pre">__spec_classes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">set</span></em><a class="headerlink" href="#pypz.plugins.kafka_io.ports.KafkaChannelInputPort.__spec_classes" title="Link to this definition"></a></dt>
+<dd><p>Set of specs classes that are in the class hierarchy i.e., which specs classes are
+contributing to the implementation of this class</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.kafka_io.ports.KafkaChannelInputPort.__spec_name">
+<span class="sig-name descname"><span class="pre">__spec_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pypz.plugins.kafka_io.ports.KafkaChannelInputPort.__spec_name" title="Link to this definition"></a></dt>
+<dd><p>The name of the spec constructed of module and qualified class name. Notice that we separate
+the module name and the class name so that we can identify them at loading by name.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.kafka_io.ports.KafkaChannelInputPort._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pypz.plugins.kafka_io.ports.KafkaChannelInputPort._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.kafka_io.ports.KafkaChannelInputPort._channel_reader">
+<span class="sig-name descname"><span class="pre">_channel_reader</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../../core/pypz.core.channels.io.html#pypz.core.channels.io.ChannelReader" title="pypz.core.channels.io.ChannelReader"><span class="pre">ChannelReader</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.plugins.kafka_io.ports.KafkaChannelInputPort._channel_reader" title="Link to this definition"></a></dt>
+<dd><p>The only channel reader maintained by this plugin.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.kafka_io.ports.KafkaChannelInputPort._error_occurred">
+<span class="sig-name descname"><span class="pre">_error_occurred</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pypz.plugins.kafka_io.ports.KafkaChannelInputPort._error_occurred" title="Link to this definition"></a></dt>
+<dd><p>Helper flag to register, if error occurred during execution. This flag will
+be used to prevent resource deletion on error.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.kafka_io.ports.KafkaChannelInputPort._expected_output_count">
+<span class="sig-name descname"><span class="pre">_expected_output_count</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.plugins.kafka_io.ports.KafkaChannelInputPort._expected_output_count" title="Link to this definition"></a></dt>
+<dd><p>During _on_port_open the expected number of connected outputs will be calculated.
+It then will be used in cases, where we need to wait for all outputs.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.kafka_io.ports.KafkaChannelInputPort._group_mode">
+<span class="sig-name descname"><span class="pre">_group_mode</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pypz.plugins.kafka_io.ports.KafkaChannelInputPort._group_mode" title="Link to this definition"></a></dt>
+<dd><p>If True, the InputPortPlugin shall receive all records sent to the group</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.kafka_io.ports.KafkaChannelInputPort._interrupted">
+<span class="sig-name descname"><span class="pre">_interrupted</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pypz.plugins.kafka_io.ports.KafkaChannelInputPort._interrupted" title="Link to this definition"></a></dt>
+<dd><p>Helper flag to register, if the execution has been interrupted.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.kafka_io.ports.KafkaChannelInputPort._need_to_check_connections_opened">
+<span class="sig-name descname"><span class="pre">_need_to_check_connections_opened</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pypz.plugins.kafka_io.ports.KafkaChannelInputPort._need_to_check_connections_opened" title="Link to this definition"></a></dt>
+<dd><p>Helper flag to signalize, if the channel shall be opened. This is necessary
+to maintain state in _on_port_open().</p>
+</dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="pypz.plugins.kafka_io.ports.KafkaChannelInputPort.channel_reader_type">
 <span class="sig-name descname"><span class="pre">channel_reader_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../core/pypz.core.channels.io.html#pypz.core.channels.io.ChannelReader" title="pypz.core.channels.io.ChannelReader"><span class="pre">ChannelReader</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.plugins.kafka_io.ports.KafkaChannelInputPort.channel_reader_type" title="Link to this definition"></a></dt>
 <dd><p>Type of the channel reader to be created by this plugin.</p>
@@ -131,6 +272,142 @@
 <dt class="sig sig-object py" id="pypz.plugins.kafka_io.ports.KafkaChannelOutputPort">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.plugins.kafka_io.ports.</span></span><span class="sig-name descname"><span class="pre">KafkaChannelOutputPort</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.plugins.kafka_io.ports.KafkaChannelOutputPort" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="../../core/pypz.abstracts.channel_ports.html#pypz.abstracts.channel_ports.ChannelOutputPort" title="pypz.abstracts.channel_ports.ChannelOutputPort"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelOutputPort</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.kafka_io.ports.KafkaChannelOutputPort.__connected_ports">
+<span class="sig-name descname"><span class="pre">__connected_ports</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.PortPlugin" title="pypz.core.specs.plugin.PortPlugin"><span class="pre">PortPlugin</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.plugins.kafka_io.ports.KafkaChannelOutputPort.__connected_ports" title="Link to this definition"></a></dt>
+<dd><p>This member holds the information about the connected ports, where
+the key is the replication group names and the value is a list of
+connected ports.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.kafka_io.ports.KafkaChannelOutputPort.__context">
+<span class="sig-name descname"><span class="pre">__context</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../../core/pypz.core.specs.instance.html#pypz.core.specs.instance.Instance" title="pypz.core.specs.instance.Instance"><span class="pre">Instance</span></a></em><a class="headerlink" href="#pypz.plugins.kafka_io.ports.KafkaChannelOutputPort.__context" title="Link to this definition"></a></dt>
+<dd><p>Reference to the context aka parent object. Derived automatically
+in the override implementation of __setattr__.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.kafka_io.ports.KafkaChannelOutputPort.__depends_on">
+<span class="sig-name descname"><span class="pre">__depends_on</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">set</span></em><a class="headerlink" href="#pypz.plugins.kafka_io.ports.KafkaChannelOutputPort.__depends_on" title="Link to this definition"></a></dt>
+<dd><p>Set of other instances that is this instance depending on. Note however that
+the type of the dependencies are checked dynamically in runtime, since dependencies
+can only be defined on the same type of instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.kafka_io.ports.KafkaChannelOutputPort.__expected_parameters">
+<span class="sig-name descname"><span class="pre">__expected_parameters</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../../core/pypz.core.commons.parameters.html#pypz.core.commons.parameters.ExpectedParameter" title="pypz.core.commons.parameters.ExpectedParameter"><span class="pre">ExpectedParameter</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.plugins.kafka_io.ports.KafkaChannelOutputPort.__expected_parameters" title="Link to this definition"></a></dt>
+<dd><p>Map of expected parameters defined as descriptor of the class. Key is the name of the parameter,
+value is the parameter descriptor. Used to check, if an expected (described) parameter value
+shall be set upon instance parameter setting.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.kafka_io.ports.KafkaChannelOutputPort.__full_name">
+<span class="sig-name descname"><span class="pre">__full_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pypz.plugins.kafka_io.ports.KafkaChannelOutputPort.__full_name" title="Link to this definition"></a></dt>
+<dd><p>Full name of the instance which uniquely identifies it up to its topmost context.
+For example, if an instance A has a parent context B, which has a parent context C,
+then the full name of A is ‘C.B.A’. This value is calculated and the result is
+stored after the first calculation to avoid recalculation every time.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.kafka_io.ports.KafkaChannelOutputPort.__logger">
+<span class="sig-name descname"><span class="pre">__logger</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../../core/pypz.core.commons.loggers.html#pypz.core.commons.loggers.ContextLogger" title="pypz.core.commons.loggers.ContextLogger"><span class="pre">ContextLogger</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.plugins.kafka_io.ports.KafkaChannelOutputPort.__logger" title="Link to this definition"></a></dt>
+<dd><p>Context logger, which is the Operator’s logger if Operator context existing, otherwise
+it defaults back to the DefaultContextLogger. Note that Plugin without Operator
+context makes only sense in test cases, hence the default log level is set to DEBUG.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.kafka_io.ports.KafkaChannelOutputPort.__nested_instance_type">
+<span class="sig-name descname"><span class="pre">__nested_instance_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">NestedInstanceType</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.plugins.kafka_io.ports.KafkaChannelOutputPort.__nested_instance_type" title="Link to this definition"></a></dt>
+<dd><p>Stores the specified type of the nested instances. This is required to
+be able to discover those instances</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.kafka_io.ports.KafkaChannelOutputPort.__nested_instances">
+<span class="sig-name descname"><span class="pre">__nested_instances</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">NestedInstanceType</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.plugins.kafka_io.ports.KafkaChannelOutputPort.__nested_instances" title="Link to this definition"></a></dt>
+<dd><p>This dictionary holds all the instances that are nested in the context
+of this instance object</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.kafka_io.ports.KafkaChannelOutputPort.__parameters">
+<span class="sig-name descname"><span class="pre">__parameters</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../../core/pypz.core.specs.utils.html#pypz.core.specs.utils.InstanceParameters" title="pypz.core.specs.utils.InstanceParameters"><span class="pre">InstanceParameters</span></a></em><a class="headerlink" href="#pypz.plugins.kafka_io.ports.KafkaChannelOutputPort.__parameters" title="Link to this definition"></a></dt>
+<dd><p>The interpreted instance parameters i.e., cascading and templates are interpreted</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.kafka_io.ports.KafkaChannelOutputPort.__schema">
+<span class="sig-name descname"><span class="pre">__schema</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#pypz.plugins.kafka_io.ports.KafkaChannelOutputPort.__schema" title="Link to this definition"></a></dt>
+<dd><p>The port’s schema, which is used to identify the format of the data
+sent through the port.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.kafka_io.ports.KafkaChannelOutputPort.__simple_name">
+<span class="sig-name descname"><span class="pre">__simple_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pypz.plugins.kafka_io.ports.KafkaChannelOutputPort.__simple_name" title="Link to this definition"></a></dt>
+<dd><p>Name of the instance, which is represented by the object created from the 
+implementation class. If not provided and there is a parent context, then
+the parent context will use the name of the variable.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.kafka_io.ports.KafkaChannelOutputPort.__spec_classes">
+<span class="sig-name descname"><span class="pre">__spec_classes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">set</span></em><a class="headerlink" href="#pypz.plugins.kafka_io.ports.KafkaChannelOutputPort.__spec_classes" title="Link to this definition"></a></dt>
+<dd><p>Set of specs classes that are in the class hierarchy i.e., which specs classes are
+contributing to the implementation of this class</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.kafka_io.ports.KafkaChannelOutputPort.__spec_name">
+<span class="sig-name descname"><span class="pre">__spec_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pypz.plugins.kafka_io.ports.KafkaChannelOutputPort.__spec_name" title="Link to this definition"></a></dt>
+<dd><p>The name of the spec constructed of module and qualified class name. Notice that we separate
+the module name and the class name so that we can identify them at loading by name.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.kafka_io.ports.KafkaChannelOutputPort._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pypz.plugins.kafka_io.ports.KafkaChannelOutputPort._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.kafka_io.ports.KafkaChannelOutputPort._channel_writers">
+<span class="sig-name descname"><span class="pre">_channel_writers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../core/pypz.core.channels.io.html#pypz.core.channels.io.ChannelWriter" title="pypz.core.channels.io.ChannelWriter"><span class="pre">ChannelWriter</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.plugins.kafka_io.ports.KafkaChannelOutputPort._channel_writers" title="Link to this definition"></a></dt>
+<dd><p>The channel writers to be maintained by this plugin. Note that a channel
+writer will be created for each connection from this output port plugin.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.kafka_io.ports.KafkaChannelOutputPort._error_occurred">
+<span class="sig-name descname"><span class="pre">_error_occurred</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pypz.plugins.kafka_io.ports.KafkaChannelOutputPort._error_occurred" title="Link to this definition"></a></dt>
+<dd><p>Helper flag to register, if error occurred during execution. This flag will
+be used to prevent resource deletion on error.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.kafka_io.ports.KafkaChannelOutputPort._interrupted">
+<span class="sig-name descname"><span class="pre">_interrupted</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pypz.plugins.kafka_io.ports.KafkaChannelOutputPort._interrupted" title="Link to this definition"></a></dt>
+<dd><p>Helper flag to register, if the execution has been interrupted.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.kafka_io.ports.KafkaChannelOutputPort._port_close_errors">
+<span class="sig-name descname"><span class="pre">_port_close_errors</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../core/pypz.core.channels.io.html#pypz.core.channels.io.ChannelWriter" title="pypz.core.channels.io.ChannelWriter"><span class="pre">ChannelWriter</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.plugins.kafka_io.ports.KafkaChannelOutputPort._port_close_errors" title="Link to this definition"></a></dt>
+<dd><p>Set to store the channels that had errors on port closure. It is necessary
+to be able not to reschedule those channels in re-execution of the state.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.kafka_io.ports.KafkaChannelOutputPort._resource_deletion_errors">
+<span class="sig-name descname"><span class="pre">_resource_deletion_errors</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../core/pypz.core.channels.io.html#pypz.core.channels.io.ChannelWriter" title="pypz.core.channels.io.ChannelWriter"><span class="pre">ChannelWriter</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.plugins.kafka_io.ports.KafkaChannelOutputPort._resource_deletion_errors" title="Link to this definition"></a></dt>
+<dd><p>Set to store the channels that had errors on resource deletion. It is necessary
+to be able not to reschedule those channels in re-execution of the state.</p>
+</dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pypz.plugins.kafka_io.ports.KafkaChannelOutputPort.channel_writer_type">
 <span class="sig-name descname"><span class="pre">channel_writer_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../core/pypz.core.channels.io.html#pypz.core.channels.io.ChannelWriter" title="pypz.core.channels.io.ChannelWriter"><span class="pre">ChannelWriter</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.plugins.kafka_io.ports.KafkaChannelOutputPort.channel_writer_type" title="Link to this definition"></a></dt>

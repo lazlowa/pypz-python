@@ -275,6 +275,136 @@ Usage:</p>
 <span class="sig-name descname"><span class="pre">StringTypeName</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'String'</span></em><a class="headerlink" href="#pypz.core.commons.parameters.ParameterSchemaBuilder.StringTypeName" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
+<dl class="py class">
+<dt class="sig sig-object py" id="pypz.core.commons.parameters.ParameterSchemaBuilder._ParameterClassifierBuilder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_ParameterClassifierBuilder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameter_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameter_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_builder</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.commons.parameters.ParameterSchemaBuilder._ParameterClassifierBuilder" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.commons.parameters.ParameterSchemaBuilder._ParameterClassifierBuilder.optional">
+<span class="sig-name descname"><span class="pre">optional</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.commons.parameters.ParameterSchemaBuilder._ParameterClassifierBuilder.optional" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.commons.parameters.ParameterSchemaBuilder._ParameterClassifierBuilder.required">
+<span class="sig-name descname"><span class="pre">required</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.commons.parameters.ParameterSchemaBuilder._ParameterClassifierBuilder.required" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pypz.core.commons.parameters.ParameterSchemaBuilder._TypeBuilder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_TypeBuilder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameter_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_builder</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.commons.parameters.ParameterSchemaBuilder._TypeBuilder" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.commons.parameters.ParameterSchemaBuilder._TypeBuilder.as_boolean">
+<span class="sig-name descname"><span class="pre">as_boolean</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.commons.parameters.ParameterSchemaBuilder._TypeBuilder.as_boolean" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.commons.parameters.ParameterSchemaBuilder._TypeBuilder.as_byte">
+<span class="sig-name descname"><span class="pre">as_byte</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.commons.parameters.ParameterSchemaBuilder._TypeBuilder.as_byte" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.commons.parameters.ParameterSchemaBuilder._TypeBuilder.as_custom_type">
+<span class="sig-name descname"><span class="pre">as_custom_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">customType</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.commons.parameters.ParameterSchemaBuilder._TypeBuilder.as_custom_type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.commons.parameters.ParameterSchemaBuilder._TypeBuilder.as_enum">
+<span class="sig-name descname"><span class="pre">as_enum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">enum</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.commons.parameters.ParameterSchemaBuilder._TypeBuilder.as_enum" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.commons.parameters.ParameterSchemaBuilder._TypeBuilder.as_enum_from_list">
+<span class="sig-name descname"><span class="pre">as_enum_from_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">list_as_enum</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.commons.parameters.ParameterSchemaBuilder._TypeBuilder.as_enum_from_list" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.commons.parameters.ParameterSchemaBuilder._TypeBuilder.as_float">
+<span class="sig-name descname"><span class="pre">as_float</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.commons.parameters.ParameterSchemaBuilder._TypeBuilder.as_float" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.commons.parameters.ParameterSchemaBuilder._TypeBuilder.as_int">
+<span class="sig-name descname"><span class="pre">as_int</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.commons.parameters.ParameterSchemaBuilder._TypeBuilder.as_int" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.commons.parameters.ParameterSchemaBuilder._TypeBuilder.as_list">
+<span class="sig-name descname"><span class="pre">as_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.commons.parameters.ParameterSchemaBuilder._TypeBuilder.as_list" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.commons.parameters.ParameterSchemaBuilder._TypeBuilder.as_list_of">
+<span class="sig-name descname"><span class="pre">as_list_of</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">list_item_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.commons.parameters.ParameterSchemaBuilder._TypeBuilder.as_list_of" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.commons.parameters.ParameterSchemaBuilder._TypeBuilder.as_map">
+<span class="sig-name descname"><span class="pre">as_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">map_param</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.commons.parameters.ParameterSchemaBuilder._TypeBuilder.as_map" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.commons.parameters.ParameterSchemaBuilder._TypeBuilder.as_map_of">
+<span class="sig-name descname"><span class="pre">as_map_of</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.commons.parameters.ParameterSchemaBuilder._TypeBuilder.as_map_of" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.commons.parameters.ParameterSchemaBuilder._TypeBuilder.as_object">
+<span class="sig-name descname"><span class="pre">as_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.commons.parameters.ParameterSchemaBuilder._TypeBuilder.as_object" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.commons.parameters.ParameterSchemaBuilder._TypeBuilder.as_set">
+<span class="sig-name descname"><span class="pre">as_set</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.commons.parameters.ParameterSchemaBuilder._TypeBuilder.as_set" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.commons.parameters.ParameterSchemaBuilder._TypeBuilder.as_set_of">
+<span class="sig-name descname"><span class="pre">as_set_of</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">set_item_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.commons.parameters.ParameterSchemaBuilder._TypeBuilder.as_set_of" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.commons.parameters.ParameterSchemaBuilder._TypeBuilder.as_string">
+<span class="sig-name descname"><span class="pre">as_string</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.commons.parameters.ParameterSchemaBuilder._TypeBuilder.as_string" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.commons.parameters.ParameterSchemaBuilder._TypeBuilder.as_type">
+<span class="sig-name descname"><span class="pre">as_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param_type</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">generic_parameters</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.commons.parameters.ParameterSchemaBuilder._TypeBuilder.as_type" title="Link to this definition"></a></dt>
+<dd><p>Converts the provide type to a unified string and forwards it to the next
+builder phase. If the type is instance of a generic, then it calls itself
+recursively to extract the type and generic parameter information. If the
+type is an instance, then its str value will be provided as custom type.
+If the type is class type, then it will be checked, whether it is an Enum.
+If not, then generic parameters will be attempted to be extracted. Then
+the actual type will be converted to string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>param_type</strong> – type to be converted</p></li>
+<li><p><strong>generic_parameters</strong> – optional generic parameters</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>next builder phase</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.commons.parameters.ParameterSchemaBuilder._name_to_type">
+<span class="sig-name descname"><span class="pre">_name_to_type</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Boolean':</span> <span class="pre">&lt;class</span> <span class="pre">'bool'&gt;,</span> <span class="pre">'Byte':</span> <span class="pre">&lt;class</span> <span class="pre">'bytes'&gt;,</span> <span class="pre">'Double':</span> <span class="pre">&lt;class</span> <span class="pre">'float'&gt;,</span> <span class="pre">'Float':</span> <span class="pre">&lt;class</span> <span class="pre">'float'&gt;,</span> <span class="pre">'Integer':</span> <span class="pre">&lt;class</span> <span class="pre">'int'&gt;,</span> <span class="pre">'List':</span> <span class="pre">&lt;class</span> <span class="pre">'list'&gt;,</span> <span class="pre">'Long':</span> <span class="pre">&lt;class</span> <span class="pre">'int'&gt;,</span> <span class="pre">'Map':</span> <span class="pre">&lt;class</span> <span class="pre">'dict'&gt;,</span> <span class="pre">'Object':</span> <span class="pre">&lt;class</span> <span class="pre">'object'&gt;,</span> <span class="pre">'Set':</span> <span class="pre">&lt;class</span> <span class="pre">'set'&gt;,</span> <span class="pre">'Short':</span> <span class="pre">&lt;class</span> <span class="pre">'int'&gt;,</span> <span class="pre">'String':</span> <span class="pre">&lt;class</span> <span class="pre">'str'&gt;}</span></em><a class="headerlink" href="#pypz.core.commons.parameters.ParameterSchemaBuilder._name_to_type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.commons.parameters.ParameterSchemaBuilder._type_to_name">
+<span class="sig-name descname"><span class="pre">_type_to_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{&lt;class</span> <span class="pre">'bool'&gt;:</span> <span class="pre">'Boolean',</span> <span class="pre">&lt;class</span> <span class="pre">'bytes'&gt;:</span> <span class="pre">'Byte',</span> <span class="pre">&lt;class</span> <span class="pre">'dict'&gt;:</span> <span class="pre">'Map',</span> <span class="pre">&lt;class</span> <span class="pre">'float'&gt;:</span> <span class="pre">'Float',</span> <span class="pre">&lt;class</span> <span class="pre">'int'&gt;:</span> <span class="pre">'Integer',</span> <span class="pre">&lt;class</span> <span class="pre">'list'&gt;:</span> <span class="pre">'List',</span> <span class="pre">&lt;class</span> <span class="pre">'object'&gt;:</span> <span class="pre">'Object',</span> <span class="pre">&lt;class</span> <span class="pre">'set'&gt;:</span> <span class="pre">'Set',</span> <span class="pre">&lt;class</span> <span class="pre">'str'&gt;:</span> <span class="pre">'String'}</span></em><a class="headerlink" href="#pypz.core.commons.parameters.ParameterSchemaBuilder._type_to_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="pypz.core.commons.parameters.ParameterSchemaBuilder.builder">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">builder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">{}</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.commons.parameters.ParameterSchemaBuilder.builder" title="Link to this definition"></a></dt>

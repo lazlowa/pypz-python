@@ -130,6 +130,89 @@ is used by both the parallel and the sequential executor.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.State.__enter_state">
+<span class="sig-name descname"><span class="pre">__enter_state</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pypz.executors.operator.states.State.__enter_state" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.State.__executor">
+<span class="sig-name descname"><span class="pre">__executor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ThreadPoolExecutor</span></em><a class="headerlink" href="#pypz.executors.operator.states.State.__executor" title="Link to this definition"></a></dt>
+<dd><p>Handles the execution of plugins’ corresponding methods, which can run parallel</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.State.__exit_state">
+<span class="sig-name descname"><span class="pre">__exit_state</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pypz.executors.operator.states.State.__exit_state" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.State._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pypz.executors.operator.states.State._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.State._context">
+<span class="sig-name descname"><span class="pre">_context</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.executors.operator.context.html#pypz.executors.operator.context.ExecutionContext" title="pypz.executors.operator.context.ExecutionContext"><span class="pre">ExecutionContext</span></a></em><a class="headerlink" href="#pypz.executors.operator.states.State._context" title="Link to this definition"></a></dt>
+<dd><p>Holds the reference to the actual operator instance that shall be executed</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.State._prev_state">
+<span class="sig-name descname"><span class="pre">_prev_state</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pypz.executors.operator.states.State" title="pypz.executors.operator.states.State"><span class="pre">State</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.executors.operator.states.State._prev_state" title="Link to this definition"></a></dt>
+<dd><p>Contains the information about the previous state the
+state machine was in</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.State._reason">
+<span class="sig-name descname"><span class="pre">_reason</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.executors.operator.signals.html#pypz.executors.operator.signals.BaseSignal" title="pypz.executors.operator.signals.BaseSignal"><span class="pre">BaseSignal</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.executors.operator.states.State._reason" title="Link to this definition"></a></dt>
+<dd><p>Contains the information about the signal that drove the
+state machine into this state i.e., the reason of this state</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.State._response_collector">
+<span class="sig-name descname"><span class="pre">_response_collector</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.executors.operator.states.State._response_collector" title="Link to this definition"></a></dt>
+<dd><p>Stores the responses of the plugin objects for each instance. Used to prevent finished
+instances to be re-scheduled</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.State._schedule">
+<span class="sig-name descname"><span class="pre">_schedule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">execution_chain</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pypz.core.specs.instance.html#pypz.core.specs.instance.Instance" title="pypz.core.specs.instance.Instance"><span class="pre">Instance</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">break_on_exception</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.executors.operator.states.State._schedule" title="Link to this definition"></a></dt>
+<dd><p>Schedules a chain of instances’ specified methods for execution via the thread pool
+executor. Each chain element is represented by a list of instances and the method to
+be called. Each list will be executed parallel. The next chain element will be
+executed after all instance methods have been concluded on the current chain element.
+This method blocks until all the scheduled methods are finished.
+Both plugin and operator instance methods can be scheduled.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>execution_chain</strong> – list of tuples, where [0] is the callable method and [1] is the list of instances</p></li>
+<li><p><strong>break_on_exception</strong> – if True, it will break on the first exception, if False, it will let then chain run
+and only raise an exception at the end</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if all methods are finished (returned True), False otherwise</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.State._state_entry_time_ms">
+<span class="sig-name descname"><span class="pre">_state_entry_time_ms</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pypz.executors.operator.states.State._state_entry_time_ms" title="Link to this definition"></a></dt>
+<dd><p>Stores the state entry epoch time</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.State._transition_map">
+<span class="sig-name descname"><span class="pre">_transition_map</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pypz.executors.operator.signals.html#pypz.executors.operator.signals.BaseSignal" title="pypz.executors.operator.signals.BaseSignal"><span class="pre">BaseSignal</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#pypz.executors.operator.states.State" title="pypz.executors.operator.states.State"><span class="pre">State</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.executors.operator.states.State._transition_map" title="Link to this definition"></a></dt>
+<dd><p>Contains the possible transitions from this state</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="pypz.executors.operator.states.State.get_prev_state">
 <span class="sig-name descname"><span class="pre">get_prev_state</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pypz.executors.operator.states.State" title="pypz.executors.operator.states.State"><span class="pre">State</span></a></span></span><a class="headerlink" href="#pypz.executors.operator.states.State.get_prev_state" title="Link to this definition"></a></dt>
 <dd></dd></dl>
@@ -175,6 +258,61 @@ is used by both the parallel and the sequential executor.</p>
 <dt class="sig sig-object py" id="pypz.executors.operator.states.StateEntry">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.executors.operator.states.</span></span><span class="sig-name descname"><span class="pre">StateEntry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pypz.executors.operator.context.html#pypz.executors.operator.context.ExecutionContext" title="pypz.executors.operator.context.ExecutionContext"><span class="pre">ExecutionContext</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.executors.operator.states.StateEntry" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pypz.executors.operator.states.State" title="pypz.executors.operator.states.State"><code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateEntry.__executor">
+<span class="sig-name descname"><span class="pre">__executor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ThreadPoolExecutor</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateEntry.__executor" title="Link to this definition"></a></dt>
+<dd><p>Handles the execution of plugins’ corresponding methods, which can run parallel</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateEntry._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateEntry._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateEntry._context">
+<span class="sig-name descname"><span class="pre">_context</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.executors.operator.context.html#pypz.executors.operator.context.ExecutionContext" title="pypz.executors.operator.context.ExecutionContext"><span class="pre">ExecutionContext</span></a></em><a class="headerlink" href="#pypz.executors.operator.states.StateEntry._context" title="Link to this definition"></a></dt>
+<dd><p>Holds the reference to the actual operator instance that shall be executed</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateEntry._logger">
+<span class="sig-name descname"><span class="pre">_logger</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.core.commons.loggers.html#pypz.core.commons.loggers.ContextLogger" title="pypz.core.commons.loggers.ContextLogger"><span class="pre">ContextLogger</span></a></em><a class="headerlink" href="#pypz.executors.operator.states.StateEntry._logger" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateEntry._prev_state">
+<span class="sig-name descname"><span class="pre">_prev_state</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pypz.executors.operator.states.State" title="pypz.executors.operator.states.State"><span class="pre">State</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateEntry._prev_state" title="Link to this definition"></a></dt>
+<dd><p>Contains the information about the previous state the
+state machine was in</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateEntry._reason">
+<span class="sig-name descname"><span class="pre">_reason</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.executors.operator.signals.html#pypz.executors.operator.signals.BaseSignal" title="pypz.executors.operator.signals.BaseSignal"><span class="pre">BaseSignal</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateEntry._reason" title="Link to this definition"></a></dt>
+<dd><p>Contains the information about the signal that drove the
+state machine into this state i.e., the reason of this state</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateEntry._response_collector">
+<span class="sig-name descname"><span class="pre">_response_collector</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.executors.operator.states.StateEntry._response_collector" title="Link to this definition"></a></dt>
+<dd><p>Stores the responses of the plugin objects for each instance. Used to prevent finished
+instances to be re-scheduled</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateEntry._state_entry_time_ms">
+<span class="sig-name descname"><span class="pre">_state_entry_time_ms</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateEntry._state_entry_time_ms" title="Link to this definition"></a></dt>
+<dd><p>Stores the state entry epoch time</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateEntry._transition_map">
+<span class="sig-name descname"><span class="pre">_transition_map</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pypz.executors.operator.signals.html#pypz.executors.operator.signals.BaseSignal" title="pypz.executors.operator.signals.BaseSignal"><span class="pre">BaseSignal</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#pypz.executors.operator.states.State" title="pypz.executors.operator.states.State"><span class="pre">State</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.executors.operator.states.StateEntry._transition_map" title="Link to this definition"></a></dt>
+<dd><p>Contains the possible transitions from this state</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="pypz.executors.operator.states.StateEntry.on_entry">
 <span class="sig-name descname"><span class="pre">on_entry</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.executors.operator.states.StateEntry.on_entry" title="Link to this definition"></a></dt>
@@ -196,6 +334,61 @@ is used by both the parallel and the sequential executor.</p>
 <dt class="sig sig-object py" id="pypz.executors.operator.states.StateKilled">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.executors.operator.states.</span></span><span class="sig-name descname"><span class="pre">StateKilled</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pypz.executors.operator.context.html#pypz.executors.operator.context.ExecutionContext" title="pypz.executors.operator.context.ExecutionContext"><span class="pre">ExecutionContext</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.executors.operator.states.StateKilled" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pypz.executors.operator.states.State" title="pypz.executors.operator.states.State"><code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateKilled.__executor">
+<span class="sig-name descname"><span class="pre">__executor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ThreadPoolExecutor</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateKilled.__executor" title="Link to this definition"></a></dt>
+<dd><p>Handles the execution of plugins’ corresponding methods, which can run parallel</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateKilled._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateKilled._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateKilled._context">
+<span class="sig-name descname"><span class="pre">_context</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.executors.operator.context.html#pypz.executors.operator.context.ExecutionContext" title="pypz.executors.operator.context.ExecutionContext"><span class="pre">ExecutionContext</span></a></em><a class="headerlink" href="#pypz.executors.operator.states.StateKilled._context" title="Link to this definition"></a></dt>
+<dd><p>Holds the reference to the actual operator instance that shall be executed</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateKilled._logger">
+<span class="sig-name descname"><span class="pre">_logger</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.core.commons.loggers.html#pypz.core.commons.loggers.ContextLogger" title="pypz.core.commons.loggers.ContextLogger"><span class="pre">ContextLogger</span></a></em><a class="headerlink" href="#pypz.executors.operator.states.StateKilled._logger" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateKilled._prev_state">
+<span class="sig-name descname"><span class="pre">_prev_state</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pypz.executors.operator.states.State" title="pypz.executors.operator.states.State"><span class="pre">State</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateKilled._prev_state" title="Link to this definition"></a></dt>
+<dd><p>Contains the information about the previous state the
+state machine was in</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateKilled._reason">
+<span class="sig-name descname"><span class="pre">_reason</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.executors.operator.signals.html#pypz.executors.operator.signals.BaseSignal" title="pypz.executors.operator.signals.BaseSignal"><span class="pre">BaseSignal</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateKilled._reason" title="Link to this definition"></a></dt>
+<dd><p>Contains the information about the signal that drove the
+state machine into this state i.e., the reason of this state</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateKilled._response_collector">
+<span class="sig-name descname"><span class="pre">_response_collector</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.executors.operator.states.StateKilled._response_collector" title="Link to this definition"></a></dt>
+<dd><p>Stores the responses of the plugin objects for each instance. Used to prevent finished
+instances to be re-scheduled</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateKilled._state_entry_time_ms">
+<span class="sig-name descname"><span class="pre">_state_entry_time_ms</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateKilled._state_entry_time_ms" title="Link to this definition"></a></dt>
+<dd><p>Stores the state entry epoch time</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateKilled._transition_map">
+<span class="sig-name descname"><span class="pre">_transition_map</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pypz.executors.operator.signals.html#pypz.executors.operator.signals.BaseSignal" title="pypz.executors.operator.signals.BaseSignal"><span class="pre">BaseSignal</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#pypz.executors.operator.states.State" title="pypz.executors.operator.states.State"><span class="pre">State</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.executors.operator.states.StateKilled._transition_map" title="Link to this definition"></a></dt>
+<dd><p>Contains the possible transitions from this state</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="pypz.executors.operator.states.StateKilled.on_entry">
 <span class="sig-name descname"><span class="pre">on_entry</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.executors.operator.states.StateKilled.on_entry" title="Link to this definition"></a></dt>
@@ -217,6 +410,61 @@ is used by both the parallel and the sequential executor.</p>
 <dt class="sig sig-object py" id="pypz.executors.operator.states.StateOperationInit">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.executors.operator.states.</span></span><span class="sig-name descname"><span class="pre">StateOperationInit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pypz.executors.operator.context.html#pypz.executors.operator.context.ExecutionContext" title="pypz.executors.operator.context.ExecutionContext"><span class="pre">ExecutionContext</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.executors.operator.states.StateOperationInit" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pypz.executors.operator.states.State" title="pypz.executors.operator.states.State"><code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateOperationInit.__executor">
+<span class="sig-name descname"><span class="pre">__executor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ThreadPoolExecutor</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateOperationInit.__executor" title="Link to this definition"></a></dt>
+<dd><p>Handles the execution of plugins’ corresponding methods, which can run parallel</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateOperationInit._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateOperationInit._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateOperationInit._context">
+<span class="sig-name descname"><span class="pre">_context</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.executors.operator.context.html#pypz.executors.operator.context.ExecutionContext" title="pypz.executors.operator.context.ExecutionContext"><span class="pre">ExecutionContext</span></a></em><a class="headerlink" href="#pypz.executors.operator.states.StateOperationInit._context" title="Link to this definition"></a></dt>
+<dd><p>Holds the reference to the actual operator instance that shall be executed</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateOperationInit._logger">
+<span class="sig-name descname"><span class="pre">_logger</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.core.commons.loggers.html#pypz.core.commons.loggers.ContextLogger" title="pypz.core.commons.loggers.ContextLogger"><span class="pre">ContextLogger</span></a></em><a class="headerlink" href="#pypz.executors.operator.states.StateOperationInit._logger" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateOperationInit._prev_state">
+<span class="sig-name descname"><span class="pre">_prev_state</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pypz.executors.operator.states.State" title="pypz.executors.operator.states.State"><span class="pre">State</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateOperationInit._prev_state" title="Link to this definition"></a></dt>
+<dd><p>Contains the information about the previous state the
+state machine was in</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateOperationInit._reason">
+<span class="sig-name descname"><span class="pre">_reason</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.executors.operator.signals.html#pypz.executors.operator.signals.BaseSignal" title="pypz.executors.operator.signals.BaseSignal"><span class="pre">BaseSignal</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateOperationInit._reason" title="Link to this definition"></a></dt>
+<dd><p>Contains the information about the signal that drove the
+state machine into this state i.e., the reason of this state</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateOperationInit._response_collector">
+<span class="sig-name descname"><span class="pre">_response_collector</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.executors.operator.states.StateOperationInit._response_collector" title="Link to this definition"></a></dt>
+<dd><p>Stores the responses of the plugin objects for each instance. Used to prevent finished
+instances to be re-scheduled</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateOperationInit._state_entry_time_ms">
+<span class="sig-name descname"><span class="pre">_state_entry_time_ms</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateOperationInit._state_entry_time_ms" title="Link to this definition"></a></dt>
+<dd><p>Stores the state entry epoch time</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateOperationInit._transition_map">
+<span class="sig-name descname"><span class="pre">_transition_map</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pypz.executors.operator.signals.html#pypz.executors.operator.signals.BaseSignal" title="pypz.executors.operator.signals.BaseSignal"><span class="pre">BaseSignal</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#pypz.executors.operator.states.State" title="pypz.executors.operator.states.State"><span class="pre">State</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.executors.operator.states.StateOperationInit._transition_map" title="Link to this definition"></a></dt>
+<dd><p>Contains the possible transitions from this state</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="pypz.executors.operator.states.StateOperationInit.on_entry">
 <span class="sig-name descname"><span class="pre">on_entry</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.executors.operator.states.StateOperationInit.on_entry" title="Link to this definition"></a></dt>
@@ -238,6 +486,61 @@ is used by both the parallel and the sequential executor.</p>
 <dt class="sig sig-object py" id="pypz.executors.operator.states.StateOperationRunning">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.executors.operator.states.</span></span><span class="sig-name descname"><span class="pre">StateOperationRunning</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pypz.executors.operator.context.html#pypz.executors.operator.context.ExecutionContext" title="pypz.executors.operator.context.ExecutionContext"><span class="pre">ExecutionContext</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.executors.operator.states.StateOperationRunning" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pypz.executors.operator.states.State" title="pypz.executors.operator.states.State"><code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateOperationRunning.__executor">
+<span class="sig-name descname"><span class="pre">__executor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ThreadPoolExecutor</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateOperationRunning.__executor" title="Link to this definition"></a></dt>
+<dd><p>Handles the execution of plugins’ corresponding methods, which can run parallel</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateOperationRunning._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateOperationRunning._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateOperationRunning._context">
+<span class="sig-name descname"><span class="pre">_context</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.executors.operator.context.html#pypz.executors.operator.context.ExecutionContext" title="pypz.executors.operator.context.ExecutionContext"><span class="pre">ExecutionContext</span></a></em><a class="headerlink" href="#pypz.executors.operator.states.StateOperationRunning._context" title="Link to this definition"></a></dt>
+<dd><p>Holds the reference to the actual operator instance that shall be executed</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateOperationRunning._logger">
+<span class="sig-name descname"><span class="pre">_logger</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.core.commons.loggers.html#pypz.core.commons.loggers.ContextLogger" title="pypz.core.commons.loggers.ContextLogger"><span class="pre">ContextLogger</span></a></em><a class="headerlink" href="#pypz.executors.operator.states.StateOperationRunning._logger" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateOperationRunning._prev_state">
+<span class="sig-name descname"><span class="pre">_prev_state</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pypz.executors.operator.states.State" title="pypz.executors.operator.states.State"><span class="pre">State</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateOperationRunning._prev_state" title="Link to this definition"></a></dt>
+<dd><p>Contains the information about the previous state the
+state machine was in</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateOperationRunning._reason">
+<span class="sig-name descname"><span class="pre">_reason</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.executors.operator.signals.html#pypz.executors.operator.signals.BaseSignal" title="pypz.executors.operator.signals.BaseSignal"><span class="pre">BaseSignal</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateOperationRunning._reason" title="Link to this definition"></a></dt>
+<dd><p>Contains the information about the signal that drove the
+state machine into this state i.e., the reason of this state</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateOperationRunning._response_collector">
+<span class="sig-name descname"><span class="pre">_response_collector</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.executors.operator.states.StateOperationRunning._response_collector" title="Link to this definition"></a></dt>
+<dd><p>Stores the responses of the plugin objects for each instance. Used to prevent finished
+instances to be re-scheduled</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateOperationRunning._state_entry_time_ms">
+<span class="sig-name descname"><span class="pre">_state_entry_time_ms</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateOperationRunning._state_entry_time_ms" title="Link to this definition"></a></dt>
+<dd><p>Stores the state entry epoch time</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateOperationRunning._transition_map">
+<span class="sig-name descname"><span class="pre">_transition_map</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pypz.executors.operator.signals.html#pypz.executors.operator.signals.BaseSignal" title="pypz.executors.operator.signals.BaseSignal"><span class="pre">BaseSignal</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#pypz.executors.operator.states.State" title="pypz.executors.operator.states.State"><span class="pre">State</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.executors.operator.states.StateOperationRunning._transition_map" title="Link to this definition"></a></dt>
+<dd><p>Contains the possible transitions from this state</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="pypz.executors.operator.states.StateOperationRunning.on_entry">
 <span class="sig-name descname"><span class="pre">on_entry</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.executors.operator.states.StateOperationRunning.on_entry" title="Link to this definition"></a></dt>
@@ -259,6 +562,61 @@ is used by both the parallel and the sequential executor.</p>
 <dt class="sig sig-object py" id="pypz.executors.operator.states.StateOperationShutdown">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.executors.operator.states.</span></span><span class="sig-name descname"><span class="pre">StateOperationShutdown</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pypz.executors.operator.context.html#pypz.executors.operator.context.ExecutionContext" title="pypz.executors.operator.context.ExecutionContext"><span class="pre">ExecutionContext</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.executors.operator.states.StateOperationShutdown" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pypz.executors.operator.states.State" title="pypz.executors.operator.states.State"><code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateOperationShutdown.__executor">
+<span class="sig-name descname"><span class="pre">__executor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ThreadPoolExecutor</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateOperationShutdown.__executor" title="Link to this definition"></a></dt>
+<dd><p>Handles the execution of plugins’ corresponding methods, which can run parallel</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateOperationShutdown._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateOperationShutdown._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateOperationShutdown._context">
+<span class="sig-name descname"><span class="pre">_context</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.executors.operator.context.html#pypz.executors.operator.context.ExecutionContext" title="pypz.executors.operator.context.ExecutionContext"><span class="pre">ExecutionContext</span></a></em><a class="headerlink" href="#pypz.executors.operator.states.StateOperationShutdown._context" title="Link to this definition"></a></dt>
+<dd><p>Holds the reference to the actual operator instance that shall be executed</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateOperationShutdown._logger">
+<span class="sig-name descname"><span class="pre">_logger</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.core.commons.loggers.html#pypz.core.commons.loggers.ContextLogger" title="pypz.core.commons.loggers.ContextLogger"><span class="pre">ContextLogger</span></a></em><a class="headerlink" href="#pypz.executors.operator.states.StateOperationShutdown._logger" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateOperationShutdown._prev_state">
+<span class="sig-name descname"><span class="pre">_prev_state</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pypz.executors.operator.states.State" title="pypz.executors.operator.states.State"><span class="pre">State</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateOperationShutdown._prev_state" title="Link to this definition"></a></dt>
+<dd><p>Contains the information about the previous state the
+state machine was in</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateOperationShutdown._reason">
+<span class="sig-name descname"><span class="pre">_reason</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.executors.operator.signals.html#pypz.executors.operator.signals.BaseSignal" title="pypz.executors.operator.signals.BaseSignal"><span class="pre">BaseSignal</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateOperationShutdown._reason" title="Link to this definition"></a></dt>
+<dd><p>Contains the information about the signal that drove the
+state machine into this state i.e., the reason of this state</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateOperationShutdown._response_collector">
+<span class="sig-name descname"><span class="pre">_response_collector</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.executors.operator.states.StateOperationShutdown._response_collector" title="Link to this definition"></a></dt>
+<dd><p>Stores the responses of the plugin objects for each instance. Used to prevent finished
+instances to be re-scheduled</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateOperationShutdown._state_entry_time_ms">
+<span class="sig-name descname"><span class="pre">_state_entry_time_ms</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateOperationShutdown._state_entry_time_ms" title="Link to this definition"></a></dt>
+<dd><p>Stores the state entry epoch time</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateOperationShutdown._transition_map">
+<span class="sig-name descname"><span class="pre">_transition_map</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pypz.executors.operator.signals.html#pypz.executors.operator.signals.BaseSignal" title="pypz.executors.operator.signals.BaseSignal"><span class="pre">BaseSignal</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#pypz.executors.operator.states.State" title="pypz.executors.operator.states.State"><span class="pre">State</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.executors.operator.states.StateOperationShutdown._transition_map" title="Link to this definition"></a></dt>
+<dd><p>Contains the possible transitions from this state</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="pypz.executors.operator.states.StateOperationShutdown.on_entry">
 <span class="sig-name descname"><span class="pre">on_entry</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.executors.operator.states.StateOperationShutdown.on_entry" title="Link to this definition"></a></dt>
@@ -280,6 +638,61 @@ is used by both the parallel and the sequential executor.</p>
 <dt class="sig sig-object py" id="pypz.executors.operator.states.StateResourceCreation">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.executors.operator.states.</span></span><span class="sig-name descname"><span class="pre">StateResourceCreation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pypz.executors.operator.context.html#pypz.executors.operator.context.ExecutionContext" title="pypz.executors.operator.context.ExecutionContext"><span class="pre">ExecutionContext</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.executors.operator.states.StateResourceCreation" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pypz.executors.operator.states.State" title="pypz.executors.operator.states.State"><code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateResourceCreation.__executor">
+<span class="sig-name descname"><span class="pre">__executor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ThreadPoolExecutor</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateResourceCreation.__executor" title="Link to this definition"></a></dt>
+<dd><p>Handles the execution of plugins’ corresponding methods, which can run parallel</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateResourceCreation._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateResourceCreation._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateResourceCreation._context">
+<span class="sig-name descname"><span class="pre">_context</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.executors.operator.context.html#pypz.executors.operator.context.ExecutionContext" title="pypz.executors.operator.context.ExecutionContext"><span class="pre">ExecutionContext</span></a></em><a class="headerlink" href="#pypz.executors.operator.states.StateResourceCreation._context" title="Link to this definition"></a></dt>
+<dd><p>Holds the reference to the actual operator instance that shall be executed</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateResourceCreation._logger">
+<span class="sig-name descname"><span class="pre">_logger</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.core.commons.loggers.html#pypz.core.commons.loggers.ContextLogger" title="pypz.core.commons.loggers.ContextLogger"><span class="pre">ContextLogger</span></a></em><a class="headerlink" href="#pypz.executors.operator.states.StateResourceCreation._logger" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateResourceCreation._prev_state">
+<span class="sig-name descname"><span class="pre">_prev_state</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pypz.executors.operator.states.State" title="pypz.executors.operator.states.State"><span class="pre">State</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateResourceCreation._prev_state" title="Link to this definition"></a></dt>
+<dd><p>Contains the information about the previous state the
+state machine was in</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateResourceCreation._reason">
+<span class="sig-name descname"><span class="pre">_reason</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.executors.operator.signals.html#pypz.executors.operator.signals.BaseSignal" title="pypz.executors.operator.signals.BaseSignal"><span class="pre">BaseSignal</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateResourceCreation._reason" title="Link to this definition"></a></dt>
+<dd><p>Contains the information about the signal that drove the
+state machine into this state i.e., the reason of this state</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateResourceCreation._response_collector">
+<span class="sig-name descname"><span class="pre">_response_collector</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.executors.operator.states.StateResourceCreation._response_collector" title="Link to this definition"></a></dt>
+<dd><p>Stores the responses of the plugin objects for each instance. Used to prevent finished
+instances to be re-scheduled</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateResourceCreation._state_entry_time_ms">
+<span class="sig-name descname"><span class="pre">_state_entry_time_ms</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateResourceCreation._state_entry_time_ms" title="Link to this definition"></a></dt>
+<dd><p>Stores the state entry epoch time</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateResourceCreation._transition_map">
+<span class="sig-name descname"><span class="pre">_transition_map</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pypz.executors.operator.signals.html#pypz.executors.operator.signals.BaseSignal" title="pypz.executors.operator.signals.BaseSignal"><span class="pre">BaseSignal</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#pypz.executors.operator.states.State" title="pypz.executors.operator.states.State"><span class="pre">State</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.executors.operator.states.StateResourceCreation._transition_map" title="Link to this definition"></a></dt>
+<dd><p>Contains the possible transitions from this state</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="pypz.executors.operator.states.StateResourceCreation.on_entry">
 <span class="sig-name descname"><span class="pre">on_entry</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.executors.operator.states.StateResourceCreation.on_entry" title="Link to this definition"></a></dt>
@@ -301,6 +714,61 @@ is used by both the parallel and the sequential executor.</p>
 <dt class="sig sig-object py" id="pypz.executors.operator.states.StateResourceDeletion">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.executors.operator.states.</span></span><span class="sig-name descname"><span class="pre">StateResourceDeletion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pypz.executors.operator.context.html#pypz.executors.operator.context.ExecutionContext" title="pypz.executors.operator.context.ExecutionContext"><span class="pre">ExecutionContext</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.executors.operator.states.StateResourceDeletion" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pypz.executors.operator.states.State" title="pypz.executors.operator.states.State"><code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateResourceDeletion.__executor">
+<span class="sig-name descname"><span class="pre">__executor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ThreadPoolExecutor</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateResourceDeletion.__executor" title="Link to this definition"></a></dt>
+<dd><p>Handles the execution of plugins’ corresponding methods, which can run parallel</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateResourceDeletion._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateResourceDeletion._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateResourceDeletion._context">
+<span class="sig-name descname"><span class="pre">_context</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.executors.operator.context.html#pypz.executors.operator.context.ExecutionContext" title="pypz.executors.operator.context.ExecutionContext"><span class="pre">ExecutionContext</span></a></em><a class="headerlink" href="#pypz.executors.operator.states.StateResourceDeletion._context" title="Link to this definition"></a></dt>
+<dd><p>Holds the reference to the actual operator instance that shall be executed</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateResourceDeletion._logger">
+<span class="sig-name descname"><span class="pre">_logger</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.core.commons.loggers.html#pypz.core.commons.loggers.ContextLogger" title="pypz.core.commons.loggers.ContextLogger"><span class="pre">ContextLogger</span></a></em><a class="headerlink" href="#pypz.executors.operator.states.StateResourceDeletion._logger" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateResourceDeletion._prev_state">
+<span class="sig-name descname"><span class="pre">_prev_state</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pypz.executors.operator.states.State" title="pypz.executors.operator.states.State"><span class="pre">State</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateResourceDeletion._prev_state" title="Link to this definition"></a></dt>
+<dd><p>Contains the information about the previous state the
+state machine was in</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateResourceDeletion._reason">
+<span class="sig-name descname"><span class="pre">_reason</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.executors.operator.signals.html#pypz.executors.operator.signals.BaseSignal" title="pypz.executors.operator.signals.BaseSignal"><span class="pre">BaseSignal</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateResourceDeletion._reason" title="Link to this definition"></a></dt>
+<dd><p>Contains the information about the signal that drove the
+state machine into this state i.e., the reason of this state</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateResourceDeletion._response_collector">
+<span class="sig-name descname"><span class="pre">_response_collector</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.executors.operator.states.StateResourceDeletion._response_collector" title="Link to this definition"></a></dt>
+<dd><p>Stores the responses of the plugin objects for each instance. Used to prevent finished
+instances to be re-scheduled</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateResourceDeletion._state_entry_time_ms">
+<span class="sig-name descname"><span class="pre">_state_entry_time_ms</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateResourceDeletion._state_entry_time_ms" title="Link to this definition"></a></dt>
+<dd><p>Stores the state entry epoch time</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateResourceDeletion._transition_map">
+<span class="sig-name descname"><span class="pre">_transition_map</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pypz.executors.operator.signals.html#pypz.executors.operator.signals.BaseSignal" title="pypz.executors.operator.signals.BaseSignal"><span class="pre">BaseSignal</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#pypz.executors.operator.states.State" title="pypz.executors.operator.states.State"><span class="pre">State</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.executors.operator.states.StateResourceDeletion._transition_map" title="Link to this definition"></a></dt>
+<dd><p>Contains the possible transitions from this state</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="pypz.executors.operator.states.StateResourceDeletion.on_entry">
 <span class="sig-name descname"><span class="pre">on_entry</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.executors.operator.states.StateResourceDeletion.on_entry" title="Link to this definition"></a></dt>
@@ -322,6 +790,61 @@ is used by both the parallel and the sequential executor.</p>
 <dt class="sig sig-object py" id="pypz.executors.operator.states.StateServiceShutdown">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.executors.operator.states.</span></span><span class="sig-name descname"><span class="pre">StateServiceShutdown</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pypz.executors.operator.context.html#pypz.executors.operator.context.ExecutionContext" title="pypz.executors.operator.context.ExecutionContext"><span class="pre">ExecutionContext</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.executors.operator.states.StateServiceShutdown" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pypz.executors.operator.states.State" title="pypz.executors.operator.states.State"><code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateServiceShutdown.__executor">
+<span class="sig-name descname"><span class="pre">__executor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ThreadPoolExecutor</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateServiceShutdown.__executor" title="Link to this definition"></a></dt>
+<dd><p>Handles the execution of plugins’ corresponding methods, which can run parallel</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateServiceShutdown._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateServiceShutdown._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateServiceShutdown._context">
+<span class="sig-name descname"><span class="pre">_context</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.executors.operator.context.html#pypz.executors.operator.context.ExecutionContext" title="pypz.executors.operator.context.ExecutionContext"><span class="pre">ExecutionContext</span></a></em><a class="headerlink" href="#pypz.executors.operator.states.StateServiceShutdown._context" title="Link to this definition"></a></dt>
+<dd><p>Holds the reference to the actual operator instance that shall be executed</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateServiceShutdown._logger">
+<span class="sig-name descname"><span class="pre">_logger</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.core.commons.loggers.html#pypz.core.commons.loggers.ContextLogger" title="pypz.core.commons.loggers.ContextLogger"><span class="pre">ContextLogger</span></a></em><a class="headerlink" href="#pypz.executors.operator.states.StateServiceShutdown._logger" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateServiceShutdown._prev_state">
+<span class="sig-name descname"><span class="pre">_prev_state</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pypz.executors.operator.states.State" title="pypz.executors.operator.states.State"><span class="pre">State</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateServiceShutdown._prev_state" title="Link to this definition"></a></dt>
+<dd><p>Contains the information about the previous state the
+state machine was in</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateServiceShutdown._reason">
+<span class="sig-name descname"><span class="pre">_reason</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.executors.operator.signals.html#pypz.executors.operator.signals.BaseSignal" title="pypz.executors.operator.signals.BaseSignal"><span class="pre">BaseSignal</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateServiceShutdown._reason" title="Link to this definition"></a></dt>
+<dd><p>Contains the information about the signal that drove the
+state machine into this state i.e., the reason of this state</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateServiceShutdown._response_collector">
+<span class="sig-name descname"><span class="pre">_response_collector</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.executors.operator.states.StateServiceShutdown._response_collector" title="Link to this definition"></a></dt>
+<dd><p>Stores the responses of the plugin objects for each instance. Used to prevent finished
+instances to be re-scheduled</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateServiceShutdown._state_entry_time_ms">
+<span class="sig-name descname"><span class="pre">_state_entry_time_ms</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateServiceShutdown._state_entry_time_ms" title="Link to this definition"></a></dt>
+<dd><p>Stores the state entry epoch time</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateServiceShutdown._transition_map">
+<span class="sig-name descname"><span class="pre">_transition_map</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pypz.executors.operator.signals.html#pypz.executors.operator.signals.BaseSignal" title="pypz.executors.operator.signals.BaseSignal"><span class="pre">BaseSignal</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#pypz.executors.operator.states.State" title="pypz.executors.operator.states.State"><span class="pre">State</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.executors.operator.states.StateServiceShutdown._transition_map" title="Link to this definition"></a></dt>
+<dd><p>Contains the possible transitions from this state</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="pypz.executors.operator.states.StateServiceShutdown.on_entry">
 <span class="sig-name descname"><span class="pre">on_entry</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.executors.operator.states.StateServiceShutdown.on_entry" title="Link to this definition"></a></dt>
@@ -343,6 +866,61 @@ is used by both the parallel and the sequential executor.</p>
 <dt class="sig sig-object py" id="pypz.executors.operator.states.StateServiceStart">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.executors.operator.states.</span></span><span class="sig-name descname"><span class="pre">StateServiceStart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pypz.executors.operator.context.html#pypz.executors.operator.context.ExecutionContext" title="pypz.executors.operator.context.ExecutionContext"><span class="pre">ExecutionContext</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.executors.operator.states.StateServiceStart" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pypz.executors.operator.states.State" title="pypz.executors.operator.states.State"><code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateServiceStart.__executor">
+<span class="sig-name descname"><span class="pre">__executor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ThreadPoolExecutor</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateServiceStart.__executor" title="Link to this definition"></a></dt>
+<dd><p>Handles the execution of plugins’ corresponding methods, which can run parallel</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateServiceStart._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateServiceStart._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateServiceStart._context">
+<span class="sig-name descname"><span class="pre">_context</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.executors.operator.context.html#pypz.executors.operator.context.ExecutionContext" title="pypz.executors.operator.context.ExecutionContext"><span class="pre">ExecutionContext</span></a></em><a class="headerlink" href="#pypz.executors.operator.states.StateServiceStart._context" title="Link to this definition"></a></dt>
+<dd><p>Holds the reference to the actual operator instance that shall be executed</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateServiceStart._logger">
+<span class="sig-name descname"><span class="pre">_logger</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.core.commons.loggers.html#pypz.core.commons.loggers.ContextLogger" title="pypz.core.commons.loggers.ContextLogger"><span class="pre">ContextLogger</span></a></em><a class="headerlink" href="#pypz.executors.operator.states.StateServiceStart._logger" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateServiceStart._prev_state">
+<span class="sig-name descname"><span class="pre">_prev_state</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pypz.executors.operator.states.State" title="pypz.executors.operator.states.State"><span class="pre">State</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateServiceStart._prev_state" title="Link to this definition"></a></dt>
+<dd><p>Contains the information about the previous state the
+state machine was in</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateServiceStart._reason">
+<span class="sig-name descname"><span class="pre">_reason</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.executors.operator.signals.html#pypz.executors.operator.signals.BaseSignal" title="pypz.executors.operator.signals.BaseSignal"><span class="pre">BaseSignal</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateServiceStart._reason" title="Link to this definition"></a></dt>
+<dd><p>Contains the information about the signal that drove the
+state machine into this state i.e., the reason of this state</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateServiceStart._response_collector">
+<span class="sig-name descname"><span class="pre">_response_collector</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.executors.operator.states.StateServiceStart._response_collector" title="Link to this definition"></a></dt>
+<dd><p>Stores the responses of the plugin objects for each instance. Used to prevent finished
+instances to be re-scheduled</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateServiceStart._state_entry_time_ms">
+<span class="sig-name descname"><span class="pre">_state_entry_time_ms</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateServiceStart._state_entry_time_ms" title="Link to this definition"></a></dt>
+<dd><p>Stores the state entry epoch time</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.operator.states.StateServiceStart._transition_map">
+<span class="sig-name descname"><span class="pre">_transition_map</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pypz.executors.operator.signals.html#pypz.executors.operator.signals.BaseSignal" title="pypz.executors.operator.signals.BaseSignal"><span class="pre">BaseSignal</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#pypz.executors.operator.states.State" title="pypz.executors.operator.states.State"><span class="pre">State</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.executors.operator.states.StateServiceStart._transition_map" title="Link to this definition"></a></dt>
+<dd><p>Contains the possible transitions from this state</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="pypz.executors.operator.states.StateServiceStart.on_entry">
 <span class="sig-name descname"><span class="pre">on_entry</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.executors.operator.states.StateServiceStart.on_entry" title="Link to this definition"></a></dt>
