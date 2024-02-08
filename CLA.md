@@ -25,13 +25,13 @@ The contribution is provided under the
 
 ## Representation and Warranty
 
-You represent and warrant that they have the right to grant the copyright 
+You represent and warrant that you have the right to grant the copyright 
 license set forth in this agreement and that the contribution **does not** 
 violate any third-party rights.
 
 ## Contributor's Responsibilities
 
-You agree to promptly notify the project *pypz* if they become aware 
+You agree to promptly notify the project *pypz* if you become aware 
 of any facts or circumstances that would make the representations and 
 warranties in this agreement inaccurate in any respect.
 
