@@ -55,6 +55,11 @@ class ExpectedParameter(Generic[ParameterType]):
            def __init__(self):
                self.required_param = None
                self.optional_param = "defaultValue"
+
+    :param required: true, if parameter required, false if not
+    :param parameter_type: (str, int, float, set, list, dict, type(None))
+    :param alt_name: alternative name for the parameter, if specified it acts as reference to the parameter
+    :param on_update: callback to react on value update
     """
 
     NamePrefix = "__private_instance_parameter__"
@@ -68,12 +73,6 @@ class ExpectedParameter(Generic[ParameterType]):
                  alt_name: Optional[str] = None,
                  description: Optional[str] = None,
                  on_update: Callable[[Any], None] = None):
-        """
-        :param required: true, if parameter required, false if not
-        :param parameter_type: (str, int, float, set, list, dict, type(None))
-        :param alt_name: alternative name for the parameter, if specified it acts as reference to the parameter
-        :param on_update: callback to react on value update
-        """
 
         if parameter_type is None:
             raise TypeError("Parameter type must be specified")
@@ -213,6 +212,10 @@ class RequiredParameter(ExpectedParameter[ParameterType]):
            def __init__(self):
                self.required_param = None
                self.optional_param = "defaultValue"
+
+    :param parameter_type: (str, int, float, set, list, dict, type(None))
+    :param alt_name: alternative name for the parameter, if specified it acts as reference to the parameter
+    :param on_update: callback to react on value update
     """
 
     def __init__(self,
@@ -236,6 +239,10 @@ class OptionalParameter(ExpectedParameter[ParameterType]):
            def __init__(self):
                self.required_param = None
                self.optional_param = "defaultValue"
+
+    :param parameter_type: (str, int, float, set, list, dict, type(None))
+    :param alt_name: alternative name for the parameter, if specified it acts as reference to the parameter
+    :param on_update: callback to react on value update
     """
 
     def __init__(self,
@@ -272,205 +279,3 @@ def retrieve_parameters(input_val, parameter_type: Type[ExpectedParameter]) -> d
                 result[param.name] = param
 
     return result
-
-
-class ParameterSchemaBuilder:
-
-    RequiredFieldName = "required"
-    ByteTypeName = "Byte"
-    ShortTypeName = "Short"
-    IntTypeName = "Integer"
-    LongTypeName = "Long"
-    FloatTypeName = "Float"
-    DoubleTypeName = "Double"
-    BooleanTypeName = "Boolean"
-    StringTypeName = "String"
-    ListTypeName = "List"
-    SetTypeName = "Set"
-    MapTypeName = "Map"
-    ObjectTypeName = "Object"
-
-    _name_to_type = {
-        ByteTypeName: bytes,
-        ShortTypeName: int,
-        IntTypeName: int,
-        LongTypeName: int,
-        FloatTypeName: float,
-        DoubleTypeName: float,
-        BooleanTypeName: bool,
-        StringTypeName: str,
-        ListTypeName: list,
-        SetTypeName: set,
-        MapTypeName: dict,
-        ObjectTypeName: object
-    }
-
-    _type_to_name = {
-        bytes: ByteTypeName,
-        int: IntTypeName,
-        float: FloatTypeName,
-        bool: BooleanTypeName,
-        str: StringTypeName,
-        list: ListTypeName,
-        set: SetTypeName,
-        dict: MapTypeName,
-        object: ObjectTypeName
-    }
-
-    def __init__(self, parameters: {} = None):
-
-        self.parameters = parameters
-
-        if self.parameters is None:
-            self.parameters = {}
-
-        self.required = []
-
-    def get_complete_schema(self) -> dict:
-        return self.parameters
-
-    @staticmethod
-    def builder(parameters: {} = None):
-        return ParameterSchemaBuilder.BuilderInit(ParameterSchemaBuilder(parameters))
-
-    # =============================================================================
-
-    class BuilderInit:
-
-        def __init__(self, schema_builder):
-            self.schema_builder = schema_builder
-
-        def new_parameter(self, parameter_name: str):
-            if parameter_name == ParameterSchemaBuilder.RequiredFieldName:
-                raise ValueError(f"Attempted to define configuration schema parameter with "
-                                 f"the reserved word: {ParameterSchemaBuilder.RequiredFieldName}")
-
-            if parameter_name in self.schema_builder.parameters:
-                raise AttributeError(f"Parameter already existing with name: {parameter_name}")
-
-            return ParameterSchemaBuilder._TypeBuilder(parameter_name, self.schema_builder)
-
-        def build(self):
-            return self.schema_builder.get_complete_schema()
-
-    # =============================================================================
-
-    class _TypeBuilder:
-        def __init__(self, parameter_name: str, schema_builder):
-            self.__parameter_name = parameter_name
-            self.schema_builder = schema_builder
-
-        def as_type(self, param_type, *generic_parameters):
-            """
-            Converts the provide type to a unified string and forwards it to the next
-            builder phase. If the type is instance of a generic, then it calls itself
-            recursively to extract the type and generic parameter information. If the
-            type is an instance, then its str value will be provided as custom type.
-            If the type is class type, then it will be checked, whether it is an Enum.
-            If not, then generic parameters will be attempted to be extracted. Then
-            the actual type will be converted to string.
-
-            :param param_type: type to be converted
-            :param generic_parameters: optional generic parameters
-            :return: next builder phase
-            """
-            if not inspect.isclass(param_type):
-                if isinstance(param_type, GenericAlias):
-                    return self.as_type(param_type.__origin__, *param_type.__args__)
-
-                return ParameterSchemaBuilder._ParameterClassifierBuilder(self.__parameter_name,
-                                                                          param_type, self.schema_builder)
-            else:
-                if issubclass(param_type, Enum):
-                    if not inspect.isclass(param_type):
-                        raise TypeError(f"Expected argument type is <class> got {type(param_type)} instead")
-
-                    return ParameterSchemaBuilder._ParameterClassifierBuilder(self.__parameter_name,
-                                                                              [e.name for e in param_type],
-                                                                              self.schema_builder)
-                generic_parameter_strings = []
-                for generic in generic_parameters:
-                    generic_string = generic.__name__ if generic not in ParameterSchemaBuilder._type_to_name else \
-                        ParameterSchemaBuilder._type_to_name[generic]
-                    generic_parameter_strings.append(generic_string)
-
-                generics_string = "" if 0 == len(generic_parameter_strings) else \
-                    "<" + ",".join(generic_parameter_strings) + ">"
-
-                param_type_string = param_type.__name__ if param_type not in ParameterSchemaBuilder._type_to_name else \
-                    ParameterSchemaBuilder._type_to_name[param_type]
-
-                return ParameterSchemaBuilder.\
-                    _ParameterClassifierBuilder(self.__parameter_name,
-                                                param_type_string + generics_string,
-                                                self.schema_builder)
-
-        def as_byte(self):
-            return self.as_type(bytes)
-
-        def as_int(self):
-            return self.as_type(int)
-
-        def as_float(self):
-            return self.as_type(float)
-
-        def as_boolean(self):
-            return self.as_type(bool)
-
-        def as_object(self, obj):
-            return self.as_type(obj)
-
-        def as_list(self):
-            return self.as_type(list)
-
-        def as_list_of(self, list_item_type):
-            return self.as_type(list, list_item_type)
-
-        def as_set(self):
-            return self.as_type(set)
-
-        def as_set_of(self, set_item_type):
-            return self.as_type(set, set_item_type)
-
-        def as_string(self):
-            return self.as_type(str)
-
-        def as_enum(self, enum):
-            return self.as_type(enum)
-
-        def as_enum_from_list(self, list_as_enum: list):
-            return self.as_type(list_as_enum)
-
-        def as_map(self, map_param: dict):
-            return self.as_type(map_param)
-
-        def as_map_of(self, key_type, value_type):
-            return self.as_type(dict[key_type, value_type])
-
-        def as_custom_type(self, customType):
-            return self.as_type(customType)
-
-    # =============================================================================
-
-    class _ParameterClassifierBuilder:
-        def __init__(self, parameter_name: str, parameter_type, schema_builder):
-            self.__parameter_name = parameter_name
-            self.__parameter_type = parameter_type
-            self.schema_builder = schema_builder
-
-        def required(self):
-            self.schema_builder.parameters[self.__parameter_name] = self.__parameter_type
-
-            if self.__parameter_name not in self.schema_builder.required:
-                self.schema_builder.required.append(self.__parameter_name)
-
-            if ParameterSchemaBuilder.RequiredFieldName not in self.schema_builder.parameters:
-                self.schema_builder.parameters[ParameterSchemaBuilder.RequiredFieldName] = \
-                    self.schema_builder.required
-
-            return ParameterSchemaBuilder.BuilderInit(self.schema_builder)
-
-        def optional(self):
-            self.schema_builder.parameters[self.__parameter_name] = self.__parameter_type
-
-            return ParameterSchemaBuilder.BuilderInit(self.schema_builder)

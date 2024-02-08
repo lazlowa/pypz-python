@@ -37,6 +37,11 @@ class ChannelInputPort(InputPortPlugin, ResourceHandlerPlugin, ExtendedPlugin, A
     to realize transfer functionalities. It means that once there is a proper
     channel implementation, a fully functional InputPortPlugin can be made by
     providing that implementation in the abstract new_input_channel() method.
+
+    :param name: name of the instance, if not provided, it will be attempted to deduce from the variable's name
+    :param schema: the schema of the port plugin, which will be used to send/retrieve data
+    :param group_mode: if set to True, the all the input ports in the group shall receive all messages
+    :param channel_reader_type: the type of the channel reader to be used
     """
 
     # ======================= parameter descriptors =======================
@@ -260,6 +265,10 @@ class ChannelOutputPort(OutputPortPlugin, ResourceHandlerPlugin, ExtendedPlugin,
     to realize transfer functionalities. It means that once there is a proper
     channel implementation, a fully functional OutputPortPlugin can be made by
     providing that implementation in the abstract new_output_channel() method.
+
+    :param name: name of the instance, if not provided, it will be attempted to deduce from the variable's name
+    :param schema: the schema of the port plugin, which will be used to send/retrieve data
+    :param channel_writer_type: the type of the channel writer to be used
     """
 
     # ======================= parameter descriptors =======================

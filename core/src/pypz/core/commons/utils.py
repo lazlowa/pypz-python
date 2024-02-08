@@ -21,6 +21,14 @@ from typing import Generic, TypeVar, Any
 
 
 def ensure_type(value, expected_type: type):
+    """
+    Convenience method to ensure that the value has the expected type.
+
+    :param value: value to check
+    :param expected_type: expected type
+
+    :raises: TypeError
+    """
     if not isinstance(value, expected_type):
         raise TypeError(f"Expected type {expected_type} got {type(value)} instead")
 
@@ -35,6 +43,13 @@ ReferenceType = TypeVar('ReferenceType')
 
 
 class SynchronizedReference(Generic[ReferenceType]):
+    """
+    This class realizes a synchronized reference i.e., it locks the object during
+    read and write to avoid race conditions. This class is intended to safeguard
+    pypz for the time after GIL has been removed for good.
+
+    :param reference: the reference to the object with the generic type ReferenceType
+    """
 
     def __init__(self, reference: ReferenceType):
         self.__reference: ReferenceType = reference
@@ -50,6 +65,13 @@ class SynchronizedReference(Generic[ReferenceType]):
 
 
 class TemplateResolver:
+    """
+    This class realizes the logic to resolve templates in strings. As of 02/2024 only
+    environment variables can be resolved.
+
+    :param left_template_boundary: the start of the template
+    :param right_template_boundary: the end of the template
+    """
 
     def __init__(self, left_template_boundary: str, right_template_boundary: str):
 
@@ -138,7 +160,10 @@ class InterruptableTimer:
 
 def convert_to_dict(obj: Any) -> Any:
     """
-    This method attempts to convert an object recursively to a dictionary
+    This method attempts to convert an object recursively to a dictionary.
+
+    :param obj: any object that can be converted to dict
+    :return: resulted dict or the object, if no valid conversion available (necessary due to the recursion)
     """
 
     if isinstance(obj, list):
@@ -157,8 +182,13 @@ def convert_to_dict(obj: Any) -> Any:
 
 def is_type_allowed(obj, allowed_types: tuple) -> bool:
     """
-    This function checks if the type of the provided object is allowed given
+    This convenience function checks if the type of the provided object is allowed given
     the tuple of allowed types provided as argument.
+
+    :param obj: object to check
+    :param allowed_types: allowed types
+
+    :return: True if allowed, False otherwise
     """
 
     if not isinstance(obj, allowed_types):

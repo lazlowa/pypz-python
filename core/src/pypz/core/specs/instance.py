@@ -113,6 +113,9 @@ class Instance(Generic[NestedInstanceType], RegisteredInterface, ABC, metaclass=
     all the other models. It abstracts all common features and functionalities
     that is required to maintain the actual instances like parameters
     or even multi level nested instances.
+
+    :param name: name of the instance, if not provided, it will be attempted to deduce from the variable's name
+    :param nested_instance_type: type of the expected nested instances
     """
 
     # ========= ctor ==========

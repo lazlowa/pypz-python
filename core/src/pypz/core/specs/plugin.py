@@ -33,6 +33,8 @@ class Plugin(Instance[None], InstanceGroup, RegisteredInterface, ABC):
     from other interfaces like the Operator. It is necessary to avoid the
     case, where an Operator could be nested into other Operators. All
     plugin interfaces shall extend this one.
+
+    :param name: name of the instance, if not provided, it will be attempted to deduce from the variable's name
     """
 
     def __init__(self, name: str = None, *args, **kwargs):
@@ -97,7 +99,12 @@ class ResourceHandlerPlugin(Plugin, RegisteredInterface, ABC):
     This plugin interface allows to implement resource management related
     functionalities. The respective methods will be called at specific
     times during the execution. Check :ref:`executor` for more information.
+
+    :param name: name of the instance, if not provided, it will be attempted to deduce from the variable's name
     """
+
+    def __init__(self, name: str = None, *args, **kwargs):
+        super().__init__(name, None, *args, **kwargs)
 
     @abstractmethod
     def _on_resource_creation(self) -> bool:
@@ -126,6 +133,9 @@ class PortPlugin(Plugin, RegisteredInterface, ABC):
     """
     This plugin interface allows to implement common methods for
     port both input and output port plugins.
+
+    :param name: name of the instance, if not provided, it will be attempted to deduce from the variable's name
+    :param schema: the schema of the port plugin, which will be used to send/retrieve data
     """
 
     def __init__(self, name: Optional[str] = None,
@@ -213,7 +223,16 @@ class OutputPortPlugin(PortPlugin, RegisteredInterface, ABC):
     This plugin interface allows to implement data transfer output port for an operator.
     Operators can communicate via ports. Different technologies can be implemented
     allowing operators to talk through them.
+
+    :param name: name of the instance, if not provided, it will be attempted to deduce from the variable's name
+    :param schema: the schema of the port plugin, which will be used to send/retrieve data
     """
+
+    def __init__(self,
+                 name: Optional[str] = None,
+                 schema: Optional[Any] = None,
+                 *args, **kwargs):
+        super().__init__(name, schema, *args, **kwargs)
 
     @abstractmethod
     def send(self, data: Any) -> Any:
@@ -232,6 +251,10 @@ class InputPortPlugin(PortPlugin, RegisteredInterface, ABC):
     This plugin interface allows to implement data transfer input port for an operator.
     Operators can communicate via ports. Different technologies can be implemented
     allowing operators to talk through them.
+
+    :param name: name of the instance, if not provided, it will be attempted to deduce from the variable's name
+    :param schema: the schema of the port plugin, which will be used to send/retrieve data
+    :param group_mode: if set to True, the all the input ports in the group shall receive all messages
     """
 
     def __init__(self,
@@ -288,7 +311,12 @@ class ServicePlugin(Plugin, RegisteredInterface, ABC):
     - mounting service, which mounts and unmounts a remote location
     - listener service, which starts a background thread to listen for something
     - etc.
+
+    :param name: name of the instance, if not provided, it will be attempted to deduce from the variable's name
     """
+
+    def __init__(self, name: str = None, *args, **kwargs):
+        super().__init__(name, None, *args, **kwargs)
 
     @abstractmethod
     def _on_service_start(self) -> bool:
@@ -324,7 +352,12 @@ class ExtendedPlugin(Plugin, RegisteredInterface, ABC):
     This interface extends the normal plugin's lifecycle. The methods
     defined span outside the execution context, hence it can be used,
     if you need to perform some action before and after execution.
+
+    :param name: name of the instance, if not provided, it will be attempted to deduce from the variable's name
     """
+
+    def __init__(self, name: str = None, *args, **kwargs):
+        super().__init__(name, None, *args, **kwargs)
 
     @abstractmethod
     def _pre_execution(self) -> None:
@@ -349,4 +382,9 @@ class LoggerPlugin(Plugin, ContextLoggerInterface, RegisteredInterface, ABC):
     This addon interface allows to implement different logging technologies
     to be used during the execution. Notice that the logger methods are
     coming from the ContextLogger class.
+
+    :param name: name of the instance, if not provided, it will be attempted to deduce from the variable's name
     """
+
+    def __init__(self, name: str = None, *args, **kwargs):
+        super().__init__(name, None, *args, **kwargs)

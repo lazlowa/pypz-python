@@ -62,6 +62,9 @@ class ContextLogger(ContextLoggerInterface):
     further forward to it's nested instances and so on. Each instance provides itself
     to the context stack so, if a logger method of the actual context will be called,
     then the logger itself will get the context information automatically.
+
+    :param logger: a logger implementation that will be used to route the messages to
+    :param context_stack: the information about the current and previous contexts
     """
 
     def __init__(self, logger: ContextLoggerInterface, *context_stack: str):
@@ -107,8 +110,14 @@ class ContextLogger(ContextLoggerInterface):
 
 
 class DefaultContextLogger(ContextLoggerInterface):
+    """
+    The default implementation of the :class:`ContextLoggerInterface <pypz.core.commons.loggers.ContextLoggerInterface>`,
+    which will send log messages to the standard out.
 
-    def __init__(self, name: str):
+    :param name: name of the instance, if not provided, it will be attempted to deduce from the variable's name
+    """
+
+    def __init__(self, name: str = None):
         logging.basicConfig()
         self._logger: logging.Logger = colorlog.getLogger(name)
         self._logger.propagate = False

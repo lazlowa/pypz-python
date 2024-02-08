@@ -32,6 +32,10 @@ class ChannelReader(ChannelBase):
     The idea is that the class provides some core, protected abstract methods, which shall be implemented by
     the developer. These implementations then will be invoked by invoker methods. This makes sure that additional
     necessary logic will be performed along the implemented.
+
+    :param channel_name: name of the channel
+    :param context: the :class:`PortPlugin <pypz.core.specs.plugin.PortPlugin>`, which operates this channel
+    :param executor: an external ThreadPoolExecutor, if not provided, on will be created internally
     """
 
     # ======================= static fields =======================
@@ -283,6 +287,10 @@ class ChannelWriter(ChannelBase):
     The idea is that the class provides some core, protected abstract methods, which shall be implemented by
     the developer. These implementations then will be invoked by invoker methods. This makes sure that additional
     necessary logic will be performed along the implemented.
+
+    :param channel_name: name of the channel
+    :param context: the :class:`PortPlugin <pypz.core.specs.plugin.PortPlugin>`, which operates this channel
+    :param executor: an external ThreadPoolExecutor, if not provided, on will be created internally
     """
 
     MetricsBufferLength = 10

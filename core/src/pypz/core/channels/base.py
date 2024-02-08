@@ -38,6 +38,15 @@ class ChannelMetric:
 
 
 class ChannelBase(ABC):
+    """
+    The abstract base for the :class:`ChannelReader <pypz.core.channels.io.ChannelReader>` and the
+    :class:`ChannelWriter <pypz.core.channels.io.ChannelWriter>` classes. It contains the common
+    logic to be used in both classes' implementations.
+
+    :param channel_name: name of the channel
+    :param context: the :class:`PortPlugin <pypz.core.specs.plugin.PortPlugin>`, which operates this channel
+    :param executor: an external ThreadPoolExecutor, if not provided, on will be created internally
+    """
 
     # ======================= Static fields =======================
 

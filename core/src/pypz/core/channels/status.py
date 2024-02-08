@@ -80,6 +80,14 @@ class ChannelStatus(Enum):
 class ChannelStatusMessage:
     """
     This class is a Data Transfer Object (DTO) for the status messages sent between the channels.
+
+    :param channel_name: name of the channel
+    :param channel_context_name: name of the context of the channel, which is the full name of the plugin
+    :param channel_group_name: name of the group of the channel, which is the group name of the plugin
+    :param channel_group_index: index of the operator in the group, which is inherited by the plugin
+    :param status: status
+    :param payload: optional payload
+    :param timestamp: timestamp of the message at creation
     """
 
     def __init__(self,
@@ -120,6 +128,11 @@ class ChannelStatusMonitor(ChannelFilter):
     This class has the responsibility to monitor and track state of the connected channel RW entities.
     If the counterpart sends a status message, this class has to parse and interpret it. In addition,
     it provides an implementation for the ``ChannelFilter`` interface to enable certain queries.
+
+    :param channel_name: name of the channel
+    :param channel_context_name: name of the context of the channel, which is the full name of the plugin
+    :param channel_group_name: name of the group of the channel, which is the group name of the plugin
+    :param logger: the context logger of the plugin, which is inherited from the operator
     """
 
     ValidPatienceTimeInMs = 120000
