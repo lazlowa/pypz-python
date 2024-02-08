@@ -286,6 +286,11 @@ class State(ABC):
 
 
 class StateEntry(State):
+    """
+    Serves as entry point for the state machine.
+
+    :param context: :class:`pypz.executors.operator.context.ExecutionContext`
+    """
 
     def __init__(self, context: ExecutionContext, *args, **kwargs):
         super().__init__(context, *args, **kwargs)
@@ -301,6 +306,12 @@ class StateEntry(State):
 
 
 class StateKilled(State):
+    """
+    Serves as exit point for the state machine.
+
+    :param context: :class:`pypz.executors.operator.context.ExecutionContext`
+    """
+
     def __init__(self, context: ExecutionContext, *args, **kwargs):
         super().__init__(context, *args, **kwargs)
 
@@ -315,6 +326,27 @@ class StateKilled(State):
 
 
 class StateOperationInit(State):
+    """
+    This state initializes the operator.
+
+    Invoked methods:
+
+    1. :meth:`pypz.core.specs.plugin.PortPlugin._on_port_open`
+    2. :meth:`pypz.core.specs.operator.Operator._on_init`
+
+    This order of execution guarantees that the Operator's implementation is already having access
+    to the ports in the init phase.
+
+
+    .. note::
+       Note that both the :class:`InputPortPlugin <pypz.core.specs.plugin.InputPortPlugin>` and
+       the :class:`OutputPortPlugin <pypz.core.specs.plugin.OutputPortPlugin>` inherits from the
+       :class:`PortPlugin <pypz.core.specs.plugin.PortPlugin>`, hence plugins of both types will
+       be initialized.
+
+    :param context: :class:`pypz.executors.operator.context.ExecutionContext`
+    """
+
     def __init__(self, context: ExecutionContext, *args, **kwargs):
         super().__init__(context, *args, **kwargs)
 
@@ -351,6 +383,22 @@ class StateOperationInit(State):
 
 
 class StateOperationRunning(State):
+    """
+    This state calls the main processing method of the Operator:
+
+    :meth:`pypz.core.specs.operator.Operator._on_running`
+
+    After successful finish of the Operator's method, the offset commit on all the
+    :class:`InputPortPlugin <pypz.core.specs.plugin.InputPortPlugin>` will be invoked.
+
+    :meth:`pypz.core.specs.plugin.InputPortPlugin.commit_current_read_offset`
+
+    This ensures that even, if the developer did not commit offsets manually in the
+    implementation, offsets will still be committed.
+
+    :param context: :class:`pypz.executors.operator.context.ExecutionContext`
+    """
+
     def __init__(self, context: ExecutionContext, *args, **kwargs):
         super().__init__(context, *args, **kwargs)
 
@@ -395,6 +443,26 @@ class StateOperationRunning(State):
 
 
 class StateOperationShutdown(State):
+    """
+    This state shuts down the operator.
+
+    Invoked methods:
+
+    1. :meth:`pypz.core.specs.operator.Operator._on_shutdown`
+    2. :meth:`pypz.core.specs.plugin.PortPlugin._on_port_close`
+
+    This order of execution guarantees that the Operator's implementation is still having access
+    to the ports in the shutdown phase.
+
+    .. note::
+       Note that both the :class:`InputPortPlugin <pypz.core.specs.plugin.InputPortPlugin>` and
+       the :class:`OutputPortPlugin <pypz.core.specs.plugin.OutputPortPlugin>` inherits from the
+       :class:`PortPlugin <pypz.core.specs.plugin.PortPlugin>`, hence plugins of both types will
+       be shut down.
+
+    :param context: :class:`pypz.executors.operator.context.ExecutionContext`
+    """
+
     def __init__(self, context: ExecutionContext, *args, **kwargs):
         super().__init__(context, *args, **kwargs)
 
@@ -433,6 +501,16 @@ class StateOperationShutdown(State):
 
 
 class StateResourceCreation(State):
+    """
+    This state is responsible to invoke the resource creation related methods.
+
+    Invoked methods:
+
+    :meth:`pypz.core.specs.plugin.ResourceHandlerPlugin._on_resource_creation`
+
+    :param context: :class:`pypz.executors.operator.context.ExecutionContext`
+    """
+
     def __init__(self, context: ExecutionContext, *args, **kwargs):
         super().__init__(context, *args, **kwargs)
 
@@ -470,6 +548,16 @@ class StateResourceCreation(State):
 
 
 class StateResourceDeletion(State):
+    """
+    This state is responsible to invoke the resource deletion related methods.
+
+    Invoked methods:
+
+    :meth:`pypz.core.specs.plugin.ResourceHandlerPlugin._on_resource_deletion`
+
+    :param context: :class:`pypz.executors.operator.context.ExecutionContext`
+    """
+
     def __init__(self, context: ExecutionContext, *args, **kwargs):
         super().__init__(context, *args, **kwargs)
 
@@ -503,6 +591,15 @@ class StateResourceDeletion(State):
 
 
 class StateServiceStart(State):
+    """
+    This state is responsible to invoke the service start related methods.
+
+    Invoked methods:
+
+    :meth:`pypz.core.specs.plugin.ServicePlugin._on_service_start`
+
+    :param context: :class:`pypz.executors.operator.context.ExecutionContext`
+    """
 
     def __init__(self, context: ExecutionContext, *args, **kwargs):
         super().__init__(context, *args, **kwargs)
@@ -541,6 +638,15 @@ class StateServiceStart(State):
 
 
 class StateServiceShutdown(State):
+    """
+    This state is responsible to invoke the service shutdown related methods.
+
+    Invoked methods:
+
+    :meth:`pypz.core.specs.plugin.ServicePlugin._on_service_shutdown`
+
+    :param context: :class:`pypz.executors.operator.context.ExecutionContext`
+    """
 
     def __init__(self, context: ExecutionContext, *args, **kwargs):
         super().__init__(context, *args, **kwargs)
