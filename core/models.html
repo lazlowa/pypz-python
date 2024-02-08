@@ -62,22 +62,14 @@
 <li class="toctree-l2"><a class="reference internal" href="#instances">Instances</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#attributes">Attributes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#generic-type">Generic Type</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#metaclass">Metaclass</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#pypz.core.specs.instance.InterceptedInstance"><code class="docutils literal notranslate"><span class="pre">InterceptedInstance</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="#metaclass">Metaclass</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#dependencies">Dependencies</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#parameters">Parameters</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#data-transfer-object-dto">Data Transfer Object (DTO)</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#pypz.core.specs.instance.Instance.get_dto"><code class="docutils literal notranslate"><span class="pre">Instance.get_dto()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pypz.core.specs.instance.Instance.create_from_dto"><code class="docutils literal notranslate"><span class="pre">Instance.create_from_dto()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#working-with-yaml">Working with YAML</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#instance-groups">Instance Groups</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#pypz.core.specs.instance.InstanceGroup"><code class="docutils literal notranslate"><span class="pre">InstanceGroup</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="#instance-groups">Instance Groups</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#pipeline">Pipeline</a></li>
@@ -89,29 +81,11 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#connections">Connections</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#replication">Replication</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#methods">Methods</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#pypz.core.specs.operator.Operator._on_init"><code class="docutils literal notranslate"><span class="pre">Operator._on_init()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pypz.core.specs.operator.Operator._on_running"><code class="docutils literal notranslate"><span class="pre">Operator._on_running()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pypz.core.specs.operator.Operator._on_shutdown"><code class="docutils literal notranslate"><span class="pre">Operator._on_shutdown()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#methods">Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#logging">Logging</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#logging">Logging</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#pypz.core.specs.operator.Operator.Logger"><code class="docutils literal notranslate"><span class="pre">Logger</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#plugins">Plugins</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#pypz.core.specs.plugin.Plugin"><code class="docutils literal notranslate"><span class="pre">Plugin</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pypz.core.specs.plugin.ResourceHandlerPlugin"><code class="docutils literal notranslate"><span class="pre">ResourceHandlerPlugin</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pypz.core.specs.plugin.PortPlugin"><code class="docutils literal notranslate"><span class="pre">PortPlugin</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pypz.core.specs.plugin.InputPortPlugin"><code class="docutils literal notranslate"><span class="pre">InputPortPlugin</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pypz.core.specs.plugin.OutputPortPlugin"><code class="docutils literal notranslate"><span class="pre">OutputPortPlugin</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pypz.core.specs.plugin.ServicePlugin"><code class="docutils literal notranslate"><span class="pre">ServicePlugin</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pypz.core.specs.plugin.ExtendedPlugin"><code class="docutils literal notranslate"><span class="pre">ExtendedPlugin</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pypz.core.specs.plugin.LoggerPlugin"><code class="docutils literal notranslate"><span class="pre">LoggerPlugin</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="#plugins">Plugins</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="parameters.html">Parameters</a></li>
@@ -144,10 +118,6 @@
 <li class="toctree-l1"><a class="reference external" href="https://github.com/lazlowa/pypz-python">Source Code</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/lazlowa/pypz-starter-template">Starter Template Project</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/lazlowa/pypz-examples">Examples</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Index</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../modindex/modules.html">pypz</a></li>
 </ul>
 
         </div>
@@ -196,17 +166,21 @@ created from the classes. This design enables <em>pypz</em> to model the pipelin
 The Instance class itself is the base for every other specs. It contains all the necessary
 logic and feature that is required by the mentioned design.</p>
 <figure class="align-default" id="id5">
-<span id="inheritance-diagram"></span><div class="graphviz"><img src="../_images/inheritance-72576939779a3cacf0c4d043ef825f8df5cab6be.png" alt="Inheritance diagram of pypz.core.specs.pipeline.Pipeline, pypz.core.specs.operator.Operator, pypz.core.specs.plugin.LoggerPlugin, pypz.core.specs.plugin.ExtendedPlugin, pypz.core.specs.plugin.ServicePlugin, pypz.core.specs.plugin.InputPortPlugin, pypz.core.specs.plugin.OutputPortPlugin" usemap="#inheritance70fd585c5a" class="inheritance graphviz" /></div>
+<span id="inheritance-diagram"></span><div class="graphviz"><img src="../_images/inheritance-68aaeb25875f9ed7da4f9e915f7721173a866858.png" alt="Inheritance diagram of pypz.core.specs.pipeline.Pipeline, pypz.core.specs.operator.Operator, pypz.core.specs.plugin.LoggerPlugin, pypz.core.specs.plugin.ExtendedPlugin, pypz.core.specs.plugin.ServicePlugin, pypz.core.specs.plugin.InputPortPlugin, pypz.core.specs.plugin.OutputPortPlugin" usemap="#inheritance70fd585c5a" class="inheritance graphviz" /></div>
 <map id="inheritance70fd585c5a" name="inheritance70fd585c5a">
-<area shape="poly" id="node2" href="logging.html#pypz.core.commons.loggers.ContextLoggerInterface" target="_top" title="This interface provides the necessary methods to be able to implement" alt="" coords="530,261,519,254,487,247,437,242,374,238,305,237,235,238,173,242,123,247,91,254,80,261,91,269,123,276,173,281,235,285,305,286,374,285,437,281,487,276,519,269"/>
-<area shape="poly" id="node3" href="#pypz.core.specs.plugin.ExtendedPlugin" target="_top" title="This interface extends the normal plugin&#39;s lifecycle. The methods" alt="" coords="1406,653,1399,646,1377,639,1344,634,1302,630,1255,629,1208,630,1166,634,1132,639,1111,646,1104,653,1111,661,1132,668,1166,673,1208,677,1255,678,1302,677,1344,673,1377,668,1399,661"/>
-<area shape="poly" id="node4" href="#pypz.core.specs.plugin.Plugin" target="_top" title="This interface has the only purpose to separate the plugin interfaces" alt="" coords="773,457,770,449,760,443,746,437,728,434,708,433,687,434,669,437,655,443,645,449,642,457,645,465,655,471,669,477,687,480,708,481,728,480,746,477,760,471,770,465"/>
-<area shape="poly" id="node7" href="#pypz.core.specs.plugin.InputPortPlugin" target="_top" title="This plugin interface allows to implement data transfer input port for an operator." alt="" coords="1021,849,1014,842,992,835,959,829,918,826,872,825,826,826,784,829,751,835,730,842,723,849,730,857,751,863,784,869,826,872,872,874,918,872,959,869,992,863,1014,857"/>
-<area shape="poly" id="node8" href="#pypz.core.specs.plugin.PortPlugin" target="_top" title="This plugin interface allows to implement common methods for" alt="" coords="809,653,804,646,790,639,767,634,739,630,708,629,676,630,648,634,625,639,611,646,606,653,611,661,625,668,648,673,676,677,708,678,739,677,767,673,790,668,804,661"/>
-<area shape="poly" id="node10" href="#pypz.core.specs.instance.InstanceGroup" target="_top" title="This class provides methods to access instance group related information. It can be" alt="" coords="982,261,975,254,955,247,923,242,884,238,840,237,796,238,756,242,724,247,704,254,697,261,704,269,724,276,756,281,796,285,840,286,884,285,923,281,955,276,975,269"/>
-<area shape="poly" id="node11" href="#pypz.core.specs.plugin.LoggerPlugin" target="_top" title="This addon interface allows to implement different logging technologies" alt="" coords="591,653,585,646,566,639,538,634,502,630,463,629,423,630,387,634,359,639,341,646,335,653,341,661,359,668,387,673,423,677,463,678,502,677,538,673,566,668,585,661"/>
-<area shape="poly" id="node13" href="#pypz.core.specs.plugin.OutputPortPlugin" target="_top" title="This plugin interface allows to implement data transfer output port for an operator." alt="" coords="708,849,700,842,677,835,640,829,594,826,543,825,492,826,446,829,410,835,386,842,378,849,386,857,410,863,446,869,492,872,543,874,594,872,640,869,677,863,700,857"/>
-<area shape="poly" id="node15" href="#pypz.core.specs.plugin.ServicePlugin" target="_top" title="This plugin interface allows to implement a service. Services are special entities" alt="" coords="1089,653,1082,646,1064,639,1034,634,997,630,956,629,915,630,878,634,849,639,830,646,824,653,830,661,849,668,878,673,915,677,956,678,997,677,1034,673,1064,668,1082,661"/>
+<area shape="poly" id="node2" href="../indexes/core/pypz.core.commons.loggers.html#pypz.core.commons.loggers.ContextLoggerInterface" target="_top" title="This interface provides the necessary methods to be able to implement" alt="" coords="530,261,519,254,487,247,437,242,374,238,305,237,235,238,173,242,123,247,91,254,80,261,91,269,123,276,173,281,235,285,305,286,374,285,437,281,487,276,519,269"/>
+<area shape="poly" id="node3" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.ExtendedPlugin" target="_top" title="This interface extends the normal plugin&#39;s lifecycle. The methods" alt="" coords="1406,653,1399,646,1377,639,1344,634,1302,630,1255,629,1208,630,1166,634,1132,639,1111,646,1104,653,1111,661,1132,668,1166,673,1208,677,1255,678,1302,677,1344,673,1377,668,1399,661"/>
+<area shape="poly" id="node4" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.Plugin" target="_top" title="This interface has the only purpose to separate the plugin interfaces" alt="" coords="773,457,770,449,760,443,746,437,728,434,708,433,687,434,669,437,655,443,645,449,642,457,645,465,655,471,669,477,687,480,708,481,728,480,746,477,760,471,770,465"/>
+<area shape="poly" id="node7" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.InputPortPlugin" target="_top" title="This plugin interface allows to implement data transfer input port for an operator." alt="" coords="1021,849,1014,842,992,835,959,829,918,826,872,825,826,826,784,829,751,835,730,842,723,849,730,857,751,863,784,869,826,872,872,874,918,872,959,869,992,863,1014,857"/>
+<area shape="poly" id="node8" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.PortPlugin" target="_top" title="This plugin interface allows to implement common methods for" alt="" coords="809,653,804,646,790,639,767,634,739,630,708,629,676,630,648,634,625,639,611,646,606,653,611,661,625,668,648,673,676,677,708,678,739,677,767,673,790,668,804,661"/>
+<area shape="poly" id="node9" href="../indexes/core/pypz.core.specs.instance.html#pypz.core.specs.instance.Instance" target="_top" title="This class represents the instance specs that serves as base for" alt="" coords="1230,261,1226,254,1214,247,1195,242,1171,238,1144,237,1117,238,1093,242,1074,247,1062,254,1057,261,1062,269,1074,276,1093,281,1117,285,1144,286,1171,285,1195,281,1214,276,1226,269"/>
+<area shape="poly" id="node10" href="../indexes/core/pypz.core.specs.instance.html#pypz.core.specs.instance.InstanceGroup" target="_top" title="This class provides methods to access instance group related information. It can be" alt="" coords="982,261,975,254,955,247,923,242,884,238,840,237,796,238,756,242,724,247,704,254,697,261,704,269,724,276,756,281,796,285,840,286,884,285,923,281,955,276,975,269"/>
+<area shape="poly" id="node11" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.LoggerPlugin" target="_top" title="This addon interface allows to implement different logging technologies" alt="" coords="591,653,585,646,566,639,538,634,502,630,463,629,423,630,387,634,359,639,341,646,335,653,341,661,359,668,387,673,423,677,463,678,502,677,538,673,566,668,585,661"/>
+<area shape="poly" id="node12" href="../indexes/core/pypz.core.specs.operator.html#pypz.core.specs.operator.Operator" target="_top" title="Operator" alt="" coords="1116,457,1111,449,1098,443,1078,437,1052,434,1024,433,996,434,970,437,950,443,937,449,932,457,937,465,950,471,970,477,996,480,1024,481,1052,480,1078,477,1098,471,1111,465"/>
+<area shape="poly" id="node13" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.OutputPortPlugin" target="_top" title="This plugin interface allows to implement data transfer output port for an operator." alt="" coords="708,849,700,842,677,835,640,829,594,826,543,825,492,826,446,829,410,835,386,842,378,849,386,857,410,863,446,869,492,872,543,874,594,872,640,869,677,863,700,857"/>
+<area shape="poly" id="node15" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.ServicePlugin" target="_top" title="This plugin interface allows to implement a service. Services are special entities" alt="" coords="1089,653,1082,646,1064,639,1034,634,997,630,956,629,915,630,878,634,849,639,830,646,824,653,830,661,849,668,878,673,915,677,956,678,997,677,1034,673,1064,668,1082,661"/>
+<area shape="poly" id="node5" href="../indexes/core/pypz.core.specs.instance.html#pypz.core.specs.instance.RegisteredInterface" target="_top" title="This is a marker interface with the sole purpose to identify the native specs interfaces." alt="" coords="1533,65,1524,57,1497,51,1455,45,1403,42,1344,40,1286,42,1234,45,1192,51,1165,57,1156,65,1165,72,1192,79,1234,85,1286,88,1344,89,1403,88,1455,85,1497,79,1524,72"/>
+<area shape="poly" id="node14" href="../indexes/core/pypz.core.specs.pipeline.html#pypz.core.specs.pipeline.Pipeline" target="_top" title="Pipeline" alt="" coords="1292,457,1288,449,1276,443,1258,437,1236,434,1211,433,1186,434,1163,437,1145,443,1134,449,1130,457,1134,465,1145,471,1163,477,1186,480,1211,481,1236,480,1258,477,1276,471,1288,465"/>
 </map><figcaption>
 <p><span class="caption-text">Inheritance diagram</span><a class="headerlink" href="#id5" title="Link to this image"></a></p>
 </figcaption>
@@ -241,8 +215,8 @@ identified as a nested instance.</p>
 <span id="instance-metaclass"></span><h3>Metaclass<a class="headerlink" href="#metaclass" title="Link to this heading"></a></h3>
 <p>Notice that a custom metaclass is used to be able to intercept the creation of the Instance object.</p>
 <dl class="py class">
-<dt class="sig sig-object py" id="pypz.core.specs.instance.InterceptedInstance">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.instance.</span></span><span class="sig-name descname"><span class="pre">InterceptedInstance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">instance_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context_class</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">Instance</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.specs.instance.InterceptedInstance" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.instance.</span></span><span class="sig-name descname"><span class="pre">InterceptedInstance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">instance_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context_class</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../indexes/core/pypz.core.specs.instance.html#pypz.core.specs.instance.Instance" title="pypz.core.specs.instance.Instance"><span class="pre">Instance</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>This class represents an intercepted instance at init. Part of the feature set is that
 if you don’t provide a name to an instance in its parent context, then its variable name
 is used as name. However, since there is no convenient way to provide the name of the variable
@@ -280,8 +254,8 @@ model called the DTO. By having an intermediate model, we can ensure that only t
 are transmitted that is really necessary to be able to reconstruct an instance object.</p>
 <p>To get the DTO of an Instance, you can use:</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="pypz.core.specs.instance.Instance.get_dto">
-<span class="sig-prename descclassname"><span class="pre">Instance.</span></span><span class="sig-name descname"><span class="pre">get_dto</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">InstanceDTO</span></span></span><a class="headerlink" href="#pypz.core.specs.instance.Instance.get_dto" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">Instance.</span></span><span class="sig-name descname"><span class="pre">get_dto</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../indexes/core/pypz.core.specs.dtos.html#pypz.core.specs.dtos.InstanceDTO" title="pypz.core.specs.dtos.InstanceDTO"><span class="pre">InstanceDTO</span></a></span></span></dt>
 <dd><p>Converts the instance information into the corresponding Data Transfer Object (DTO)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -292,8 +266,8 @@ are transmitted that is really necessary to be able to reconstruct an instance o
 
 <p>To construct an Instance object from a DTO, you can use:</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="pypz.core.specs.instance.Instance.create_from_dto">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Instance.</span></span><span class="sig-name descname"><span class="pre">create_from_dto</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">instance_dto</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">InstanceDTO</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Instance</span></span></span><a class="headerlink" href="#pypz.core.specs.instance.Instance.create_from_dto" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Instance.</span></span><span class="sig-name descname"><span class="pre">create_from_dto</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">instance_dto</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../indexes/core/pypz.core.specs.dtos.html#pypz.core.specs.dtos.InstanceDTO" title="pypz.core.specs.dtos.InstanceDTO"><span class="pre">InstanceDTO</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../indexes/core/pypz.core.specs.instance.html#pypz.core.specs.instance.Instance" title="pypz.core.specs.instance.Instance"><span class="pre">Instance</span></a></span></span></dt>
 <dd><p>Creates an instance object from the DTO representation. It is capable
 to retrieve and load specified classes and to update created instances
 according to the DTO.</p>
@@ -318,8 +292,8 @@ out of the box, which JSON lacks the support of (e.g., interpreting sets).</p>
 <p>In the background, the instance will be converted into a DTO, which then will be converted into a YAML string.</p>
 <p>To construct an Instance from a YAML string, you can use:</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="pypz.core.specs.instance.Instance.create_from_string">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Instance.</span></span><span class="sig-name descname"><span class="pre">create_from_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Instance</span></span></span><a class="headerlink" href="#pypz.core.specs.instance.Instance.create_from_string" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Instance.</span></span><span class="sig-name descname"><span class="pre">create_from_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../indexes/core/pypz.core.specs.instance.html#pypz.core.specs.instance.Instance" title="pypz.core.specs.instance.Instance"><span class="pre">Instance</span></a></span></span></dt>
 <dd><p>Helper method to provide the functionality to create an instance from
 a json model specified either as string or as dict.</p>
 <dl class="field-list simple">
@@ -341,34 +315,34 @@ a json model specified either as string or as dict.</p>
 you are creating a group of operators. The original instance in this case is called “principal”.</p>
 <p>The class InstanceGroup provides the methods to access useful group related information.</p>
 <dl class="py class">
-<dt class="sig sig-object py" id="pypz.core.specs.instance.InstanceGroup">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.instance.</span></span><span class="sig-name descname"><span class="pre">InstanceGroup</span></span><a class="headerlink" href="#pypz.core.specs.instance.InstanceGroup" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.instance.</span></span><span class="sig-name descname"><span class="pre">InstanceGroup</span></span></dt>
 <dd><p>This class provides methods to access instance group related information. It can be
 implemented on different instance level, since a group might have different meaning
 on top level and on nested level.</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="pypz.core.specs.instance.InstanceGroup.get_group_index">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_group_index</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#pypz.core.specs.instance.InstanceGroup.get_group_index" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_group_index</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pypz.core.specs.instance.InstanceGroup.get_group_name">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_group_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.core.specs.instance.InstanceGroup.get_group_name" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_group_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pypz.core.specs.instance.InstanceGroup.get_group_principal">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_group_principal</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Instance</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.core.specs.instance.InstanceGroup.get_group_principal" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_group_principal</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../indexes/core/pypz.core.specs.instance.html#pypz.core.specs.instance.Instance" title="pypz.core.specs.instance.Instance"><span class="pre">Instance</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pypz.core.specs.instance.InstanceGroup.get_group_size">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_group_size</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#pypz.core.specs.instance.InstanceGroup.get_group_size" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_group_size</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pypz.core.specs.instance.InstanceGroup.is_principal">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_principal</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.core.specs.instance.InstanceGroup.is_principal" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_principal</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -482,8 +456,8 @@ replication factor = 0 means no replication, only the original.</p>
 <p>The Operator class provides methods to implement your business logic. Each method
 is called in specific order based on the <a class="reference internal" href="executor.html#executor"><span class="std std-ref">executor</span></a> implementation.</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="pypz.core.specs.operator.Operator._on_init">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Operator.</span></span><span class="sig-name descname"><span class="pre">_on_init</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.core.specs.operator.Operator._on_init" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Operator.</span></span><span class="sig-name descname"><span class="pre">_on_init</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span></dt>
 <dd><p>This method shall implement the logic to initialize the operation.
 It will be called after services are started and resources are created.</p>
 <dl class="field-list simple">
@@ -498,8 +472,8 @@ It will be called after services are started and resources are created.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pypz.core.specs.operator.Operator._on_running">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Operator.</span></span><span class="sig-name descname"><span class="pre">_on_running</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.core.specs.operator.Operator._on_running" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Operator.</span></span><span class="sig-name descname"><span class="pre">_on_running</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span></dt>
 <dd><p>This method shall implement the actual business logic.
 It will be called after the _on_init has successfully finished</p>
 <dl class="field-list simple">
@@ -515,8 +489,8 @@ It will be called after the _on_init has successfully finished</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pypz.core.specs.operator.Operator._on_shutdown">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Operator.</span></span><span class="sig-name descname"><span class="pre">_on_shutdown</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.core.specs.operator.Operator._on_shutdown" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Operator.</span></span><span class="sig-name descname"><span class="pre">_on_shutdown</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span></dt>
 <dd><p>This method shall implement the logic to shut down the operation.
 It will be called, after the _on_running has successfully finished.</p>
 <dl class="field-list simple">
@@ -542,8 +516,8 @@ method will be called in the background:</p>
 </div>
 <p>The aggregated logger is realized by:</p>
 <dl class="py class">
-<dt class="sig sig-object py" id="pypz.core.specs.operator.Operator.Logger">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.operator.Operator.</span></span><span class="sig-name descname"><span class="pre">Logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logger_plugins</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pypz.core.specs.plugin.LoggerPlugin" title="pypz.core.specs.plugin.LoggerPlugin"><span class="pre">LoggerPlugin</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.specs.operator.Operator.Logger" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.operator.Operator.</span></span><span class="sig-name descname"><span class="pre">Logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logger_plugins</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.LoggerPlugin" title="pypz.core.specs.plugin.LoggerPlugin"><span class="pre">LoggerPlugin</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>This is a wrapper class for the logging functionality. It wraps all the
 implementations of the LoggerAddons and by invoking either method it
 will invoke the corresponding method of each LoggerAddons.</p>
@@ -558,8 +532,8 @@ will invoke the corresponding method of each LoggerAddons.</p>
 of an operator. As you can check on the <a class="reference internal" href="#inheritance-diagram"><span class="std std-ref">Inheritance diagram</span></a>,
 there are several plugin interfaces with different purposes.</p>
 <dl class="py class">
-<dt class="sig sig-object py" id="pypz.core.specs.plugin.Plugin">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.plugin.</span></span><span class="sig-name descname"><span class="pre">Plugin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.specs.plugin.Plugin" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.plugin.</span></span><span class="sig-name descname"><span class="pre">Plugin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>This interface has the only purpose to separate the plugin interfaces
 from other interfaces like the Operator. It is necessary to avoid the
 case, where an Operator could be nested into other Operators. All
@@ -567,39 +541,39 @@ plugin interfaces shall extend this one.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="pypz.core.specs.plugin.ResourceHandlerPlugin">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.plugin.</span></span><span class="sig-name descname"><span class="pre">ResourceHandlerPlugin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.specs.plugin.ResourceHandlerPlugin" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.plugin.</span></span><span class="sig-name descname"><span class="pre">ResourceHandlerPlugin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>This plugin interface allows to implement resource management related
 functionalities. The respective methods will be called at specific
 times during the execution. Check <a class="reference internal" href="executor.html#executor"><span class="std std-ref">Executor</span></a> for more information.</p>
 </dd></dl>
 
 <dl class="py class" id="port-plugins">
-<dt class="sig sig-object py" id="pypz.core.specs.plugin.PortPlugin">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.plugin.</span></span><span class="sig-name descname"><span class="pre">PortPlugin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.specs.plugin.PortPlugin" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.plugin.</span></span><span class="sig-name descname"><span class="pre">PortPlugin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>This plugin interface allows to implement common methods for
 port both input and output port plugins.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="pypz.core.specs.plugin.InputPortPlugin">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.plugin.</span></span><span class="sig-name descname"><span class="pre">InputPortPlugin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.specs.plugin.InputPortPlugin" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.plugin.</span></span><span class="sig-name descname"><span class="pre">InputPortPlugin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>This plugin interface allows to implement data transfer input port for an operator.
 Operators can communicate via ports. Different technologies can be implemented
 allowing operators to talk through them.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="pypz.core.specs.plugin.OutputPortPlugin">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.plugin.</span></span><span class="sig-name descname"><span class="pre">OutputPortPlugin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.specs.plugin.OutputPortPlugin" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.plugin.</span></span><span class="sig-name descname"><span class="pre">OutputPortPlugin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>This plugin interface allows to implement data transfer output port for an operator.
 Operators can communicate via ports. Different technologies can be implemented
 allowing operators to talk through them.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="pypz.core.specs.plugin.ServicePlugin">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.plugin.</span></span><span class="sig-name descname"><span class="pre">ServicePlugin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.specs.plugin.ServicePlugin" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.plugin.</span></span><span class="sig-name descname"><span class="pre">ServicePlugin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>This plugin interface allows to implement a service. Services are special entities
 in the execution, since those are decoupled from the execution life-cycle, hence
 can run in the background. Examples:
@@ -609,16 +583,16 @@ can run in the background. Examples:
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="pypz.core.specs.plugin.ExtendedPlugin">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.plugin.</span></span><span class="sig-name descname"><span class="pre">ExtendedPlugin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.specs.plugin.ExtendedPlugin" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.plugin.</span></span><span class="sig-name descname"><span class="pre">ExtendedPlugin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>This interface extends the normal plugin’s lifecycle. The methods
 defined span outside the execution context, hence it can be used,
 if you need to perform some action before and after execution.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="pypz.core.specs.plugin.LoggerPlugin">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.plugin.</span></span><span class="sig-name descname"><span class="pre">LoggerPlugin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.specs.plugin.LoggerPlugin" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.plugin.</span></span><span class="sig-name descname"><span class="pre">LoggerPlugin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>This addon interface allows to implement different logging technologies
 to be used during the execution. Notice that the logger methods are
 coming from the ContextLogger class.</p>

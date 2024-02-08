@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pypz.core.channels package &mdash; pypz  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            pypz
+          </a>
+              <div class="version">
+                0.9.0b5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">General</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../general/overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../general/changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../core/models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core/parameters.html">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core/data_transfer.html">Data transfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core/executor.html">Executor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core/logging.html">Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core/deployer.html">Deployer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Plugins</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../plugins/kafka_io.html">Kafka IO Plugin</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Deployers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../deployers/kubernetes.html">Kubernetes Deployer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Sniffer</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../sniffer/overview.html">Overview</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/ht_create_pipeline.html">How to create a pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/ht_debug_in_operator.html">How to debug in a deployed operator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/ht_contribute.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/ht_develop.html">Developer’s Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lazlowa/pypz-python">Source Code</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lazlowa/pypz-starter-template">Starter Template Project</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lazlowa/pypz-examples">Examples</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pypz</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">pypz.core.channels package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/indexes/core/pypz.core.channels.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pypz-core-channels-package">
+<h1>pypz.core.channels package<a class="headerlink" href="#pypz-core-channels-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="pypz.core.channels.base.html">pypz.core.channels.base module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pypz.core.channels.base.html#pypz.core.channels.base.ChannelBase"><code class="docutils literal notranslate"><span class="pre">ChannelBase</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.base.html#pypz.core.channels.base.ChannelBase.ControlLoopExceptionTimeoutInMs"><code class="docutils literal notranslate"><span class="pre">ChannelBase.ControlLoopExceptionTimeoutInMs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.base.html#pypz.core.channels.base.ChannelBase.DefaultStatusThreadIntervalInMs"><code class="docutils literal notranslate"><span class="pre">ChannelBase.DefaultStatusThreadIntervalInMs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.base.html#pypz.core.channels.base.ChannelBase.ParamKeyLogLevel"><code class="docutils literal notranslate"><span class="pre">ChannelBase.ParamKeyLogLevel</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.base.html#pypz.core.channels.base.ChannelBase.ParamKeyMetricsEnabled"><code class="docutils literal notranslate"><span class="pre">ChannelBase.ParamKeyMetricsEnabled</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.base.html#pypz.core.channels.base.ChannelBase.can_close"><code class="docutils literal notranslate"><span class="pre">ChannelBase.can_close()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.base.html#pypz.core.channels.base.ChannelBase.get_channel_name"><code class="docutils literal notranslate"><span class="pre">ChannelBase.get_channel_name()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.base.html#pypz.core.channels.base.ChannelBase.get_configuration"><code class="docutils literal notranslate"><span class="pre">ChannelBase.get_configuration()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.base.html#pypz.core.channels.base.ChannelBase.get_context"><code class="docutils literal notranslate"><span class="pre">ChannelBase.get_context()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.base.html#pypz.core.channels.base.ChannelBase.get_location"><code class="docutils literal notranslate"><span class="pre">ChannelBase.get_location()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.base.html#pypz.core.channels.base.ChannelBase.get_logger"><code class="docutils literal notranslate"><span class="pre">ChannelBase.get_logger()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.base.html#pypz.core.channels.base.ChannelBase.get_unique_name"><code class="docutils literal notranslate"><span class="pre">ChannelBase.get_unique_name()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.base.html#pypz.core.channels.base.ChannelBase.invoke_close_channel"><code class="docutils literal notranslate"><span class="pre">ChannelBase.invoke_close_channel()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.base.html#pypz.core.channels.base.ChannelBase.invoke_configure_channel"><code class="docutils literal notranslate"><span class="pre">ChannelBase.invoke_configure_channel()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.base.html#pypz.core.channels.base.ChannelBase.invoke_open_channel"><code class="docutils literal notranslate"><span class="pre">ChannelBase.invoke_open_channel()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.base.html#pypz.core.channels.base.ChannelBase.invoke_resource_creation"><code class="docutils literal notranslate"><span class="pre">ChannelBase.invoke_resource_creation()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.base.html#pypz.core.channels.base.ChannelBase.invoke_resource_deletion"><code class="docutils literal notranslate"><span class="pre">ChannelBase.invoke_resource_deletion()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.base.html#pypz.core.channels.base.ChannelBase.invoke_sync_send_status_message"><code class="docutils literal notranslate"><span class="pre">ChannelBase.invoke_sync_send_status_message()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.base.html#pypz.core.channels.base.ChannelBase.invoke_sync_status_update"><code class="docutils literal notranslate"><span class="pre">ChannelBase.invoke_sync_status_update()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.base.html#pypz.core.channels.base.ChannelBase.is_any_connected_channel_healthy_and_not_closed"><code class="docutils literal notranslate"><span class="pre">ChannelBase.is_any_connected_channel_healthy_and_not_closed()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.base.html#pypz.core.channels.base.ChannelBase.is_any_connected_channel_healthy_and_not_stopped"><code class="docutils literal notranslate"><span class="pre">ChannelBase.is_any_connected_channel_healthy_and_not_stopped()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.base.html#pypz.core.channels.base.ChannelBase.is_any_connected_channel_healthy_and_not_stopped_and_not_closed"><code class="docutils literal notranslate"><span class="pre">ChannelBase.is_any_connected_channel_healthy_and_not_stopped_and_not_closed()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.base.html#pypz.core.channels.base.ChannelBase.is_any_connected_channels_healthy"><code class="docutils literal notranslate"><span class="pre">ChannelBase.is_any_connected_channels_healthy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.base.html#pypz.core.channels.base.ChannelBase.is_any_connected_channels_unhealthy"><code class="docutils literal notranslate"><span class="pre">ChannelBase.is_any_connected_channels_unhealthy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.base.html#pypz.core.channels.base.ChannelBase.is_channel_open"><code class="docutils literal notranslate"><span class="pre">ChannelBase.is_channel_open()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.base.html#pypz.core.channels.base.ChannelBase.is_channel_started"><code class="docutils literal notranslate"><span class="pre">ChannelBase.is_channel_started()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.base.html#pypz.core.channels.base.ChannelBase.is_channel_stopped"><code class="docutils literal notranslate"><span class="pre">ChannelBase.is_channel_stopped()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.base.html#pypz.core.channels.base.ChannelBase.is_resource_created"><code class="docutils literal notranslate"><span class="pre">ChannelBase.is_resource_created()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.base.html#pypz.core.channels.base.ChannelBase.is_resource_deleted"><code class="docutils literal notranslate"><span class="pre">ChannelBase.is_resource_deleted()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.base.html#pypz.core.channels.base.ChannelBase.on_new_channel_status_monitor"><code class="docutils literal notranslate"><span class="pre">ChannelBase.on_new_channel_status_monitor()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.base.html#pypz.core.channels.base.ChannelBase.on_status_message_received"><code class="docutils literal notranslate"><span class="pre">ChannelBase.on_status_message_received()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.base.html#pypz.core.channels.base.ChannelBase.on_status_message_send"><code class="docutils literal notranslate"><span class="pre">ChannelBase.on_status_message_send()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.base.html#pypz.core.channels.base.ChannelBase.retrieve_all_connected_channel_count"><code class="docutils literal notranslate"><span class="pre">ChannelBase.retrieve_all_connected_channel_count()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.base.html#pypz.core.channels.base.ChannelBase.retrieve_connected_channel_unique_names"><code class="docutils literal notranslate"><span class="pre">ChannelBase.retrieve_connected_channel_unique_names()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.base.html#pypz.core.channels.base.ChannelBase.retrieve_healthy_connected_channel_count"><code class="docutils literal notranslate"><span class="pre">ChannelBase.retrieve_healthy_connected_channel_count()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.base.html#pypz.core.channels.base.ChannelBase.set_location"><code class="docutils literal notranslate"><span class="pre">ChannelBase.set_location()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.base.html#pypz.core.channels.base.ChannelBase.start_channel"><code class="docutils literal notranslate"><span class="pre">ChannelBase.start_channel()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.base.html#pypz.core.channels.base.ChannelBase.stop_channel"><code class="docutils literal notranslate"><span class="pre">ChannelBase.stop_channel()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pypz.core.channels.base.html#pypz.core.channels.base.ChannelMetric"><code class="docutils literal notranslate"><span class="pre">ChannelMetric</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pypz.core.channels.io.html">pypz.core.channels.io module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pypz.core.channels.io.html#pypz.core.channels.io.ChannelReader"><code class="docutils literal notranslate"><span class="pre">ChannelReader</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.io.html#pypz.core.channels.io.ChannelReader.MetricsBufferLength"><code class="docutils literal notranslate"><span class="pre">ChannelReader.MetricsBufferLength</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.io.html#pypz.core.channels.io.ChannelReader.NotInitialized"><code class="docutils literal notranslate"><span class="pre">ChannelReader.NotInitialized</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.io.html#pypz.core.channels.io.ChannelReader.acknowledge_input"><code class="docutils literal notranslate"><span class="pre">ChannelReader.acknowledge_input()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.io.html#pypz.core.channels.io.ChannelReader.get_read_record_count"><code class="docutils literal notranslate"><span class="pre">ChannelReader.get_read_record_count()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.io.html#pypz.core.channels.io.ChannelReader.get_read_record_offset"><code class="docutils literal notranslate"><span class="pre">ChannelReader.get_read_record_offset()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.io.html#pypz.core.channels.io.ChannelReader.has_records"><code class="docutils literal notranslate"><span class="pre">ChannelReader.has_records()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.io.html#pypz.core.channels.io.ChannelReader.invoke_commit_current_read_offset"><code class="docutils literal notranslate"><span class="pre">ChannelReader.invoke_commit_current_read_offset()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.io.html#pypz.core.channels.io.ChannelReader.invoke_commit_offset"><code class="docutils literal notranslate"><span class="pre">ChannelReader.invoke_commit_offset()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.io.html#pypz.core.channels.io.ChannelReader.invoke_read_records"><code class="docutils literal notranslate"><span class="pre">ChannelReader.invoke_read_records()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.io.html#pypz.core.channels.io.ChannelReader.on_status_message_send"><code class="docutils literal notranslate"><span class="pre">ChannelReader.on_status_message_send()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.io.html#pypz.core.channels.io.ChannelReader.set_initial_record_offset"><code class="docutils literal notranslate"><span class="pre">ChannelReader.set_initial_record_offset()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.io.html#pypz.core.channels.io.ChannelReader.set_initial_record_offset_auto"><code class="docutils literal notranslate"><span class="pre">ChannelReader.set_initial_record_offset_auto()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pypz.core.channels.io.html#pypz.core.channels.io.ChannelWriter"><code class="docutils literal notranslate"><span class="pre">ChannelWriter</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.io.html#pypz.core.channels.io.ChannelWriter.MetricsBufferLength"><code class="docutils literal notranslate"><span class="pre">ChannelWriter.MetricsBufferLength</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.io.html#pypz.core.channels.io.ChannelWriter.get_written_record_count"><code class="docutils literal notranslate"><span class="pre">ChannelWriter.get_written_record_count()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.io.html#pypz.core.channels.io.ChannelWriter.invoke_write_records"><code class="docutils literal notranslate"><span class="pre">ChannelWriter.invoke_write_records()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.io.html#pypz.core.channels.io.ChannelWriter.is_all_connected_input_channels_acknowledged"><code class="docutils literal notranslate"><span class="pre">ChannelWriter.is_all_connected_input_channels_acknowledged()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.io.html#pypz.core.channels.io.ChannelWriter.on_status_message_send"><code class="docutils literal notranslate"><span class="pre">ChannelWriter.on_status_message_send()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pypz.core.channels.misc.html">pypz.core.channels.misc module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pypz.core.channels.misc.html#pypz.core.channels.misc.BlankChannelReader"><code class="docutils literal notranslate"><span class="pre">BlankChannelReader</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.misc.html#pypz.core.channels.misc.BlankChannelReader.has_records"><code class="docutils literal notranslate"><span class="pre">BlankChannelReader.has_records()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pypz.core.channels.misc.html#pypz.core.channels.misc.BlankChannelWriter"><code class="docutils literal notranslate"><span class="pre">BlankChannelWriter</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pypz.core.channels.status.html">pypz.core.channels.status module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.ChannelFilter"><code class="docutils literal notranslate"><span class="pre">ChannelFilter</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.ChannelFilter.get_channel_context_name"><code class="docutils literal notranslate"><span class="pre">ChannelFilter.get_channel_context_name()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.ChannelFilter.get_channel_group_name"><code class="docutils literal notranslate"><span class="pre">ChannelFilter.get_channel_group_name()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.ChannelFilter.get_channel_unique_name"><code class="docutils literal notranslate"><span class="pre">ChannelFilter.get_channel_unique_name()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.ChannelFilter.is_channel_closed"><code class="docutils literal notranslate"><span class="pre">ChannelFilter.is_channel_closed()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.ChannelFilter.is_channel_error"><code class="docutils literal notranslate"><span class="pre">ChannelFilter.is_channel_error()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.ChannelFilter.is_channel_healthy"><code class="docutils literal notranslate"><span class="pre">ChannelFilter.is_channel_healthy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.ChannelFilter.is_channel_not_initialised"><code class="docutils literal notranslate"><span class="pre">ChannelFilter.is_channel_not_initialised()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.ChannelFilter.is_channel_opened"><code class="docutils literal notranslate"><span class="pre">ChannelFilter.is_channel_opened()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.ChannelFilter.is_channel_started"><code class="docutils literal notranslate"><span class="pre">ChannelFilter.is_channel_started()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.ChannelFilter.is_channel_stopped"><code class="docutils literal notranslate"><span class="pre">ChannelFilter.is_channel_stopped()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.ChannelStatus"><code class="docutils literal notranslate"><span class="pre">ChannelStatus</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.ChannelStatus.Acknowledged"><code class="docutils literal notranslate"><span class="pre">ChannelStatus.Acknowledged</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.ChannelStatus.Closed"><code class="docutils literal notranslate"><span class="pre">ChannelStatus.Closed</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.ChannelStatus.Error"><code class="docutils literal notranslate"><span class="pre">ChannelStatus.Error</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.ChannelStatus.HealthCheck"><code class="docutils literal notranslate"><span class="pre">ChannelStatus.HealthCheck</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.ChannelStatus.Opened"><code class="docutils literal notranslate"><span class="pre">ChannelStatus.Opened</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.ChannelStatus.Started"><code class="docutils literal notranslate"><span class="pre">ChannelStatus.Started</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.ChannelStatus.Stopped"><code class="docutils literal notranslate"><span class="pre">ChannelStatus.Stopped</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.ChannelStatus.WaitingForSchema"><code class="docutils literal notranslate"><span class="pre">ChannelStatus.WaitingForSchema</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.ChannelStatusMessage"><code class="docutils literal notranslate"><span class="pre">ChannelStatusMessage</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.ChannelStatusMessage.create_from_json"><code class="docutils literal notranslate"><span class="pre">ChannelStatusMessage.create_from_json()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.ChannelStatusMessage.get_channel_unique_name"><code class="docutils literal notranslate"><span class="pre">ChannelStatusMessage.get_channel_unique_name()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.ChannelStatusMonitor"><code class="docutils literal notranslate"><span class="pre">ChannelStatusMonitor</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.ChannelStatusMonitor.ValidPatienceTimeInMs"><code class="docutils literal notranslate"><span class="pre">ChannelStatusMonitor.ValidPatienceTimeInMs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.ChannelStatusMonitor.get_channel_context_name"><code class="docutils literal notranslate"><span class="pre">ChannelStatusMonitor.get_channel_context_name()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.ChannelStatusMonitor.get_channel_group_name"><code class="docutils literal notranslate"><span class="pre">ChannelStatusMonitor.get_channel_group_name()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.ChannelStatusMonitor.get_channel_unique_name"><code class="docutils literal notranslate"><span class="pre">ChannelStatusMonitor.get_channel_unique_name()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.ChannelStatusMonitor.is_channel_closed"><code class="docutils literal notranslate"><span class="pre">ChannelStatusMonitor.is_channel_closed()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.ChannelStatusMonitor.is_channel_error"><code class="docutils literal notranslate"><span class="pre">ChannelStatusMonitor.is_channel_error()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.ChannelStatusMonitor.is_channel_healthy"><code class="docutils literal notranslate"><span class="pre">ChannelStatusMonitor.is_channel_healthy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.ChannelStatusMonitor.is_channel_not_initialised"><code class="docutils literal notranslate"><span class="pre">ChannelStatusMonitor.is_channel_not_initialised()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.ChannelStatusMonitor.is_channel_opened"><code class="docutils literal notranslate"><span class="pre">ChannelStatusMonitor.is_channel_opened()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.ChannelStatusMonitor.is_channel_started"><code class="docutils literal notranslate"><span class="pre">ChannelStatusMonitor.is_channel_started()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.ChannelStatusMonitor.is_channel_stopped"><code class="docutils literal notranslate"><span class="pre">ChannelStatusMonitor.is_channel_stopped()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.ChannelStatusMonitor.on_status_update"><code class="docutils literal notranslate"><span class="pre">ChannelStatusMonitor.on_status_update()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.ChannelStatusMonitor.update"><code class="docutils literal notranslate"><span class="pre">ChannelStatusMonitor.update()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.NameSeparator"><code class="docutils literal notranslate"><span class="pre">NameSeparator</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="module-pypz.core.channels">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pypz.core.channels" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Laszlo Anka.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

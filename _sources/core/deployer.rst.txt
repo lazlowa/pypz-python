@@ -7,4 +7,5 @@ Deployer
    *pypz* ships with an implementation for Kubernetes
 
 .. autoclass:: pypz.deployers.base.Deployer
+   :no-index:
    :members:

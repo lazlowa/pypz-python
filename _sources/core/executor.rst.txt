@@ -99,4 +99,5 @@ what *pypz* can provide is an execution mode, where only resources will be delet
 of running the actual business logic.
 
 .. autoclass:: pypz.executors.commons.ExecutionMode
+   :no-index:
    :members:

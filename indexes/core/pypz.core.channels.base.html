@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pypz.core.channels.base module &mdash; pypz  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            pypz
+          </a>
+              <div class="version">
+                0.9.0b5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">General</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../general/overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../general/changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../core/models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core/parameters.html">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core/data_transfer.html">Data transfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core/executor.html">Executor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core/logging.html">Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core/deployer.html">Deployer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Plugins</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../plugins/kafka_io.html">Kafka IO Plugin</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Deployers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../deployers/kubernetes.html">Kubernetes Deployer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Sniffer</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../sniffer/overview.html">Overview</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/ht_create_pipeline.html">How to create a pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/ht_debug_in_operator.html">How to debug in a deployed operator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/ht_contribute.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/ht_develop.html">Developer’s Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lazlowa/pypz-python">Source Code</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lazlowa/pypz-starter-template">Starter Template Project</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lazlowa/pypz-examples">Examples</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pypz</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">pypz.core.channels.base module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/indexes/core/pypz.core.channels.base.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-pypz.core.channels.base">
+<span id="pypz-core-channels-base-module"></span><h1>pypz.core.channels.base module<a class="headerlink" href="#module-pypz.core.channels.base" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.channels.base.</span></span><span class="sig-name descname"><span class="pre">ChannelBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pypz.core.specs.plugin.html#pypz.core.specs.plugin.PortPlugin" title="pypz.core.specs.plugin.PortPlugin"><span class="pre">PortPlugin</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">executor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ThreadPoolExecutor</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.channels.base.ChannelBase" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase.ControlLoopExceptionTimeoutInMs">
+<span class="sig-name descname"><span class="pre">ControlLoopExceptionTimeoutInMs</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">60000</span></em><a class="headerlink" href="#pypz.core.channels.base.ChannelBase.ControlLoopExceptionTimeoutInMs" title="Link to this definition"></a></dt>
+<dd><p>This value defines the timeout for having unhandled exception in the control loop.
+After expiration, the control loop will be terminated.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase.DefaultStatusThreadIntervalInMs">
+<span class="sig-name descname"><span class="pre">DefaultStatusThreadIntervalInMs</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2000</span></em><a class="headerlink" href="#pypz.core.channels.base.ChannelBase.DefaultStatusThreadIntervalInMs" title="Link to this definition"></a></dt>
+<dd><p>This value defines in how many ms the status messages (health check) will be sent to the
+counterpart channel.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase.ParamKeyLogLevel">
+<span class="sig-name descname"><span class="pre">ParamKeyLogLevel</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'logLevel'</span></em><a class="headerlink" href="#pypz.core.channels.base.ChannelBase.ParamKeyLogLevel" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase.ParamKeyMetricsEnabled">
+<span class="sig-name descname"><span class="pre">ParamKeyMetricsEnabled</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'metricsEnabled'</span></em><a class="headerlink" href="#pypz.core.channels.base.ChannelBase.ParamKeyMetricsEnabled" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase.can_close">
+<span class="sig-name descname"><span class="pre">can_close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.core.channels.base.ChannelBase.can_close" title="Link to this definition"></a></dt>
+<dd><p>This method can implement the logic to determine, if the channel can
+be closed or not.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if the channel can be closed, False otherwise</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase.get_channel_name">
+<span class="sig-name descname"><span class="pre">get_channel_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.channels.base.ChannelBase.get_channel_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase.get_configuration">
+<span class="sig-name descname"><span class="pre">get_configuration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#pypz.core.channels.base.ChannelBase.get_configuration" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase.get_context">
+<span class="sig-name descname"><span class="pre">get_context</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="pypz.core.specs.plugin.html#pypz.core.specs.plugin.PortPlugin" title="pypz.core.specs.plugin.PortPlugin"><span class="pre">PortPlugin</span></a></span></span><a class="headerlink" href="#pypz.core.channels.base.ChannelBase.get_context" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase.get_location">
+<span class="sig-name descname"><span class="pre">get_location</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.channels.base.ChannelBase.get_location" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase.get_logger">
+<span class="sig-name descname"><span class="pre">get_logger</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.channels.base.ChannelBase.get_logger" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase.get_unique_name">
+<span class="sig-name descname"><span class="pre">get_unique_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.channels.base.ChannelBase.get_unique_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase.invoke_close_channel">
+<span class="sig-name descname"><span class="pre">invoke_close_channel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.core.channels.base.ChannelBase.invoke_close_channel" title="Link to this definition"></a></dt>
+<dd><p>An invoker method that encapsulates the actual implementation. This method
+MUST be called instead of the implemented method directly to ensure proper
+channel functionality.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if operation done, False if still in progress</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase.invoke_configure_channel">
+<span class="sig-name descname"><span class="pre">invoke_configure_channel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_configuration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.core.channels.base.ChannelBase.invoke_configure_channel" title="Link to this definition"></a></dt>
+<dd><p>An invoker method that encapsulates the actual implementation. This method
+MUST be called instead of the implemented method directly to ensure proper
+channel functionality.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase.invoke_open_channel">
+<span class="sig-name descname"><span class="pre">invoke_open_channel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.core.channels.base.ChannelBase.invoke_open_channel" title="Link to this definition"></a></dt>
+<dd><p>An invoker method that encapsulates the actual implementation. This method
+MUST be called instead of the implemented method directly to ensure proper
+channel functionality.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if operation done, False if still in progress</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase.invoke_resource_creation">
+<span class="sig-name descname"><span class="pre">invoke_resource_creation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.core.channels.base.ChannelBase.invoke_resource_creation" title="Link to this definition"></a></dt>
+<dd><p>An invoker method that encapsulates the actual implementation. This method
+MUST be called instead of the implemented method directly to ensure proper
+channel functionality.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if operation done, False if still in progress</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase.invoke_resource_deletion">
+<span class="sig-name descname"><span class="pre">invoke_resource_deletion</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.core.channels.base.ChannelBase.invoke_resource_deletion" title="Link to this definition"></a></dt>
+<dd><p>An invoker method that encapsulates the actual implementation. This method
+MUST be called instead of the implemented method directly to ensure proper
+channel functionality.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if operation done, False if still in progress</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase.invoke_sync_send_status_message">
+<span class="sig-name descname"><span class="pre">invoke_sync_send_status_message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.ChannelStatus" title="pypz.core.channels.status.ChannelStatus"><span class="pre">ChannelStatus</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.core.channels.base.ChannelBase.invoke_sync_send_status_message" title="Link to this definition"></a></dt>
+<dd><p>An invoker method that encapsulates the actual implementation. This method
+MUST be called instead of the implemented method directly to ensure proper
+channel functionality.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase.invoke_sync_status_update">
+<span class="sig-name descname"><span class="pre">invoke_sync_status_update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.channels.base.ChannelBase.invoke_sync_status_update" title="Link to this definition"></a></dt>
+<dd><p>An invoker method that encapsulates the actual implementation. This method
+MUST be called instead of the implemented method directly to ensure proper
+channel functionality.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase.is_any_connected_channel_healthy_and_not_closed">
+<span class="sig-name descname"><span class="pre">is_any_connected_channel_healthy_and_not_closed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.core.channels.base.ChannelBase.is_any_connected_channel_healthy_and_not_closed" title="Link to this definition"></a></dt>
+<dd><p>This method realises the question “Is there any connected channel that is healthy, but not
+closed?”. This can be seen as opposite of “Is all connected channels closed or unhealthy?”
+with the strong difference that the latter does not give a proper answer if there is no
+connected channels at all.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if there is any channel healthy, but not closed, False if not or no connected channel</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase.is_any_connected_channel_healthy_and_not_stopped">
+<span class="sig-name descname"><span class="pre">is_any_connected_channel_healthy_and_not_stopped</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.core.channels.base.ChannelBase.is_any_connected_channel_healthy_and_not_stopped" title="Link to this definition"></a></dt>
+<dd><p>This method realises the question “Is there any connected channel that is healthy, but not
+stopped?”. This can be seen as opposite of “Is all connected channels stopped or unhealthy?”
+with the strong difference that the latter does not give a proper answer if there is no
+connected channels at all.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if there is any channel healthy, but not stopped, False if not or no connected channel</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase.is_any_connected_channel_healthy_and_not_stopped_and_not_closed">
+<span class="sig-name descname"><span class="pre">is_any_connected_channel_healthy_and_not_stopped_and_not_closed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.core.channels.base.ChannelBase.is_any_connected_channel_healthy_and_not_stopped_and_not_closed" title="Link to this definition"></a></dt>
+<dd><p>This method realises the question “Is there any connected channel that is healthy, but not
+stopped and not closed?”. This can be seen as opposite of “Is all connected channels closed or
+stopped or unhealthy?” with the strong difference that the latter does not give a proper
+answer if there is no connected channels at all.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if there is any channel healthy, but not stopped and not closed,
+False if not or no connected channel</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase.is_any_connected_channels_healthy">
+<span class="sig-name descname"><span class="pre">is_any_connected_channels_healthy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.core.channels.base.ChannelBase.is_any_connected_channels_healthy" title="Link to this definition"></a></dt>
+<dd><p>This method realises the question “Is there any channel healthy?”. This can be seen as opposite
+of “Is all channels unhealthy?” with the strong difference that the latter does not give a proper
+answer if there is no connected channels at all.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if there is any channel healthy, False if not or no connected channel</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase.is_any_connected_channels_unhealthy">
+<span class="sig-name descname"><span class="pre">is_any_connected_channels_unhealthy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.core.channels.base.ChannelBase.is_any_connected_channels_unhealthy" title="Link to this definition"></a></dt>
+<dd><p>This method realises the question “Is there any connected channels unhealthy?”. This can be seen
+as opposite of “Is all connected channels healthy?” with the strong difference that the latter
+does not give a proper answer if there is no connected channels at all.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if there is any channel unhealthy, False if not or no connected channels</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase.is_channel_open">
+<span class="sig-name descname"><span class="pre">is_channel_open</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.channels.base.ChannelBase.is_channel_open" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase.is_channel_started">
+<span class="sig-name descname"><span class="pre">is_channel_started</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.channels.base.ChannelBase.is_channel_started" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase.is_channel_stopped">
+<span class="sig-name descname"><span class="pre">is_channel_stopped</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.channels.base.ChannelBase.is_channel_stopped" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase.is_resource_created">
+<span class="sig-name descname"><span class="pre">is_resource_created</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.channels.base.ChannelBase.is_resource_created" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase.is_resource_deleted">
+<span class="sig-name descname"><span class="pre">is_resource_deleted</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.channels.base.ChannelBase.is_resource_deleted" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase.on_new_channel_status_monitor">
+<span class="sig-name descname"><span class="pre">on_new_channel_status_monitor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">status_monitor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.ChannelStatusMonitor" title="pypz.core.channels.status.ChannelStatusMonitor"><span class="pre">ChannelStatusMonitor</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.core.channels.base.ChannelBase.on_new_channel_status_monitor" title="Link to this definition"></a></dt>
+<dd><p>This method can be overridden to handle the creation of the new ChannelStatusMonitor e.g.
+registering callbacks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>status_monitor</strong> – ChannelStatusMonitor object newly created</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase.on_status_message_received">
+<span class="sig-name descname"><span class="pre">on_status_message_received</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.ChannelStatusMessage" title="pypz.core.channels.status.ChannelStatusMessage"><span class="pre">ChannelStatusMessage</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.core.channels.base.ChannelBase.on_status_message_received" title="Link to this definition"></a></dt>
+<dd><p>Adds a callback to the set of callbacks, which will be executed upon status
+message received.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>callback</strong> – callback Callable[[list[str]], None]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase.on_status_message_send">
+<span class="sig-name descname"><span class="pre">on_status_message_send</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.channels.base.ChannelBase.on_status_message_send" title="Link to this definition"></a></dt>
+<dd><p>This method can be implemented to hook into the event of sending status message.
+For example one can use it to calculate aggregated metrics between 2 sending and
+attach the metrics to the healthCheckPayload.
+VERY IMPORTANT NOTE: keep the runtime as low as possible, because the higher the
+runtime the more load on the status message sender thread, which might cause
+double activation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase.retrieve_all_connected_channel_count">
+<span class="sig-name descname"><span class="pre">retrieve_all_connected_channel_count</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#pypz.core.channels.base.ChannelBase.retrieve_all_connected_channel_count" title="Link to this definition"></a></dt>
+<dd><p>Returns the number of tracked input channels. This can be used to synchronize some activities like starting
+the output.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>number of tracked input channels</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase.retrieve_connected_channel_unique_names">
+<span class="sig-name descname"><span class="pre">retrieve_connected_channel_unique_names</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filter_function</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.ChannelFilter" title="pypz.core.channels.status.ChannelFilter"><span class="pre">ChannelFilter</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">set</span></span></span><a class="headerlink" href="#pypz.core.channels.base.ChannelBase.retrieve_connected_channel_unique_names" title="Link to this definition"></a></dt>
+<dd><p>This method returns a set of connected channel names given the evaluation
+criteria passed as argument.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filter_function</strong> – check_function check the ChannelFilter for more details (nullable)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Set of channel names that passes the given evaluation</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase.retrieve_healthy_connected_channel_count">
+<span class="sig-name descname"><span class="pre">retrieve_healthy_connected_channel_count</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#pypz.core.channels.base.ChannelBase.retrieve_healthy_connected_channel_count" title="Link to this definition"></a></dt>
+<dd><p>Returns the number of healthy tracked input channels.
+This can be used to synchronize some activities like starting the output.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>number of healthy tracked input channels</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase.set_location">
+<span class="sig-name descname"><span class="pre">set_location</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_location</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.channels.base.ChannelBase.set_location" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase.start_channel">
+<span class="sig-name descname"><span class="pre">start_channel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">send_status_message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.core.channels.base.ChannelBase.start_channel" title="Link to this definition"></a></dt>
+<dd><p>This method sets the corresponding flags and sends the corresponding status message to signalize that
+the channel has been started.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>send_status_message</strong> – if True the status message sending will be called</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase.stop_channel">
+<span class="sig-name descname"><span class="pre">stop_channel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">send_status_message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.core.channels.base.ChannelBase.stop_channel" title="Link to this definition"></a></dt>
+<dd><p>This method sets the corresponding flags and sends the corresponding status message to signalize that
+the channel has been stopped.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>send_status_message</strong> – if True the status message sending will be called</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelMetric">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.channels.base.</span></span><span class="sig-name descname"><span class="pre">ChannelMetric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elapsedTimeSinceLastIO</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recordCountInLastIO</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.channels.base.ChannelMetric" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Laszlo Anka.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

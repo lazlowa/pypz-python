@@ -25,7 +25,6 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="pypz" href="../modindex/modules.html" />
     <link rel="prev" title="Contributor’s Guide" href="ht_contribute.html" /> 
 </head>
 
@@ -97,10 +96,6 @@
 <li class="toctree-l1"><a class="reference external" href="https://github.com/lazlowa/pypz-python">Source Code</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/lazlowa/pypz-starter-template">Starter Template Project</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/lazlowa/pypz-examples">Examples</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Index</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../modindex/modules.html">pypz</a></li>
 </ul>
 
         </div>
@@ -209,16 +204,35 @@ that every subproject is installed.</p>
 </pre></div>
 </div>
 <p>Additionally, you need to install the dependencies for the Sphinx extensions:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements-docs.txt
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>./docs/requirements.txt
 </pre></div>
 </div>
 <p>As last, you need to install <a class="reference external" href="https://graphviz.org/">GraphViz</a>, since its features are used
 by Sphinx to generate images in the documentation.</p>
-<p>Once all the dependencies are installed, you can build the documentation with the following command:</p>
+<p>The indexes are regenerated in the publish action. However, if you want to rebuild them locally,
+you can do it with the following commands from the docs folder:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>sphinx-apidoc<span class="w"> </span>--implicit-namespaces<span class="w"> </span>-e<span class="w"> </span>-f<span class="w"> </span>-o<span class="w"> </span>./indexes/core<span class="w"> </span>../core/src/pypz/
+sphinx-apidoc<span class="w"> </span>--implicit-namespaces<span class="w"> </span>-e<span class="w"> </span>-f<span class="w"> </span>-o<span class="w"> </span>./indexes/sniffer<span class="w"> </span>../sniffer/src/pypz/
+sphinx-apidoc<span class="w"> </span>--implicit-namespaces<span class="w"> </span>-e<span class="w"> </span>-f<span class="w"> </span>-o<span class="w"> </span>./indexes/plugins/kafka_io<span class="w"> </span>../plugins/kafka_io/src/pypz/
+sphinx-apidoc<span class="w"> </span>--implicit-namespaces<span class="w"> </span>-e<span class="w"> </span>-f<span class="w"> </span>-o<span class="w"> </span>./indexes/deployers/k8s<span class="w"> </span>../deployers/k8s/src/pypz/
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Since the index is generated automatically with implicit namespaces, there are some known issues with the
+documentation build:</p>
+<ul class="simple">
+<li><p>multiple .rst files of the common namespaces are generated, which causes the following warning
+<code class="docutils literal notranslate"><span class="pre">WARNING:</span> <span class="pre">duplicate</span> <span class="pre">object</span> <span class="pre">description</span> <span class="pre">[...]</span> <span class="pre">use</span> <span class="pre">:no-index:</span> <span class="pre">for</span> <span class="pre">one</span> <span class="pre">of</span> <span class="pre">them</span></code></p></li>
+<li><p>the generated module.rst files are not included in any toctree causing the warning
+<code class="docutils literal notranslate"><span class="pre">WARNING:</span> <span class="pre">document</span> <span class="pre">isn't</span> <span class="pre">included</span> <span class="pre">in</span> <span class="pre">any</span> <span class="pre">toctree</span></code></p></li>
+</ul>
+</div>
+<p>You can build the documentation with the following command:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>sphinx-build<span class="w"> </span>./docs<span class="w"> </span>./docs/_build
 </pre></div>
 </div>
-<p>Then you can open the generated index.html under ./docs/_build/index.html</p>
+<p>Then you can open the generated index.html under ./docs/_build/index.html.</p>
 </section>
 </section>
 
@@ -227,7 +241,6 @@ by Sphinx to generate images in the documentation.</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="ht_contribute.html" class="btn btn-neutral float-left" title="Contributor’s Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../modindex/modules.html" class="btn btn-neutral float-right" title="pypz" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

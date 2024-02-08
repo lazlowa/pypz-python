@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pypz.core.channels.io module &mdash; pypz  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            pypz
+          </a>
+              <div class="version">
+                0.9.0b5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">General</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../general/overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../general/changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../core/models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core/parameters.html">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core/data_transfer.html">Data transfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core/executor.html">Executor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core/logging.html">Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core/deployer.html">Deployer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Plugins</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../plugins/kafka_io.html">Kafka IO Plugin</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Deployers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../deployers/kubernetes.html">Kubernetes Deployer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Sniffer</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../sniffer/overview.html">Overview</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/ht_create_pipeline.html">How to create a pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/ht_debug_in_operator.html">How to debug in a deployed operator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/ht_contribute.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/ht_develop.html">Developer’s Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lazlowa/pypz-python">Source Code</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lazlowa/pypz-starter-template">Starter Template Project</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lazlowa/pypz-examples">Examples</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pypz</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">pypz.core.channels.io module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/indexes/core/pypz.core.channels.io.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-pypz.core.channels.io">
+<span id="pypz-core-channels-io-module"></span><h1>pypz.core.channels.io module<a class="headerlink" href="#module-pypz.core.channels.io" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="pypz.core.channels.io.ChannelReader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.channels.io.</span></span><span class="sig-name descname"><span class="pre">ChannelReader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pypz.core.specs.plugin.html#pypz.core.specs.plugin.InputPortPlugin" title="pypz.core.specs.plugin.InputPortPlugin"><span class="pre">InputPortPlugin</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">executor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ThreadPoolExecutor</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.channels.io.ChannelReader" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="pypz.core.channels.base.html#pypz.core.channels.base.ChannelBase" title="pypz.core.channels.base.ChannelBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelBase</span></code></a></p>
+<p>This class is the base of the input channel classes.
+The idea is that the class provides some core, protected abstract methods, which shall be implemented by
+the developer. These implementations then will be invoked by invoker methods. This makes sure that additional
+necessary logic will be performed along the implemented.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.io.ChannelReader.MetricsBufferLength">
+<span class="sig-name descname"><span class="pre">MetricsBufferLength</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></em><a class="headerlink" href="#pypz.core.channels.io.ChannelReader.MetricsBufferLength" title="Link to this definition"></a></dt>
+<dd><p>This variable specifies the length of the metric buffer and so the averaging window</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.io.ChannelReader.NotInitialized">
+<span class="sig-name descname"><span class="pre">NotInitialized</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">-1</span></em><a class="headerlink" href="#pypz.core.channels.io.ChannelReader.NotInitialized" title="Link to this definition"></a></dt>
+<dd><p>Some helper static to init or identify if offset is not initialized</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.io.ChannelReader.acknowledge_input">
+<span class="sig-name descname"><span class="pre">acknowledge_input</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.core.channels.io.ChannelReader.acknowledge_input" title="Link to this definition"></a></dt>
+<dd><p>This method sends the corresponding ack signal to the ChannelWriter</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.io.ChannelReader.get_read_record_count">
+<span class="sig-name descname"><span class="pre">get_read_record_count</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#pypz.core.channels.io.ChannelReader.get_read_record_count" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.io.ChannelReader.get_read_record_offset">
+<span class="sig-name descname"><span class="pre">get_read_record_offset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#pypz.core.channels.io.ChannelReader.get_read_record_offset" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.io.ChannelReader.has_records">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">has_records</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.core.channels.io.ChannelReader.has_records" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic to check, if the reader can still read records.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if channel has still records, False if not</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.io.ChannelReader.invoke_commit_current_read_offset">
+<span class="sig-name descname"><span class="pre">invoke_commit_current_read_offset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.core.channels.io.ChannelReader.invoke_commit_current_read_offset" title="Link to this definition"></a></dt>
+<dd><p>This method is used to invoke the implementation of the abstract method.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.io.ChannelReader.invoke_commit_offset">
+<span class="sig-name descname"><span class="pre">invoke_commit_offset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compensate_with_initial_offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.core.channels.io.ChannelReader.invoke_commit_offset" title="Link to this definition"></a></dt>
+<dd><p>This method is used to invoke the implementation of the abstract method. This is necessary to perform some
+additional actions like compensating the calculated offset with the initial to make sure that the proper
+offset is committed. Note that this compensation makes only sense in case of crash-restart, since the initial
+values are probably not 0. Note that the provided offset is calculated by the calculateApplicableOffsetFrom
+by breaking down the calculated offset by the framework.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>offset</strong> – offset calculated by the plugin for this channel</p></li>
+<li><p><strong>compensate_with_initial_offset</strong> – if True, the initial offset will be added to the provided offset</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.io.ChannelReader.invoke_read_records">
+<span class="sig-name descname"><span class="pre">invoke_read_records</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#pypz.core.channels.io.ChannelReader.invoke_read_records" title="Link to this definition"></a></dt>
+<dd><p>An invoker method that encapsulates the actual implementation. This method
+MUST be called instead of the implemented method directly to ensure proper
+channel functionality.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of read records or empty list in case no records read</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.io.ChannelReader.on_status_message_send">
+<span class="sig-name descname"><span class="pre">on_status_message_send</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.core.channels.io.ChannelReader.on_status_message_send" title="Link to this definition"></a></dt>
+<dd><p>This method can be implemented to hook into the event of sending status message.
+For example one can use it to calculate aggregated metrics between 2 sending and
+attach the metrics to the healthCheckPayload.
+VERY IMPORTANT NOTE: keep the runtime as low as possible, because the higher the
+runtime the more load on the status message sender thread, which might cause
+double activation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.io.ChannelReader.set_initial_record_offset">
+<span class="sig-name descname"><span class="pre">set_initial_record_offset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">initial_record_offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.core.channels.io.ChannelReader.set_initial_record_offset" title="Link to this definition"></a></dt>
+<dd><p>This method initializes the internal variables</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>initial_record_offset</strong> – value to be initialized to</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.io.ChannelReader.set_initial_record_offset_auto">
+<span class="sig-name descname"><span class="pre">set_initial_record_offset_auto</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.core.channels.io.ChannelReader.set_initial_record_offset_auto" title="Link to this definition"></a></dt>
+<dd><p>This method sets the initial values of the internal variables to the values retrieved by the implementation.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pypz.core.channels.io.ChannelWriter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.channels.io.</span></span><span class="sig-name descname"><span class="pre">ChannelWriter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pypz.core.specs.plugin.html#pypz.core.specs.plugin.OutputPortPlugin" title="pypz.core.specs.plugin.OutputPortPlugin"><span class="pre">OutputPortPlugin</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">executor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ThreadPoolExecutor</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.channels.io.ChannelWriter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="pypz.core.channels.base.html#pypz.core.channels.base.ChannelBase" title="pypz.core.channels.base.ChannelBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelBase</span></code></a></p>
+<p>This class is the base of the output channel classes.
+The idea is that the class provides some core, protected abstract methods, which shall be implemented by
+the developer. These implementations then will be invoked by invoker methods. This makes sure that additional
+necessary logic will be performed along the implemented.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.io.ChannelWriter.MetricsBufferLength">
+<span class="sig-name descname"><span class="pre">MetricsBufferLength</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></em><a class="headerlink" href="#pypz.core.channels.io.ChannelWriter.MetricsBufferLength" title="Link to this definition"></a></dt>
+<dd><p>This variable specifies the length of the metric buffer and so the averaging window</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.io.ChannelWriter.get_written_record_count">
+<span class="sig-name descname"><span class="pre">get_written_record_count</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.channels.io.ChannelWriter.get_written_record_count" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.io.ChannelWriter.invoke_write_records">
+<span class="sig-name descname"><span class="pre">invoke_write_records</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">records</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.core.channels.io.ChannelWriter.invoke_write_records" title="Link to this definition"></a></dt>
+<dd><p>This method is used to invoke the implementation of the abstract method. This is necessary to perform some
+additional actions e.g. updating number of outputted records.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>records</strong> – records to be written</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.io.ChannelWriter.is_all_connected_input_channels_acknowledged">
+<span class="sig-name descname"><span class="pre">is_all_connected_input_channels_acknowledged</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.core.channels.io.ChannelWriter.is_all_connected_input_channels_acknowledged" title="Link to this definition"></a></dt>
+<dd><p>This method retrieves the number of InputChannels that have acknowledged their input (i.e. the output of
+this channel). This information can be useful for scenarios, where a synchronization logic needs to be
+implemented e.g. where the output shall not provide more data until the inputs did not acknowledge. Note
+that the state is maintained entirely by the ChannelWriter i.e. if the ChannelReader sent the proper message,
+a flag will be set in the corresponding entry of the status map. Then this flag will be reset once this
+ChannelWriter produces new data (check invoke_write_records() for more detail).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>number of acknowledged InputChannels</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.core.channels.io.ChannelWriter.on_status_message_send">
+<span class="sig-name descname"><span class="pre">on_status_message_send</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.channels.io.ChannelWriter.on_status_message_send" title="Link to this definition"></a></dt>
+<dd><p>This method can be implemented to hook into the event of sending status message.
+For example one can use it to calculate aggregated metrics between 2 sending and
+attach the metrics to the healthCheckPayload.
+VERY IMPORTANT NOTE: keep the runtime as low as possible, because the higher the
+runtime the more load on the status message sender thread, which might cause
+double activation.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Laszlo Anka.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

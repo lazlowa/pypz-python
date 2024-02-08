@@ -64,17 +64,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Executor</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#execution-context">Execution Context</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#state-machine">State machine</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#execution-modes">Execution modes</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#pypz.executors.commons.ExecutionMode"><code class="docutils literal notranslate"><span class="pre">ExecutionMode</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#pypz.executors.commons.ExecutionMode.ResourceCreationOnly"><code class="docutils literal notranslate"><span class="pre">ExecutionMode.ResourceCreationOnly</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pypz.executors.commons.ExecutionMode.ResourceDeletionOnly"><code class="docutils literal notranslate"><span class="pre">ExecutionMode.ResourceDeletionOnly</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pypz.executors.commons.ExecutionMode.Skip"><code class="docutils literal notranslate"><span class="pre">ExecutionMode.Skip</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pypz.executors.commons.ExecutionMode.Standard"><code class="docutils literal notranslate"><span class="pre">ExecutionMode.Standard</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pypz.executors.commons.ExecutionMode.WithoutResourceDeletion"><code class="docutils literal notranslate"><span class="pre">ExecutionMode.WithoutResourceDeletion</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="#execution-modes">Execution modes</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="logging.html">Logging</a></li>
@@ -104,10 +94,6 @@
 <li class="toctree-l1"><a class="reference external" href="https://github.com/lazlowa/pypz-python">Source Code</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/lazlowa/pypz-starter-template">Starter Template Project</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/lazlowa/pypz-examples">Examples</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Index</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../modindex/modules.html">pypz</a></li>
 </ul>
 
         </div>
@@ -224,32 +210,32 @@ only you do, <em>pypz</em> cannot provide an integrated feature to clean up your
 what <em>pypz</em> can provide is an execution mode, where only resources will be deleted instead
 of running the actual business logic.</p>
 <dl class="py class">
-<dt class="sig sig-object py" id="pypz.executors.commons.ExecutionMode">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.executors.commons.</span></span><span class="sig-name descname"><span class="pre">ExecutionMode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.executors.commons.ExecutionMode" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.executors.commons.</span></span><span class="sig-name descname"><span class="pre">ExecutionMode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span></dt>
 <dd><dl class="py attribute">
-<dt class="sig sig-object py" id="pypz.executors.commons.ExecutionMode.ResourceCreationOnly">
-<span class="sig-name descname"><span class="pre">ResourceCreationOnly</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ResourceCreationOnly'</span></em><a class="headerlink" href="#pypz.executors.commons.ExecutionMode.ResourceCreationOnly" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">ResourceCreationOnly</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ResourceCreationOnly'</span></em></dt>
 <dd><p>In this mode the state machine will execute resource creation only. Note that services
 will be started before and stopped after resource creation.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="pypz.executors.commons.ExecutionMode.ResourceDeletionOnly">
-<span class="sig-name descname"><span class="pre">ResourceDeletionOnly</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ResourceDeletionOnly'</span></em><a class="headerlink" href="#pypz.executors.commons.ExecutionMode.ResourceDeletionOnly" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">ResourceDeletionOnly</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ResourceDeletionOnly'</span></em></dt>
 <dd><p>In this mode the state machine will execute resource deletion only. Note that services
 will be started before and stopped after resource creation.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="pypz.executors.commons.ExecutionMode.Skip">
-<span class="sig-name descname"><span class="pre">Skip</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Skip'</span></em><a class="headerlink" href="#pypz.executors.commons.ExecutionMode.Skip" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Skip</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Skip'</span></em></dt>
 <dd><p>If this mode is set, then the executor will not be invoked. This is necessary
 e.g., in deployment cases, where we want to ignore the execution of certain operators.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="pypz.executors.commons.ExecutionMode.Standard">
-<span class="sig-name descname"><span class="pre">Standard</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Standard'</span></em><a class="headerlink" href="#pypz.executors.commons.ExecutionMode.Standard" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Standard</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Standard'</span></em></dt>
 <dd><p>In this mode the state machine will follow its standard route.
 Note that <cite>Standard</cite> means that resources will be created and deleted up automatically. If
 you want to have a standard mode, where resources are only created, but not deleted, then use the
@@ -257,8 +243,8 @@ WithoutResourceDeletion</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="pypz.executors.commons.ExecutionMode.WithoutResourceDeletion">
-<span class="sig-name descname"><span class="pre">WithoutResourceDeletion</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'WithoutResourceDeletion'</span></em><a class="headerlink" href="#pypz.executors.commons.ExecutionMode.WithoutResourceDeletion" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">WithoutResourceDeletion</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'WithoutResourceDeletion'</span></em></dt>
 <dd><p>In this mode the state machine will follow its standard route. 
 However the StateResourceDeletion will be skipped. This is a relevant use-case, 
 if you want to trigger centralized resource cleanup after the operations are done.</p>

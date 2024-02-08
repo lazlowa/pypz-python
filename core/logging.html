@@ -63,11 +63,7 @@
 <li class="toctree-l1"><a class="reference internal" href="data_transfer.html">Data transfer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="executor.html">Executor</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Logging</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#context-logging">Context Logging</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#pypz.core.commons.loggers.ContextLoggerInterface"><code class="docutils literal notranslate"><span class="pre">ContextLoggerInterface</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pypz.core.commons.loggers.ContextLogger"><code class="docutils literal notranslate"><span class="pre">ContextLogger</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="#context-logging">Context Logging</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#operator-logging">Operator Logging</a></li>
 </ul>
 </li>
@@ -97,10 +93,6 @@
 <li class="toctree-l1"><a class="reference external" href="https://github.com/lazlowa/pypz-python">Source Code</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/lazlowa/pypz-starter-template">Starter Template Project</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/lazlowa/pypz-examples">Examples</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Index</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../modindex/modules.html">pypz</a></li>
 </ul>
 
         </div>
@@ -155,16 +147,16 @@ context for the operators.</p>
 </ul>
 <p>The concept involves the following classes:</p>
 <dl class="py class">
-<dt class="sig sig-object py" id="pypz.core.commons.loggers.ContextLoggerInterface">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.commons.loggers.</span></span><span class="sig-name descname"><span class="pre">ContextLoggerInterface</span></span><a class="headerlink" href="#pypz.core.commons.loggers.ContextLoggerInterface" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.commons.loggers.</span></span><span class="sig-name descname"><span class="pre">ContextLoggerInterface</span></span></dt>
 <dd><p>This interface provides the necessary methods to be able to implement
 the context logging functionality. Context logging means that there
 is exactly one logger, which will be (re)used in the given context.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="pypz.core.commons.loggers.ContextLogger">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.commons.loggers.</span></span><span class="sig-name descname"><span class="pre">ContextLogger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logger</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pypz.core.commons.loggers.ContextLoggerInterface" title="pypz.core.commons.loggers.ContextLoggerInterface"><span class="pre">ContextLoggerInterface</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">context_stack</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.commons.loggers.ContextLogger" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.commons.loggers.</span></span><span class="sig-name descname"><span class="pre">ContextLogger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logger</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../indexes/core/pypz.core.commons.loggers.html#pypz.core.commons.loggers.ContextLoggerInterface" title="pypz.core.commons.loggers.ContextLoggerInterface"><span class="pre">ContextLoggerInterface</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">context_stack</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>This class has the responsibility to provide a simple logging interface, which
 hides the complexity of maintaining the context information. The user can
 call the familiar methods without knowing, how the context information are
@@ -191,13 +183,17 @@ each logger plugins’ corresponding methods manually, we want to abstract this,
 is one call.</p>
 <p>The following diagram shows the inheritance map of the logging-relevant classes:</p>
 <figure class="align-default" id="id2">
-<div class="graphviz"><img src="../_images/inheritance-9afe5187dd6128e38dd8b7df4eaff56c8bcb237c.png" alt="Inheritance diagram of pypz.core.specs.plugin.LoggerPlugin, pypz.core.commons.loggers.ContextLogger, pypz.plugins.loggers.default.DefaultLoggerPlugin" usemap="#inheritance694f7133b1" class="inheritance graphviz" /></div>
+<div class="graphviz"><img src="../_images/inheritance-8e90ad792ef1dac1deca22691031b37b89373cdb.png" alt="Inheritance diagram of pypz.core.specs.plugin.LoggerPlugin, pypz.core.commons.loggers.ContextLogger, pypz.plugins.loggers.default.DefaultLoggerPlugin" usemap="#inheritance694f7133b1" class="inheritance graphviz" /></div>
 <map id="inheritance694f7133b1" name="inheritance694f7133b1">
-<area shape="poly" id="node3" href="#pypz.core.commons.loggers.ContextLoggerInterface" target="_top" title="This interface provides the necessary methods to be able to implement" alt="" coords="677,480,665,472,630,465,577,459,509,455,434,454,359,455,291,459,238,465,203,472,191,480,203,488,238,496,291,502,359,505,434,507,509,505,577,502,630,496,665,488"/>
-<area shape="poly" id="node6" href="models.html#pypz.core.specs.plugin.LoggerPlugin" target="_top" title="This addon interface allows to implement different logging technologies" alt="" coords="1075,686,1068,678,1048,671,1018,665,979,661,936,660,894,661,855,665,824,671,805,678,798,686,805,694,824,702,855,708,894,711,936,713,979,711,1018,708,1048,702,1068,694"/>
-<area shape="poly" id="node10" href="models.html#pypz.core.specs.instance.InstanceGroup" target="_top" title="This class provides methods to access instance group related information. It can be" alt="" coords="1033,274,1025,266,1003,259,969,253,926,249,879,248,832,249,789,253,755,259,733,266,725,274,733,282,755,290,789,296,832,299,879,301,926,299,969,296,1003,290,1025,282"/>
-<area shape="poly" id="node11" href="models.html#pypz.core.specs.plugin.Plugin" target="_top" title="This interface has the only purpose to separate the plugin interfaces" alt="" coords="1128,480,1124,472,1114,465,1099,459,1079,455,1057,454,1035,455,1016,459,1000,465,990,472,987,480,990,488,1000,496,1016,502,1035,505,1057,507,1079,505,1099,502,1114,496,1124,488"/>
-<area shape="poly" id="node2" href="#pypz.core.commons.loggers.ContextLogger" target="_top" title="This class has the responsibility to provide a simple logging interface, which" alt="" coords="313,686,306,678,284,671,249,665,206,661,158,660,111,661,67,665,33,671,11,678,3,686,11,694,33,702,67,708,111,711,158,713,206,711,249,708,284,702,306,694"/>
+<area shape="poly" id="node3" href="../indexes/core/pypz.core.commons.loggers.html#pypz.core.commons.loggers.ContextLoggerInterface" target="_top" title="This interface provides the necessary methods to be able to implement" alt="" coords="677,480,665,472,630,465,577,459,509,455,434,454,359,455,291,459,238,465,203,472,191,480,203,488,238,496,291,502,359,505,434,507,509,505,577,502,630,496,665,488"/>
+<area shape="poly" id="node6" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.LoggerPlugin" target="_top" title="This addon interface allows to implement different logging technologies" alt="" coords="1075,686,1068,678,1048,671,1018,665,979,661,936,660,894,661,855,665,824,671,805,678,798,686,805,694,824,702,855,708,894,711,936,713,979,711,1018,708,1048,702,1068,694"/>
+<area shape="poly" id="node8" href="../indexes/core/pypz.core.specs.instance.html#pypz.core.specs.instance.Instance" target="_top" title="This class represents the instance specs that serves as base for" alt="" coords="1268,274,1263,266,1250,259,1229,253,1203,249,1175,248,1146,249,1120,253,1099,259,1086,266,1081,274,1086,282,1099,290,1120,296,1146,299,1175,301,1203,299,1229,296,1250,290,1263,282"/>
+<area shape="poly" id="node10" href="../indexes/core/pypz.core.specs.instance.html#pypz.core.specs.instance.InstanceGroup" target="_top" title="This class provides methods to access instance group related information. It can be" alt="" coords="1033,274,1025,266,1003,259,969,253,926,249,879,248,832,249,789,253,755,259,733,266,725,274,733,282,755,290,789,296,832,299,879,301,926,299,969,296,1003,290,1025,282"/>
+<area shape="poly" id="node11" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.Plugin" target="_top" title="This interface has the only purpose to separate the plugin interfaces" alt="" coords="1128,480,1124,472,1114,465,1099,459,1079,455,1057,454,1035,455,1016,459,1000,465,990,472,987,480,990,488,1000,496,1016,502,1035,505,1057,507,1079,505,1099,502,1114,496,1124,488"/>
+<area shape="poly" id="node2" href="../indexes/core/pypz.core.commons.loggers.html#pypz.core.commons.loggers.ContextLogger" target="_top" title="This class has the responsibility to provide a simple logging interface, which" alt="" coords="313,686,306,678,284,671,249,665,206,661,158,660,111,661,67,665,33,671,11,678,3,686,11,694,33,702,67,708,111,711,158,713,206,711,249,708,284,702,306,694"/>
+<area shape="poly" id="node4" href="../indexes/core/pypz.core.commons.loggers.html#pypz.core.commons.loggers.DefaultContextLogger" target="_top" title="DefaultContextLogger" alt="" coords="782,686,771,678,739,671,689,665,626,661,556,660,486,661,422,665,372,671,340,678,329,686,340,694,372,702,422,708,486,711,556,713,626,711,689,708,739,702,771,694"/>
+<area shape="poly" id="node5" href="../indexes/core/pypz.plugins.loggers.default.html#pypz.plugins.loggers.default.DefaultLoggerPlugin" target="_top" title="DefaultLoggerPlugin" alt="" coords="956,892,946,884,916,877,870,871,811,867,746,866,681,867,622,871,576,877,546,884,536,892,546,900,576,908,622,914,681,917,746,919,811,917,870,914,916,908,946,900"/>
+<area shape="poly" id="node9" href="../indexes/core/pypz.core.specs.instance.html#pypz.core.specs.instance.RegisteredInterface" target="_top" title="This is a marker interface with the sole purpose to identify the native specs interfaces." alt="" coords="1528,68,1518,60,1490,53,1445,47,1388,43,1325,42,1262,43,1205,47,1160,53,1131,60,1121,68,1131,76,1160,84,1205,90,1262,93,1325,95,1388,93,1445,90,1490,84,1518,76"/>
 </map><figcaption>
 <p><span class="caption-text">Inheritance diagram</span><a class="headerlink" href="#id2" title="Link to this image"></a></p>
 </figcaption>
@@ -207,7 +203,7 @@ a logger plugin, then you actually implement the <cite>ContextLoggerInterface</c
 <p>Furthermore, there is a <cite>ContextLoggerInterface</cite> implementation in the Operator:</p>
 <dl class="py class">
 <dt class="sig sig-object py">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.operator.Operator.</span></span><span class="sig-name descname"><span class="pre">Logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logger_plugins</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="models.html#pypz.core.specs.plugin.LoggerPlugin" title="pypz.core.specs.plugin.LoggerPlugin"><span class="pre">LoggerPlugin</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.operator.Operator.</span></span><span class="sig-name descname"><span class="pre">Logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logger_plugins</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.LoggerPlugin" title="pypz.core.specs.plugin.LoggerPlugin"><span class="pre">LoggerPlugin</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>This is a wrapper class for the logging functionality. It wraps all the
 implementations of the LoggerAddons and by invoking either method it
 will invoke the corresponding method of each LoggerAddons.</p>

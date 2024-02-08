@@ -79,13 +79,22 @@ If you want to utilize channels, then you shall implement the abstract methods o
 instead of the port interfaces.
 
 .. autoclass:: pypz.core.channels.io.ChannelReader
+   :no-index:
 
    .. automethod:: _load_input_record_offset
+      :no-index:
+
    .. automethod:: has_records
+      :no-index:
+
    .. automethod:: _read_records
+      :no-index:
+
    .. automethod:: _commit_offset
+      :no-index:
 
 .. autoclass:: pypz.core.channels.io.ChannelWriter
+   :no-index:
 
    .. automethod:: _write_records
 

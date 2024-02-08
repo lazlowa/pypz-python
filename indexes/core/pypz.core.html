@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pypz.core package &mdash; pypz  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            pypz
+          </a>
+              <div class="version">
+                0.9.0b5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">General</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../general/overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../general/changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../core/models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core/parameters.html">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core/data_transfer.html">Data transfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core/executor.html">Executor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core/logging.html">Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core/deployer.html">Deployer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Plugins</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../plugins/kafka_io.html">Kafka IO Plugin</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Deployers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../deployers/kubernetes.html">Kubernetes Deployer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Sniffer</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../sniffer/overview.html">Overview</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/ht_create_pipeline.html">How to create a pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/ht_debug_in_operator.html">How to debug in a deployed operator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/ht_contribute.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/ht_develop.html">Developer’s Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lazlowa/pypz-python">Source Code</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lazlowa/pypz-starter-template">Starter Template Project</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lazlowa/pypz-examples">Examples</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pypz</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">pypz.core package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/indexes/core/pypz.core.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pypz-core-package">
+<h1>pypz.core package<a class="headerlink" href="#pypz-core-package" title="Link to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="pypz.core.channels.html">pypz.core.channels package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pypz.core.channels.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.base.html">pypz.core.channels.base module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.channels.base.html#pypz.core.channels.base.ChannelBase"><code class="docutils literal notranslate"><span class="pre">ChannelBase</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.channels.base.html#pypz.core.channels.base.ChannelMetric"><code class="docutils literal notranslate"><span class="pre">ChannelMetric</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.io.html">pypz.core.channels.io module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.channels.io.html#pypz.core.channels.io.ChannelReader"><code class="docutils literal notranslate"><span class="pre">ChannelReader</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.channels.io.html#pypz.core.channels.io.ChannelWriter"><code class="docutils literal notranslate"><span class="pre">ChannelWriter</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.misc.html">pypz.core.channels.misc module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.channels.misc.html#pypz.core.channels.misc.BlankChannelReader"><code class="docutils literal notranslate"><span class="pre">BlankChannelReader</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.channels.misc.html#pypz.core.channels.misc.BlankChannelWriter"><code class="docutils literal notranslate"><span class="pre">BlankChannelWriter</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.channels.status.html">pypz.core.channels.status module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.ChannelFilter"><code class="docutils literal notranslate"><span class="pre">ChannelFilter</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.ChannelStatus"><code class="docutils literal notranslate"><span class="pre">ChannelStatus</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.ChannelStatusMessage"><code class="docutils literal notranslate"><span class="pre">ChannelStatusMessage</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.ChannelStatusMonitor"><code class="docutils literal notranslate"><span class="pre">ChannelStatusMonitor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.channels.status.html#pypz.core.channels.status.NameSeparator"><code class="docutils literal notranslate"><span class="pre">NameSeparator</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pypz.core.channels.html#module-pypz.core.channels">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pypz.core.commons.html">pypz.core.commons package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pypz.core.commons.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.commons.loggers.html">pypz.core.commons.loggers module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.commons.loggers.html#pypz.core.commons.loggers.ContextLogger"><code class="docutils literal notranslate"><span class="pre">ContextLogger</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.commons.loggers.html#pypz.core.commons.loggers.ContextLoggerInterface"><code class="docutils literal notranslate"><span class="pre">ContextLoggerInterface</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.commons.loggers.html#pypz.core.commons.loggers.DefaultContextLogger"><code class="docutils literal notranslate"><span class="pre">DefaultContextLogger</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.commons.parameters.html">pypz.core.commons.parameters module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.commons.parameters.html#pypz.core.commons.parameters.ExpectedParameter"><code class="docutils literal notranslate"><span class="pre">ExpectedParameter</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.commons.parameters.html#pypz.core.commons.parameters.OptionalParameter"><code class="docutils literal notranslate"><span class="pre">OptionalParameter</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.commons.parameters.html#pypz.core.commons.parameters.ParameterSchemaBuilder"><code class="docutils literal notranslate"><span class="pre">ParameterSchemaBuilder</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.commons.parameters.html#pypz.core.commons.parameters.RequiredParameter"><code class="docutils literal notranslate"><span class="pre">RequiredParameter</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.commons.parameters.html#pypz.core.commons.parameters.retrieve_parameters"><code class="docutils literal notranslate"><span class="pre">retrieve_parameters()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.commons.utils.html">pypz.core.commons.utils module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.commons.utils.html#pypz.core.commons.utils.InterruptableTimer"><code class="docutils literal notranslate"><span class="pre">InterruptableTimer</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.commons.utils.html#pypz.core.commons.utils.SynchronizedReference"><code class="docutils literal notranslate"><span class="pre">SynchronizedReference</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.commons.utils.html#pypz.core.commons.utils.TemplateResolver"><code class="docutils literal notranslate"><span class="pre">TemplateResolver</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.commons.utils.html#pypz.core.commons.utils.convert_to_dict"><code class="docutils literal notranslate"><span class="pre">convert_to_dict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.commons.utils.html#pypz.core.commons.utils.current_time_millis"><code class="docutils literal notranslate"><span class="pre">current_time_millis()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.commons.utils.html#pypz.core.commons.utils.ensure_type"><code class="docutils literal notranslate"><span class="pre">ensure_type()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.commons.utils.html#pypz.core.commons.utils.is_type_allowed"><code class="docutils literal notranslate"><span class="pre">is_type_allowed()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pypz.core.commons.html#module-pypz.core.commons">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pypz.core.specs.html">pypz.core.specs package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pypz.core.specs.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.specs.dtos.html">pypz.core.specs.dtos module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.specs.dtos.html#pypz.core.specs.dtos.InstanceDTO"><code class="docutils literal notranslate"><span class="pre">InstanceDTO</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.specs.dtos.html#pypz.core.specs.dtos.OperatorConnection"><code class="docutils literal notranslate"><span class="pre">OperatorConnection</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.specs.dtos.html#pypz.core.specs.dtos.OperatorConnectionSource"><code class="docutils literal notranslate"><span class="pre">OperatorConnectionSource</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.specs.dtos.html#pypz.core.specs.dtos.OperatorInstanceDTO"><code class="docutils literal notranslate"><span class="pre">OperatorInstanceDTO</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.specs.dtos.html#pypz.core.specs.dtos.OperatorSpecDTO"><code class="docutils literal notranslate"><span class="pre">OperatorSpecDTO</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.specs.dtos.html#pypz.core.specs.dtos.PipelineInstanceDTO"><code class="docutils literal notranslate"><span class="pre">PipelineInstanceDTO</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.specs.dtos.html#pypz.core.specs.dtos.PipelineSpecDTO"><code class="docutils literal notranslate"><span class="pre">PipelineSpecDTO</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.specs.dtos.html#pypz.core.specs.dtos.PluginInstanceDTO"><code class="docutils literal notranslate"><span class="pre">PluginInstanceDTO</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.specs.dtos.html#pypz.core.specs.dtos.PluginSpecDTO"><code class="docutils literal notranslate"><span class="pre">PluginSpecDTO</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.specs.dtos.html#pypz.core.specs.dtos.SpecDTO"><code class="docutils literal notranslate"><span class="pre">SpecDTO</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.specs.instance.html">pypz.core.specs.instance module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.specs.instance.html#pypz.core.specs.instance.Instance"><code class="docutils literal notranslate"><span class="pre">Instance</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.specs.instance.html#pypz.core.specs.instance.InstanceGroup"><code class="docutils literal notranslate"><span class="pre">InstanceGroup</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.specs.instance.html#pypz.core.specs.instance.InstanceInitInterceptor"><code class="docutils literal notranslate"><span class="pre">InstanceInitInterceptor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.specs.instance.html#pypz.core.specs.instance.InterceptedInstance"><code class="docutils literal notranslate"><span class="pre">InterceptedInstance</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.specs.instance.html#pypz.core.specs.instance.InterceptedInstanceType"><code class="docutils literal notranslate"><span class="pre">InterceptedInstanceType</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.specs.instance.html#pypz.core.specs.instance.RegisteredInterface"><code class="docutils literal notranslate"><span class="pre">RegisteredInterface</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.specs.misc.html">pypz.core.specs.misc module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.specs.misc.html#pypz.core.specs.misc.BlankInputPortPlugin"><code class="docutils literal notranslate"><span class="pre">BlankInputPortPlugin</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.specs.misc.html#pypz.core.specs.misc.BlankInstance"><code class="docutils literal notranslate"><span class="pre">BlankInstance</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.specs.misc.html#pypz.core.specs.misc.BlankOperator"><code class="docutils literal notranslate"><span class="pre">BlankOperator</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.specs.misc.html#pypz.core.specs.misc.BlankOutputPortPlugin"><code class="docutils literal notranslate"><span class="pre">BlankOutputPortPlugin</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.specs.misc.html#pypz.core.specs.misc.BlankPlugin"><code class="docutils literal notranslate"><span class="pre">BlankPlugin</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.specs.misc.html#pypz.core.specs.misc.BlankPortPlugin"><code class="docutils literal notranslate"><span class="pre">BlankPortPlugin</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.specs.misc.html#pypz.core.specs.misc.BlankResourceHandlerPlugin"><code class="docutils literal notranslate"><span class="pre">BlankResourceHandlerPlugin</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.specs.misc.html#pypz.core.specs.misc.BlankServicePlugin"><code class="docutils literal notranslate"><span class="pre">BlankServicePlugin</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.specs.operator.html">pypz.core.specs.operator module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.specs.operator.html#pypz.core.specs.operator.Operator"><code class="docutils literal notranslate"><span class="pre">Operator</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.specs.pipeline.html">pypz.core.specs.pipeline module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.specs.pipeline.html#pypz.core.specs.pipeline.Pipeline"><code class="docutils literal notranslate"><span class="pre">Pipeline</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.specs.plugin.html">pypz.core.specs.plugin module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.specs.plugin.html#pypz.core.specs.plugin.ExtendedPlugin"><code class="docutils literal notranslate"><span class="pre">ExtendedPlugin</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.specs.plugin.html#pypz.core.specs.plugin.InputPortPlugin"><code class="docutils literal notranslate"><span class="pre">InputPortPlugin</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.specs.plugin.html#pypz.core.specs.plugin.LoggerPlugin"><code class="docutils literal notranslate"><span class="pre">LoggerPlugin</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.specs.plugin.html#pypz.core.specs.plugin.OutputPortPlugin"><code class="docutils literal notranslate"><span class="pre">OutputPortPlugin</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.specs.plugin.html#pypz.core.specs.plugin.Plugin"><code class="docutils literal notranslate"><span class="pre">Plugin</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.specs.plugin.html#pypz.core.specs.plugin.PortPlugin"><code class="docutils literal notranslate"><span class="pre">PortPlugin</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.specs.plugin.html#pypz.core.specs.plugin.ResourceHandlerPlugin"><code class="docutils literal notranslate"><span class="pre">ResourceHandlerPlugin</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.specs.plugin.html#pypz.core.specs.plugin.ServicePlugin"><code class="docutils literal notranslate"><span class="pre">ServicePlugin</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.core.specs.utils.html">pypz.core.specs.utils module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.specs.utils.html#pypz.core.specs.utils.AccessWrapper"><code class="docutils literal notranslate"><span class="pre">AccessWrapper</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.specs.utils.html#pypz.core.specs.utils.ExcludedCascadingParameterPrefix"><code class="docutils literal notranslate"><span class="pre">ExcludedCascadingParameterPrefix</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.specs.utils.html#pypz.core.specs.utils.IncludedCascadingParameterPrefix"><code class="docutils literal notranslate"><span class="pre">IncludedCascadingParameterPrefix</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.specs.utils.html#pypz.core.specs.utils.InstanceParameters"><code class="docutils literal notranslate"><span class="pre">InstanceParameters</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.specs.utils.html#pypz.core.specs.utils.SingletonAccessWrapper"><code class="docutils literal notranslate"><span class="pre">SingletonAccessWrapper</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.specs.utils.html#pypz.core.specs.utils.load_class_by_name"><code class="docutils literal notranslate"><span class="pre">load_class_by_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.specs.utils.html#pypz.core.specs.utils.remove_super_classes"><code class="docutils literal notranslate"><span class="pre">remove_super_classes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pypz.core.specs.utils.html#pypz.core.specs.utils.resolve_dependency_graph"><code class="docutils literal notranslate"><span class="pre">resolve_dependency_graph()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pypz.core.specs.html#module-pypz.core.specs">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="module-pypz.core">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pypz.core" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Laszlo Anka.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

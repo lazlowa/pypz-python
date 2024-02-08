@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pypz.sniffer package &mdash; pypz  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            pypz
+          </a>
+              <div class="version">
+                0.9.0b5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">General</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../general/overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../general/changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../core/models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core/parameters.html">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core/data_transfer.html">Data transfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core/executor.html">Executor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core/logging.html">Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core/deployer.html">Deployer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Plugins</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../plugins/kafka_io.html">Kafka IO Plugin</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Deployers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../deployers/kubernetes.html">Kubernetes Deployer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Sniffer</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../sniffer/overview.html">Overview</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/ht_create_pipeline.html">How to create a pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/ht_debug_in_operator.html">How to debug in a deployed operator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/ht_contribute.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/ht_develop.html">Developer’s Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lazlowa/pypz-python">Source Code</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lazlowa/pypz-starter-template">Starter Template Project</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lazlowa/pypz-examples">Examples</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pypz</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">pypz.sniffer package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/indexes/sniffer/pypz.sniffer.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pypz-sniffer-package">
+<h1>pypz.sniffer package<a class="headerlink" href="#pypz-sniffer-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="pypz.sniffer.sniffer.html">pypz.sniffer.sniffer module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pypz.sniffer.sniffer.html#pypz.sniffer.sniffer.ChannelSniffer"><code class="docutils literal notranslate"><span class="pre">ChannelSniffer</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pypz.sniffer.sniffer.html#pypz.sniffer.sniffer.ChannelSniffer.close"><code class="docutils literal notranslate"><span class="pre">ChannelSniffer.close()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.sniffer.sniffer.html#pypz.sniffer.sniffer.ChannelSniffer.on_status_message"><code class="docutils literal notranslate"><span class="pre">ChannelSniffer.on_status_message()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.sniffer.sniffer.html#pypz.sniffer.sniffer.ChannelSniffer.open"><code class="docutils literal notranslate"><span class="pre">ChannelSniffer.open()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.sniffer.sniffer.html#pypz.sniffer.sniffer.ChannelSniffer.sniff"><code class="docutils literal notranslate"><span class="pre">ChannelSniffer.sniff()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.sniffer.sniffer.html#pypz.sniffer.sniffer.ChannelSniffer.subscribe"><code class="docutils literal notranslate"><span class="pre">ChannelSniffer.subscribe()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pypz.sniffer.sniffer.html#pypz.sniffer.sniffer.PipelineSniffer"><code class="docutils literal notranslate"><span class="pre">PipelineSniffer</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pypz.sniffer.sniffer.html#pypz.sniffer.sniffer.PipelineSniffer.get_channel_id"><code class="docutils literal notranslate"><span class="pre">PipelineSniffer.get_channel_id()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.sniffer.sniffer.html#pypz.sniffer.sniffer.PipelineSniffer.get_channel_sniffer_by_port"><code class="docutils literal notranslate"><span class="pre">PipelineSniffer.get_channel_sniffer_by_port()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.sniffer.sniffer.html#pypz.sniffer.sniffer.PipelineSniffer.start"><code class="docutils literal notranslate"><span class="pre">PipelineSniffer.start()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.sniffer.sniffer.html#pypz.sniffer.sniffer.PipelineSniffer.stop"><code class="docutils literal notranslate"><span class="pre">PipelineSniffer.stop()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pypz.sniffer.utils.html">pypz.sniffer.utils module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pypz.sniffer.utils.html#pypz.sniffer.utils.is_sublist"><code class="docutils literal notranslate"><span class="pre">is_sublist()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="pypz.sniffer.utils.html#pypz.sniffer.utils.order_operators_by_connections"><code class="docutils literal notranslate"><span class="pre">order_operators_by_connections()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="pypz.sniffer.utils.html#pypz.sniffer.utils.retrieve_operator_paths"><code class="docutils literal notranslate"><span class="pre">retrieve_operator_paths()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pypz.sniffer.viewer.html">pypz.sniffer.viewer module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pypz.sniffer.viewer.html#pypz.sniffer.viewer.PipelineSnifferViewer"><code class="docutils literal notranslate"><span class="pre">PipelineSnifferViewer</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pypz.sniffer.viewer.html#pypz.sniffer.viewer.PipelineSnifferViewer.create_from_dto"><code class="docutils literal notranslate"><span class="pre">PipelineSnifferViewer.create_from_dto()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.sniffer.viewer.html#pypz.sniffer.viewer.PipelineSnifferViewer.create_from_string"><code class="docutils literal notranslate"><span class="pre">PipelineSnifferViewer.create_from_string()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pypz.sniffer.views.html">pypz.sniffer.views module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pypz.sniffer.views.html#pypz.sniffer.views.ChannelRWView"><code class="docutils literal notranslate"><span class="pre">ChannelRWView</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pypz.sniffer.views.html#pypz.sniffer.views.ChannelRWView.draw"><code class="docutils literal notranslate"><span class="pre">ChannelRWView.draw()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.sniffer.views.html#pypz.sniffer.views.ChannelRWView.on_update"><code class="docutils literal notranslate"><span class="pre">ChannelRWView.on_update()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pypz.sniffer.views.html#pypz.sniffer.views.ChannelView"><code class="docutils literal notranslate"><span class="pre">ChannelView</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pypz.sniffer.views.html#pypz.sniffer.views.ChannelView.draw"><code class="docutils literal notranslate"><span class="pre">ChannelView.draw()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pypz.sniffer.views.html#pypz.sniffer.views.OperatorView"><code class="docutils literal notranslate"><span class="pre">OperatorView</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pypz.sniffer.views.html#pypz.sniffer.views.OperatorView.draw"><code class="docutils literal notranslate"><span class="pre">OperatorView.draw()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pypz.sniffer.views.html#pypz.sniffer.views.PortView"><code class="docutils literal notranslate"><span class="pre">PortView</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pypz.sniffer.views.html#pypz.sniffer.views.PortView.draw"><code class="docutils literal notranslate"><span class="pre">PortView.draw()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pypz.sniffer.views.html#pypz.sniffer.views.ViewConfig"><code class="docutils literal notranslate"><span class="pre">ViewConfig</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pypz.sniffer.views.html#pypz.sniffer.views.ViewConfig.channel_cell_height"><code class="docutils literal notranslate"><span class="pre">ViewConfig.channel_cell_height</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.sniffer.views.html#pypz.sniffer.views.ViewConfig.channel_height"><code class="docutils literal notranslate"><span class="pre">ViewConfig.channel_height</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.sniffer.views.html#pypz.sniffer.views.ViewConfig.channel_spacing_hor"><code class="docutils literal notranslate"><span class="pre">ViewConfig.channel_spacing_hor</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.sniffer.views.html#pypz.sniffer.views.ViewConfig.channel_spacing_ver"><code class="docutils literal notranslate"><span class="pre">ViewConfig.channel_spacing_ver</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.sniffer.views.html#pypz.sniffer.views.ViewConfig.channel_start_pos_x"><code class="docutils literal notranslate"><span class="pre">ViewConfig.channel_start_pos_x</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.sniffer.views.html#pypz.sniffer.views.ViewConfig.channel_start_pos_y"><code class="docutils literal notranslate"><span class="pre">ViewConfig.channel_start_pos_y</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.sniffer.views.html#pypz.sniffer.views.ViewConfig.channel_width"><code class="docutils literal notranslate"><span class="pre">ViewConfig.channel_width</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.sniffer.views.html#pypz.sniffer.views.ViewConfig.grid_line_spacing_hor"><code class="docutils literal notranslate"><span class="pre">ViewConfig.grid_line_spacing_hor</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.sniffer.views.html#pypz.sniffer.views.ViewConfig.grid_line_spacing_ver"><code class="docutils literal notranslate"><span class="pre">ViewConfig.grid_line_spacing_ver</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.sniffer.views.html#pypz.sniffer.views.ViewConfig.operator_height"><code class="docutils literal notranslate"><span class="pre">ViewConfig.operator_height</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.sniffer.views.html#pypz.sniffer.views.ViewConfig.operator_spacing_hor"><code class="docutils literal notranslate"><span class="pre">ViewConfig.operator_spacing_hor</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.sniffer.views.html#pypz.sniffer.views.ViewConfig.operator_spacing_ver"><code class="docutils literal notranslate"><span class="pre">ViewConfig.operator_spacing_ver</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.sniffer.views.html#pypz.sniffer.views.ViewConfig.operator_start_pos_x"><code class="docutils literal notranslate"><span class="pre">ViewConfig.operator_start_pos_x</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.sniffer.views.html#pypz.sniffer.views.ViewConfig.operator_start_pos_y"><code class="docutils literal notranslate"><span class="pre">ViewConfig.operator_start_pos_y</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.sniffer.views.html#pypz.sniffer.views.ViewConfig.operator_width"><code class="docutils literal notranslate"><span class="pre">ViewConfig.operator_width</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.sniffer.views.html#pypz.sniffer.views.ViewConfig.replica_spacing_ver"><code class="docutils literal notranslate"><span class="pre">ViewConfig.replica_spacing_ver</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.sniffer.views.html#pypz.sniffer.views.ViewConfig.status_cell_count"><code class="docutils literal notranslate"><span class="pre">ViewConfig.status_cell_count</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.sniffer.views.html#pypz.sniffer.views.ViewConfig.status_cell_size"><code class="docutils literal notranslate"><span class="pre">ViewConfig.status_cell_size</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.sniffer.views.html#pypz.sniffer.views.ViewConfig.window_height"><code class="docutils literal notranslate"><span class="pre">ViewConfig.window_height</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.sniffer.views.html#pypz.sniffer.views.ViewConfig.window_width"><code class="docutils literal notranslate"><span class="pre">ViewConfig.window_width</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="module-pypz.sniffer">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pypz.sniffer" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Laszlo Anka.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
