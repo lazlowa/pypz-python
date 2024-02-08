@@ -10,6 +10,9 @@ both home and work environment, like:
 - how could we easily perform data processing on huge scale
 - how could we speed up the data processing itself
 
+If you want to start right away, follow this 
+[guide](https://lazlowa.github.io/pypz-python/guides/ht_create_pipeline.html).
+
 # *"When should I consider using it?"*
 You might consider using *pypz* in the following scenarios:
 - you are not a data engineer, but you want to be able to implement and deploy
