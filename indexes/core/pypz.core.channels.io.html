@@ -123,6 +123,15 @@
 The idea is that the class provides some core, protected abstract methods, which shall be implemented by
 the developer. These implementations then will be invoked by invoker methods. This makes sure that additional
 necessary logic will be performed along the implemented.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel_name</strong> – name of the channel</p></li>
+<li><p><strong>context</strong> – the <a class="reference internal" href="pypz.core.specs.plugin.html#pypz.core.specs.plugin.PortPlugin" title="pypz.core.specs.plugin.PortPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">PortPlugin</span></code></a>, which operates this channel</p></li>
+<li><p><strong>executor</strong> – an external ThreadPoolExecutor, if not provided, on will be created internally</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pypz.core.channels.io.ChannelReader.MetricsBufferLength">
 <span class="sig-name descname"><span class="pre">MetricsBufferLength</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></em><a class="headerlink" href="#pypz.core.channels.io.ChannelReader.MetricsBufferLength" title="Link to this definition"></a></dt>
@@ -343,6 +352,15 @@ double activation.</p>
 The idea is that the class provides some core, protected abstract methods, which shall be implemented by
 the developer. These implementations then will be invoked by invoker methods. This makes sure that additional
 necessary logic will be performed along the implemented.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel_name</strong> – name of the channel</p></li>
+<li><p><strong>context</strong> – the <a class="reference internal" href="pypz.core.specs.plugin.html#pypz.core.specs.plugin.PortPlugin" title="pypz.core.specs.plugin.PortPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">PortPlugin</span></code></a>, which operates this channel</p></li>
+<li><p><strong>executor</strong> – an external ThreadPoolExecutor, if not provided, on will be created internally</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pypz.core.channels.io.ChannelWriter.MetricsBufferLength">
 <span class="sig-name descname"><span class="pre">MetricsBufferLength</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></em><a class="headerlink" href="#pypz.core.channels.io.ChannelWriter.MetricsBufferLength" title="Link to this definition"></a></dt>

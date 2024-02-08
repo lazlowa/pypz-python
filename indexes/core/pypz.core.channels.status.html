@@ -225,6 +225,19 @@ object.</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.channels.status.</span></span><span class="sig-name descname"><span class="pre">ChannelStatusMessage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_context_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_group_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_group_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pypz.core.channels.status.ChannelStatus" title="pypz.core.channels.status.ChannelStatus"><span class="pre">ChannelStatus</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestamp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.channels.status.ChannelStatusMessage" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>This class is a Data Transfer Object (DTO) for the status messages sent between the channels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel_name</strong> – name of the channel</p></li>
+<li><p><strong>channel_context_name</strong> – name of the context of the channel, which is the full name of the plugin</p></li>
+<li><p><strong>channel_group_name</strong> – name of the group of the channel, which is the group name of the plugin</p></li>
+<li><p><strong>channel_group_index</strong> – index of the operator in the group, which is inherited by the plugin</p></li>
+<li><p><strong>status</strong> – status</p></li>
+<li><p><strong>payload</strong> – optional payload</p></li>
+<li><p><strong>timestamp</strong> – timestamp of the message at creation</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="pypz.core.channels.status.ChannelStatusMessage.create_from_json">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_from_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.channels.status.ChannelStatusMessage.create_from_json" title="Link to this definition"></a></dt>
@@ -244,6 +257,16 @@ object.</p>
 <p>This class has the responsibility to monitor and track state of the connected channel RW entities.
 If the counterpart sends a status message, this class has to parse and interpret it. In addition,
 it provides an implementation for the <code class="docutils literal notranslate"><span class="pre">ChannelFilter</span></code> interface to enable certain queries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel_name</strong> – name of the channel</p></li>
+<li><p><strong>channel_context_name</strong> – name of the context of the channel, which is the full name of the plugin</p></li>
+<li><p><strong>channel_group_name</strong> – name of the group of the channel, which is the group name of the plugin</p></li>
+<li><p><strong>logger</strong> – the context logger of the plugin, which is inherited from the operator</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pypz.core.channels.status.ChannelStatusMonitor.ValidPatienceTimeInMs">
 <span class="sig-name descname"><span class="pre">ValidPatienceTimeInMs</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">120000</span></em><a class="headerlink" href="#pypz.core.channels.status.ChannelStatusMonitor.ValidPatienceTimeInMs" title="Link to this definition"></a></dt>

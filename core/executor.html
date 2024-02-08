@@ -122,15 +122,18 @@
              
   <section id="executor">
 <span id="id1"></span><h1>Executor<a class="headerlink" href="#executor" title="Link to this heading"></a></h1>
-<p>Since the operator entity in <em>pypz</em> is self-contained, an executor is required, which controls the execution
-flow of the entire operator incl. plugins. The executor has the following main components:</p>
+<p>Since the operator entity in <em>pypz</em> is self-contained, an
+<a class="reference internal" href="../indexes/core/pypz.executors.operator.executor.html#pypz.executors.operator.executor.OperatorExecutor" title="pypz.executors.operator.executor.OperatorExecutor"><code class="xref py py-class docutils literal notranslate"><span class="pre">OperatorExecutor</span></code></a>
+is required, which controls the execution flow of the entire operator incl. plugins.
+The executor has the following main components:</p>
 <ul class="simple">
-<li><p>execution context</p></li>
-<li><p>state machine</p></li>
+<li><p><a class="reference internal" href="../indexes/core/pypz.executors.operator.context.html#pypz.executors.operator.context.ExecutionContext" title="pypz.executors.operator.context.ExecutionContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExecutionContext</span></code></a></p></li>
+<li><p>state machine (embedded into the <a class="reference internal" href="../indexes/core/pypz.executors.operator.executor.html#pypz.executors.operator.executor.OperatorExecutor" title="pypz.executors.operator.executor.OperatorExecutor"><code class="xref py py-class docutils literal notranslate"><span class="pre">OperatorExecutor</span></code></a>)</p></li>
 </ul>
 <section id="execution-context">
 <h2>Execution Context<a class="headerlink" href="#execution-context" title="Link to this heading"></a></h2>
-<p>The execution context is responsible to maintain all the necessary information during execution.
+<p>The <a class="reference internal" href="../indexes/core/pypz.executors.operator.context.html#pypz.executors.operator.context.ExecutionContext" title="pypz.executors.operator.context.ExecutionContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExecutionContext</span></code></a> is
+responsible to maintain all the necessary information during execution.
 It can be forwarded to the states of the state machine as well.</p>
 <p>The execution context has the following responsibilities:</p>
 <ul class="simple">
@@ -143,11 +146,12 @@ It can be forwarded to the states of the state machine as well.</p>
 </section>
 <section id="state-machine">
 <h2>State machine<a class="headerlink" href="#state-machine" title="Link to this heading"></a></h2>
-<div align="center" class="align-center"><div class="graphviz"><img src="../_images/graphviz-971d0428be5300539f3004453ea8a8df0c936353.png" alt="digraph state_machine {
+<div align="center" class="align-center"><div class="graphviz"><img src="../_images/graphviz-31d390f4c63f2cfd19fccd7dbf6bfb2dbca19139.png" alt="digraph state_machine {
     size=&quot;10,20&quot;;
     ratio=&quot;auto&quot;;
     ranksep=&quot;2&quot;;
     rankdir=&quot;TB&quot;;
+    margin=&quot;0.0,0.5&quot;;
     graph [fontname=&quot;Verdana&quot;, fontsize=&quot;28&quot;];
 
     start [shape=circle, label=&quot;&quot;, style=filled, color=black, width=0.2, height=0.2];
@@ -198,6 +202,8 @@ It can be forwarded to the states of the state machine as well.</p>
     killed -&gt; end;
 }" class="graphviz" /></div>
 </div>
+<p>You can find more information incl. invoked plugin methods in the corresponding
+<a class="reference internal" href="../indexes/core/pypz.executors.operator.states.html#module-pypz.executors.operator.states" title="pypz.executors.operator.states"><code class="xref py py-class docutils literal notranslate"><span class="pre">module</span></code></a>.</p>
 </section>
 <section id="execution-modes">
 <h2>Execution modes<a class="headerlink" href="#execution-modes" title="Link to this heading"></a></h2>

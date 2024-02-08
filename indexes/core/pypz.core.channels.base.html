@@ -119,6 +119,18 @@
 <dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.channels.base.</span></span><span class="sig-name descname"><span class="pre">ChannelBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pypz.core.specs.plugin.html#pypz.core.specs.plugin.PortPlugin" title="pypz.core.specs.plugin.PortPlugin"><span class="pre">PortPlugin</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">executor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ThreadPoolExecutor</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.channels.base.ChannelBase" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<p>The abstract base for the <a class="reference internal" href="pypz.core.channels.io.html#pypz.core.channels.io.ChannelReader" title="pypz.core.channels.io.ChannelReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelReader</span></code></a> and the
+<a class="reference internal" href="pypz.core.channels.io.html#pypz.core.channels.io.ChannelWriter" title="pypz.core.channels.io.ChannelWriter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelWriter</span></code></a> classes. It contains the common
+logic to be used in both classes’ implementations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel_name</strong> – name of the channel</p></li>
+<li><p><strong>context</strong> – the <a class="reference internal" href="pypz.core.specs.plugin.html#pypz.core.specs.plugin.PortPlugin" title="pypz.core.specs.plugin.PortPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">PortPlugin</span></code></a>, which operates this channel</p></li>
+<li><p><strong>executor</strong> – an external ThreadPoolExecutor, if not provided, on will be created internally</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase.ControlLoopExceptionTimeoutInMs">
 <span class="sig-name descname"><span class="pre">ControlLoopExceptionTimeoutInMs</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">60000</span></em><a class="headerlink" href="#pypz.core.channels.base.ChannelBase.ControlLoopExceptionTimeoutInMs" title="Link to this definition"></a></dt>

@@ -258,6 +258,12 @@ and only raise an exception at the end</p></li>
 <dt class="sig sig-object py" id="pypz.executors.operator.states.StateEntry">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.executors.operator.states.</span></span><span class="sig-name descname"><span class="pre">StateEntry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pypz.executors.operator.context.html#pypz.executors.operator.context.ExecutionContext" title="pypz.executors.operator.context.ExecutionContext"><span class="pre">ExecutionContext</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.executors.operator.states.StateEntry" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pypz.executors.operator.states.State" title="pypz.executors.operator.states.State"><code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code></a></p>
+<p>Serves as entry point for the state machine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>context</strong> – <a class="reference internal" href="pypz.executors.operator.context.html#pypz.executors.operator.context.ExecutionContext" title="pypz.executors.operator.context.ExecutionContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">pypz.executors.operator.context.ExecutionContext</span></code></a></p>
+</dd>
+</dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pypz.executors.operator.states.StateEntry.__executor">
 <span class="sig-name descname"><span class="pre">__executor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ThreadPoolExecutor</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateEntry.__executor" title="Link to this definition"></a></dt>
@@ -334,6 +340,12 @@ instances to be re-scheduled</p>
 <dt class="sig sig-object py" id="pypz.executors.operator.states.StateKilled">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.executors.operator.states.</span></span><span class="sig-name descname"><span class="pre">StateKilled</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pypz.executors.operator.context.html#pypz.executors.operator.context.ExecutionContext" title="pypz.executors.operator.context.ExecutionContext"><span class="pre">ExecutionContext</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.executors.operator.states.StateKilled" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pypz.executors.operator.states.State" title="pypz.executors.operator.states.State"><code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code></a></p>
+<p>Serves as exit point for the state machine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>context</strong> – <a class="reference internal" href="pypz.executors.operator.context.html#pypz.executors.operator.context.ExecutionContext" title="pypz.executors.operator.context.ExecutionContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">pypz.executors.operator.context.ExecutionContext</span></code></a></p>
+</dd>
+</dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pypz.executors.operator.states.StateKilled.__executor">
 <span class="sig-name descname"><span class="pre">__executor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ThreadPoolExecutor</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateKilled.__executor" title="Link to this definition"></a></dt>
@@ -410,6 +422,26 @@ instances to be re-scheduled</p>
 <dt class="sig sig-object py" id="pypz.executors.operator.states.StateOperationInit">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.executors.operator.states.</span></span><span class="sig-name descname"><span class="pre">StateOperationInit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pypz.executors.operator.context.html#pypz.executors.operator.context.ExecutionContext" title="pypz.executors.operator.context.ExecutionContext"><span class="pre">ExecutionContext</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.executors.operator.states.StateOperationInit" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pypz.executors.operator.states.State" title="pypz.executors.operator.states.State"><code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code></a></p>
+<p>This state initializes the operator.</p>
+<p>Invoked methods:</p>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="pypz.core.specs.plugin.html#pypz.core.specs.plugin.PortPlugin._on_port_open" title="pypz.core.specs.plugin.PortPlugin._on_port_open"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pypz.core.specs.plugin.PortPlugin._on_port_open()</span></code></a></p></li>
+<li><p><a class="reference internal" href="pypz.core.specs.operator.html#pypz.core.specs.operator.Operator._on_init" title="pypz.core.specs.operator.Operator._on_init"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pypz.core.specs.operator.Operator._on_init()</span></code></a></p></li>
+</ol>
+<p>This order of execution guarantees that the Operator’s implementation is already having access
+to the ports in the init phase.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Note that both the <a class="reference internal" href="pypz.core.specs.plugin.html#pypz.core.specs.plugin.InputPortPlugin" title="pypz.core.specs.plugin.InputPortPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">InputPortPlugin</span></code></a> and
+the <a class="reference internal" href="pypz.core.specs.plugin.html#pypz.core.specs.plugin.OutputPortPlugin" title="pypz.core.specs.plugin.OutputPortPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">OutputPortPlugin</span></code></a> inherits from the
+<a class="reference internal" href="pypz.core.specs.plugin.html#pypz.core.specs.plugin.PortPlugin" title="pypz.core.specs.plugin.PortPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">PortPlugin</span></code></a>, hence plugins of both types will
+be initialized.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>context</strong> – <a class="reference internal" href="pypz.executors.operator.context.html#pypz.executors.operator.context.ExecutionContext" title="pypz.executors.operator.context.ExecutionContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">pypz.executors.operator.context.ExecutionContext</span></code></a></p>
+</dd>
+</dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pypz.executors.operator.states.StateOperationInit.__executor">
 <span class="sig-name descname"><span class="pre">__executor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ThreadPoolExecutor</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateOperationInit.__executor" title="Link to this definition"></a></dt>
@@ -486,6 +518,18 @@ instances to be re-scheduled</p>
 <dt class="sig sig-object py" id="pypz.executors.operator.states.StateOperationRunning">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.executors.operator.states.</span></span><span class="sig-name descname"><span class="pre">StateOperationRunning</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pypz.executors.operator.context.html#pypz.executors.operator.context.ExecutionContext" title="pypz.executors.operator.context.ExecutionContext"><span class="pre">ExecutionContext</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.executors.operator.states.StateOperationRunning" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pypz.executors.operator.states.State" title="pypz.executors.operator.states.State"><code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code></a></p>
+<p>This state calls the main processing method of the Operator:</p>
+<p><a class="reference internal" href="pypz.core.specs.operator.html#pypz.core.specs.operator.Operator._on_running" title="pypz.core.specs.operator.Operator._on_running"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pypz.core.specs.operator.Operator._on_running()</span></code></a></p>
+<p>After successful finish of the Operator’s method, the offset commit on all the
+<a class="reference internal" href="pypz.core.specs.plugin.html#pypz.core.specs.plugin.InputPortPlugin" title="pypz.core.specs.plugin.InputPortPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">InputPortPlugin</span></code></a> will be invoked.</p>
+<p><a class="reference internal" href="pypz.core.specs.plugin.html#pypz.core.specs.plugin.InputPortPlugin.commit_current_read_offset" title="pypz.core.specs.plugin.InputPortPlugin.commit_current_read_offset"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pypz.core.specs.plugin.InputPortPlugin.commit_current_read_offset()</span></code></a></p>
+<p>This ensures that even, if the developer did not commit offsets manually in the
+implementation, offsets will still be committed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>context</strong> – <a class="reference internal" href="pypz.executors.operator.context.html#pypz.executors.operator.context.ExecutionContext" title="pypz.executors.operator.context.ExecutionContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">pypz.executors.operator.context.ExecutionContext</span></code></a></p>
+</dd>
+</dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pypz.executors.operator.states.StateOperationRunning.__executor">
 <span class="sig-name descname"><span class="pre">__executor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ThreadPoolExecutor</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateOperationRunning.__executor" title="Link to this definition"></a></dt>
@@ -562,6 +606,26 @@ instances to be re-scheduled</p>
 <dt class="sig sig-object py" id="pypz.executors.operator.states.StateOperationShutdown">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.executors.operator.states.</span></span><span class="sig-name descname"><span class="pre">StateOperationShutdown</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pypz.executors.operator.context.html#pypz.executors.operator.context.ExecutionContext" title="pypz.executors.operator.context.ExecutionContext"><span class="pre">ExecutionContext</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.executors.operator.states.StateOperationShutdown" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pypz.executors.operator.states.State" title="pypz.executors.operator.states.State"><code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code></a></p>
+<p>This state shuts down the operator.</p>
+<p>Invoked methods:</p>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="pypz.core.specs.operator.html#pypz.core.specs.operator.Operator._on_shutdown" title="pypz.core.specs.operator.Operator._on_shutdown"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pypz.core.specs.operator.Operator._on_shutdown()</span></code></a></p></li>
+<li><p><a class="reference internal" href="pypz.core.specs.plugin.html#pypz.core.specs.plugin.PortPlugin._on_port_close" title="pypz.core.specs.plugin.PortPlugin._on_port_close"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pypz.core.specs.plugin.PortPlugin._on_port_close()</span></code></a></p></li>
+</ol>
+<p>This order of execution guarantees that the Operator’s implementation is still having access
+to the ports in the shutdown phase.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Note that both the <a class="reference internal" href="pypz.core.specs.plugin.html#pypz.core.specs.plugin.InputPortPlugin" title="pypz.core.specs.plugin.InputPortPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">InputPortPlugin</span></code></a> and
+the <a class="reference internal" href="pypz.core.specs.plugin.html#pypz.core.specs.plugin.OutputPortPlugin" title="pypz.core.specs.plugin.OutputPortPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">OutputPortPlugin</span></code></a> inherits from the
+<a class="reference internal" href="pypz.core.specs.plugin.html#pypz.core.specs.plugin.PortPlugin" title="pypz.core.specs.plugin.PortPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">PortPlugin</span></code></a>, hence plugins of both types will
+be shut down.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>context</strong> – <a class="reference internal" href="pypz.executors.operator.context.html#pypz.executors.operator.context.ExecutionContext" title="pypz.executors.operator.context.ExecutionContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">pypz.executors.operator.context.ExecutionContext</span></code></a></p>
+</dd>
+</dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pypz.executors.operator.states.StateOperationShutdown.__executor">
 <span class="sig-name descname"><span class="pre">__executor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ThreadPoolExecutor</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateOperationShutdown.__executor" title="Link to this definition"></a></dt>
@@ -638,6 +702,14 @@ instances to be re-scheduled</p>
 <dt class="sig sig-object py" id="pypz.executors.operator.states.StateResourceCreation">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.executors.operator.states.</span></span><span class="sig-name descname"><span class="pre">StateResourceCreation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pypz.executors.operator.context.html#pypz.executors.operator.context.ExecutionContext" title="pypz.executors.operator.context.ExecutionContext"><span class="pre">ExecutionContext</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.executors.operator.states.StateResourceCreation" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pypz.executors.operator.states.State" title="pypz.executors.operator.states.State"><code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code></a></p>
+<p>This state is responsible to invoke the resource creation related methods.</p>
+<p>Invoked methods:</p>
+<p><a class="reference internal" href="pypz.core.specs.plugin.html#pypz.core.specs.plugin.ResourceHandlerPlugin._on_resource_creation" title="pypz.core.specs.plugin.ResourceHandlerPlugin._on_resource_creation"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pypz.core.specs.plugin.ResourceHandlerPlugin._on_resource_creation()</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>context</strong> – <a class="reference internal" href="pypz.executors.operator.context.html#pypz.executors.operator.context.ExecutionContext" title="pypz.executors.operator.context.ExecutionContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">pypz.executors.operator.context.ExecutionContext</span></code></a></p>
+</dd>
+</dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pypz.executors.operator.states.StateResourceCreation.__executor">
 <span class="sig-name descname"><span class="pre">__executor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ThreadPoolExecutor</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateResourceCreation.__executor" title="Link to this definition"></a></dt>
@@ -714,6 +786,14 @@ instances to be re-scheduled</p>
 <dt class="sig sig-object py" id="pypz.executors.operator.states.StateResourceDeletion">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.executors.operator.states.</span></span><span class="sig-name descname"><span class="pre">StateResourceDeletion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pypz.executors.operator.context.html#pypz.executors.operator.context.ExecutionContext" title="pypz.executors.operator.context.ExecutionContext"><span class="pre">ExecutionContext</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.executors.operator.states.StateResourceDeletion" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pypz.executors.operator.states.State" title="pypz.executors.operator.states.State"><code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code></a></p>
+<p>This state is responsible to invoke the resource deletion related methods.</p>
+<p>Invoked methods:</p>
+<p><a class="reference internal" href="pypz.core.specs.plugin.html#pypz.core.specs.plugin.ResourceHandlerPlugin._on_resource_deletion" title="pypz.core.specs.plugin.ResourceHandlerPlugin._on_resource_deletion"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pypz.core.specs.plugin.ResourceHandlerPlugin._on_resource_deletion()</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>context</strong> – <a class="reference internal" href="pypz.executors.operator.context.html#pypz.executors.operator.context.ExecutionContext" title="pypz.executors.operator.context.ExecutionContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">pypz.executors.operator.context.ExecutionContext</span></code></a></p>
+</dd>
+</dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pypz.executors.operator.states.StateResourceDeletion.__executor">
 <span class="sig-name descname"><span class="pre">__executor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ThreadPoolExecutor</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateResourceDeletion.__executor" title="Link to this definition"></a></dt>
@@ -790,6 +870,14 @@ instances to be re-scheduled</p>
 <dt class="sig sig-object py" id="pypz.executors.operator.states.StateServiceShutdown">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.executors.operator.states.</span></span><span class="sig-name descname"><span class="pre">StateServiceShutdown</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pypz.executors.operator.context.html#pypz.executors.operator.context.ExecutionContext" title="pypz.executors.operator.context.ExecutionContext"><span class="pre">ExecutionContext</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.executors.operator.states.StateServiceShutdown" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pypz.executors.operator.states.State" title="pypz.executors.operator.states.State"><code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code></a></p>
+<p>This state is responsible to invoke the service shutdown related methods.</p>
+<p>Invoked methods:</p>
+<p><a class="reference internal" href="pypz.core.specs.plugin.html#pypz.core.specs.plugin.ServicePlugin._on_service_shutdown" title="pypz.core.specs.plugin.ServicePlugin._on_service_shutdown"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pypz.core.specs.plugin.ServicePlugin._on_service_shutdown()</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>context</strong> – <a class="reference internal" href="pypz.executors.operator.context.html#pypz.executors.operator.context.ExecutionContext" title="pypz.executors.operator.context.ExecutionContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">pypz.executors.operator.context.ExecutionContext</span></code></a></p>
+</dd>
+</dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pypz.executors.operator.states.StateServiceShutdown.__executor">
 <span class="sig-name descname"><span class="pre">__executor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ThreadPoolExecutor</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateServiceShutdown.__executor" title="Link to this definition"></a></dt>
@@ -866,6 +954,14 @@ instances to be re-scheduled</p>
 <dt class="sig sig-object py" id="pypz.executors.operator.states.StateServiceStart">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.executors.operator.states.</span></span><span class="sig-name descname"><span class="pre">StateServiceStart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pypz.executors.operator.context.html#pypz.executors.operator.context.ExecutionContext" title="pypz.executors.operator.context.ExecutionContext"><span class="pre">ExecutionContext</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.executors.operator.states.StateServiceStart" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pypz.executors.operator.states.State" title="pypz.executors.operator.states.State"><code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code></a></p>
+<p>This state is responsible to invoke the service start related methods.</p>
+<p>Invoked methods:</p>
+<p><a class="reference internal" href="pypz.core.specs.plugin.html#pypz.core.specs.plugin.ServicePlugin._on_service_start" title="pypz.core.specs.plugin.ServicePlugin._on_service_start"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pypz.core.specs.plugin.ServicePlugin._on_service_start()</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>context</strong> – <a class="reference internal" href="pypz.executors.operator.context.html#pypz.executors.operator.context.ExecutionContext" title="pypz.executors.operator.context.ExecutionContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">pypz.executors.operator.context.ExecutionContext</span></code></a></p>
+</dd>
+</dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pypz.executors.operator.states.StateServiceStart.__executor">
 <span class="sig-name descname"><span class="pre">__executor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ThreadPoolExecutor</span></em><a class="headerlink" href="#pypz.executors.operator.states.StateServiceStart.__executor" title="Link to this definition"></a></dt>

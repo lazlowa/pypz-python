@@ -122,6 +122,11 @@
 <p>This interface extends the normal plugin’s lifecycle. The methods
 defined span outside the execution context, hence it can be used,
 if you need to perform some action before and after execution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> – name of the instance, if not provided, it will be attempted to deduce from the variable’s name</p>
+</dd>
+</dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pypz.core.specs.plugin.ExtendedPlugin._abc_impl">
 <span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pypz.core.specs.plugin.ExtendedPlugin._abc_impl" title="Link to this definition"></a></dt>
@@ -151,6 +156,15 @@ can be used to perform initialization that is required before the execution.</p>
 <p>This plugin interface allows to implement data transfer input port for an operator.
 Operators can communicate via ports. Different technologies can be implemented
 allowing operators to talk through them.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – name of the instance, if not provided, it will be attempted to deduce from the variable’s name</p></li>
+<li><p><strong>schema</strong> – the schema of the port plugin, which will be used to send/retrieve data</p></li>
+<li><p><strong>group_mode</strong> – if set to True, the all the input ports in the group shall receive all messages</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pypz.core.specs.plugin.InputPortPlugin._abc_impl">
 <span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pypz.core.specs.plugin.InputPortPlugin._abc_impl" title="Link to this definition"></a></dt>
@@ -207,6 +221,11 @@ read offset based on the technology used.</p>
 <p>This addon interface allows to implement different logging technologies
 to be used during the execution. Notice that the logger methods are
 coming from the ContextLogger class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> – name of the instance, if not provided, it will be attempted to deduce from the variable’s name</p>
+</dd>
+</dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pypz.core.specs.plugin.LoggerPlugin._abc_impl">
 <span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pypz.core.specs.plugin.LoggerPlugin._abc_impl" title="Link to this definition"></a></dt>
@@ -221,6 +240,14 @@ coming from the ContextLogger class.</p>
 <p>This plugin interface allows to implement data transfer output port for an operator.
 Operators can communicate via ports. Different technologies can be implemented
 allowing operators to talk through them.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – name of the instance, if not provided, it will be attempted to deduce from the variable’s name</p></li>
+<li><p><strong>schema</strong> – the schema of the port plugin, which will be used to send/retrieve data</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pypz.core.specs.plugin.OutputPortPlugin._abc_impl">
 <span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pypz.core.specs.plugin.OutputPortPlugin._abc_impl" title="Link to this definition"></a></dt>
@@ -251,6 +278,11 @@ The implementation shall specify the type of the data and the return value.</p>
 from other interfaces like the Operator. It is necessary to avoid the
 case, where an Operator could be nested into other Operators. All
 plugin interfaces shall extend this one.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> – name of the instance, if not provided, it will be attempted to deduce from the variable’s name</p>
+</dd>
+</dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pypz.core.specs.plugin.Plugin.__logger">
 <span class="sig-name descname"><span class="pre">__logger</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.core.commons.loggers.html#pypz.core.commons.loggers.ContextLogger" title="pypz.core.commons.loggers.ContextLogger"><span class="pre">ContextLogger</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.core.specs.plugin.Plugin.__logger" title="Link to this definition"></a></dt>
@@ -349,6 +381,14 @@ a json model specified either as string or as dict.</p>
 <dd><p>Bases: <a class="reference internal" href="#pypz.core.specs.plugin.Plugin" title="pypz.core.specs.plugin.Plugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">Plugin</span></code></a>, <a class="reference internal" href="pypz.core.specs.instance.html#pypz.core.specs.instance.RegisteredInterface" title="pypz.core.specs.instance.RegisteredInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">RegisteredInterface</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
 <p>This plugin interface allows to implement common methods for
 port both input and output port plugins.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – name of the instance, if not provided, it will be attempted to deduce from the variable’s name</p></li>
+<li><p><strong>schema</strong> – the schema of the port plugin, which will be used to send/retrieve data</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pypz.core.specs.plugin.PortPlugin.__connected_ports">
 <span class="sig-name descname"><span class="pre">__connected_ports</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pypz.core.specs.plugin.PortPlugin" title="pypz.core.specs.plugin.PortPlugin"><span class="pre">PortPlugin</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.core.specs.plugin.PortPlugin.__connected_ports" title="Link to this definition"></a></dt>
@@ -420,6 +460,11 @@ sent through the port.</p>
 <p>This plugin interface allows to implement resource management related
 functionalities. The respective methods will be called at specific
 times during the execution. Check <a class="reference internal" href="../../core/executor.html#executor"><span class="std std-ref">Executor</span></a> for more information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> – name of the instance, if not provided, it will be attempted to deduce from the variable’s name</p>
+</dd>
+</dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pypz.core.specs.plugin.ResourceHandlerPlugin._abc_impl">
 <span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pypz.core.specs.plugin.ResourceHandlerPlugin._abc_impl" title="Link to this definition"></a></dt>
@@ -460,6 +505,11 @@ can run in the background. Examples:
 - mounting service, which mounts and unmounts a remote location
 - listener service, which starts a background thread to listen for something
 - etc.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> – name of the instance, if not provided, it will be attempted to deduce from the variable’s name</p>
+</dd>
+</dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pypz.core.specs.plugin.ServicePlugin.__context">
 <span class="sig-name descname"><span class="pre">__context</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.core.specs.instance.html#pypz.core.specs.instance.Instance" title="pypz.core.specs.instance.Instance"><span class="pre">Instance</span></a></em><a class="headerlink" href="#pypz.core.specs.plugin.ServicePlugin.__context" title="Link to this definition"></a></dt>

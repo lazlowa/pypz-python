@@ -3,16 +3,19 @@
 Executor
 ========
 
-Since the operator entity in *pypz* is self-contained, an executor is required, which controls the execution
-flow of the entire operator incl. plugins. The executor has the following main components:
+Since the operator entity in *pypz* is self-contained, an
+:class:`OperatorExecutor <pypz.executors.operator.executor.OperatorExecutor>`
+is required, which controls the execution flow of the entire operator incl. plugins.
+The executor has the following main components:
 
-- execution context
-- state machine
+- :class:`ExecutionContext <pypz.executors.operator.context.ExecutionContext>`
+- state machine (embedded into the :class:`OperatorExecutor <pypz.executors.operator.executor.OperatorExecutor>`)
 
 Execution Context
 -----------------
 
-The execution context is responsible to maintain all the necessary information during execution.
+The :class:`ExecutionContext <pypz.executors.operator.context.ExecutionContext>` is
+responsible to maintain all the necessary information during execution.
 It can be forwarded to the states of the state machine as well.
 
 The execution context has the following responsibilities:
@@ -35,6 +38,7 @@ State machine
        ratio="auto";
        ranksep="2";
        rankdir="TB";
+       margin="0.0,0.5";
        graph [fontname="Verdana", fontsize="28"];
 
        start [shape=circle, label="", style=filled, color=black, width=0.2, height=0.2];
@@ -84,6 +88,9 @@ State machine
 
        killed -> end;
    }
+
+You can find more information incl. invoked plugin methods in the corresponding
+:class:`module <pypz.executors.operator.states>`.
 
 Execution modes
 ---------------

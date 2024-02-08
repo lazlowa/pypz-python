@@ -235,7 +235,9 @@ start Kafka locally</p></li>
 <p>Check <a class="reference internal" href="../core/models.html#models"><span class="std std-ref">Models</span></a> section for more details on the methods.</p>
 <section id="output-schema">
 <h3>Output Schema<a class="headerlink" href="#output-schema" title="Link to this heading"></a></h3>
-<p>The builtin KafkaChannelPorts are sending records in <a class="reference external" href="https://avro.apache.org/docs/1.11.1/specification/_print/">Avro</a>
+<p>The builtin kafka ports (<a class="reference internal" href="../indexes/plugins/kafka_io/pypz.plugins.kafka_io.ports.html#pypz.plugins.kafka_io.ports.KafkaChannelInputPort" title="pypz.plugins.kafka_io.ports.KafkaChannelInputPort"><code class="xref py py-class docutils literal notranslate"><span class="pre">KafkaChannelInputPort</span></code></a>,
+<a class="reference internal" href="../indexes/plugins/kafka_io/pypz.plugins.kafka_io.ports.html#pypz.plugins.kafka_io.ports.KafkaChannelOutputPort" title="pypz.plugins.kafka_io.ports.KafkaChannelOutputPort"><code class="xref py py-class docutils literal notranslate"><span class="pre">KafkaChannelOutputPort</span></code></a>)
+are sending records in <a class="reference external" href="https://avro.apache.org/docs/1.11.1/specification/_print/">Avro</a>
 format, hence we need to define the schema for the records.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">AvroSchemaString</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">{</span>
@@ -256,8 +258,8 @@ format, hence we need to define the schema for the records.</p>
 <section id="init">
 <h3><em>__init__()</em><a class="headerlink" href="#init" title="Link to this heading"></a></h3>
 <p>Operators can be enhanced by plugins. For example, the Input-/OutputPortPlugins enable the operators
-to transfer data to and from each other. Hence, we need to create the <code class="docutils literal notranslate"><span class="pre">KafkaChannelOutputPort</span></code> plugin
-in the ctor of the operator.</p>
+to transfer data to and from each other. Hence, we need to create the
+<a class="reference internal" href="../indexes/plugins/kafka_io/pypz.plugins.kafka_io.ports.html#pypz.plugins.kafka_io.ports.KafkaChannelInputPort" title="pypz.plugins.kafka_io.ports.KafkaChannelInputPort"><code class="xref py py-class docutils literal notranslate"><span class="pre">KafkaChannelInputPort</span></code></a> plugin in the ctor of the operator.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
 
 <span class="n">AvroSchemaString</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
@@ -484,7 +486,7 @@ with the name <code class="docutils literal notranslate"><span class="pre">execu
 <p>The following logic is implemented:</p>
 <ol class="arabic simple">
 <li><p>Create the DemoPipeline object</p></li>
-<li><p>Create the PipelineExecutor object with the pipeline as ctor argument</p></li>
+<li><p>Create the <a class="reference internal" href="../indexes/core/pypz.executors.pipeline.executor.html#pypz.executors.pipeline.executor.PipelineExecutor" title="pypz.executors.pipeline.executor.PipelineExecutor"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineExecutor</span></code></a> object with the pipeline as ctor argument</p></li>
 <li><p>Start the pipeline execution</p></li>
 <li><p>Shutdown the pipeline execution</p></li>
 </ol>
@@ -533,8 +535,9 @@ used two-level, excluding <a class="reference internal" href="../core/parameters
 <img alt="../_images/ht_cp_execute_log_1.png" src="../_images/ht_cp_execute_log_1.png" />
 <p>Notice that we used the print method to show some information on stdout, however there is a <a class="reference internal" href="../core/logging.html#logging"><span class="std std-ref">Logging</span></a> system
 in <em>pypz</em>, which allows to send log messages. For this, we need to enhance our operators by logger plugins.
-As next, we will add the <code class="docutils literal notranslate"><span class="pre">DefaultLoggerPlugin</span></code> to each operators and we will modify the code to use the
-new logger. The <code class="docutils literal notranslate"><span class="pre">DefaultLoggerPlugin</span></code> sends the logs to stdout.</p>
+As next, we will add the <a class="reference internal" href="../indexes/core/pypz.plugins.loggers.default.html#pypz.plugins.loggers.default.DefaultLoggerPlugin" title="pypz.plugins.loggers.default.DefaultLoggerPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">DefaultLoggerPlugin</span></code></a>
+to each operators and we will modify the code to use the
+new logger. The <a class="reference internal" href="../indexes/core/pypz.plugins.loggers.default.html#pypz.plugins.loggers.default.DefaultLoggerPlugin" title="pypz.plugins.loggers.default.DefaultLoggerPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">DefaultLoggerPlugin</span></code></a> sends the logs to stdout.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
 
 <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -619,10 +622,10 @@ Sniffer is a small tool to visualize the control plane of the operators’ ports
 <li><p>Create an additional file with the name <code class="docutils literal notranslate"><span class="pre">sniffer.py</span></code>, which will be a script</p></li>
 <li><p>Create the pipeline object</p></li>
 <li><p>Set the parameters as you have done in the <code class="docutils literal notranslate"><span class="pre">execute.py</span></code></p></li>
-<li><p>Create the sniffer object and provide the pipeline as constructor argument</p></li>
+<li><p>Create the <a class="reference internal" href="../indexes/sniffer/pypz.sniffer.viewer.html#pypz.sniffer.viewer.PipelineSnifferViewer" title="pypz.sniffer.viewer.PipelineSnifferViewer"><code class="xref py py-class docutils literal notranslate"><span class="pre">sniffer</span> <span class="pre">object</span></code></a> and provide the pipeline as constructor argument</p></li>
 <li><p>Invoke the sniffer’s mainloop() method (based on TK)</p></li>
 </ol>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pypz.executors.pipeline.executor</span> <span class="kn">import</span> <span class="n">PipelineExecutor</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pypz.sniffer.viewer</span> <span class="kn">import</span> <span class="n">PipelineSnifferViewer</span>
 
 <span class="kn">from</span> <span class="nn">pypz.example.pipeline</span> <span class="kn">import</span> <span class="n">DemoPipeline</span>
 
@@ -765,7 +768,7 @@ the following:</p>
 <li><p>Create an additional file with the name <code class="docutils literal notranslate"><span class="pre">deploy.py</span></code>, which will be a script</p></li>
 <li><p>Create the pipeline object</p></li>
 <li><p>Set the necessary parameters</p></li>
-<li><p>Create the KubernetesDeployer and specify the namespace</p></li>
+<li><p>Create the <a class="reference internal" href="../indexes/deployers/k8s/pypz.deployers.k8s.html#pypz.deployers.k8s.KubernetesDeployer" title="pypz.deployers.k8s.KubernetesDeployer"><code class="xref py py-class docutils literal notranslate"><span class="pre">KubernetesDeployer</span></code></a> and specify the namespace</p></li>
 <li><p>Deploy the pipeline only, if it is not yet deployed</p></li>
 <li><p>Attach to the deployed pipeline to block until it is finished</p></li>
 <li><p>Destroy the pipeline and its related resources</p></li>

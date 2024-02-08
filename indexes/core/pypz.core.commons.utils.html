@@ -137,6 +137,14 @@ Note that this should not be used in cases, where accuracy matters.</p>
 <dt class="sig sig-object py" id="pypz.core.commons.utils.SynchronizedReference">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.commons.utils.</span></span><span class="sig-name descname"><span class="pre">SynchronizedReference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reference</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ReferenceType</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.commons.utils.SynchronizedReference" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Generic</span></code>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">ReferenceType</span></code>]</p>
+<p>This class realizes a synchronized reference i.e., it locks the object during
+read and write to avoid race conditions. This class is intended to safeguard
+pypz for the time after GIL has been removed for good.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>reference</strong> – the reference to the object with the generic type ReferenceType</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="pypz.core.commons.utils.SynchronizedReference.get">
 <span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ReferenceType</span></span></span><a class="headerlink" href="#pypz.core.commons.utils.SynchronizedReference.get" title="Link to this definition"></a></dt>
@@ -153,6 +161,16 @@ Note that this should not be used in cases, where accuracy matters.</p>
 <dt class="sig sig-object py" id="pypz.core.commons.utils.TemplateResolver">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.commons.utils.</span></span><span class="sig-name descname"><span class="pre">TemplateResolver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">left_template_boundary</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">right_template_boundary</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.commons.utils.TemplateResolver" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class realizes the logic to resolve templates in strings. As of 02/2024 only
+environment variables can be resolved.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>left_template_boundary</strong> – the start of the template</p></li>
+<li><p><strong>right_template_boundary</strong> – the end of the template</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pypz.core.commons.utils.TemplateResolver.m_envVarPattern">
 <span class="sig-name descname"><span class="pre">m_envVarPattern</span></span><a class="headerlink" href="#pypz.core.commons.utils.TemplateResolver.m_envVarPattern" title="Link to this definition"></a></dt>
@@ -185,7 +203,15 @@ or a normal String.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pypz.core.commons.utils.convert_to_dict">
 <span class="sig-prename descclassname"><span class="pre">pypz.core.commons.utils.</span></span><span class="sig-name descname"><span class="pre">convert_to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="headerlink" href="#pypz.core.commons.utils.convert_to_dict" title="Link to this definition"></a></dt>
-<dd><p>This method attempts to convert an object recursively to a dictionary</p>
+<dd><p>This method attempts to convert an object recursively to a dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>obj</strong> – any object that can be converted to dict</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>resulted dict or the object, if no valid conversion available (necessary due to the recursion)</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -196,13 +222,36 @@ or a normal String.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pypz.core.commons.utils.ensure_type">
 <span class="sig-prename descclassname"><span class="pre">pypz.core.commons.utils.</span></span><span class="sig-name descname"><span class="pre">ensure_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expected_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.commons.utils.ensure_type" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Convenience method to ensure that the value has the expected type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value</strong> – value to check</p></li>
+<li><p><strong>expected_type</strong> – expected type</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p>TypeError</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pypz.core.commons.utils.is_type_allowed">
 <span class="sig-prename descclassname"><span class="pre">pypz.core.commons.utils.</span></span><span class="sig-name descname"><span class="pre">is_type_allowed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allowed_types</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.core.commons.utils.is_type_allowed" title="Link to this definition"></a></dt>
-<dd><p>This function checks if the type of the provided object is allowed given
+<dd><p>This convenience function checks if the type of the provided object is allowed given
 the tuple of allowed types provided as argument.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj</strong> – object to check</p></li>
+<li><p><strong>allowed_types</strong> – allowed types</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if allowed, False otherwise</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>

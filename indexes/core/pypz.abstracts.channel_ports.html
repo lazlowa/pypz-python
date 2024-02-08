@@ -123,6 +123,16 @@
 to realize transfer functionalities. It means that once there is a proper
 channel implementation, a fully functional InputPortPlugin can be made by
 providing that implementation in the abstract new_input_channel() method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – name of the instance, if not provided, it will be attempted to deduce from the variable’s name</p></li>
+<li><p><strong>schema</strong> – the schema of the port plugin, which will be used to send/retrieve data</p></li>
+<li><p><strong>group_mode</strong> – if set to True, the all the input ports in the group shall receive all messages</p></li>
+<li><p><strong>channel_reader_type</strong> – the type of the channel reader to be used</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pypz.abstracts.channel_ports.ChannelInputPort._abc_impl">
 <span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pypz.abstracts.channel_ports.ChannelInputPort._abc_impl" title="Link to this definition"></a></dt>
@@ -141,6 +151,15 @@ Usage:</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">optional_param</span> <span class="o">=</span> <span class="s2">&quot;defaultValue&quot;</span>
 </pre></div>
 </div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>parameter_type</strong> – (str, int, float, set, list, dict, type(None))</p></li>
+<li><p><strong>alt_name</strong> – alternative name for the parameter, if specified it acts as reference to the parameter</p></li>
+<li><p><strong>on_update</strong> – callback to react on value update</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py attribute">
@@ -156,6 +175,15 @@ Usage:</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">optional_param</span> <span class="o">=</span> <span class="s2">&quot;defaultValue&quot;</span>
 </pre></div>
 </div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>parameter_type</strong> – (str, int, float, set, list, dict, type(None))</p></li>
+<li><p><strong>alt_name</strong> – alternative name for the parameter, if specified it acts as reference to the parameter</p></li>
+<li><p><strong>on_update</strong> – callback to react on value update</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py attribute">
@@ -269,6 +297,15 @@ Usage:</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">optional_param</span> <span class="o">=</span> <span class="s2">&quot;defaultValue&quot;</span>
 </pre></div>
 </div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>parameter_type</strong> – (str, int, float, set, list, dict, type(None))</p></li>
+<li><p><strong>alt_name</strong> – alternative name for the parameter, if specified it acts as reference to the parameter</p></li>
+<li><p><strong>on_update</strong> – callback to react on value update</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -299,6 +336,15 @@ Usage:</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">optional_param</span> <span class="o">=</span> <span class="s2">&quot;defaultValue&quot;</span>
 </pre></div>
 </div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>parameter_type</strong> – (str, int, float, set, list, dict, type(None))</p></li>
+<li><p><strong>alt_name</strong> – alternative name for the parameter, if specified it acts as reference to the parameter</p></li>
+<li><p><strong>on_update</strong> – callback to react on value update</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py attribute">
@@ -314,6 +360,15 @@ Usage:</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">optional_param</span> <span class="o">=</span> <span class="s2">&quot;defaultValue&quot;</span>
 </pre></div>
 </div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>parameter_type</strong> – (str, int, float, set, list, dict, type(None))</p></li>
+<li><p><strong>alt_name</strong> – alternative name for the parameter, if specified it acts as reference to the parameter</p></li>
+<li><p><strong>on_update</strong> – callback to react on value update</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -363,6 +418,15 @@ read offset based on the technology used.</p>
 to realize transfer functionalities. It means that once there is a proper
 channel implementation, a fully functional OutputPortPlugin can be made by
 providing that implementation in the abstract new_output_channel() method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – name of the instance, if not provided, it will be attempted to deduce from the variable’s name</p></li>
+<li><p><strong>schema</strong> – the schema of the port plugin, which will be used to send/retrieve data</p></li>
+<li><p><strong>channel_writer_type</strong> – the type of the channel writer to be used</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pypz.abstracts.channel_ports.ChannelOutputPort._abc_impl">
 <span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pypz.abstracts.channel_ports.ChannelOutputPort._abc_impl" title="Link to this definition"></a></dt>
@@ -381,6 +445,15 @@ Usage:</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">optional_param</span> <span class="o">=</span> <span class="s2">&quot;defaultValue&quot;</span>
 </pre></div>
 </div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>parameter_type</strong> – (str, int, float, set, list, dict, type(None))</p></li>
+<li><p><strong>alt_name</strong> – alternative name for the parameter, if specified it acts as reference to the parameter</p></li>
+<li><p><strong>on_update</strong> – callback to react on value update</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py attribute">
@@ -396,6 +469,15 @@ Usage:</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">optional_param</span> <span class="o">=</span> <span class="s2">&quot;defaultValue&quot;</span>
 </pre></div>
 </div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>parameter_type</strong> – (str, int, float, set, list, dict, type(None))</p></li>
+<li><p><strong>alt_name</strong> – alternative name for the parameter, if specified it acts as reference to the parameter</p></li>
+<li><p><strong>on_update</strong> – callback to react on value update</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py attribute">
@@ -503,6 +585,15 @@ Usage:</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">optional_param</span> <span class="o">=</span> <span class="s2">&quot;defaultValue&quot;</span>
 </pre></div>
 </div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>parameter_type</strong> – (str, int, float, set, list, dict, type(None))</p></li>
+<li><p><strong>alt_name</strong> – alternative name for the parameter, if specified it acts as reference to the parameter</p></li>
+<li><p><strong>on_update</strong> – callback to react on value update</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
