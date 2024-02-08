@@ -1,0 +1,12 @@
+pypz.plugins namespace
+======================
+
+.. py:module:: pypz.plugins
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   pypz.plugins.loggers

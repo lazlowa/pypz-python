@@ -1,10 +1,5 @@
 from pypz.version import PROJECT_VERSION
 
-import os
-import sys
-
-sys.path.insert(0, os.path.abspath('../core/src/pypz'))
-
 # Configuration file for the Sphinx documentation builder.
 #
 # For the full list of built-in configuration values, see the documentation:

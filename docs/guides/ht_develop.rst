@@ -106,10 +106,29 @@ Additionally, you need to install the dependencies for the Sphinx extensions:
 As last, you need to install `GraphViz <https://graphviz.org/>`_, since its features are used
 by Sphinx to generate images in the documentation.
 
-Once all the dependencies are installed, you can build the documentation with the following command:
+The indexes are regenerated in the publish action. However, if you want to rebuild them locally,
+you can do it with the following commands from the docs folder:
+
+.. code-block:: shell
+
+   sphinx-apidoc --implicit-namespaces -e -f -o ./indexes/core ../core/src/pypz/
+   sphinx-apidoc --implicit-namespaces -e -f -o ./indexes/sniffer ../sniffer/src/pypz/
+   sphinx-apidoc --implicit-namespaces -e -f -o ./indexes/plugins/kafka_io ../plugins/kafka_io/src/pypz/
+   sphinx-apidoc --implicit-namespaces -e -f -o ./indexes/deployers/k8s ../deployers/k8s/src/pypz/
+
+.. warning::
+   Since the index is generated automatically with implicit namespaces, there are some known issues with the
+   documentation build:
+
+   - multiple .rst files of the common namespaces are generated, which causes the following warning
+     ``WARNING: duplicate object description [...] use :no-index: for one of them``
+   - the generated module.rst files are not included in any toctree causing the warning
+     ``WARNING: document isn't included in any toctree``
+
+You can build the documentation with the following command:
 
 .. code-block:: shell
 
    sphinx-build ./docs ./docs/_build
 
-Then you can open the generated index.html under ./docs/_build/index.html
+Then you can open the generated index.html under ./docs/_build/index.html.

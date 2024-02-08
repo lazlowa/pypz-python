@@ -1,5 +1,5 @@
-core package
-============
+pypz.core package
+=================
 
 Subpackages
 -----------
@@ -7,14 +7,14 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
-   core.channels
-   core.commons
-   core.specs
+   pypz.core.channels
+   pypz.core.commons
+   pypz.core.specs
 
 Module contents
 ---------------
 
-.. automodule:: core
+.. automodule:: pypz.core
    :members:
    :undoc-members:
    :show-inheritance:

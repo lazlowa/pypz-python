@@ -59,13 +59,6 @@ Welcome to pypz's documentation!
    Starter Template Project <https://github.com/lazlowa/pypz-starter-template>
    Examples <https://github.com/lazlowa/pypz-examples>
 
-.. toctree::
-   :maxdepth: 1
-   :caption: Index
-
-   modindex/modules
-
-
 Indices and tables
 ==================
 

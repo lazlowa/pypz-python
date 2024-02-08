@@ -21,7 +21,13 @@ jobs:
         python -m pip install pyyaml
         python -m pip install -r requirements.txt
         python -m pip install -r ./docs/requirements.txt
-    - name: Build
+    - name: Build Indexes
+      run: |
+        sphinx-apidoc --implicit-namespaces -e -f -o .\indexes\core ..\core\src\pypz\
+        sphinx-apidoc --implicit-namespaces -e -f -o .\indexes\sniffer ..\sniffer\src\pypz\
+        sphinx-apidoc --implicit-namespaces -e -f -o .\indexes\plugins\kafka_io ..\plugins\kafka_io\src\pypz\
+        sphinx-apidoc --implicit-namespaces -e -f -o .\indexes\deployers\k8s ..\deployers\k8s\src\pypz\
+    - name: Build HTML
       run: |
         sphinx-build ./docs ./docs/_build
     - name: Deploy

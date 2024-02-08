@@ -33,7 +33,10 @@ So we have the following requirements:
 The concept involves the following classes:
 
 .. autoclass:: pypz.core.commons.loggers.ContextLoggerInterface
+   :no-index:
+
 .. autoclass:: pypz.core.commons.loggers.ContextLogger
+   :no-index:
 
 The `ContextLoggerInterface` shall be used to implement the actual logging functionality. Notice that
 this class provides protected methods that shall not be called directly. The `ContextLogger` provides
