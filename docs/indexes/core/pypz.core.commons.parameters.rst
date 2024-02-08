@@ -5,3 +5,4 @@ pypz.core.commons.parameters module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:

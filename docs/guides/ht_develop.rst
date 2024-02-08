@@ -111,10 +111,10 @@ you can do it with the following commands from the docs folder:
 
 .. code-block:: shell
 
-   sphinx-apidoc --implicit-namespaces -e -f -o ./indexes/core ../core/src/pypz/
-   sphinx-apidoc --implicit-namespaces -e -f -o ./indexes/sniffer ../sniffer/src/pypz/
-   sphinx-apidoc --implicit-namespaces -e -f -o ./indexes/plugins/kafka_io ../plugins/kafka_io/src/pypz/
-   sphinx-apidoc --implicit-namespaces -e -f -o ./indexes/deployers/k8s ../deployers/k8s/src/pypz/
+   sphinx-apidoc --implicit-namespaces -e -f --private -o ./indexes/core ../core/src/pypz/
+   sphinx-apidoc --implicit-namespaces -e -f --private -o ./indexes/sniffer ../sniffer/src/pypz/
+   sphinx-apidoc --implicit-namespaces -e -f --private -o ./indexes/plugins/kafka_io ../plugins/kafka_io/src/pypz/
+   sphinx-apidoc --implicit-namespaces -e -f --private -o ./indexes/deployers/k8s ../deployers/k8s/src/pypz/
 
 .. warning::
    Since the index is generated automatically with implicit namespaces, there are some known issues with the

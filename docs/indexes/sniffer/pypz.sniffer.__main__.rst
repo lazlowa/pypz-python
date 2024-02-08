@@ -1,7 +1,7 @@
-pypz.core.channels.status module
+pypz.sniffer.\_\_main\_\_ module
 ================================
 
-.. automodule:: pypz.core.channels.status
+.. automodule:: pypz.sniffer.__main__
    :members:
    :undoc-members:
    :show-inheritance:

@@ -5,3 +5,4 @@ pypz.core.specs.operator module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:

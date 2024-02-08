@@ -5,3 +5,4 @@ pypz.plugins.loggers.default module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
