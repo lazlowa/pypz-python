@@ -62,6 +62,8 @@ class KafkaChannelTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
+        time.sleep(2)
+
         cls.test_admin_client: KafkaAdminClient = KafkaAdminClient(bootstrap_servers=KafkaChannelTest.bootstrap_url)
 
     @classmethod
@@ -822,6 +824,9 @@ class KafkaChannelTest(unittest.TestCase):
             self.assertEqual(10, reader.get_read_record_offset())
 
             writer.invoke_write_records(KafkaChannelTest.generate_records(10))
+
+            time.sleep(2)
+
             self.assertTrue(writer.invoke_close_channel())
 
             self.assertEqual(10, len(reader.invoke_read_records()))
@@ -862,7 +867,7 @@ class KafkaChannelTest(unittest.TestCase):
             self.assertTrue(writer.invoke_open_channel())
 
             writer.invoke_write_records(KafkaChannelTest.generate_records(10))
-            time.sleep(5)
+            time.sleep(2)
 
             with self.assertRaises(ValueError):
                 reader.invoke_commit_offset(10)
