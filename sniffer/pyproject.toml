@@ -5,6 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "pypz-io-sniffer"
 version = "0.9.0b6"
+license = { file = "LICENSE" }
 authors = [
     { name = "Laszlo Anka", email = "laszlo.anka@gmail.com" }
 ]
