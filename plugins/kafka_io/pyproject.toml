@@ -24,7 +24,7 @@ keywords = [
 ]
 dependencies = [
     "pypz-core",
-    "avro==1.10.1",
+    "avro==1.11.3",
     "kafka-python==2.0.2",
     "avro-validator==1.2.1"
 ]
