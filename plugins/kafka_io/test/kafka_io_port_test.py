@@ -33,6 +33,8 @@ class KafkaIOPortTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
+        time.sleep(2)
+
         cls.test_admin_client: KafkaAdminClient = KafkaAdminClient(bootstrap_servers=KafkaIOPortTest.bootstrap_url)
 
     @classmethod
