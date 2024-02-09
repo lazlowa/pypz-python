@@ -28,9 +28,6 @@ dependencies = [
     "stompest==2.3.0"
 ]
 
-[tool.setuptools]
-license-files = ["../LICENSE"]
-
 [tool.setuptools.packages.find]
 where = ["src"]
 namespaces = true

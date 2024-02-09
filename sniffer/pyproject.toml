@@ -25,9 +25,6 @@ dependencies = [
     "pypz-core"
 ]
 
-[tool.setuptools]
-license-files = ["../LICENSE"]
-
 [tool.setuptools.packages.find]
 where = ["src"]
 namespaces = true
