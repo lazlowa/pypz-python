@@ -24,9 +24,6 @@ dependencies = [
     "colorlog"
 ]
 
-[tool.setuptools]
-license-files = ["../LICENSE"]
-
 [tool.setuptools.dynamic]
 version = {attr = "pypz.version.PROJECT_VERSION"}
 
