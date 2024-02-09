@@ -104,7 +104,8 @@ This schema will expect a record with the key "text" in type string.
 *__init__()*
 ++++++++++++
 
-Operators can be enhanced by plugins. For example, the Input-/OutputPortPlugins enable the operators
+Operators can be enhanced by plugins. For example, the :class:`Input- <pypz.core.specs.plugin.InputPortPlugin>`/
+:class:`OutputPortPlugins <pypz.core.specs.plugin.OutputPortPlugin>` enable the operators
 to transfer data to and from each other. Hence, we need to create the
 :class:`KafkaChannelInputPort <pypz.plugins.kafka_io.ports.KafkaChannelInputPort>` plugin in the ctor of the operator.
 
@@ -144,15 +145,17 @@ Check :ref:`operator_methods` for the signature explanation.
 This method will be called after services have been started, resources have been created and port plugins
 have been initialized.
 
-.. important::
-   Always care for the expected return value!
-
 Since we are not implementing any logic here for this example, simply return True.
 
 .. code-block:: python
 
    def _on_init(self) -> bool:
        return True
+
+.. warning::
+   There is an explicit type checking of the expected return values during execution, so
+   **ALWAYS mind the expected return values and their types!** If you would return ``None`` here, you would get
+   an error due to the unexpected return value type.
 
 *_on_shutdown()*
 ++++++++++++++++
@@ -380,7 +383,8 @@ The following logic is implemented:
 
 .. note::
    Notice that we specified the name of the pipeline here. The reason is that automatic name deduction from
-   variable names is working only within *pypz* Instance context i.e., if the caller is a type of the Instance.
+   variable names is working only within *pypz* :class:`Instance <pypz.core.specs.instance.Instance>`
+   context i.e., if the caller is a type of the :class:`Instance <pypz.core.specs.instance.Instance>`.
    Check :ref:`instance_metaclass` for more information.
 
 If you try to run your script now, you will get the following error:
@@ -414,7 +418,8 @@ If you start the executor now, you need to see something like this:
 .. image:: ../resources/images/ht_cp_execute_log_1.png
 
 Notice that we used the print method to show some information on stdout, however there is a :ref:`logging` system
-in *pypz*, which allows to send log messages. For this, we need to enhance our operators by logger plugins.
+in *pypz*, which allows to send log messages. For this, we need to enhance our operators by
+:class:`LoggerPlugins <pypz.core.specs.plugin.LoggerPlugin>`.
 As next, we will add the :class:`DefaultLoggerPlugin <pypz.plugins.loggers.default.DefaultLoggerPlugin>`
 to each operators and we will modify the code to use the
 new logger. The :class:`DefaultLoggerPlugin <pypz.plugins.loggers.default.DefaultLoggerPlugin>` sends the logs to stdout.
@@ -503,7 +508,7 @@ Sniffer
 -------
 
 It might be helpful to know, what the operators are doing and how many data they have processed.
-Sniffer is a small tool to visualize the control plane of the operators' ports i.e., what the ports are doing.
+:ref:`Sniffer <sniffer>` is a small tool to visualize the control plane of the operators' ports i.e., what the ports are doing.
 
 .. warning::
    The sniffer is still in an early version. Do not expect perfect functionality or nice GUI!

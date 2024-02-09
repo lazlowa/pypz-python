@@ -257,7 +257,8 @@ format, hence we need to define the schema for the records.</p>
 </section>
 <section id="init">
 <h3><em>__init__()</em><a class="headerlink" href="#init" title="Link to this heading"></a></h3>
-<p>Operators can be enhanced by plugins. For example, the Input-/OutputPortPlugins enable the operators
+<p>Operators can be enhanced by plugins. For example, the <a class="reference internal" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.InputPortPlugin" title="pypz.core.specs.plugin.InputPortPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">Input-</span></code></a>/
+<a class="reference internal" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.OutputPortPlugin" title="pypz.core.specs.plugin.OutputPortPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">OutputPortPlugins</span></code></a> enable the operators
 to transfer data to and from each other. Hence, we need to create the
 <a class="reference internal" href="../indexes/plugins/kafka_io/pypz.plugins.kafka_io.ports.html#pypz.plugins.kafka_io.ports.KafkaChannelInputPort" title="pypz.plugins.kafka_io.ports.KafkaChannelInputPort"><code class="xref py py-class docutils literal notranslate"><span class="pre">KafkaChannelInputPort</span></code></a> plugin in the ctor of the operator.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
@@ -292,14 +293,16 @@ to transfer data to and from each other. Hence, we need to create the
 <p>Check <a class="reference internal" href="../core/models.html#operator-methods"><span class="std std-ref">Methods</span></a> for the signature explanation.</p>
 <p>This method will be called after services have been started, resources have been created and port plugins
 have been initialized.</p>
-<div class="admonition important">
-<p class="admonition-title">Important</p>
-<p>Always care for the expected return value!</p>
-</div>
 <p>Since we are not implementing any logic here for this example, simply return True.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_on_init</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
     <span class="k">return</span> <span class="kc">True</span>
 </pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>There is an explicit type checking of the expected return values during execution, so
+<strong>ALWAYS mind the expected return values and their types!</strong> If you would return <code class="docutils literal notranslate"><span class="pre">None</span></code> here, you would get
+an error due to the unexpected return value type.</p>
 </div>
 </section>
 <section id="on-shutdown">
@@ -505,7 +508,8 @@ with the name <code class="docutils literal notranslate"><span class="pre">execu
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Notice that we specified the name of the pipeline here. The reason is that automatic name deduction from
-variable names is working only within <em>pypz</em> Instance context i.e., if the caller is a type of the Instance.
+variable names is working only within <em>pypz</em> <a class="reference internal" href="../indexes/core/pypz.core.specs.instance.html#pypz.core.specs.instance.Instance" title="pypz.core.specs.instance.Instance"><code class="xref py py-class docutils literal notranslate"><span class="pre">Instance</span></code></a>
+context i.e., if the caller is a type of the <a class="reference internal" href="../indexes/core/pypz.core.specs.instance.html#pypz.core.specs.instance.Instance" title="pypz.core.specs.instance.Instance"><code class="xref py py-class docutils literal notranslate"><span class="pre">Instance</span></code></a>.
 Check <a class="reference internal" href="../core/models.html#instance-metaclass"><span class="std std-ref">Metaclass</span></a> for more information.</p>
 </div>
 <p>If you try to run your script now, you will get the following error:</p>
@@ -534,7 +538,8 @@ used two-level, excluding <a class="reference internal" href="../core/parameters
 <p>If you start the executor now, you need to see something like this:</p>
 <img alt="../_images/ht_cp_execute_log_1.png" src="../_images/ht_cp_execute_log_1.png" />
 <p>Notice that we used the print method to show some information on stdout, however there is a <a class="reference internal" href="../core/logging.html#logging"><span class="std std-ref">Logging</span></a> system
-in <em>pypz</em>, which allows to send log messages. For this, we need to enhance our operators by logger plugins.
+in <em>pypz</em>, which allows to send log messages. For this, we need to enhance our operators by
+<a class="reference internal" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.LoggerPlugin" title="pypz.core.specs.plugin.LoggerPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">LoggerPlugins</span></code></a>.
 As next, we will add the <a class="reference internal" href="../indexes/core/pypz.plugins.loggers.default.html#pypz.plugins.loggers.default.DefaultLoggerPlugin" title="pypz.plugins.loggers.default.DefaultLoggerPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">DefaultLoggerPlugin</span></code></a>
 to each operators and we will modify the code to use the
 new logger. The <a class="reference internal" href="../indexes/core/pypz.plugins.loggers.default.html#pypz.plugins.loggers.default.DefaultLoggerPlugin" title="pypz.plugins.loggers.default.DefaultLoggerPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">DefaultLoggerPlugin</span></code></a> sends the logs to stdout.</p>
@@ -613,7 +618,7 @@ we need to change the log level via setting the corresponding parameter.</p>
 <section id="sniffer">
 <h2>Sniffer<a class="headerlink" href="#sniffer" title="Link to this heading"></a></h2>
 <p>It might be helpful to know, what the operators are doing and how many data they have processed.
-Sniffer is a small tool to visualize the control plane of the operators’ ports i.e., what the ports are doing.</p>
+<a class="reference internal" href="../sniffer/overview.html#sniffer"><span class="std std-ref">Sniffer</span></a> is a small tool to visualize the control plane of the operators’ ports i.e., what the ports are doing.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>The sniffer is still in an early version. Do not expect perfect functionality or nice GUI!</p>
