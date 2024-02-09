@@ -121,12 +121,26 @@
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
 <p>This class is used to collect and abstract the common logic in all derived states.
 All other states must extend on this class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>context</strong> – <a class="reference internal" href="pypz.executors.operator.context.html#pypz.executors.operator.context.ExecutionContext" title="pypz.executors.operator.context.ExecutionContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">pypz.executors.operator.context.ExecutionContext</span></code></a></p>
+</dd>
+</dl>
 <dl class="py class">
 <dt class="sig sig-object py" id="pypz.executors.operator.states.State.MethodWrapper">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MethodWrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pypz.executors.operator.states.State" title="pypz.executors.operator.states.State"><span class="pre">State</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">instance_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callable_method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.executors.operator.states.State.MethodWrapper" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>This class represents the invocation of the plugin objects’ method as action. It
 is used by both the parallel and the sequential executor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>state</strong> – the state object, where the execution is performed</p></li>
+<li><p><strong>instance_name</strong> – name of the executable instance</p></li>
+<li><p><strong>callable_method</strong> – the method of the instance to be invoked</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">

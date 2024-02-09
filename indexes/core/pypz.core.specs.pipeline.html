@@ -119,6 +119,15 @@
 <dt class="sig sig-object py" id="pypz.core.specs.pipeline.Pipeline">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.pipeline.</span></span><span class="sig-name descname"><span class="pre">Pipeline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.specs.pipeline.Pipeline" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="pypz.core.specs.instance.html#pypz.core.specs.instance.Instance" title="pypz.core.specs.instance.Instance"><code class="xref py py-class docutils literal notranslate"><span class="pre">Instance</span></code></a>[<a class="reference internal" href="pypz.core.specs.operator.html#pypz.core.specs.operator.Operator" title="pypz.core.specs.operator.Operator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Operator</span></code></a>], <a class="reference internal" href="pypz.core.specs.instance.html#pypz.core.specs.instance.RegisteredInterface" title="pypz.core.specs.instance.RegisteredInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">RegisteredInterface</span></code></a></p>
+<p>This class represents the pipeline instance specs. A pipeline is actually a
+virtual organization of operators. It has a meaning only on pipeline level
+actions like deployment and execution. A pipeline spec can contain
+operators as nested instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> – name of the instance, if not provided, it will be attempted to deduce from the variable’s name</p>
+</dd>
+</dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pypz.core.specs.pipeline.Pipeline.__context">
 <span class="sig-name descname"><span class="pre">__context</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.core.specs.instance.html#pypz.core.specs.instance.Instance" title="pypz.core.specs.instance.Instance"><span class="pre">Instance</span></a></em><a class="headerlink" href="#pypz.core.specs.pipeline.Pipeline.__context" title="Link to this definition"></a></dt>

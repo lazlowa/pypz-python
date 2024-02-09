@@ -119,25 +119,67 @@
 <dt class="sig sig-object py" id="pypz.executors.pipeline.executor.PipelineExecutor">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.executors.pipeline.executor.</span></span><span class="sig-name descname"><span class="pre">PipelineExecutor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pipeline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pypz.core.specs.pipeline.html#pypz.core.specs.pipeline.Pipeline" title="pypz.core.specs.pipeline.Pipeline"><span class="pre">Pipeline</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.executors.pipeline.executor.PipelineExecutor" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class implements the feature to execute an entire pipeline i.e., each operator
+individually via an <a class="reference internal" href="pypz.executors.operator.executor.html#pypz.executors.operator.executor.OperatorExecutor" title="pypz.executors.operator.executor.OperatorExecutor"><code class="xref py py-class docutils literal notranslate"><span class="pre">OperatorExecutor</span></code></a>.
+To increase the performance of the execution, each
+<a class="reference internal" href="pypz.executors.operator.executor.html#pypz.executors.operator.executor.OperatorExecutor" title="pypz.executors.operator.executor.OperatorExecutor"><code class="xref py py-class docutils literal notranslate"><span class="pre">OperatorExecutor</span></code></a> will be launched
+in a separate thread.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This class has the sole purpose to allow you to test pipelines locally, it should not be used
+for production workloads, since python is not very optimal for concurrent executions. That is
+the reason to limit the operator count.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>pipeline</strong> – the pipeline instance to be executed</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.executors.pipeline.executor.PipelineExecutor.__futures">
+<span class="sig-name descname"><span class="pre">__futures</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">set</span><span class="p"><span class="pre">[</span></span><span class="pre">Future</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.executors.pipeline.executor.PipelineExecutor.__futures" title="Link to this definition"></a></dt>
+<dd><p>Creating the OperatorExecutor objects. Notice that none of the OperatorExecutors
+may handle interrupts, since this will be handled on PipelineExecutor level.</p>
+</dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pypz.executors.pipeline.executor.PipelineExecutor._max_operator_count">
 <span class="sig-name descname"><span class="pre">_max_operator_count</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">32</span></em><a class="headerlink" href="#pypz.executors.pipeline.executor.PipelineExecutor._max_operator_count" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>This value limits the number of operators to be executed parallely. An exception will be
+thrown, if exceeded.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pypz.executors.pipeline.executor.PipelineExecutor.interrupt">
 <span class="sig-name descname"><span class="pre">interrupt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal_number</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_stack</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.executors.pipeline.executor.PipelineExecutor.interrupt" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>This method is called upon receiving a system signal e.g., SIGINT.
+We are interrupting each <a class="reference internal" href="pypz.executors.operator.executor.html#pypz.executors.operator.executor.OperatorExecutor" title="pypz.executors.operator.executor.OperatorExecutor"><code class="xref py py-class docutils literal notranslate"><span class="pre">OperatorExecutor</span></code></a>
+by invoking <a class="reference internal" href="pypz.executors.operator.executor.html#pypz.executors.operator.executor.OperatorExecutor.interrupt" title="pypz.executors.operator.executor.OperatorExecutor.interrupt"><code class="xref py py-meth docutils literal notranslate"><span class="pre">interrupt()</span></code></a> only
+if it is still running. Notice that we cancel futures i.e., should an
+<a class="reference internal" href="pypz.executors.operator.executor.html#pypz.executors.operator.executor.OperatorExecutor" title="pypz.executors.operator.executor.OperatorExecutor"><code class="xref py py-class docutils literal notranslate"><span class="pre">OperatorExecutor</span></code></a> not yet be scheduled,
+it will prevent to be scheduled.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pypz.executors.pipeline.executor.PipelineExecutor.shutdown">
 <span class="sig-name descname"><span class="pre">shutdown</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pypz.executors.pipeline.executor.PipelineExecutor.shutdown" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>This method shuts down the <code class="docutils literal notranslate"><span class="pre">ThreadPoolExecutor</span></code>. Notice that it blocks until all
+OperatorExecutor has finished. Notice as well that we don’t cancel futures, since
+it will be handled upon handling the interrupt signals.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pypz.executors.pipeline.executor.PipelineExecutor.start">
 <span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exec_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pypz.executors.commons.html#pypz.executors.commons.ExecutionMode" title="pypz.executors.commons.ExecutionMode"><span class="pre">ExecutionMode</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">ExecutionMode.Standard</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.executors.pipeline.executor.PipelineExecutor.start" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>This method triggers the execution by creating a <code class="docutils literal notranslate"><span class="pre">ThreadPoolExecutor</span></code> and submitting
+the <a class="reference internal" href="pypz.executors.operator.executor.html#pypz.executors.operator.executor.OperatorExecutor" title="pypz.executors.operator.executor.OperatorExecutor"><code class="xref py py-class docutils literal notranslate"><span class="pre">OperatorExecutor</span></code></a>’s
+corresponding method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>exec_mode</strong> – <a class="reference internal" href="pypz.executors.commons.html#pypz.executors.commons.ExecutionMode" title="pypz.executors.commons.ExecutionMode"><code class="xref py py-class docutils literal notranslate"><span class="pre">pypz.executors.commons.ExecutionMode</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 

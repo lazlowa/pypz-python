@@ -119,64 +119,266 @@
 <dt class="sig sig-object py" id="pypz.core.specs.dtos.InstanceDTO">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.dtos.</span></span><span class="sig-name descname"><span class="pre">InstanceDTO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dependsOn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pypz.core.specs.dtos.SpecDTO" title="pypz.core.specs.dtos.SpecDTO"><span class="pre">SpecDTO</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.specs.dtos.InstanceDTO" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class represents the base Data Transfer Object for an instance.
+Note that using the coding language as analogy, the instance spec is like
+a class, where the instance itself is like the object created from the class.
+If we want to transfer the instance spec remotely, we need to convert it
+into this DTO representation. This class acts as base for every other specs.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Notice that the names of the attributes and ctor arguments will be used for
+serialization, hence those are not following python’s format guidelines.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – name of the instance</p></li>
+<li><p><strong>parameters</strong> – parameters of the instance</p></li>
+<li><p><strong>dependsOn</strong> – list of instances that this instance depends on</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pypz.core.specs.dtos.OperatorConnection">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.dtos.</span></span><span class="sig-name descname"><span class="pre">OperatorConnection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputPortName</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#pypz.core.specs.dtos.OperatorConnectionSource" title="pypz.core.specs.dtos.OperatorConnectionSource"><span class="pre">OperatorConnectionSource</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.specs.dtos.OperatorConnection" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class represents the base Data Transfer Object for a connection between operator instances.
+Note that using the coding language as analogy, the instance spec is like
+a class, where the instance itself is like the object created from the class.
+If we want to transfer the instance spec remotely, we need to convert it
+into this DTO representation. This class acts as base for every other specs.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Notice that the names of the attributes and ctor arguments will be used for
+serialization, hence those are not following python’s format guidelines.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>inputPortName</strong> – name of the input port of the connection</p></li>
+<li><p><strong>source</strong> – source DTO of the connection</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pypz.core.specs.dtos.OperatorConnectionSource">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.dtos.</span></span><span class="sig-name descname"><span class="pre">OperatorConnectionSource</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">instanceName</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputPortName</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.specs.dtos.OperatorConnectionSource" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class represents the base Data Transfer Object for the source of
+a connection between operator instances.
+Note that using the coding language as analogy, the instance spec is like
+a class, where the instance itself is like the object created from the class.
+If we want to transfer the instance spec remotely, we need to convert it
+into this DTO representation. This class acts as base for every other specs.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Notice that the names of the attributes and ctor arguments will be used for
+serialization, hence those are not following python’s format guidelines.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>instanceName</strong> – name of the source instance</p></li>
+<li><p><strong>outputPortName</strong> – name of the output port in the source instance</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pypz.core.specs.dtos.OperatorInstanceDTO">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.dtos.</span></span><span class="sig-name descname"><span class="pre">OperatorInstanceDTO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dependsOn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pypz.core.specs.dtos.OperatorSpecDTO" title="pypz.core.specs.dtos.OperatorSpecDTO"><span class="pre">OperatorSpecDTO</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connections</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pypz.core.specs.dtos.OperatorConnection" title="pypz.core.specs.dtos.OperatorConnection"><span class="pre">OperatorConnection</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.specs.dtos.OperatorInstanceDTO" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pypz.core.specs.dtos.InstanceDTO" title="pypz.core.specs.dtos.InstanceDTO"><code class="xref py py-class docutils literal notranslate"><span class="pre">InstanceDTO</span></code></a></p>
-<p>Operator instance related DTO. Operator instances have additional instance
+<p>This class represents the base Data Transfer Object for an operator instance.
+Operator instances have additional instance
 information that shall be modelled via the DTO e.g., since Operator
 instances can be connected through port plugins, those connections shall
 be modelled as well.</p>
+<p>Note that using the coding language as analogy, the instance spec is like
+a class, where the instance itself is like the object created from the class.
+If we want to transfer the instance spec remotely, we need to convert it
+into this DTO representation. This class acts as base for every other specs.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Notice that the names of the attributes and ctor arguments will be used for
+serialization, hence those are not following python’s format guidelines.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – name of the instance</p></li>
+<li><p><strong>parameters</strong> – parameters of the instance</p></li>
+<li><p><strong>dependsOn</strong> – list of instances that this instance depends on</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pypz.core.specs.dtos.OperatorSpecDTO">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.dtos.</span></span><span class="sig-name descname"><span class="pre">OperatorSpecDTO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">location</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expectedParameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">types</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nestedInstanceType</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nestedInstances</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pypz.core.specs.dtos.PluginInstanceDTO" title="pypz.core.specs.dtos.PluginInstanceDTO"><span class="pre">PluginInstanceDTO</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.specs.dtos.OperatorSpecDTO" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pypz.core.specs.dtos.SpecDTO" title="pypz.core.specs.dtos.SpecDTO"><code class="xref py py-class docutils literal notranslate"><span class="pre">SpecDTO</span></code></a></p>
+<p>This class represents the Data Transfer Object for an operator spec.
+Note that using the coding language as analogy, the instance spec is like
+a class, where the instance itself is like the object created from the class.
+If we want to transfer the instance spec remotely, we need to convert it
+into this DTO representation. This class acts as base for every other specs.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Notice that the names of the attributes and ctor arguments will be used for
+serialization, hence those are not following python’s format guidelines.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – name of the specs</p></li>
+<li><p><strong>location</strong> – the location of the spec to retrieve it from</p></li>
+<li><p><strong>expectedParameters</strong> – the expected parameters by the spec</p></li>
+<li><p><strong>types</strong> – the implemented types of the spec</p></li>
+<li><p><strong>nestedInstanceType</strong> – the expected type of the nested instances</p></li>
+<li><p><strong>nestedInstances</strong> – the list of the actual nested instances</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pypz.core.specs.dtos.PipelineInstanceDTO">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.dtos.</span></span><span class="sig-name descname"><span class="pre">PipelineInstanceDTO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dependsOn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pypz.core.specs.dtos.PipelineSpecDTO" title="pypz.core.specs.dtos.PipelineSpecDTO"><span class="pre">PipelineSpecDTO</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.specs.dtos.PipelineInstanceDTO" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pypz.core.specs.dtos.InstanceDTO" title="pypz.core.specs.dtos.InstanceDTO"><code class="xref py py-class docutils literal notranslate"><span class="pre">InstanceDTO</span></code></a></p>
+<p>This class represents the base Data Transfer Object for a pipeline instance.
+Note that using the coding language as analogy, the instance spec is like
+a class, where the instance itself is like the object created from the class.
+If we want to transfer the instance spec remotely, we need to convert it
+into this DTO representation. This class acts as base for every other specs.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Notice that the names of the attributes and ctor arguments will be used for
+serialization, hence those are not following python’s format guidelines.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – name of the instance</p></li>
+<li><p><strong>parameters</strong> – parameters of the instance</p></li>
+<li><p><strong>dependsOn</strong> – list of instances that this instance depends on</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pypz.core.specs.dtos.PipelineSpecDTO">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.dtos.</span></span><span class="sig-name descname"><span class="pre">PipelineSpecDTO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">location</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expectedParameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">types</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nestedInstanceType</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nestedInstances</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pypz.core.specs.dtos.OperatorInstanceDTO" title="pypz.core.specs.dtos.OperatorInstanceDTO"><span class="pre">OperatorInstanceDTO</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.specs.dtos.PipelineSpecDTO" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pypz.core.specs.dtos.SpecDTO" title="pypz.core.specs.dtos.SpecDTO"><code class="xref py py-class docutils literal notranslate"><span class="pre">SpecDTO</span></code></a></p>
+<p>This class represents the Data Transfer Object for a pipeline spec.
+Note that using the coding language as analogy, the instance spec is like
+a class, where the instance itself is like the object created from the class.
+If we want to transfer the instance spec remotely, we need to convert it
+into this DTO representation. This class acts as base for every other specs.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Notice that the names of the attributes and ctor arguments will be used for
+serialization, hence those are not following python’s format guidelines.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – name of the specs</p></li>
+<li><p><strong>location</strong> – the location of the spec to retrieve it from</p></li>
+<li><p><strong>expectedParameters</strong> – the expected parameters by the spec</p></li>
+<li><p><strong>types</strong> – the implemented types of the spec</p></li>
+<li><p><strong>nestedInstanceType</strong> – the expected type of the nested instances</p></li>
+<li><p><strong>nestedInstances</strong> – the list of the actual nested instances</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pypz.core.specs.dtos.PluginInstanceDTO">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.dtos.</span></span><span class="sig-name descname"><span class="pre">PluginInstanceDTO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dependsOn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pypz.core.specs.dtos.PluginSpecDTO" title="pypz.core.specs.dtos.PluginSpecDTO"><span class="pre">PluginSpecDTO</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.specs.dtos.PluginInstanceDTO" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pypz.core.specs.dtos.InstanceDTO" title="pypz.core.specs.dtos.InstanceDTO"><code class="xref py py-class docutils literal notranslate"><span class="pre">InstanceDTO</span></code></a></p>
+<p>This class represents the base Data Transfer Object for a plugin instance.
+Note that using the coding language as analogy, the instance spec is like
+a class, where the instance itself is like the object created from the class.
+If we want to transfer the instance spec remotely, we need to convert it
+into this DTO representation. This class acts as base for every other specs.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Notice that the names of the attributes and ctor arguments will be used for
+serialization, hence those are not following python’s format guidelines.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – name of the instance</p></li>
+<li><p><strong>parameters</strong> – parameters of the instance</p></li>
+<li><p><strong>dependsOn</strong> – list of instances that this instance depends on</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pypz.core.specs.dtos.PluginSpecDTO">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.dtos.</span></span><span class="sig-name descname"><span class="pre">PluginSpecDTO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">location</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expectedParameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">types</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nestedInstanceType</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nestedInstances</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.specs.dtos.PluginSpecDTO" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pypz.core.specs.dtos.SpecDTO" title="pypz.core.specs.dtos.SpecDTO"><code class="xref py py-class docutils literal notranslate"><span class="pre">SpecDTO</span></code></a></p>
+<p>This class represents the Data Transfer Object for a plugin spec.
+Note that using the coding language as analogy, the instance spec is like
+a class, where the instance itself is like the object created from the class.
+If we want to transfer the instance spec remotely, we need to convert it
+into this DTO representation. This class acts as base for every other specs.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Notice that the names of the attributes and ctor arguments will be used for
+serialization, hence those are not following python’s format guidelines.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – name of the specs</p></li>
+<li><p><strong>location</strong> – the location of the spec to retrieve it from</p></li>
+<li><p><strong>expectedParameters</strong> – the expected parameters by the spec</p></li>
+<li><p><strong>types</strong> – the implemented types of the spec</p></li>
+<li><p><strong>nestedInstanceType</strong> – the expected type of the nested instances</p></li>
+<li><p><strong>nestedInstances</strong> – the list of the actual nested instances</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pypz.core.specs.dtos.SpecDTO">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.core.specs.dtos.</span></span><span class="sig-name descname"><span class="pre">SpecDTO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">location</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expectedParameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">types</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nestedInstanceType</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nestedInstances</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">NestedInstanceDTOType</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nested_instance_dto_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">NestedInstanceDTOType</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'default'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.specs.dtos.SpecDTO" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class represents the base Data Transfer Object for an instance spec.
+Note that using the coding language as analogy, the instance spec is like
+a class, where the instance itself is like the object created from the class.
+If we want to transfer the instance spec remotely, we need to convert it
+into this DTO representation. This class acts as base for every other specs.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Notice that the names of the attributes and ctor arguments will be used for
+serialization, hence those are not following python’s format guidelines.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – name of the specs</p></li>
+<li><p><strong>location</strong> – the location of the spec to retrieve it from</p></li>
+<li><p><strong>expectedParameters</strong> – the expected parameters by the spec</p></li>
+<li><p><strong>types</strong> – the implemented types of the spec</p></li>
+<li><p><strong>nestedInstanceType</strong> – the expected type of the nested instances</p></li>
+<li><p><strong>nestedInstances</strong> – the list of the actual nested instances</p></li>
+<li><p><strong>nested_instance_dto_type</strong> – helper to specify the nested DTO type</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 </section>

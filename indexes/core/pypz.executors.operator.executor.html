@@ -122,6 +122,14 @@
 <p>This class has the purpose of executing an Operator along with its nested
 plugins. The execution is based on a state machine, where each state
 is responsible to execute specific entities’ corresponding methods.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>operator</strong> – the actual operator instance to execute</p></li>
+<li><p><strong>handle_interrupts</strong> – if True, then the execution can be interrupted by system signals</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pypz.executors.operator.executor.OperatorExecutor.__context">
 <span class="sig-name descname"><span class="pre">__context</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.executors.operator.context.html#pypz.executors.operator.context.ExecutionContext" title="pypz.executors.operator.context.ExecutionContext"><span class="pre">ExecutionContext</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.executors.operator.executor.OperatorExecutor.__context" title="Link to this definition"></a></dt>
