@@ -19,6 +19,15 @@ from pypz.core.specs.plugin import LoggerPlugin
 
 
 class DefaultLoggerPlugin(LoggerPlugin, DefaultContextLogger):
+    """
+    This is the default implementation of the :class:`LoggerPlugin <pypz.core.specs.plugin.LoggerPlugin>`
+    interface. It actually does not implement anything, but uses the
+    :class:`DefaultContextLogger <pypz.core.commons.loggers.DefaultContextLogger>`. This is
+    possible, since both implements the
+    :class:`ContextLoggerInterface <pypz.core.commons.loggers.ContextLoggerInterface>`.
+
+    :param name: name of the instance, if not provided, it will be attempted to deduce from the variable's name
+    """
 
     _log_level = OptionalParameter(str,
                                    alt_name="logLevel",

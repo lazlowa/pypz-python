@@ -36,6 +36,9 @@ class OperatorExecutor:
     This class has the purpose of executing an Operator along with its nested
     plugins. The execution is based on a state machine, where each state
     is responsible to execute specific entities' corresponding methods.
+
+    :param operator: the actual operator instance to execute
+    :param handle_interrupts: if True, then the execution can be interrupted by system signals
     """
 
     def __init__(self, operator: Operator, handle_interrupts: bool = True):

@@ -27,6 +27,9 @@ class ExecutionContext:
     """
     This class is intended to store context information and helper methods for
     the actual execution. The context itself is based on the current Operator.
+
+    :param operator: the actual operator instance to be executed
+    :param exec_mode: :class:`ExecutionMode <pypz.executors.commons.ExecutionMode>`
     """
 
     def __init__(self, operator: Operator, exec_mode: ExecutionMode):

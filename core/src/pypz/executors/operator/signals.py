@@ -16,13 +16,11 @@
 
 
 class BaseSignal:
-
     def __init__(self):
         pass
 
 
 class SignalError(BaseSignal):
-
     def __init__(self, exc: Exception = None):
         super().__init__()
         self.__exc = exc

@@ -23,6 +23,14 @@ from pypz.core.specs.operator import Operator
 
 
 class Pipeline(Instance[Operator], RegisteredInterface):
+    """
+    This class represents the pipeline instance specs. A pipeline is actually a
+    virtual organization of operators. It has a meaning only on pipeline level
+    actions like deployment and execution. A pipeline spec can contain
+    operators as nested instance.
+
+    :param name: name of the instance, if not provided, it will be attempted to deduce from the variable's name
+    """
 
     def __init__(self, name: str, *args, **kwargs):
         super().__init__(name, Operator, *args, **kwargs)

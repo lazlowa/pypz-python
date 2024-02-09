@@ -33,6 +33,11 @@ class DeploymentState(enum.Enum):
 
 
 class Deployer(ABC):
+    """
+    This is the base class for every deployer implementations. If you want to
+    develop your own deployer with your own choice of technology, then you need
+    to implement this interface.
+    """
 
     # ================== abstract methods ====================
 

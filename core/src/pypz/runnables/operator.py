@@ -23,7 +23,7 @@ from pypz.core.specs.pipeline import Pipeline
 from pypz.executors.commons import ExecutionMode
 from pypz.executors.operator.executor import OperatorExecutor
 
-
+""" This script is used to invoke operator execution """
 if __name__ == "__main__":
     print(sys.argv)
     if 3 > len(sys.argv):

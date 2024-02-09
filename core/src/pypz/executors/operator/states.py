@@ -38,6 +38,8 @@ class State(ABC):
     """
     This class is used to collect and abstract the common logic in all derived states.
     All other states must extend on this class.
+
+    :param context: :class:`pypz.executors.operator.context.ExecutionContext`
     """
 
     # ============ inner classes =============
@@ -46,6 +48,10 @@ class State(ABC):
         """
         This class represents the invocation of the plugin objects' method as action. It
         is used by both the parallel and the sequential executor.
+
+        :param state: the state object, where the execution is performed
+        :param instance_name: name of the executable instance
+        :param callable_method: the method of the instance to be invoked
         """
 
         def __init__(self, state: State,

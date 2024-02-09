@@ -30,14 +30,32 @@ if TYPE_CHECKING:
 
 
 class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
+    """
+    This class represents the operator instance specs. This class shall be used
+    to integrate your processing logic with *pypz*. An operator spec can contain
+    plugins as nested instance.
+
+    :param name: name of the instance, if not provided, it will be attempted to deduce from the variable's name
+    """
 
     # ========================= inner logger class =========================
 
     class Logger(ContextLoggerInterface):
         """
         This is a wrapper class for the logging functionality. It wraps all the
-        implementations of the LoggerAddons and by invoking either method it
-        will invoke the corresponding method of each LoggerAddons.
+        implementation of the :class:`LoggerPlugin <pypz.core.specs.plugin.LoggerPlugin>`
+        and by invoking either method it will invoke the corresponding method of each
+        :class:`LoggerPlugin <pypz.core.specs.plugin.LoggerPlugin>`.
+
+        .. note::
+           The logger instance is provided to all plugins, so the plugins can call the
+           methods of this logger. However, if a :class:`LoggerPlugin <pypz.core.specs.plugin.LoggerPlugin>`
+           would invoke the logger methods, it would cause an infinite recursion. This
+           is prevented so that in every logger call, the call trace will be analyzed and
+           if any instance of a :class:`LoggerPlugin <pypz.core.specs.plugin.LoggerPlugin>`
+           is found, then a ``RecursionError`` will be thrown.
+
+        :param logger_plugins: logger plugin instances collected in the operator instance
         """
 
         def __init__(self, logger_plugins: set[LoggerPlugin]):

@@ -23,8 +23,26 @@ from pypz.core.specs.pipeline import Pipeline
 
 
 class PipelineExecutor:
+    """
+    This class implements the feature to execute an entire pipeline i.e., each operator
+    individually via an :class:`OperatorExecutor <pypz.executors.operator.executor.OperatorExecutor>`.
+    To increase the performance of the execution, each
+    :class:`OperatorExecutor <pypz.executors.operator.executor.OperatorExecutor>` will be launched
+    in a separate thread.
+
+    .. warning::
+       This class has the sole purpose to allow you to test pipelines locally, it should not be used
+       for production workloads, since python is not very optimal for concurrent executions. That is
+       the reason to limit the operator count.
+
+    :param pipeline: the pipeline instance to be executed
+    """
 
     _max_operator_count: int = 32
+    """
+    This value limits the number of operators to be executed parallely. An exception will be
+    thrown, if exceeded.
+    """
 
     def __init__(self, pipeline: Pipeline):
         signal.signal(signal.SIGTERM, self.interrupt)
@@ -38,6 +56,8 @@ class PipelineExecutor:
 
         self.__futures: set[concurrent.futures.Future] = set()
 
+        """ Creating the OperatorExecutor objects. Notice that none of the OperatorExecutors
+            may handle interrupts, since this will be handled on PipelineExecutor level. """
         for operator in self.__pipeline.get_protected().get_nested_instances().values():
             self.__operator_executors.add(OperatorExecutor(operator, handle_interrupts=False))
 
@@ -47,6 +67,14 @@ class PipelineExecutor:
                                  f"{len(self.__operator_executors)}")
 
     def start(self, exec_mode: ExecutionMode = ExecutionMode.Standard):
+        """
+        This method triggers the execution by creating a ``ThreadPoolExecutor`` and submitting
+        the :class:`OperatorExecutor <pypz.executors.operator.executor.OperatorExecutor>`'s
+        corresponding method.
+
+        :param exec_mode: :class:`pypz.executors.commons.ExecutionMode`
+        """
+
         if self.__executor is None:
             self.__executor = concurrent.futures.ThreadPoolExecutor(max_workers=PipelineExecutor._max_operator_count,
                                                                     thread_name_prefix=self.__class__.__name__)
@@ -58,11 +86,26 @@ class PipelineExecutor:
                 pass
 
     def shutdown(self):
+        """
+        This method shuts down the ``ThreadPoolExecutor``. Notice that it blocks until all
+        OperatorExecutor has finished. Notice as well that we don't cancel futures, since
+        it will be handled upon handling the interrupt signals.
+        """
+
         if self.__executor is not None:
             self.__executor.shutdown(wait=True, cancel_futures=False)
             self.__executor = None
 
     def interrupt(self, signal_number, current_stack):
+        """
+        This method is called upon receiving a system signal e.g., SIGINT.
+        We are interrupting each :class:`OperatorExecutor <pypz.executors.operator.executor.OperatorExecutor>`
+        by invoking :meth:`interrupt() <pypz.executors.operator.executor.OperatorExecutor.interrupt>` only
+        if it is still running. Notice that we cancel futures i.e., should an
+        :class:`OperatorExecutor <pypz.executors.operator.executor.OperatorExecutor>` not yet be scheduled,
+        it will prevent to be scheduled.
+        """
+
         for operator_executor in self.__operator_executors:
             if operator_executor.is_running():
                 operator_executor.interrupt(signal_number, current_stack)

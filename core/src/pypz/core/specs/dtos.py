@@ -19,6 +19,26 @@ NestedInstanceDTOType = TypeVar("NestedInstanceDTOType", bound='InstanceDTO')
 
 
 class SpecDTO:
+    """
+    This class represents the base Data Transfer Object for an instance spec.
+    Note that using the coding language as analogy, the instance spec is like
+    a class, where the instance itself is like the object created from the class.
+    If we want to transfer the instance spec remotely, we need to convert it
+    into this DTO representation. This class acts as base for every other specs.
+
+    .. note::
+       Notice that the names of the attributes and ctor arguments will be used for
+       serialization, hence those are not following python's format guidelines.
+
+    :param name: name of the specs
+    :param location: the location of the spec to retrieve it from
+    :param expectedParameters: the expected parameters by the spec
+    :param types: the implemented types of the spec
+    :param nestedInstanceType: the expected type of the nested instances
+    :param nestedInstances: the list of the actual nested instances
+    :param nested_instance_dto_type: helper to specify the nested DTO type
+    """
+
     def __init__(self,
                  name: str = None,
                  location: str = None,
@@ -67,6 +87,22 @@ class SpecDTO:
 
 
 class InstanceDTO:
+    """
+    This class represents the base Data Transfer Object for an instance.
+    Note that using the coding language as analogy, the instance spec is like
+    a class, where the instance itself is like the object created from the class.
+    If we want to transfer the instance spec remotely, we need to convert it
+    into this DTO representation. This class acts as base for every other specs.
+
+    .. note::
+       Notice that the names of the attributes and ctor arguments will be used for
+       serialization, hence those are not following python's format guidelines.
+
+    :param name: name of the instance
+    :param parameters: parameters of the instance
+    :param dependsOn: list of instances that this instance depends on
+    """
+
     def __init__(self, name: str = None, parameters: dict = None, dependsOn: list[str] = None,
                  spec: SpecDTO = None):
         self.name: str = name
@@ -95,6 +131,25 @@ class InstanceDTO:
 
 
 class PluginSpecDTO(SpecDTO):
+    """
+    This class represents the Data Transfer Object for a plugin spec.
+    Note that using the coding language as analogy, the instance spec is like
+    a class, where the instance itself is like the object created from the class.
+    If we want to transfer the instance spec remotely, we need to convert it
+    into this DTO representation. This class acts as base for every other specs.
+
+    .. note::
+       Notice that the names of the attributes and ctor arguments will be used for
+       serialization, hence those are not following python's format guidelines.
+
+    :param name: name of the specs
+    :param location: the location of the spec to retrieve it from
+    :param expectedParameters: the expected parameters by the spec
+    :param types: the implemented types of the spec
+    :param nestedInstanceType: the expected type of the nested instances
+    :param nestedInstances: the list of the actual nested instances
+    """
+
     def __init__(self,
                  name: str = None,
                  location: str = None,
@@ -106,6 +161,22 @@ class PluginSpecDTO(SpecDTO):
 
 
 class PluginInstanceDTO(InstanceDTO):
+    """
+    This class represents the base Data Transfer Object for a plugin instance.
+    Note that using the coding language as analogy, the instance spec is like
+    a class, where the instance itself is like the object created from the class.
+    If we want to transfer the instance spec remotely, we need to convert it
+    into this DTO representation. This class acts as base for every other specs.
+
+    .. note::
+       Notice that the names of the attributes and ctor arguments will be used for
+       serialization, hence those are not following python's format guidelines.
+
+    :param name: name of the instance
+    :param parameters: parameters of the instance
+    :param dependsOn: list of instances that this instance depends on
+    """
+
     def __init__(self,
                  name: str = None,
                  parameters: dict = None,
@@ -122,6 +193,25 @@ class PluginInstanceDTO(InstanceDTO):
 
 
 class OperatorSpecDTO(SpecDTO):
+    """
+    This class represents the Data Transfer Object for an operator spec.
+    Note that using the coding language as analogy, the instance spec is like
+    a class, where the instance itself is like the object created from the class.
+    If we want to transfer the instance spec remotely, we need to convert it
+    into this DTO representation. This class acts as base for every other specs.
+
+    .. note::
+       Notice that the names of the attributes and ctor arguments will be used for
+       serialization, hence those are not following python's format guidelines.
+
+    :param name: name of the specs
+    :param location: the location of the spec to retrieve it from
+    :param expectedParameters: the expected parameters by the spec
+    :param types: the implemented types of the spec
+    :param nestedInstanceType: the expected type of the nested instances
+    :param nestedInstances: the list of the actual nested instances
+    """
+
     def __init__(self,
                  name: str = None,
                  location: str = None,
@@ -133,6 +223,22 @@ class OperatorSpecDTO(SpecDTO):
 
 
 class OperatorConnectionSource:
+    """
+    This class represents the base Data Transfer Object for the source of
+    a connection between operator instances.
+    Note that using the coding language as analogy, the instance spec is like
+    a class, where the instance itself is like the object created from the class.
+    If we want to transfer the instance spec remotely, we need to convert it
+    into this DTO representation. This class acts as base for every other specs.
+
+    .. note::
+       Notice that the names of the attributes and ctor arguments will be used for
+       serialization, hence those are not following python's format guidelines.
+
+    :param instanceName: name of the source instance
+    :param outputPortName: name of the output port in the source instance
+    """
+
     def __init__(self,
                  instanceName: str = None,
                  outputPortName: str = None):
@@ -152,6 +258,21 @@ class OperatorConnectionSource:
 
 
 class OperatorConnection:
+    """
+    This class represents the base Data Transfer Object for a connection between operator instances.
+    Note that using the coding language as analogy, the instance spec is like
+    a class, where the instance itself is like the object created from the class.
+    If we want to transfer the instance spec remotely, we need to convert it
+    into this DTO representation. This class acts as base for every other specs.
+
+    .. note::
+       Notice that the names of the attributes and ctor arguments will be used for
+       serialization, hence those are not following python's format guidelines.
+
+    :param inputPortName: name of the input port of the connection
+    :param source: source DTO of the connection
+    """
+
     def __init__(self,
                  inputPortName: str = None,
                  source: dict | OperatorConnectionSource = None):
@@ -174,10 +295,24 @@ class OperatorConnection:
 
 class OperatorInstanceDTO(InstanceDTO):
     """
-    Operator instance related DTO. Operator instances have additional instance
+    This class represents the base Data Transfer Object for an operator instance.
+    Operator instances have additional instance
     information that shall be modelled via the DTO e.g., since Operator
     instances can be connected through port plugins, those connections shall
     be modelled as well.
+
+    Note that using the coding language as analogy, the instance spec is like
+    a class, where the instance itself is like the object created from the class.
+    If we want to transfer the instance spec remotely, we need to convert it
+    into this DTO representation. This class acts as base for every other specs.
+
+    .. note::
+       Notice that the names of the attributes and ctor arguments will be used for
+       serialization, hence those are not following python's format guidelines.
+
+    :param name: name of the instance
+    :param parameters: parameters of the instance
+    :param dependsOn: list of instances that this instance depends on
     """
 
     def __init__(self,
@@ -223,6 +358,25 @@ class OperatorInstanceDTO(InstanceDTO):
 
 
 class PipelineSpecDTO(SpecDTO):
+    """
+    This class represents the Data Transfer Object for a pipeline spec.
+    Note that using the coding language as analogy, the instance spec is like
+    a class, where the instance itself is like the object created from the class.
+    If we want to transfer the instance spec remotely, we need to convert it
+    into this DTO representation. This class acts as base for every other specs.
+
+    .. note::
+       Notice that the names of the attributes and ctor arguments will be used for
+       serialization, hence those are not following python's format guidelines.
+
+    :param name: name of the specs
+    :param location: the location of the spec to retrieve it from
+    :param expectedParameters: the expected parameters by the spec
+    :param types: the implemented types of the spec
+    :param nestedInstanceType: the expected type of the nested instances
+    :param nestedInstances: the list of the actual nested instances
+    """
+
     def __init__(self,
                  name: str = None,
                  location: str = None,
@@ -233,6 +387,22 @@ class PipelineSpecDTO(SpecDTO):
 
 
 class PipelineInstanceDTO(InstanceDTO):
+    """
+    This class represents the base Data Transfer Object for a pipeline instance.
+    Note that using the coding language as analogy, the instance spec is like
+    a class, where the instance itself is like the object created from the class.
+    If we want to transfer the instance spec remotely, we need to convert it
+    into this DTO representation. This class acts as base for every other specs.
+
+    .. note::
+       Notice that the names of the attributes and ctor arguments will be used for
+       serialization, hence those are not following python's format guidelines.
+
+    :param name: name of the instance
+    :param parameters: parameters of the instance
+    :param dependsOn: list of instances that this instance depends on
+    """
+
     def __init__(self,
                  name: str = None,
                  parameters: dict = None,
