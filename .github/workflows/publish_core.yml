@@ -71,8 +71,8 @@ jobs:
         file: .docker/Dockerfile_dev
         push: true
         tags: |
-          lazlowa/pypz-python-dev:latest
-          lazlowa/pypz-python-dev:${{ needs.build.outputs.pypz-version }}
+          pypz/python-base-dev:latest
+          pypz/python-base-dev:${{ needs.build.outputs.pypz-version }}
 
   publish-image-alpine:
     needs: build
@@ -97,5 +97,5 @@ jobs:
         file: .docker/Dockerfile_alpine
         push: true
         tags: |
-          lazlowa/pypz-python-alpine:latest
-          lazlowa/pypz-python-alpine:${{ needs.build.outputs.pypz-version }}
+          pypz/python-base-alpine:latest
+          pypz/python-base-alpine:${{ needs.build.outputs.pypz-version }}
