@@ -39,7 +39,7 @@
             pypz
           </a>
               <div class="version">
-                0.9.0b8
+                0.9.0b9
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -125,17 +125,24 @@
 <span class="sig-prename descclassname"><span class="pre">pypz.sniffer.utils.</span></span><span class="sig-name descname"><span class="pre">order_operators_by_connections</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pipeline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../core/pypz.core.specs.pipeline.html#pypz.core.specs.pipeline.Pipeline" title="pypz.core.specs.pipeline.Pipeline"><span class="pre">Pipeline</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../core/pypz.core.specs.operator.html#pypz.core.specs.operator.Operator" title="pypz.core.specs.operator.Operator"><span class="pre">Operator</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#pypz.sniffer.utils.order_operators_by_connections" title="Link to this definition"></a></dt>
 <dd><p>This function attempts to order the operators along their connections. Consider
 the following example with connection directions from top to bottom:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">|</span> <span class="n">A</span>   <span class="n">B</span> <span class="o">|</span>
-<span class="o">|</span>  \ <span class="o">/</span>  <span class="o">|</span>
-<span class="o">|</span>   <span class="n">C</span>   <span class="o">|</span>
-<span class="o">|</span>  <span class="o">/</span> \  <span class="o">|</span>
-<span class="o">|</span> <span class="n">D</span>   <span class="n">E</span> <span class="o">|</span>
-<span class="o">|</span> <span class="o">|</span>  <span class="o">/</span>  <span class="o">|</span>
-<span class="o">|</span> <span class="n">F</span> <span class="o">/</span>   <span class="o">|</span>
-<span class="o">|</span> <span class="o">|/</span>    <span class="o">|</span>
-<span class="o">|</span> <span class="n">G</span>     <span class="o">|</span>
-</pre></div>
+<dl>
+<dt>::</dt><dd><div class="line-block">
+<div class="line">A   B |</div>
+<div class="line-block">
+<div class="line">/  |</div>
+<div class="line-block">
+<div class="line">C   |</div>
 </div>
+<div class="line">/  |</div>
+</div>
+<div class="line">D   E |</div>
+<div class="line">|  /  |</div>
+<div class="line">F /   |</div>
+<div class="line"><a href="#id1"><span class="problematic" id="id2">|</span></a>/    |</div>
+<div class="line">G     |</div>
+</div>
+</dd>
+</dl>
 <p>Dependencies can be expressed along the connections. The expected result from this
 function orders these dependencies into list of sets, where the list represents
 the dependency levels and the set the independent operators on each level.

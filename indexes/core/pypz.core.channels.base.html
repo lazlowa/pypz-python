@@ -39,7 +39,7 @@
             pypz
           </a>
               <div class="version">
-                0.9.0b8
+                0.9.0b9
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -289,7 +289,7 @@ IMPORTANT NOTE - this method shall be invoked after the close_channel()</p>
 <dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase._executor_stopped">
 <span class="sig-name descname"><span class="pre">_executor_stopped</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.core.commons.utils.html#pypz.core.commons.utils.SynchronizedReference" title="pypz.core.commons.utils.SynchronizedReference"><span class="pre">SynchronizedReference</span></a><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.core.channels.base.ChannelBase._executor_stopped" title="Link to this definition"></a></dt>
 <dd><p>Flag to signalize that the executor thread has been terminated. This flag is necessary along wi
-_stopping_executor to synchronize the termination. Otherwise it can happen that the 
+_stopping_executor to synchronize the termination. Otherwise it can happen that the
 thread did not terminate yet, but the channel has already been closed resulting in exceptions.</p>
 </dd></dl>
 
