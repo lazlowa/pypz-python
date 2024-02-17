@@ -9,6 +9,8 @@ jobs:
   check-changes:
     name: "Check Changes"
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
     outputs:
       core: ${{ steps.changes.outputs.core }}
       deployer_k8s: ${{ steps.changes.outputs.deployer_k8s }}
