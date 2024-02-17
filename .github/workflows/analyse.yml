@@ -1,7 +1,6 @@
 name: "Analyse :: All"
 
 on:
-  push:
   pull_request:
   workflow_dispatch:
 
