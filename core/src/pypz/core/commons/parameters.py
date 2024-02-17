@@ -70,7 +70,7 @@ class ExpectedParameter(Generic[ParameterType]):
                  parameter_type: Type[ParameterType],
                  alt_name: Optional[str] = None,
                  description: Optional[str] = None,
-                 on_update: Callable[[Any], None] = None):
+                 on_update: Callable[[Any, Any], None] = None):
 
         if parameter_type is None:
             raise TypeError("Parameter type must be specified")
@@ -79,10 +79,10 @@ class ExpectedParameter(Generic[ParameterType]):
             raise TypeError(f"Type description not allowed: {parameter_type}")
 
         self.parameter_type: Type[ParameterType] = parameter_type \
-            if not isinstance(parameter_type, GenericAlias) else parameter_type.__origin__
+            if not isinstance(parameter_type, GenericAlias) else parameter_type.__origin__  # type: ignore
 
         self.generic_types: list[type] = None \
-            if not isinstance(parameter_type, GenericAlias) else parameter_type.__args__
+            if not isinstance(parameter_type, GenericAlias) else parameter_type.__args__  # type: ignore
 
         if not issubclass(self.parameter_type, allowed_param_types):
             raise TypeError(f"Invalid parameter type: {self.parameter_type}. Allowed types are: {allowed_param_types}")
@@ -188,7 +188,7 @@ class ExpectedParameter(Generic[ParameterType]):
         return {
             self.name: {
                 'type': None if self.parameter_type is None else
-                self.parameter_type.__origin__ if isinstance(self.parameter_type, GenericAlias)
+                self.parameter_type.__origin__ if isinstance(self.parameter_type, GenericAlias)  # type: ignore
                 else self.parameter_type.__name__,
                 'required': self.required,
                 'description': self.description,
@@ -220,7 +220,7 @@ class RequiredParameter(ExpectedParameter[ParameterType]):
                  parameter_type: Type[ParameterType] = None,
                  alt_name: str = None,
                  description: Optional[str] = None,
-                 on_update: Callable[[Any], None] = None):
+                 on_update: Callable[[Any, Any], None] = None):
         super().__init__(True, parameter_type, alt_name, description, on_update)
 
 
@@ -247,7 +247,7 @@ class OptionalParameter(ExpectedParameter[ParameterType]):
                  parameter_type: Type[ParameterType] = None,
                  alt_name: str = None,
                  description: Optional[str] = None,
-                 on_update: Callable[[Any], None] = None):
+                 on_update: Callable[[Any, Any], None] = None):
         super().__init__(False, parameter_type, alt_name, description, on_update)
 
 

@@ -15,6 +15,7 @@
 # =============================================================================
 import types
 import re
+import typing
 from importlib import import_module
 from typing import Callable, Any, Iterable
 
@@ -52,6 +53,7 @@ class InstanceParameters(dict):
                 for callback in self.__update_callbacks[name]:
                     callback(value)
 
+    @typing.no_type_check
     def update(self, __m, **kwargs) -> None:
         super().update(__m, **kwargs)
 
@@ -79,10 +81,11 @@ def resolve_dependency_graph(instances: set | Iterable) -> list[set]:
     :param instances: set of instances to resolve the dependencies across
     :return: list of sets, where the list represents dependency levels and set the instances on it
     """
-    if 0 < len(instances):
-        resolved_instances = set()
-        dependency_level_list = list()
-        instance_set = instances if isinstance(instances, set) else set(instances)
+    instance_set = instances if isinstance(instances, set) else set(instances)
+
+    if 0 < len(instance_set):
+        resolved_instances: set = set()
+        dependency_level_list: list[set] = list()
 
         for level in range(len(instance_set)):
             # We cannot have more dependency levels than instances we have, hence
@@ -102,7 +105,7 @@ def resolve_dependency_graph(instances: set | Iterable) -> list[set]:
                     dependency_level_list[level].add(instance)
 
             resolved_instances.update(dependency_level_list[level])
-            if len(resolved_instances) == len(instances):
+            if len(resolved_instances) == len(instance_set):
                 # Early termination, since all instance dependencies have been resolved
                 return dependency_level_list
 

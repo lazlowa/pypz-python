@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # =============================================================================
-from typing import Optional, Any
+from typing import Optional, Any, TypeVar
 
 from pypz.core.specs.instance import Instance, NestedInstanceType
 from pypz.core.specs.operator import Operator
@@ -21,7 +21,10 @@ from pypz.core.specs.plugin import Plugin, PortPlugin, InputPortPlugin, OutputPo
     ServicePlugin
 
 
-class BlankInstance(Instance[NestedInstanceType]):
+BlankNestedInstanceType = TypeVar('BlankNestedInstanceType', bound='BlankInstance')
+
+
+class BlankInstance(Instance[BlankNestedInstanceType]):
 
     def _on_interrupt(self, system_signal: int = None) -> None:
         pass

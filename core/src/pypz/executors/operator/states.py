@@ -215,8 +215,9 @@ class State(ABC):
 
         for execution_element in execution_chain:
 
-            method_name = \
-                execution_element[0] if isinstance(execution_element[0], str) else execution_element[0].__name__
+            method_name = execution_element[0] \
+                if isinstance(execution_element[0], str) else execution_element[0].__name__  # type: ignore
+
             instances = execution_element[1]
 
             futures: dict[concurrent.futures.Future, Callable[[], Any]] = dict()

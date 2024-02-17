@@ -96,7 +96,7 @@ class KubernetesDeployer(Deployer):
 
     @staticmethod
     def sanitize(string: str) -> str:
-        return string.translate(str.maketrans({"_": "-", ".": "-"}))
+        return string.translate(str.maketrans({"_": "-", ".": "-"}))  # type: ignore
 
     # ========================= ctor ==========================
 

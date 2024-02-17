@@ -35,7 +35,7 @@ class KafkaIOPortTest(unittest.TestCase):
     def setUpClass(cls) -> None:
         time.sleep(2)
 
-        cls.test_admin_client: KafkaAdminClient = KafkaAdminClient(bootstrap_servers=KafkaIOPortTest.bootstrap_url)
+        cls.test_admin_client = KafkaAdminClient(bootstrap_servers=KafkaIOPortTest.bootstrap_url)
 
     @classmethod
     def tearDownClass(cls) -> None:

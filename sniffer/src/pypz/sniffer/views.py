@@ -14,6 +14,7 @@
 # limitations under the License.
 # =============================================================================
 import tkinter as tk
+from typing import Optional
 
 from pypz.abstracts.channel_ports import ChannelInputPort, ChannelOutputPort
 from pypz.core.channels.status import ChannelStatusMessage, ChannelStatus
@@ -56,29 +57,29 @@ class ChannelView:
         self.channel_reader_views: list[ChannelRWView] = list()
         self.channel_writer_views: list[ChannelRWView] = list()
 
-        self.x1 = None
-        self.y1 = None
-        self.x2 = None
-        self.y2 = None
+        self.x1: Optional[int] = None
+        self.y1: Optional[int] = None
+        self.x2: Optional[int] = None
+        self.y2: Optional[int] = None
 
     def draw(self, next_available_y_position: int):
-        first_channel_reader = min(self.channel_reader_views, key=lambda cr: cr.top)
-        last_channel_reader = max(self.channel_reader_views, key=lambda cr: cr.top)
-        first_channel_writer = min(self.channel_writer_views, key=lambda cr: cr.top)
-        last_channel_writer = max(self.channel_writer_views, key=lambda cr: cr.top)
+        first_channel_reader: ChannelRWView = min(self.channel_reader_views, key=lambda cr: cr.top)
+        last_channel_reader: ChannelRWView = max(self.channel_reader_views, key=lambda cr: cr.top)
+        first_channel_writer: ChannelRWView = min(self.channel_writer_views, key=lambda cr: cr.top)
+        last_channel_writer: ChannelRWView = max(self.channel_writer_views, key=lambda cr: cr.top)
 
-        channel_reader_x_min = first_channel_reader.left
-        channel_reader_y_min = first_channel_reader.top + (first_channel_reader.bottom - first_channel_reader.top) / 2
-        channel_reader_y_max = last_channel_reader.top + (last_channel_reader.bottom - last_channel_reader.top) / 2
+        channel_reader_x_min: float = first_channel_reader.left
+        channel_reader_y_min: float = first_channel_reader.top + (first_channel_reader.bottom - first_channel_reader.top) / 2
+        channel_reader_y_max: float = last_channel_reader.top + (last_channel_reader.bottom - last_channel_reader.top) / 2
 
-        channel_writer_x_max = first_channel_writer.right
-        channel_writer_y_min = first_channel_writer.top + (first_channel_writer.bottom - first_channel_writer.top) / 2
-        channel_writer_y_max = last_channel_writer.top + (last_channel_writer.bottom - last_channel_writer.top) / 2
+        channel_writer_x_max: float = first_channel_writer.right
+        channel_writer_y_min: float = first_channel_writer.top + (first_channel_writer.bottom - first_channel_writer.top) / 2
+        channel_writer_y_max: float = last_channel_writer.top + (last_channel_writer.bottom - last_channel_writer.top) / 2
 
-        self.x1 = channel_reader_x_min - 50 - 20 * self.channel_reader_idx
-        self.y1 = channel_reader_y_min + (channel_reader_y_max - channel_reader_y_min) / 2
-        self.x2 = channel_writer_x_max + 50 + 20 * self.channel_writer_idx
-        self.y2 = channel_writer_y_min + (channel_writer_y_max - channel_writer_y_min) / 2
+        self.x1 = int(channel_reader_x_min - 50 - 20 * self.channel_reader_idx)
+        self.y1 = int(channel_reader_y_min + (channel_reader_y_max - channel_reader_y_min) / 2)
+        self.x2 = int(channel_writer_x_max + 50 + 20 * self.channel_writer_idx)
+        self.y2 = int(channel_writer_y_min + (channel_writer_y_max - channel_writer_y_min) / 2)
 
         for idx, channel_reader in enumerate(self.channel_reader_views):
             self.canvas.create_line(self.x1,
@@ -124,10 +125,10 @@ class ChannelRWView:
         self.status_display_l = None
         self.status_display_r = None
 
-        self.left = None
-        self.top = None
-        self.right = None
-        self.bottom = None
+        self.left: Optional[int] = None
+        self.top: Optional[int] = None
+        self.right: Optional[int] = None
+        self.bottom: Optional[int] = None
 
         self.is_finished: bool = False
         self.is_error: bool = False

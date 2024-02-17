@@ -82,7 +82,7 @@ def order_operators_by_connections(pipeline: Pipeline) -> list[set[Operator]]:
     Note that this method is capable to handle circular dependencies.
     """
 
-    paths = list()
+    paths: list = list()
     # Step 1)
     # Extracting the paths. Using the example in the docs, the expected result:
     # [0] - [A, C, D, F, G]
@@ -115,7 +115,7 @@ def order_operators_by_connections(pipeline: Pipeline) -> list[set[Operator]]:
     # [3] -> {F, G}
     # [4] -> {G}
     # =======================================================================================
-    dependency_levels = []
+    dependency_levels: list = []
     for path in cleaned_paths:
         for idx, node in enumerate(path):
             if idx == len(dependency_levels):

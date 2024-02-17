@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # =============================================================================
-from typing import Optional, Type, TypeVar
+from typing import Optional, Type, TypeVar, Union
 
 NestedInstanceDTOType = TypeVar("NestedInstanceDTOType", bound='InstanceDTO')
 
@@ -46,19 +46,19 @@ class SpecDTO:
                  types: list = None,
                  nestedInstanceType: str = None,
                  nestedInstances: list[NestedInstanceDTOType] = None,
-                 nested_instance_dto_type: Optional[Type[NestedInstanceDTOType]] = 'default'):
+                 nested_instance_dto_type: Optional[Union[Type[NestedInstanceDTOType], str]] = 'default'):
         self.name: str = name
         self.location: str = location
         self.expectedParameters: dict = expectedParameters
         self.types: list = types
         self.nestedInstanceType: str = nestedInstanceType
-        self.nestedInstances: Optional[set[NestedInstanceDTOType]] = None
+        self.nestedInstances: Optional[list[NestedInstanceDTOType]] = None
 
         if nested_instance_dto_type == 'default':
-            nested_instance_dto_type = InstanceDTO
+            nested_instance_dto_type = InstanceDTO  # type: ignore
 
         if (nestedInstances is not None) and (nested_instance_dto_type is not None):
-            self.nestedInstances: list[NestedInstanceDTOType] = list()
+            self.nestedInstances = list()
             if isinstance(nestedInstances, (set, list)):
                 for nestedInstance in nestedInstances:
                     if isinstance(nestedInstance, InstanceDTO):

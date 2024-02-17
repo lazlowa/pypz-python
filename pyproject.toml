@@ -44,5 +44,6 @@ files = [
 namespace_packages = "True"
 explicit_package_bases = "True"
 ignore_missing_imports = "True"
-implicit_optional = "True"
+strict_optional = "False"
 allow_redefinition = "True"
+disable_error_code = "no-redef"

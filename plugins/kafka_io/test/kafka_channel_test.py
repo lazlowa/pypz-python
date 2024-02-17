@@ -64,7 +64,7 @@ class KafkaChannelTest(unittest.TestCase):
     def setUpClass(cls) -> None:
         time.sleep(2)
 
-        cls.test_admin_client: KafkaAdminClient = KafkaAdminClient(bootstrap_servers=KafkaChannelTest.bootstrap_url)
+        cls.test_admin_client = KafkaAdminClient(bootstrap_servers=KafkaChannelTest.bootstrap_url)
 
     @classmethod
     def tearDownClass(cls) -> None:

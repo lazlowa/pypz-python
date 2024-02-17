@@ -17,6 +17,7 @@ import inspect
 import re
 import sys
 import types
+import typing
 from abc import ABCMeta, ABC, abstractmethod
 from typing import Type, Any, TypeVar, Generic, Optional
 
@@ -75,6 +76,7 @@ class InstanceInitInterceptor(ABCMeta):
     executing the __init__ of the instance. For more information refer to InterceptedInstance.
     """
 
+    @typing.no_type_check
     def __call__(cls: Type[InterceptedInstanceType], name: str = None, *args, **kwargs) -> InterceptedInstanceType:
         """
         This method is called, if a class object is being created, hence we can intercept
@@ -137,7 +139,7 @@ class Instance(Generic[NestedInstanceType], RegisteredInterface, ABC, metaclass=
         # Member declarations
         # ===================
 
-        self.__nested_instance_type: Type[NestedInstanceType] | None = nested_instance_type
+        self.__nested_instance_type: Optional[Type[NestedInstanceType]] = nested_instance_type
         """
         Stores the specified type of the nested instances. This is required to
         be able to discover those instances
@@ -633,7 +635,7 @@ class Instance(Generic[NestedInstanceType], RegisteredInterface, ABC, metaclass=
                     else load_class_by_name(instance_dto.spec.nestedInstanceType)
 
                 # Creating dummy implementation of abstract methods
-                class_body = {abstract_method: lambda: None for abstract_method in abstract_methods}
+                class_body: dict[str, Any] = {abstract_method: lambda: None for abstract_method in abstract_methods}
 
                 module_and_name = instance_dto.spec.name.split(":")
                 class_body["__module__"] = module_and_name[0]
@@ -644,13 +646,12 @@ class Instance(Generic[NestedInstanceType], RegisteredInterface, ABC, metaclass=
                                                 tuple(remove_super_classes(base_classes)),
                                                 {}, lambda ns: ns.update(class_body))
 
-                if "nested_instance_type" in inspect.signature(instance_type.__init__).parameters:
-                    instance: Instance = instance_type(instance_dto.name,
-                                                       nested_instance_type=nested_instance_type,
-                                                       from_dto=instance_dto, *args, **kwargs)
+                if "nested_instance_type" in inspect.signature(instance_type.__init__).parameters:  # type: ignore
+                    instance = instance_type(instance_dto.name,
+                                             nested_instance_type=nested_instance_type,
+                                             from_dto=instance_dto, *args, **kwargs)
                 else:
-                    instance: Instance = instance_type(instance_dto.name,
-                                                       from_dto=instance_dto, *args, **kwargs)
+                    instance = instance_type(instance_dto.name, from_dto=instance_dto, *args, **kwargs)
 
                 print(f"[WARNING] Mock instance created of spec '{instance_dto.spec.name}' for "
                       f"[{instance.get_full_name()}]. Reason: {e}", file=sys.stderr)
