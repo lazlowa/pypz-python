@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pypz-amq-io"
-version = "0.9.0b9"
+version = "0.9.0b10"
 authors = [
     { name = "Laszlo Anka", email = "laszlo.anka@gmail.com" }
 ]
