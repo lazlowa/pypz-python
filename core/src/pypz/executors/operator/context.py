@@ -13,12 +13,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # =============================================================================
-from typing import Type, Callable
+from typing import Type, Callable, TypeVar
 
 from pypz.executors.commons import ExecutionMode, ExitCodes
 from pypz.core.specs.operator import Operator
 from pypz.core.specs.plugin import Plugin
 from pypz.core.specs.utils import resolve_dependency_graph
+
+PluginType = TypeVar('PluginType', bound=Plugin)
 
 
 class ExecutionContext:
@@ -82,18 +84,18 @@ class ExecutionContext:
     def set_exit_code(self, exit_code: ExitCodes):
         self.__exit_code = exit_code
 
-    def get_plugin_instances_by_type(self, plugin_type: Type[Plugin]) -> set[Plugin]:
+    def get_plugin_instances_by_type(self, plugin_type: Type[PluginType]) -> set[PluginType]:
         return self.__plugin_type_registry[plugin_type] if plugin_type in self.__plugin_type_registry else set()
 
-    def get_dependency_graph_by_type(self, plugin_type: Type[Plugin]) -> list[set[Plugin]]:
+    def get_dependency_graph_by_type(self, plugin_type: Type[PluginType]) -> list[set[PluginType]]:
         return self.__typed_dependency_graphs[plugin_type] if plugin_type in self.__plugin_type_registry else []
 
-    def for_each_plugin_instances(self, consumer: Callable[[Plugin], None]) -> None:
+    def for_each_plugin_instances(self, consumer: Callable[[PluginType], None]) -> None:
         for plugin_instance in self.__operator.get_protected().get_nested_instances().values():
             consumer(plugin_instance)
 
-    def for_each_plugin_objects_with_type(self, plugin_type: Type[Plugin],
-                                          consumer: Callable[[Plugin], None]) -> None:
+    def for_each_plugin_objects_with_type(self, plugin_type: Type[PluginType],
+                                          consumer: Callable[[PluginType], None]) -> None:
         if plugin_type in self.__plugin_type_registry:
             for plugin_instance in self.__plugin_type_registry[plugin_type]:
                 consumer(plugin_instance)
