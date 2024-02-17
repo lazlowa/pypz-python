@@ -1,4 +1,4 @@
--e ./core
--e ./deployers/k8s
--e ./plugins/kafka_io
--e ./sniffer
+-e ./core[static]
+-e ./deployers/k8s[static]
+-e ./plugins/kafka_io[static]
+-e ./sniffer[static]
