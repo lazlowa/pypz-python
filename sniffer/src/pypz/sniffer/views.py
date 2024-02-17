@@ -69,12 +69,16 @@ class ChannelView:
         last_channel_writer: ChannelRWView = max(self.channel_writer_views, key=lambda cr: cr.top)
 
         channel_reader_x_min: float = first_channel_reader.left
-        channel_reader_y_min: float = first_channel_reader.top + (first_channel_reader.bottom - first_channel_reader.top) / 2
-        channel_reader_y_max: float = last_channel_reader.top + (last_channel_reader.bottom - last_channel_reader.top) / 2
+        channel_reader_y_min: float = \
+            first_channel_reader.top + (first_channel_reader.bottom - first_channel_reader.top) / 2
+        channel_reader_y_max: float = \
+            last_channel_reader.top + (last_channel_reader.bottom - last_channel_reader.top) / 2
 
         channel_writer_x_max: float = first_channel_writer.right
-        channel_writer_y_min: float = first_channel_writer.top + (first_channel_writer.bottom - first_channel_writer.top) / 2
-        channel_writer_y_max: float = last_channel_writer.top + (last_channel_writer.bottom - last_channel_writer.top) / 2
+        channel_writer_y_min: float = \
+            first_channel_writer.top + (first_channel_writer.bottom - first_channel_writer.top) / 2
+        channel_writer_y_max: float = \
+            last_channel_writer.top + (last_channel_writer.bottom - last_channel_writer.top) / 2
 
         self.x1 = int(channel_reader_x_min - 50 - 20 * self.channel_reader_idx)
         self.y1 = int(channel_reader_y_min + (channel_reader_y_max - channel_reader_y_min) / 2)

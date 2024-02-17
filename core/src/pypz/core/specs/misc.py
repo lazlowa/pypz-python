@@ -15,7 +15,7 @@
 # =============================================================================
 from typing import Optional, Any, TypeVar
 
-from pypz.core.specs.instance import Instance, NestedInstanceType
+from pypz.core.specs.instance import Instance
 from pypz.core.specs.operator import Operator
 from pypz.core.specs.plugin import Plugin, PortPlugin, InputPortPlugin, OutputPortPlugin, ResourceHandlerPlugin, \
     ServicePlugin
