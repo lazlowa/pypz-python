@@ -78,9 +78,10 @@ Prepare the Pull Request
    main branch
 3. Implement your fix, feature etc.
 4. Implement the necessary unittests
-5. Run the corresponding tests
-6. Rebase your fork, squash commits and resolve conflicts
-7. Commit message shall have a clear description of the changes (emphasis on the answers to "why")
+5. Run the corresponding tests (Check the README of the specific subproject for more details on testing)
+6. :ref:`static_analysis`
+7. Rebase your fork, squash commits and resolve conflicts
+8. Commit message shall have a clear description of the changes (emphasis on the answers to "why")
 
 Pass PR Review
 ++++++++++++++

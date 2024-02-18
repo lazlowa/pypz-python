@@ -41,7 +41,7 @@
             pypz
           </a>
               <div class="version">
-                0.9.0b9
+                0.9.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -60,7 +60,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="models.html">Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="parameters.html">Parameters</a></li>
-<li class="toctree-l1"><a class="reference internal" href="data_transfer.html">Data transfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_transfer.html">Data Transfer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="executor.html">Executor</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Logging</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#context-logging">Context Logging</a></li>
@@ -147,8 +147,8 @@ context for the operators.</p>
 </ul>
 <p>The concept involves the following classes:</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="../indexes/core/pypz.core.commons.loggers.html#pypz.core.commons.loggers.ContextLoggerInterface" title="pypz.core.commons.loggers.ContextLoggerInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">pypz.core.commons.loggers.ContextLoggerInterface</span></code></a></p></li>
-<li><p><a class="reference internal" href="../indexes/core/pypz.core.commons.loggers.html#pypz.core.commons.loggers.ContextLogger" title="pypz.core.commons.loggers.ContextLogger"><code class="xref py py-class docutils literal notranslate"><span class="pre">pypz.core.commons.loggers.ContextLogger</span></code></a></p></li>
+<li><p><a class="reference internal" href="../indexes/core/pypz.core.commons.loggers.html#pypz.core.commons.loggers.ContextLoggerInterface" title="pypz.core.commons.loggers.ContextLoggerInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">ContextLoggerInterface</span></code></a></p></li>
+<li><p><a class="reference internal" href="../indexes/core/pypz.core.commons.loggers.html#pypz.core.commons.loggers.ContextLogger" title="pypz.core.commons.loggers.ContextLogger"><code class="xref py py-class docutils literal notranslate"><span class="pre">ContextLogger</span></code></a></p></li>
 </ul>
 <p>The <a class="reference internal" href="../indexes/core/pypz.core.commons.loggers.html#pypz.core.commons.loggers.ContextLoggerInterface" title="pypz.core.commons.loggers.ContextLoggerInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">ContextLoggerInterface</span></code></a> shall be used to implement
 the actual logging functionality. Notice that this class provides protected methods that shall not be called directly.
@@ -163,7 +163,7 @@ object to perform logging.</p>
 an operator context, which can be used by the operator and the nested plugins as well. An additional
 twist to the story that there might be multiple logger plugins in an operator. Instead of calling
 each logger plugins’ corresponding methods manually, we want to abstract this, so for the user it
-is one call.</p>
+seems to be a single method call.</p>
 <p>The following diagram shows the inheritance map of the logging-relevant classes:</p>
 <figure class="align-default" id="id2">
 <div class="graphviz"><img src="../_images/inheritance-b01c8157fca53218d6f0147db7ab11ee08740b76.png" alt="Inheritance diagram of pypz.core.specs.plugin.LoggerPlugin, pypz.core.commons.loggers.ContextLogger, pypz.plugins.loggers.default.DefaultLoggerPlugin" usemap="#inheritance694f7133b1" class="inheritance graphviz" /></div>
@@ -187,7 +187,8 @@ a logger plugin, then you actually implement the
 <a class="reference internal" href="../indexes/core/pypz.core.commons.loggers.html#pypz.core.commons.loggers.ContextLoggerInterface" title="pypz.core.commons.loggers.ContextLoggerInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">ContextLoggerInterface</span></code></a>.</p>
 <p>Furthermore, there is a <a class="reference internal" href="../indexes/core/pypz.core.commons.loggers.html#pypz.core.commons.loggers.ContextLoggerInterface" title="pypz.core.commons.loggers.ContextLoggerInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">ContextLoggerInterface</span></code></a>
 implementation in the Operator: <a class="reference internal" href="../indexes/core/pypz.core.specs.operator.html#pypz.core.specs.operator.Operator.Logger" title="pypz.core.specs.operator.Operator.Logger"><code class="xref py py-class docutils literal notranslate"><span class="pre">pypz.core.specs.operator.Operator.Logger</span></code></a>.</p>
-<p>This class implements the functionality to abstract the method call of all LoggerPlugins in the operator context.</p>
+<p>This class implements the functionality to abstract the method call of all
+<a class="reference internal" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.LoggerPlugin" title="pypz.core.specs.plugin.LoggerPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">LoggerPlugins</span></code></a> in the operator context.</p>
 <p>If you check the Operator’s constructor, you will notice the member <cite>self.__logger</cite>.
 This is actually a <a class="reference internal" href="../indexes/core/pypz.core.commons.loggers.html#pypz.core.commons.loggers.ContextLogger" title="pypz.core.commons.loggers.ContextLogger"><code class="xref py py-class docutils literal notranslate"><span class="pre">ContextLogger</span></code></a>
 object, where the <a class="reference internal" href="../indexes/core/pypz.core.specs.operator.html#pypz.core.specs.operator.Operator.Logger" title="pypz.core.specs.operator.Operator.Logger"><code class="xref py py-class docutils literal notranslate"><span class="pre">Operator.Logger</span></code></a>

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Data transfer &mdash; pypz  documentation</title>
+  <title>Data Transfer &mdash; pypz  documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=eafc0fe6" />
@@ -41,7 +41,7 @@
             pypz
           </a>
               <div class="version">
-                0.9.0b9
+                0.9.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -60,7 +60,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="models.html">Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="parameters.html">Parameters</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Data transfer</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Data Transfer</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#ports">Ports</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#channels">Channels</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#pypz-core-channels-io-channelreader"><code class="xref py py-class docutils literal notranslate"><span class="pre">pypz.core.channels.io.ChannelReader</span></code></a></li>
@@ -117,7 +117,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Data transfer</li>
+      <li class="breadcrumb-item active">Data Transfer</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/core/data_transfer.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -128,9 +128,9 @@
            <div itemprop="articleBody">
              
   <section id="data-transfer">
-<span id="id1"></span><h1>Data transfer<a class="headerlink" href="#data-transfer" title="Link to this heading"></a></h1>
-<p>Data transfer between operations in a pipeline is essential.
-In <em>pypz</em> data transfer is possible between operators through so called <em>ports</em>.</p>
+<span id="id1"></span><h1>Data Transfer<a class="headerlink" href="#data-transfer" title="Link to this heading"></a></h1>
+<p>Data transfer is essential between operations in a pipeline.
+In <em>pypz</em> data transfer is possible between operators through so called <strong>ports</strong>.</p>
 <figure class="align-center" id="id2">
 <img alt="Basic pipeline" src="../_images/basic_pipeline.png" />
 <figcaption>
@@ -162,19 +162,26 @@ In <em>pypz</em> data transfer is possible between operators through so called <
 <div class="admonition important">
 <p class="admonition-title">Important</p>
 <p>Note that although <em>pypz</em> has a lot of builtin guards and trails to ensure execution stability,
-it does not have quality guarantees for custom interface implementations i.e., <em>pypz</em> will not
-take responsibility to any damage caused during execution of a custom plugin.</p>
+it does not provide quality guarantees for custom interface implementations i.e., <em>pypz</em> will not
+take responsibility to any damage caused during execution of a custom port plugin.</p>
 </div>
 </section>
 <section id="channels">
 <h2>Channels<a class="headerlink" href="#channels" title="Link to this heading"></a></h2>
 <p>During implementing the data transfer logic behind the port interfaces, you might encounter some challenges, which
-takes more time to solve or even forces repetitive activities. For that reason <em>pypz</em> offers you an alternative
-view on how data can be transferred across ports.</p>
+takes more time to solve or even forces repetitive activities. Some of the challenges are:</p>
+<ul class="simple">
+<li><p>connection state management and transfer i.e., ports are aware of other ports’ states</p></li>
+<li><p>continuous health checks / heartbeats</p></li>
+<li><p>group handling i.e., if the operator is <a class="reference internal" href="models.html#operator-replication"><span class="std std-ref">replicated</span></a>, the channel gets this information</p></li>
+<li><p>quality metrics and statistics</p></li>
+<li><p>…</p></li>
+</ul>
+<p>For that reason <em>pypz</em> offers you an alternative view on how data can be transferred across ports.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The following feature is completely independent from ports, you can consider as an extension to it, which
-you might use or not use. However, <em>pypz</em>’s implemented port plugins are based on this feature.</p>
+<p>The following feature is completely independent from ports, you can consider it as an extension, which
+you are free to use. However, <em>pypz</em>’s implemented port plugins are based on this feature.</p>
 </div>
 <p>In <em>pypz</em>’s view, each connection between ports can/shall be isolated. Such a connection can be represented
 as a <em>channel</em>.</p>
@@ -193,13 +200,6 @@ readers and channel writers.</p>
 <p><span class="caption-text">ChannelReader/-Writer</span><a class="headerlink" href="#id5" title="Link to this image"></a></p>
 </figcaption>
 </figure>
-<p>Channels provide a solution to the following challenges:</p>
-<ul class="simple">
-<li><p>channel/connection state management and transfer i.e., ports are aware of other ports’ states</p></li>
-<li><p>continuous health checks i.e., ports are aware, if other port is down</p></li>
-<li><p>instance group handling i.e., if the operator is <a class="reference internal" href="models.html#operator-replication"><span class="std std-ref">replicated</span></a>, the channel gets this information</p></li>
-<li><p>automatic metrics calculation</p></li>
-</ul>
 <p>If you want to utilize channels, then you shall implement the abstract methods of the corresponding classes
 instead of the port interfaces.</p>
 <section id="pypz-core-channels-io-channelreader">
@@ -227,14 +227,15 @@ same pattern:</p>
 <ol class="arabic simple">
 <li><p>create the necessary resources</p></li>
 <li><p>open the channels</p></li>
-<li><p>etl. wait for other connected channels</p></li>
+<li><p>eventually wait for other connected channels</p></li>
 <li><p>start the transmission</p></li>
+<li><p>finish the transmission</p></li>
 <li><p>close the channels</p></li>
 <li><p>clean up resources</p></li>
 </ol>
-<p>To unload you creating boilerplate code every time, <em>pypz</em> provides an abstract implementation of the input and
-output port plugin, which takes care all of these steps, so at the end you just need to provide the channel
-implementation, everything else will be taken care of.</p>
+<p>To unload you from creating boilerplate code every time you have a new channel implementation,
+<em>pypz</em> provides an abstract input and output port plugin, which takes care all of these steps,
+so at the end you just need to provide the channel implementation, everything else will be taken care of.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p><em>pypz</em> ships with a channel implementation for Kafka</p>
@@ -263,7 +264,7 @@ channels into <em>pypz</em>. It provides all the necessary method calls of the c
 <p><span class="caption-text">Inheritance diagram</span><a class="headerlink" href="#id6" title="Link to this image"></a></p>
 </figcaption>
 </figure>
-<p>Notice that both plugins are implementing the <a class="reference internal" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.ResourceHandlerPlugin" title="pypz.core.specs.plugin.ResourceHandlerPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">pypz.core.specs.plugin.ResourceHandlerPlugin</span></code></a>
+<p>Notice that both plugins are implementing the <a class="reference internal" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.ResourceHandlerPlugin" title="pypz.core.specs.plugin.ResourceHandlerPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">ResourceHandlerPlugin</span></code></a>
 interface as well, which allows to create and delete resources for the channels.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -285,20 +286,23 @@ is connected, but the <a class="reference internal" href="../indexes/core/pypz.a
 </figcaption>
 </figure>
 <p>The reason is that from <a class="reference internal" href="../indexes/core/pypz.abstracts.channel_ports.html#pypz.abstracts.channel_ports.ChannelInputPort" title="pypz.abstracts.channel_ports.ChannelInputPort"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelInputPort</span></code></a>
-perspective you have certain expectations w.r.t. records, so there
+perspective you have certain expectations w.r.t. records to receive, so there
 is no reason to create different <a class="reference internal" href="../indexes/core/pypz.core.channels.io.html#pypz.core.channels.io.ChannelReader" title="pypz.core.channels.io.ChannelReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelReader</span></code></a> entities,
 because all the <a class="reference internal" href="../indexes/core/pypz.core.channels.io.html#pypz.core.channels.io.ChannelWriter" title="pypz.core.channels.io.ChannelWriter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelWriter</span></code></a> shall meet your expectations.
 In other words, by invoking the <a class="reference internal" href="../indexes/core/pypz.abstracts.channel_ports.html#pypz.abstracts.channel_ports.ChannelInputPort.retrieve" title="pypz.abstracts.channel_ports.ChannelInputPort.retrieve"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pypz.abstracts.channel_ports.ChannelInputPort.retrieve()</span></code></a> method,
-you will then get all the records from all the outputs anyhow. This means as well that you need to manually
-care for ordering, if you have such a requirement.</p>
+you will then get all the records from all the outputs anyhow.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This design decision requests you to manually care for record ordering, if you have such a requirement.</p>
+</div>
 <p>Further information:</p>
 <ul class="simple">
 <li><p>if an operator is <a class="reference internal" href="models.html#operator-replication"><span class="std std-ref">replicated</span></a>, then it forms an <a class="reference internal" href="models.html#instance-group"><span class="std std-ref">instance group</span></a>;
 only group principals can manage resources, replicas cannot</p></li>
 <li><p>in case of error <strong>resources WILL NOT be deleted</strong>, this feature ensures that in case the principal instance crashes,
 it can restart and continue the work without deleting the resources containing the already transmitted records</p></li>
-<li><p>in shutdown phase it is made sure that all channels have at least one attempt to shut down itself even it a previous
-channel threw an exception</p></li>
+<li><p>in shutdown phase both resource deletion and channel closing is attempted for each channel writers and readers
+at least once</p></li>
 </ul>
 <section id="expected-parameters">
 <span id="channel-expected-parameters"></span><h3>Expected Parameters<a class="headerlink" href="#expected-parameters" title="Link to this heading"></a></h3>

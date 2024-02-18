@@ -40,7 +40,7 @@
             pypz
           </a>
               <div class="version">
-                0.9.0b9
+                0.9.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -59,7 +59,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../core/models.html">Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../core/parameters.html">Parameters</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../core/data_transfer.html">Data transfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core/data_transfer.html">Data Transfer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../core/executor.html">Executor</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../core/logging.html">Logging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../core/deployer.html">Deployer</a></li>
@@ -86,6 +86,12 @@
 <li class="toctree-l2"><a class="reference internal" href="#project-structure">Project Structure</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#work-in-the-project">Work in the Project</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#run-tests">Run Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#perform-static-analysis">Perform Static Analysis</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#test-coverage">Test Coverage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#linting">Linting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#type-checking">Type Checking</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#build">Build</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#build-the-documentation">Build the Documentation</a></li>
 </ul>
@@ -184,6 +190,65 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
 <p>Different subprojects might have different steps to take, before you can run the tests. Please check the
 corresponding README for more information.</p>
 </section>
+<section id="perform-static-analysis">
+<span id="static-analysis"></span><h2>Perform Static Analysis<a class="headerlink" href="#perform-static-analysis" title="Link to this heading"></a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>All tests and static analysis will be performed upon creating a pull request. However, it is a good
+practice to perform these steps locally as well, before pushing.</p>
+</div>
+<p>To perform the following actions, you need to install the optional dependencies for the project.
+The <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> file already contains the information to install the monorepo in editable
+mode incl. the optional dependencies for static analysis.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+</pre></div>
+</div>
+<section id="test-coverage">
+<h3>Test Coverage<a class="headerlink" href="#test-coverage" title="Link to this heading"></a></h3>
+<p>To evaluate test coverage, the python package <a class="reference external" href="https://coverage.readthedocs.io/en/7.4.1/">coverage</a> is used.
+To perform the tests incl. coverage analysis, you need to execute the following command:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>coverage<span class="w"> </span>run<span class="w"> </span>-m<span class="w"> </span>unittest<span class="w"> </span>discover<span class="w"> </span>core/test<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;*.py&quot;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Notice that this will execute the tests on the core subproject. To have coverage reports on other
+subprojects, you need to adapt the command accordingly.</p>
+</div>
+<p>Once the test ran, you can create the report with the following command:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>coverage<span class="w"> </span>report
+</pre></div>
+</div>
+<p>Please refer to the documentation of <a class="reference external" href="https://coverage.readthedocs.io/en/7.4.1/">coverage</a> for more options.</p>
+</section>
+<section id="linting">
+<h3>Linting<a class="headerlink" href="#linting" title="Link to this heading"></a></h3>
+<p>For linting purposes <a class="reference external" href="https://flake8.pycqa.org/en/latest/">flake8</a> is used. You can find the
+corresponding configuration in <a class="reference external" href="https://github.com/lazlowa/pypz-python/blob/main/setup.cfg">setup.cfg</a>.</p>
+<p>To scan the entire repository with <a class="reference external" href="https://flake8.pycqa.org/en/latest/">flake8</a>, execute the following command:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>flake8<span class="w"> </span><span class="k">$(</span>git<span class="w"> </span>ls-files<span class="w"> </span>*.py<span class="k">)</span>
+</pre></div>
+</div>
+<p>To scan only the modified files with <a class="reference external" href="https://flake8.pycqa.org/en/latest/">flake8</a>,
+execute the following command (at project’s root):</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>flake8<span class="w"> </span><span class="k">$(</span>git<span class="w"> </span>diff<span class="w"> </span>--name-only<span class="w"> </span>main<span class="w">  </span>./*.py<span class="k">)</span>
+</pre></div>
+</div>
+</section>
+<section id="type-checking">
+<h3>Type Checking<a class="headerlink" href="#type-checking" title="Link to this heading"></a></h3>
+<p>It is desired to some extent to check type correctness throughout the entire project. For that purpose
+<a class="reference external" href="https://mypy-lang.org/">mypy</a> is used. It helps to look at python like it would be a static typed
+language. You can find mypy’s configuration in the
+<a class="reference external" href="https://github.com/lazlowa/pypz-python/blob/main/pyproject.toml">pyproject.toml</a> file.</p>
+<p><em>pypz</em> configures mypy to always check the entire project instead of only the modified files. This
+is necessary, since your changes can cause downstream issues. To perform the type checking, execute the
+following command from project’s root:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>mypy<span class="w"> </span>.
+</pre></div>
+</div>
+</section>
+</section>
 <section id="build">
 <h2>Build<a class="headerlink" href="#build" title="Link to this heading"></a></h2>
 <p>To build your project, you will need the <code class="docutils literal notranslate"><span class="pre">build</span></code> tool first:</p>
@@ -191,7 +256,7 @@ corresponding README for more information.</p>
 </pre></div>
 </div>
 <p>Then you can build your project by invoking the following command from the subproject’s root</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>build
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>build<span class="w"> </span>&lt;SUBPROJECT_LOCATION&gt;
 </pre></div>
 </div>
 <p>This command will create the sdist and wheel into the dist folder.</p>

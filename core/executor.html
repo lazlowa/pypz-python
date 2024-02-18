@@ -26,7 +26,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Logging" href="logging.html" />
-    <link rel="prev" title="Data transfer" href="data_transfer.html" /> 
+    <link rel="prev" title="Data Transfer" href="data_transfer.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -41,7 +41,7 @@
             pypz
           </a>
               <div class="version">
-                0.9.0b9
+                0.9.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -60,7 +60,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="models.html">Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="parameters.html">Parameters</a></li>
-<li class="toctree-l1"><a class="reference internal" href="data_transfer.html">Data transfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_transfer.html">Data Transfer</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Executor</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#execution-context">Execution Context</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#state-machine">State machine</a></li>
@@ -122,10 +122,11 @@
              
   <section id="executor">
 <span id="id1"></span><h1>Executor<a class="headerlink" href="#executor" title="Link to this heading"></a></h1>
-<p>Since the operator entity in <em>pypz</em> is self-contained, an
-<a class="reference internal" href="../indexes/core/pypz.executors.operator.executor.html#pypz.executors.operator.executor.OperatorExecutor" title="pypz.executors.operator.executor.OperatorExecutor"><code class="xref py py-class docutils literal notranslate"><span class="pre">OperatorExecutor</span></code></a>
-is required, which controls the execution flow of the entire operator incl. plugins.
-The executor has the following main components:</p>
+<p>In <em>pypz</em> each operator is self-contained, which means that there is no external dependencies for its
+runtime (like an executor infrastructure) i.e., you can execute it for example on your local machine or in a Kubernetes
+cluster as well. This requires an embedded <a class="reference internal" href="../indexes/core/pypz.executors.operator.executor.html#pypz.executors.operator.executor.OperatorExecutor" title="pypz.executors.operator.executor.OperatorExecutor"><code class="xref py py-class docutils literal notranslate"><span class="pre">OperatorExecutor</span></code></a>,
+which controls the execution flow of the entire operator incl. plugins.</p>
+<p>The executor has the following main components:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="../indexes/core/pypz.executors.operator.context.html#pypz.executors.operator.context.ExecutionContext" title="pypz.executors.operator.context.ExecutionContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExecutionContext</span></code></a></p></li>
 <li><p>state machine (embedded into the <a class="reference internal" href="../indexes/core/pypz.executors.operator.executor.html#pypz.executors.operator.executor.OperatorExecutor" title="pypz.executors.operator.executor.OperatorExecutor"><code class="xref py py-class docutils literal notranslate"><span class="pre">OperatorExecutor</span></code></a>)</p></li>
@@ -203,7 +204,7 @@ It can be forwarded to the states of the state machine as well.</p>
 }" class="graphviz" /></div>
 </div>
 <p>You can find more information incl. invoked plugin methods in the corresponding
-<a class="reference internal" href="../indexes/core/pypz.executors.operator.states.html#module-pypz.executors.operator.states" title="pypz.executors.operator.states"><code class="xref py py-class docutils literal notranslate"><span class="pre">module</span></code></a>.</p>
+<a class="reference internal" href="../indexes/core/pypz.executors.operator.states.html#module-pypz.executors.operator.states" title="pypz.executors.operator.states"><code class="xref py py-class docutils literal notranslate"><span class="pre">states</span> <span class="pre">module</span></code></a>.</p>
 </section>
 <section id="execution-modes">
 <h2>Execution modes<a class="headerlink" href="#execution-modes" title="Link to this heading"></a></h2>
@@ -223,7 +224,7 @@ of running the actual business logic.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="data_transfer.html" class="btn btn-neutral float-left" title="Data transfer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="data_transfer.html" class="btn btn-neutral float-left" title="Data Transfer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="logging.html" class="btn btn-neutral float-right" title="Logging" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

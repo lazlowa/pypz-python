@@ -39,7 +39,7 @@
             pypz
           </a>
               <div class="version">
-                0.9.0b9
+                0.9.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -58,7 +58,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../core/models.html">Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../core/parameters.html">Parameters</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../core/data_transfer.html">Data transfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core/data_transfer.html">Data Transfer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../core/executor.html">Executor</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../core/logging.html">Logging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../core/deployer.html">Deployer</a></li>
@@ -149,14 +149,14 @@ the actual execution. The context itself is based on the current Operator.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pypz.executors.operator.context.ExecutionContext.__plugin_type_registry">
-<span class="sig-name descname"><span class="pre">__plugin_type_registry</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">PluginType</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">set</span><span class="p"><span class="pre">[</span></span><span class="pre">PluginType</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.executors.operator.context.ExecutionContext.__plugin_type_registry" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">__plugin_type_registry</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pypz.core.specs.plugin.html#pypz.core.specs.plugin.Plugin" title="pypz.core.specs.plugin.Plugin"><span class="pre">Plugin</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pypz.core.specs.plugin.html#pypz.core.specs.plugin.Plugin" title="pypz.core.specs.plugin.Plugin"><span class="pre">Plugin</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.executors.operator.context.ExecutionContext.__plugin_type_registry" title="Link to this definition"></a></dt>
 <dd><p>This member holds all the context entities along their implemented interfaces. It allows
 simple type based iteration/execution.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pypz.executors.operator.context.ExecutionContext.__typed_dependency_graphs">
-<span class="sig-name descname"><span class="pre">__typed_dependency_graphs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">PluginType</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">set</span><span class="p"><span class="pre">[</span></span><span class="pre">PluginType</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.executors.operator.context.ExecutionContext.__typed_dependency_graphs" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">__typed_dependency_graphs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pypz.core.specs.plugin.html#pypz.core.specs.plugin.Plugin" title="pypz.core.specs.plugin.Plugin"><span class="pre">Plugin</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pypz.core.specs.plugin.html#pypz.core.specs.plugin.Plugin" title="pypz.core.specs.plugin.Plugin"><span class="pre">Plugin</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.executors.operator.context.ExecutionContext.__typed_dependency_graphs" title="Link to this definition"></a></dt>
 <dd><p>This member holds the nested instances ordered by their resolved dependency list along
 their types. The key holds the instance type, the value is a list of set, where each list
 element represents a dependency level i.e., the 0th element holds the instances w/o

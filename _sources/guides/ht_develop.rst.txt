@@ -70,6 +70,80 @@ Run Tests
 Different subprojects might have different steps to take, before you can run the tests. Please check the
 corresponding README for more information.
 
+.. _static_analysis:
+
+Perform Static Analysis
+-----------------------
+
+.. note::
+   All tests and static analysis will be performed upon creating a pull request. However, it is a good
+   practice to perform these steps locally as well, before pushing.
+
+To perform the following actions, you need to install the optional dependencies for the project.
+The ``requirements.txt`` file already contains the information to install the monorepo in editable
+mode incl. the optional dependencies for static analysis.
+
+.. code-block:: shell
+
+   pip install -r requirements.txt
+
+Test Coverage
++++++++++++++
+
+To evaluate test coverage, the python package `coverage <https://coverage.readthedocs.io/en/7.4.1/>`_ is used.
+To perform the tests incl. coverage analysis, you need to execute the following command:
+
+.. code-block:: shell
+
+   coverage run -m unittest discover core/test -p "*.py"
+
+.. note::
+   Notice that this will execute the tests on the core subproject. To have coverage reports on other
+   subprojects, you need to adapt the command accordingly.
+
+Once the test ran, you can create the report with the following command:
+
+.. code-block:: shell
+
+   coverage report
+
+Please refer to the documentation of `coverage <https://coverage.readthedocs.io/en/7.4.1/>`_ for more options.
+
+Linting
++++++++
+
+For linting purposes `flake8 <https://flake8.pycqa.org/en/latest/>`_ is used. You can find the
+corresponding configuration in `setup.cfg <https://github.com/lazlowa/pypz-python/blob/main/setup.cfg>`_.
+
+To scan the entire repository with `flake8 <https://flake8.pycqa.org/en/latest/>`_, execute the following command:
+
+.. code-block:: shell
+
+   flake8 $(git ls-files *.py)
+
+To scan only the modified files with `flake8 <https://flake8.pycqa.org/en/latest/>`_,
+execute the following command (at project's root):
+
+.. code-block:: shell
+
+   flake8 $(git diff --name-only main  ./*.py)
+
+Type Checking
++++++++++++++
+
+It is desired to some extent to check type correctness throughout the entire project. For that purpose
+`mypy <https://mypy-lang.org/>`_ is used. It helps to look at python like it would be a static typed
+language. You can find mypy's configuration in the
+`pyproject.toml <https://github.com/lazlowa/pypz-python/blob/main/pyproject.toml>`_ file.
+
+*pypz* configures mypy to always check the entire project instead of only the modified files. This
+is necessary, since your changes can cause downstream issues. To perform the type checking, execute the
+following command from project's root:
+
+.. code-block:: shell
+
+   mypy .
+
 Build
 -----
 
@@ -83,7 +157,7 @@ Then you can build your project by invoking the following command from the subpr
 
 .. code-block:: shell
 
-   python -m build
+   python -m build <SUBPROJECT_LOCATION>
 
 This command will create the sdist and wheel into the dist folder.
 

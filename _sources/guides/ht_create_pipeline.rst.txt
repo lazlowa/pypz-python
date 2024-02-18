@@ -1,3 +1,5 @@
+.. _guide_ht_create_pipeline:
+
 How to create a pipeline
 ========================
 
@@ -20,10 +22,10 @@ What You Will Need
 ------------------
 
 - Python 3.11+
-- an IDE of your choice, however PyCharm CE has been used for this guide
+- an IDE of your choice, however PyCharm CE has been used for this tutorial
 - access to a Kafka cluster or you can simply use the confluent image "confluentinc/confluent-local image" to
   start Kafka locally
-- (optional) access to a Kubernetes Cluster (you can use `Kind <https://kind.sigs.k8s.io>`_ locally)
+- (optional) access to a Kubernetes Cluster (or you can use `Kind <https://kind.sigs.k8s.io>`_ locally)
 - (optional) access to a Docker image registry (not necessary if Kind used)
 
 Setting Up The Project
@@ -107,7 +109,7 @@ This schema will expect a record with the key "text" in type string.
 Operators can be enhanced by plugins. For example, the :class:`Input- <pypz.core.specs.plugin.InputPortPlugin>`/
 :class:`OutputPortPlugins <pypz.core.specs.plugin.OutputPortPlugin>` enable the operators
 to transfer data to and from each other. Hence, we need to create the
-:class:`KafkaChannelInputPort <pypz.plugins.kafka_io.ports.KafkaChannelInputPort>` plugin in the ctor of the operator.
+:class:`KafkaChannelOutputPort <pypz.plugins.kafka_io.ports.KafkaChannelOutputPort>` plugin in the ctor of the operator.
 
 .. code-block:: python
 
@@ -135,7 +137,7 @@ to transfer data to and from each other. Hence, we need to create the
 
    ...
 
-Additionally, we create a variable to track, how many records have been sent already.
+Additionally, we create a variable to track, how many records have already been sent.
 
 *_on_init()*
 ++++++++++++
@@ -174,8 +176,8 @@ Since we are not implementing any logic here for this example, simply return Tru
 *_on_interrupt(system_signal)*
 ++++++++++++++++++++++++++++++
 
-This method is called, if a system signal has been caught like SIGINT, SEGTERM etc. You can use it to stop
-your internal logic (e.g., loops), which is not accessible by *pypz*.
+This method is called, if a system signal has been caught like SIGINT, SEGTERM etc. You can use it to
+eventually interrupt your internal logic (e.g., loops), which is not accessible by *pypz*.
 It does not expect any return value and we are not using it for this example, hence you can leave it.
 
 *_on_error()*
@@ -191,8 +193,12 @@ Check :ref:`operator_methods` for the signature explanation.
 
 This method is called after the _on_init() has successfully finished and before _on_shutdown(). It runs until:
 
-- the method returns True
-- the method returns None and there is no more records to be received on any of the InputPortPlugins
+- the method returns True **OR**
+- the method returns None and there is no more records to be received on any of the
+  :class:`Input- <pypz.core.specs.plugin.InputPortPlugin>`
+
+Since we don't have any :class:`InputPortPlugin <pypz.core.specs.plugin.InputPortPlugin>` in the writer operator,
+we need to make sure that we have a termination condition i.e., at some point, we return ``True``.
 
 The following logic is implemented:
 
@@ -255,7 +261,7 @@ Since we are reading records from Kafka sent by the DemoWriterOperator, we need 
 *__init__()*
 ++++++++++++
 
-For the reader operator we need to define the kafka input port.
+We need to define the :class:`KafkaChannelInputPort <pypz.plugins.kafka_io.ports.KafkaChannelInputPort>`.
 
 .. code-block:: python
 
@@ -346,14 +352,14 @@ Congratulations, you created your first pipeline in *pypz*!
 [Optional] Kafka Cluster
 ------------------------
 
-Since we are using Kafka port plugins in the example, you will need access to a Kafka cluster. Should it be not the case,
-you can start a cluster locally from the corresponding confluent image:
+Since we are using Kafka port plugins in the example, you will need ti have access to a Kafka cluster.
+Should it be not the case, you can start a cluster locally from the corresponding confluent image:
 
 .. code-block:: shell
 
    docker run -it -d --rm -p 9092:9092 confluentinc/confluent-local
 
-Then you can access the broker via ``localhost:9092``.
+Then you can access the Kafka broker via ``localhost:9092``.
 
 Local execution
 ---------------
@@ -411,7 +417,7 @@ to set the following instance parameters:
 
 .. note::
    Notice that we configured the :ref:`channels <channel_expected_parameters>` in the port plugins directly and we
-   used two-level, excluding :ref:`cascading paremters <cascading_parameters>`.
+   used :ref:`two-level, excluding cascading parameters <cascading_parameters>`.
 
 If you start the executor now, you need to see something like this:
 
@@ -425,7 +431,11 @@ to each operators and we will modify the code to use the
 new logger. The :class:`DefaultLoggerPlugin <pypz.plugins.loggers.default.DefaultLoggerPlugin>` sends the logs to stdout.
 
 .. code-block:: python
-   :emphasize-lines: 10,19
+   :emphasize-lines: 14,23
+
+   ...
+
+   class DemoWriterOperator(Operator):
 
    ...
 
@@ -461,7 +471,11 @@ new logger. The :class:`DefaultLoggerPlugin <pypz.plugins.loggers.default.Defaul
    ...
 
 .. code-block:: python
-   :emphasize-lines: 8,15
+   :emphasize-lines: 12,19
+
+   ...
+
+   class DemoReaderOperator(Operator):
 
    ...
 
@@ -554,7 +568,7 @@ Build + Docker
 
    python -m build
 
-This command will create the sdist and wheel into the dist folder. This is important, since the Dockerfile
+This command will create the sdist and wheel into the **dist** folder. This is important, since the Dockerfile
 references this folder.
 
 3. Now you can build your docker image via
@@ -571,7 +585,7 @@ references this folder.
 
    .. image:: ../resources/images/ht_cp_docker_error.png
 
-   The following issues can cause this error:
+   This can have the following root causes:
 
    1. invalid DNS configuration -> check /etc/resolv.conf on linux
    2. you are behind a proxy, but the Docker engine does not know about it -> check ~/.docker/config.json
@@ -615,7 +629,7 @@ references this folder.
            self.reader.input_port.connect(self.writer.output_port)
 
 This is important, if you want to deploy your pipeline, since the deployer will use the provided image name to
-start the proper container with your project.
+start the proper container with your project embedded in it.
 
 Deploy to Kubernetes
 --------------------
@@ -658,7 +672,7 @@ installed Kind, then the necessary config file is already prepared under ~/.kube
 Certificates (optional)
 +++++++++++++++++++++++
 
-If your cluster has a not commonly available certificate, then you need to import it into the certificate
+If your cluster has a not commonly accepted certificate, then you need to import it into the certificate
 store of the python. *pypz* uses ``certifi``. To get the location of the cacert file, you can execute
 the following:
 
@@ -736,9 +750,6 @@ Modify your ``deploy.py`` file:
    you would not see the replicated operators in Sniffer, since the pipeline object created in the ``sniffer.py`` file
    has no replicated operators.
 
-Adapt the Sniffer
-+++++++++++++++++
-
 You can either set the parameters as well in ``sniffer.py``, but in this case every time you change something in
 the deployed pipeline, you need to replicate the change into your ``sniffer.py``.
 
@@ -761,7 +772,15 @@ Adapt the ``sniffer.py`` accordingly.
        sniffer = PipelineSnifferViewer(pipeline)
        sniffer.mainloop()
 
-You can now run the ``deploy.py`` and ``sniffer.py`` scripts. If everything is ok, you should see something like this:
+Now you can run the scripts:
+
+1. ``deploy.py``
+2. ``sniffer.py``
+
+Mind the order, since unlike in the previous cases, sniffer cannot be executed before the pipeline has
+been deployed, since now it relies on the deployed configuration.
+
+If everything is ok, you should see something like this:
 
 .. image:: ../resources/images/ht_cp_sniffer_2.gif
 

@@ -41,7 +41,7 @@
             pypz
           </a>
               <div class="version">
-                0.9.0b9
+                0.9.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -54,8 +54,8 @@
               <p class="caption" role="heading"><span class="caption-text">General</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Overview</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#when-should-i-consider-using-it"><em>When should I consider using it?</em></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#realistic-use-cases">Realistic use-cases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#when-should-i-consider-using-it"><em>“When should I consider using it?”</em></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#realistic-use-cases">Realistic Use Cases</a></li>
 </ul>
 </li>
 </ul>
@@ -66,7 +66,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../core/models.html">Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../core/parameters.html">Parameters</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../core/data_transfer.html">Data transfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core/data_transfer.html">Data Transfer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../core/executor.html">Executor</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../core/logging.html">Logging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../core/deployer.html">Deployer</a></li>
@@ -125,16 +125,18 @@
 <h1>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h1>
 <p><strong>pypz</strong> (like pipes, pronounce as [paɪps]) is a lightweight and modular Pipeline as Code (PaC) framework.
 Its purpose is to simplify and speed up the process of developing <strong>data processing</strong> pipelines by taking
-care most of the challenges and repetitive tasks, so you can focus on the development of the business logic.</p>
-<p>Originally, <em>pypz</em> has been designed to address some data processing related challenges in
-both home and work environment, like:</p>
+care most of the challenges and repetitive tasks, so you can focus on the development of the business logic.
+It does not promise more than what an experienced Data Engineer could do, however it might make the work
+in the data processing/-engineering domain much more convenient and enjoyable.</p>
+<p>Originally, <em>pypz</em> has been designed to address some data processing related challenges in like:</p>
 <ul class="simple">
 <li><p>how could we speed up and modularize the development of such data processing tasks</p></li>
 <li><p>how could we easily perform data processing on huge scale</p></li>
 <li><p>how could we speed up the data processing itself</p></li>
 </ul>
+<p>If you want to start right away, follow this: <a class="reference internal" href="../guides/ht_create_pipeline.html#guide-ht-create-pipeline"><span class="std std-ref">How to create a pipeline</span></a></p>
 <section id="when-should-i-consider-using-it">
-<h2><em>When should I consider using it?</em><a class="headerlink" href="#when-should-i-consider-using-it" title="Link to this heading"></a></h2>
+<h2><em>“When should I consider using it?”</em><a class="headerlink" href="#when-should-i-consider-using-it" title="Link to this heading"></a></h2>
 <p>You might consider using <em>pypz</em> in the following scenarios:</p>
 <ul class="simple">
 <li><p>you are not a data engineer, but you want to be able to implement and deploy
@@ -147,10 +149,10 @@ and you would like to move to data processing pipelines (each step runs parallel
 to split into more (reusable) operations</p></li>
 <li><p>you are struggling scaling out your data processing</p></li>
 <li><p>you want to speed up your ETL pipelines</p></li>
-<li><p>and more …</p></li>
+<li><p>…</p></li>
 </ul>
 <section id="realistic-use-cases">
-<h3>Realistic use-cases<a class="headerlink" href="#realistic-use-cases" title="Link to this heading"></a></h3>
+<h3>Realistic Use Cases<a class="headerlink" href="#realistic-use-cases" title="Link to this heading"></a></h3>
 <p>Your car fleet sends continuously signals to your backend. For each million
 signals you want to compute some KPIs as fast as possible to be able to
 present it to your managers.</p>
@@ -160,7 +162,8 @@ with different parameters on millions of images stored somewhere, and you
 want to have as fast iterations as possible.</p>
 <hr class="docutils" />
 <p>You are an application engineer, who tries to fine-tune the application
-parameters of a software product with having a customer on your neck.</p>
+parameters of a software product for an upcoming release with having a
+customer on your neck.</p>
 <hr class="docutils" />
 <p>Your ETL pipeline has to extract images from millions of videos. The images
 shall be prepared and stored for further processing.</p>

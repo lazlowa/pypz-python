@@ -4,16 +4,19 @@ Overview
 **pypz** (like pipes, pronounce as [paɪps]) is a lightweight and modular Pipeline as Code (PaC) framework.
 Its purpose is to simplify and speed up the process of developing **data processing** pipelines by taking
 care most of the challenges and repetitive tasks, so you can focus on the development of the business logic.
+It does not promise more than what an experienced Data Engineer could do, however it might make the work
+in the data processing/-engineering domain much more convenient and enjoyable.
 
-Originally, *pypz* has been designed to address some data processing related challenges in
-both home and work environment, like:
+Originally, *pypz* has been designed to address some data processing related challenges in like:
 
 - how could we speed up and modularize the development of such data processing tasks
 - how could we easily perform data processing on huge scale
 - how could we speed up the data processing itself
 
-*When should I consider using it?*
-----------------------------------
+If you want to start right away, follow this: :ref:`guide_ht_create_pipeline`
+
+*"When should I consider using it?"*
+------------------------------------
 
 You might consider using *pypz* in the following scenarios:
 
@@ -27,9 +30,9 @@ You might consider using *pypz* in the following scenarios:
   to split into more (reusable) operations
 - you are struggling scaling out your data processing
 - you want to speed up your ETL pipelines
-- and more ...
+- ...
 
-Realistic use-cases
+Realistic Use Cases
 +++++++++++++++++++
 
 Your car fleet sends continuously signals to your backend. For each million
@@ -45,7 +48,8 @@ want to have as fast iterations as possible.
 ----------------------------------------------------------------------------
 
 You are an application engineer, who tries to fine-tune the application
-parameters of a software product with having a customer on your neck.
+parameters of a software product for an upcoming release with having a
+customer on your neck.
 
 ----------------------------------------------------------------------------
 

@@ -3,11 +3,11 @@
 Models
 ======
 
-There is a multi-layered design behind *pypz*. It means that on the highest level there is
-the pipeline, which contains the operators one level deeper with the actual business logic.
-It is possible to enhance the functionalities of the operators via plugins e.g., the port plugins by
-which the operators can transfer data between each other or the logger plugins that enables the
-operator to send logs to the specified targets. The plugins are on the third, lowest level.
+There is a multi-layered design behind *pypz* with the following layers from top to bottom: pipeline,
+operator, plugin. As you can see, in the top layer there is the pipeline, which contains the operators
+with the actual business logic. It is possible to enhance the functionalities of the operators via
+plugins e.g., the port plugins by which the operators can transfer data between each other or the
+logger plugins that enables the operator to send logs to the specified targets. The plugins are on the lowest level.
 
 .. figure:: ../resources/images/basic_pipeline.png
    :alt: Basic pipeline
@@ -20,12 +20,12 @@ operator to send logs to the specified targets. The plugins are on the third, lo
 Instances
 ---------
 
-Each runtime entities in *pypz* (pipelines, operators, plugins) are represented as instances.
+Each entities in *pypz* (pipelines, operators, plugins) are represented as instances in runtime.
 The blueprints of the instances are called specs and are represented as classes in the code.
 In other words, you can consider the specs as the classes and the instances as the objects
 created from the classes. This design enables *pypz* to model the pipelines as code.
-The Instance class itself is the base for every other specs. It contains all the necessary
-logic and feature that is required by the mentioned design.
+The :class:`Instance <pypz.core.specs.instance.Instance>` class itself is the base for
+every other specs. It contains all the necessary logic and feature that is required by the mentioned design.
 
 .. _inheritance_diagram:
 
@@ -40,9 +40,10 @@ logic and feature that is required by the mentioned design.
    :parts: 1
    :caption: Inheritance diagram
 
-The instance class is designed in a way that it could be used on its own. However, the Pipeline, Operator and
-Plugin classes are specializing and somewhat restricting the base Instance class in a way that is
-necessary for *pypz*.
+The :class:`Instance <pypz.core.specs.instance.Instance>` class is designed in a way that it could
+be used on its own. However, the :class:`Pipeline <pypz.core.specs.pipeline.Pipeline>`,
+:class:`Operator <pypz.core.specs.operator.Operator>` and :class:`Plugin <pypz.core.specs.plugin.Plugin>`
+classes are specializing and somewhat restricting the base Instance class in a way that is necessary for *pypz*.
 
 Attributes
 ++++++++++
@@ -62,10 +63,10 @@ Basically an instance has the following attributes:
 Generic Type
 ++++++++++++
 
-The Instance class is a generic class, where the generic attribute describes the expected type of
-the nested instances. It is important, since at construction time all attributes will be scanned
-and if one of them has the type of the expected nested instance type, then it will be automatically
-identified as a nested instance.
+The :class:`Instance <pypz.core.specs.instance.Instance>` class is a generic class, where the generic attribute
+describes the expected type of the nested instances. It is important, since at construction time all
+attributes will be scanned and if one of them has the type of the expected nested instance type, then
+it will be automatically identified as a nested instance.
 
 .. _instance_metaclass:
 
@@ -73,29 +74,28 @@ Metaclass
 +++++++++
 
 Notice that a custom metaclass is used (:class:`pypz.core.specs.instance.InterceptedInstance`)
-to be able to intercept the creation of the Instance object.
+to be able to intercept the creation of the Instance object. This is necessary to allow to perform potential
+instance name deduction from variable name and some other checks.
 
 Dependencies
 ++++++++++++
 
-It is possible to define dependencies between Instances at runtime. However, you should be aware
+It is possible to define dependencies between instances at runtime. However, you should be aware
 that the meaning of the dependencies are defined by the runtime context i.e., just by defining
 them has no effect. For example, the operator executor uses the dependency definitions of the plugins to
-build a call order list, which then will determine, what plugin runs when. Although not yet implemented,
-but a deployer might use the dependency definitions across operators to decide, which operator
-is to be deployed at what time.
+build a call order list, which then will determine, what plugin runs when.
 
 Parameters
 ++++++++++
 
-You can define expected parameters for your Instance spec. You can expect both required and
-optional parameters to be set for your instance. Check the :ref:`parameters section <parameters>`
-for a more detailed explanation.
+You can define expected parameters for your :class:`Instance <pypz.core.specs.instance.Instance>` spec.
+You can expect both required and optional parameters to be set for your instance.
+Check the :ref:`parameters section <parameters>` for a more detailed explanation.
 
 Data Transfer Object (DTO)
 ++++++++++++++++++++++++++
 
-If you want to transfer Instances to outside of the current process, you need to convert it
+If you want to transfer instances to outside of the current process, you need to convert it
 into a representation, which can then be serialized. This representation is an additional
 model called the DTO. By having an intermediate model, we can ensure that only those information
 are transmitted that is really necessary to be able to reconstruct an instance object.
@@ -114,7 +114,7 @@ Working with YAML
 Currently *pypz* serializes the DTOs into YAML, since it is human readable and provides features
 out of the box, which JSON lacks the support of (e.g., interpreting sets).
 
-To convert an Instance into a YAML string, you can use:
+To convert an instance into a YAML string, you can use:
 
 .. code-block:: python
 
@@ -122,7 +122,7 @@ To convert an Instance into a YAML string, you can use:
 
 In the background, the instance will be converted into a DTO, which then will be converted into a YAML string.
 
-To construct an Instance from a YAML string, you can use:
+To construct an instance from a YAML string, you can use:
 
 :meth:`pypz.core.specs.instance.Instance.create_from_string`
 
@@ -144,17 +144,19 @@ The class :class:`pypz.core.specs.instance.InstanceGroup` provides the methods t
 Pipeline
 --------
 
-As its name suggests, the Pipeline class represents a pipeline in *pypz*. Its nested type is
-defined as the Operator class. Basically it does not alter or extend the functionality of the
-Instance class, since unlike the operators and plugins, the pipeline is a virtual organization
-of the Operators.
+As its name suggests, the :class:`Pipeline <pypz.core.specs.pipeline.Pipeline>` class represents a
+pipeline in *pypz*. Its nested type is defined as the :class:`Operator <pypz.core.specs.operator.Operator>` class.
+Basically it does not alter or extend the functionality of the :class:`Instance <pypz.core.specs.instance.Instance>`
+class, since unlike the operators and plugins, the pipeline is a virtual organization of the Operators.
 
 Operator
 --------
 
-The Operator class represents the operator in *pypz*. Its nested type is defined as the Plugin class.
-Operators are the most important model, since it contains the implementation of the business logic.
-In addition to the Instance class, the Operator class provides the following features:
+The :class:`Operator <pypz.core.specs.operator.Operator>` class represents the operator in *pypz*.
+Its nested type is defined as the :class:`Plugin <pypz.core.specs.plugin.Plugin>` class.
+The :class:`Operator <pypz.core.specs.operator.Operator>` is the most important model, since it contains
+the implementation of the business logic. In addition to the :class:`Instance <pypz.core.specs.instance.Instance>`
+class, the Operator class provides the following features:
 
 - :ref:`operator connection <operator_connection>`
 - :ref:`operator replication <operator_replication>`
@@ -232,11 +234,11 @@ The first operator reads the files from some share, the second operator performs
 some KPI extraction and the third operator aggregates the results and stores
 in some database.
 
-If there is 1 million of files and the KPI extraction takes 1 second for each
+If there is 1 million files and the KPI extraction takes 1 second for each
 file then it takes ~11.5 days to go through all the files. This is why *pypz*
-provides the feature of operator replication. This enables selective scaling
-in the pipeline. For example, let's replicate the KPI extractor operator 99
-times, which will result in total 100 operator (original + replicas):
+provides the feature of operator replication. This enables a selective scaling
+in the pipeline. For example, let's replicate the KPI extractor operator 99x,
+which will result in total 100 operator (original + replicas):
 
 .. figure:: ../resources/images/sample_pipeline_w_replication.png
    :alt: With replication
@@ -249,26 +251,29 @@ all the processor operator, hence those will share the load, which will result
 appr. 100x faster execution. This results ~2.7 hours for the entire set instead
 of 11.5 days.
 
-Based on your capacities, you can go even higher with the replication to boost
-even more the processing time.
+Based on your capacities, you can go even higher with the replication to reduce even more the processing time.
 
 Replication at its core means that a *pypz* creates an Instance based on the following rules:
 
 - the replica instance has the same type (class) as the original
-- the name of the instance contains the replication index i.e., if the original operator's name is 'inst' then the first replica's name is 'inst_0'
-- to ensure consistency across instances all the attributes of the original operator is shared with the replicas like parameters, connections, etc.
+- the original and the replica instances are forming a group, where the original is called principal
+- each replica has a permanent index attached to it, which is visible in the name of the instance e.g.,
+  if the original operator's name is 'inst' then the first replica's name is 'inst_0'
+- to ensure consistency across instances all the attributes of the original operator is shared with the
+  replicas like parameters, connections, etc.
 
 .. note::
-   Note that you are able to set the replication factor i.e., the number of replicas, where
-   replication factor = 0 means no replication, only the original.
+   Note that the concept of replications differs from scaling in a way that with setting the replication
+   factor, you are creating copies of the original. A replication factor of 0 does not delete the original,
+   it just does not create additional copies.
 
 .. _operator_methods:
 
 Methods
 +++++++
 
-The Operator class provides methods to implement your business logic. Each method
-is called in specific order based on the :ref:`executor <executor>` implementation.
+The :class:`Operator <pypz.core.specs.operator.Operator>` class provides methods to implement your business logic.
+Each method is called in specific order based on the :ref:`executor <executor>` implementation.
 
 - :meth:`_on_init() <pypz.core.specs.operator.Operator._on_init>`
 - :meth:`_on_running() <pypz.core.specs.operator.Operator._on_running>`
@@ -279,10 +284,10 @@ is called in specific order based on the :ref:`executor <executor>` implementati
 Logging
 +++++++
 
-Although the logging functionality is provided by the LoggerPlugin class,
-the Operator class provides an aggregated logging interface, which means that should there be
-multiple LoggerPlugin in an Operator context, with a single method call all LoggerPlugins' corresponding
-method will be called in the background:
+Although the logging functionality is provided by the :class:`LoggerPlugin <pypz.core.specs.plugin.LoggerPlugin>` class,
+the :class:`Operator <pypz.core.specs.operator.Operator>` class provides an aggregated logging interface,
+which means that should there be multiple :class:`LoggerPlugin <pypz.core.specs.plugin.LoggerPlugin>` in an
+operator context, with a single method call all LoggerPlugins' corresponding method will be called in the background:
 
 .. code-block:: python
 

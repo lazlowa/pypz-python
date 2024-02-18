@@ -32,8 +32,8 @@ So we have the following requirements:
 
 The concept involves the following classes:
 
-- :class:`pypz.core.commons.loggers.ContextLoggerInterface`
-- :class:`pypz.core.commons.loggers.ContextLogger`
+- :class:`ContextLoggerInterface <pypz.core.commons.loggers.ContextLoggerInterface>`
+- :class:`ContextLogger <pypz.core.commons.loggers.ContextLogger>`
 
 The :class:`ContextLoggerInterface <pypz.core.commons.loggers.ContextLoggerInterface>` shall be used to implement
 the actual logging functionality. Notice that this class provides protected methods that shall not be called directly.
@@ -49,7 +49,7 @@ Since an operator is a self-contained entity, we need to ensure that there is on
 an operator context, which can be used by the operator and the nested plugins as well. An additional
 twist to the story that there might be multiple logger plugins in an operator. Instead of calling
 each logger plugins' corresponding methods manually, we want to abstract this, so for the user it
-is one call.
+seems to be a single method call.
 
 The following diagram shows the inheritance map of the logging-relevant classes:
 
@@ -68,7 +68,8 @@ a logger plugin, then you actually implement the
 Furthermore, there is a :class:`ContextLoggerInterface <pypz.core.commons.loggers.ContextLoggerInterface>`
 implementation in the Operator: :class:`pypz.core.specs.operator.Operator.Logger`.
 
-This class implements the functionality to abstract the method call of all LoggerPlugins in the operator context.
+This class implements the functionality to abstract the method call of all
+:class:`LoggerPlugins <pypz.core.specs.plugin.LoggerPlugin>` in the operator context.
 
 If you check the Operator's constructor, you will notice the member `self.__logger`.
 This is actually a :class:`ContextLogger <pypz.core.commons.loggers.ContextLogger>`

@@ -25,7 +25,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Data transfer" href="data_transfer.html" />
+    <link rel="next" title="Data Transfer" href="data_transfer.html" />
     <link rel="prev" title="Models" href="models.html" /> 
 </head>
 
@@ -41,7 +41,7 @@
             pypz
           </a>
               <div class="version">
-                0.9.0b9
+                0.9.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -60,16 +60,16 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="models.html">Models</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Parameters</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#expected-parameters">Expected parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#cascading-parameters">Cascading parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#template-parameters">Template parameters</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#instance-time-templates">Instance time templates</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#execution-time-templates">Execution time templates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#expected-parameters">Expected Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cascading-parameters">Cascading Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#template-parameters">Template Parameters</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#instance-time-templates">Instance Time Templates</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#execution-time-templates">Execution Time Templates</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="data_transfer.html">Data transfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_transfer.html">Data Transfer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="executor.html">Executor</a></li>
 <li class="toctree-l1"><a class="reference internal" href="logging.html">Logging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="deployer.html">Deployer</a></li>
@@ -126,8 +126,9 @@
              
   <section id="parameters">
 <span id="id1"></span><h1>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h1>
-<p>Operators and plugins may define parameters to allow it’s users to tune the functionality.
-As matter of fact, parameters can be set for each <a class="reference internal" href="models.html#instances"><span class="std std-ref">instance</span></a> via the following method:</p>
+<p>Operators and plugins may define parameters to allow the users to tune their functionalities.
+As matter of fact, parameters can be set for each <a class="reference internal" href="../indexes/core/pypz.core.specs.instance.html#pypz.core.specs.instance.Instance" title="pypz.core.specs.instance.Instance"><code class="xref py py-class docutils literal notranslate"><span class="pre">Instance</span></code></a>
+via the following method:</p>
 <p><a class="reference internal" href="../indexes/core/pypz.core.specs.instance.html#pypz.core.specs.instance.Instance.set_parameter" title="pypz.core.specs.instance.Instance.set_parameter"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pypz.core.specs.instance.Instance.set_parameter()</span></code></a></p>
 <p>In the following section it will be explained:</p>
 <ul class="simple">
@@ -136,10 +137,30 @@ As matter of fact, parameters can be set for each <a class="reference internal" 
 <li><p>how template interpolation is working</p></li>
 </ul>
 <section id="expected-parameters">
-<span id="id2"></span><h2>Expected parameters<a class="headerlink" href="#expected-parameters" title="Link to this heading"></a></h2>
+<span id="id2"></span><h2>Expected Parameters<a class="headerlink" href="#expected-parameters" title="Link to this heading"></a></h2>
 <p>Your instance implementation can expect parameters either as required or as optional.
-For this a descriptor class is used:</p>
-<p><a class="reference internal" href="../indexes/core/pypz.core.commons.parameters.html#pypz.core.commons.parameters.ExpectedParameter" title="pypz.core.commons.parameters.ExpectedParameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">pypz.core.commons.parameters.ExpectedParameter</span></code></a></p>
+The <a class="reference internal" href="../indexes/core/pypz.core.commons.parameters.html#pypz.core.commons.parameters.ExpectedParameter" title="pypz.core.commons.parameters.ExpectedParameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExpectedParameter</span></code></a> descriptor class is used
+for this purpose.</p>
+<p>Example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">TestImpl</span><span class="p">(</span><span class="n">Instance</span><span class="p">):</span>
+    <span class="n">required_param</span> <span class="o">=</span> <span class="n">ExpectedParameter</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">parameter_type</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
+    <span class="n">optional_param</span> <span class="o">=</span> <span class="n">ExpectedParameter</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">parameter_type</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">required_param</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optional_param</span> <span class="o">=</span> <span class="s2">&quot;defaultValue&quot;</span>
+</pre></div>
+</div>
+<p>This is equivalent to:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">TestImpl</span><span class="p">(</span><span class="n">Instance</span><span class="p">):</span>
+    <span class="n">required_param</span> <span class="o">=</span> <span class="n">RequiredParameter</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="n">optional_param</span> <span class="o">=</span> <span class="n">OptionalParameter</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">required_param</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optional_param</span> <span class="o">=</span> <span class="s2">&quot;defaultValue&quot;</span>
+</pre></div>
+</div>
 <p>As you can see, the expected parameters shall be defined both as class and instance variable, where
 the class variable has the type of the descriptor class and the instance variable the actual
 parameter value.</p>
@@ -158,11 +179,19 @@ a parameter set with that name via:</p>
 <p>Note that although you can define an initial value for the required parameters, a value setting
 will still be required.</p>
 </div>
+<p>This descriptor class provides the following features:</p>
+<ul class="simple">
+<li><p>ensures type conformity</p></li>
+<li><p>provides alternative name for parameters, which can differ from the variable’s name</p></li>
+<li><p>provides callback, if the value has been updated</p></li>
+<li><p>bound to <a class="reference internal" href="../indexes/core/pypz.core.specs.instance.html#pypz.core.specs.instance.Instance" title="pypz.core.specs.instance.Instance"><code class="xref py py-class docutils literal notranslate"><span class="pre">Instance's</span></code></a> parameter store, hence if you
+define a parameter this way, you can access as well via <code class="docutils literal notranslate"><span class="pre">instance.get_parameter()</span></code> method</p></li>
+</ul>
 </section>
 <section id="cascading-parameters">
-<span id="id3"></span><h2>Cascading parameters<a class="headerlink" href="#cascading-parameters" title="Link to this heading"></a></h2>
+<span id="id3"></span><h2>Cascading Parameters<a class="headerlink" href="#cascading-parameters" title="Link to this heading"></a></h2>
 <p>Imagine the case, where you have a pipeline with 5 operators, each with 1 input port and 1 output port plugin.
-To specify the parameter ‘channelLocation’ (see <a class="reference internal" href="data_transfer.html#data-transfer"><span class="std std-ref">Data transfer</span></a>) you would need to set the same value
+To specify the parameter ‘channelLocation’ (see <a class="reference internal" href="data_transfer.html#data-transfer"><span class="std std-ref">Data Transfer</span></a>) you would need to set the same value
 for 10 different instances. To avoid such tedious thing, <em>pypz</em> provides a feature to cascade parameters from
 higher contexts. Sticking to the example, you can set the parameter ‘channelLocation’ on pipeline level for
 all existing plugins in the pipeline like this:</p>
@@ -171,11 +200,13 @@ all existing plugins in the pipeline like this:</p>
 </div>
 <p>There are two types of cascading parameters:</p>
 <ul class="simple">
-<li><p><strong>including</strong>, if the parameter name is prefixed by “<cite>#</cite>”, then the parameter will not just be cascaded, but will be applied on the level, where it was set</p></li>
-<li><p><strong>excluding</strong>, if the parameter name is prefixed by “<cite>&gt;</cite>”, then the parameter will be cascaded, but it will not be applied on the level, where it was set</p></li>
+<li><p><strong>including</strong>, if the parameter name is prefixed by “<cite>#</cite>”, then the parameter will not just be cascaded,
+but will be applied to the instance, where it was set</p></li>
+<li><p><strong>excluding</strong>, if the parameter name is prefixed by “<cite>&gt;</cite>”, then the parameter will be cascaded,
+but it will not be applied to the instance, where it was set</p></li>
 </ul>
-<p>The number of prefixes determines, how many levels will a parameter be cascaded.</p>
-<p>The example above is a two-level, excluding cascading parameter i.e., it will be cascaded from pipeline to plugin
+<p>The number of prefixes determines, how many levels will a parameter be cascaded.
+The example above is a two-level, excluding cascading parameter i.e., it will be cascaded from pipeline to plugin
 level without applying it to either pipeline or operator level.</p>
 <p>Examples:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set on pipeline and operator level</span>
@@ -185,7 +216,7 @@ level without applying it to either pipeline or operator level.</p>
 <span class="n">pipeline</span><span class="o">.</span><span class="n">set_parameter</span><span class="p">(</span><span class="s2">&quot;##param&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span>
 
 <span class="c1"># Set on operator and plugin level</span>
-<span class="n">operator</span><span class="o">.</span><span class="n">set_parameter</span><span class="p">(</span><span class="s2">&quot;##param&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span>
+<span class="n">operator</span><span class="o">.</span><span class="n">set_parameter</span><span class="p">(</span><span class="s2">&quot;#param&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span>
 
 <span class="c1"># Set on plugin level</span>
 <span class="n">operator</span><span class="o">.</span><span class="n">set_parameter</span><span class="p">(</span><span class="s2">&quot;&gt;param&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span>
@@ -199,24 +230,30 @@ level without applying it to either pipeline or operator level.</p>
 </div>
 </section>
 <section id="template-parameters">
-<h2>Template parameters<a class="headerlink" href="#template-parameters" title="Link to this heading"></a></h2>
+<h2>Template Parameters<a class="headerlink" href="#template-parameters" title="Link to this heading"></a></h2>
 <p>Imagine the case, where your operator has to access secured resources and it needs the appropriate
-credentials. Obviously, there are options like using some credential store solutions like key-vaults
-or using third-party libs. However, <em>pypz</em> provides a template interpolation features for parameters.</p>
+credentials. Obviously, there are options like using some credential store solutions e.g., key-vaults
+or using third-party libs. However, <em>pypz</em> provides a template interpolation feature for parameters.</p>
 <p>Based on the time, when the templates are interpolated, there are two different templating syntax.</p>
 <section id="instance-time-templates">
-<h3>Instance time templates<a class="headerlink" href="#instance-time-templates" title="Link to this heading"></a></h3>
+<h3>Instance Time Templates<a class="headerlink" href="#instance-time-templates" title="Link to this heading"></a></h3>
 <p>Syntax: <cite>${}</cite></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set on pipeline and operator level</span>
 <span class="n">instance</span><span class="o">.</span><span class="n">set_parameter</span><span class="p">(</span><span class="s2">&quot;secret&quot;</span><span class="p">,</span> <span class="s2">&quot;${env:SECRET}&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>In this case the template is resolved as soon as the parameter is on the instance. This can be used,
-if you deploy a pipeline from your system, where you can set the value for the environment variable.
-<strong>However, the secret will be visible in the serialized configuration.</strong></p>
+<p>In this case the template is resolved as soon as the parameter is set on the instance via the
+<a class="reference internal" href="../indexes/core/pypz.core.specs.instance.html#pypz.core.specs.instance.Instance.set_parameter" title="pypz.core.specs.instance.Instance.set_parameter"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_parameter()</span></code></a> method. This can be used,
+if you deploy a pipeline from your system, where you can set the value for the environment variable.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><strong>Since the template is interpreted already on the instance object the secret
+will be visible in the serialized configuration!</strong> If you want to prevent this, then you
+should use execution time templates described in the next section.</p>
+</div>
 </section>
 <section id="execution-time-templates">
-<h3>Execution time templates<a class="headerlink" href="#execution-time-templates" title="Link to this heading"></a></h3>
+<h3>Execution Time Templates<a class="headerlink" href="#execution-time-templates" title="Link to this heading"></a></h3>
 <p>Syntax: <cite>$()</cite></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set on pipeline and operator level</span>
 <span class="n">instance</span><span class="o">.</span><span class="n">set_parameter</span><span class="p">(</span><span class="s2">&quot;secret&quot;</span><span class="p">,</span> <span class="s2">&quot;$(env:SECRET)&quot;</span><span class="p">)</span>
@@ -224,8 +261,8 @@ if you deploy a pipeline from your system, where you can set the value for the e
 </div>
 <p>In this case the template is resolved by the executor itself i.e., on the machine, where the executor
 is started. This requires the capability to control the environment variables on that machine. Unlike
-in case of the instance time template parameters, the value of the execution time template is not
-visible in the serialized configuration.</p>
+in case of the instance time template parameters, the value of the execution time template is <strong>not
+visible</strong> in the serialized configuration.</p>
 <hr class="docutils" />
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -241,7 +278,7 @@ to resolve files and remote locations as well in the future.</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="models.html" class="btn btn-neutral float-left" title="Models" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="data_transfer.html" class="btn btn-neutral float-right" title="Data transfer" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="data_transfer.html" class="btn btn-neutral float-right" title="Data Transfer" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

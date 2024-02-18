@@ -41,7 +41,7 @@
             pypz
           </a>
               <div class="version">
-                0.9.0b9
+                0.9.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -60,7 +60,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../core/models.html">Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../core/parameters.html">Parameters</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../core/data_transfer.html">Data transfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core/data_transfer.html">Data Transfer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../core/executor.html">Executor</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../core/logging.html">Logging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../core/deployer.html">Deployer</a></li>
@@ -115,10 +115,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#kubernetesdeployer">KubernetesDeployer</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#play-with-replication">Play with Replication</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#adapt-the-sniffer">Adapt the Sniffer</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="#play-with-replication">Play with Replication</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#additional-optimizations">Additional Optimizations</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#expected-parameters">Expected Parameters</a></li>
 </ul>
@@ -161,7 +158,7 @@
            <div itemprop="articleBody">
              
   <section id="how-to-create-a-pipeline">
-<h1>How to create a pipeline<a class="headerlink" href="#how-to-create-a-pipeline" title="Link to this heading"></a></h1>
+<span id="guide-ht-create-pipeline"></span><h1>How to create a pipeline<a class="headerlink" href="#how-to-create-a-pipeline" title="Link to this heading"></a></h1>
 <section id="what-you-will-learn">
 <h2>What You Will Learn<a class="headerlink" href="#what-you-will-learn" title="Link to this heading"></a></h2>
 <ul class="simple">
@@ -183,10 +180,10 @@
 <h2>What You Will Need<a class="headerlink" href="#what-you-will-need" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>Python 3.11+</p></li>
-<li><p>an IDE of your choice, however PyCharm CE has been used for this guide</p></li>
+<li><p>an IDE of your choice, however PyCharm CE has been used for this tutorial</p></li>
 <li><p>access to a Kafka cluster or you can simply use the confluent image “confluentinc/confluent-local image” to
 start Kafka locally</p></li>
-<li><p>(optional) access to a Kubernetes Cluster (you can use <a class="reference external" href="https://kind.sigs.k8s.io">Kind</a> locally)</p></li>
+<li><p>(optional) access to a Kubernetes Cluster (or you can use <a class="reference external" href="https://kind.sigs.k8s.io">Kind</a> locally)</p></li>
 <li><p>(optional) access to a Docker image registry (not necessary if Kind used)</p></li>
 </ul>
 </section>
@@ -260,7 +257,7 @@ format, hence we need to define the schema for the records.</p>
 <p>Operators can be enhanced by plugins. For example, the <a class="reference internal" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.InputPortPlugin" title="pypz.core.specs.plugin.InputPortPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">Input-</span></code></a>/
 <a class="reference internal" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.OutputPortPlugin" title="pypz.core.specs.plugin.OutputPortPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">OutputPortPlugins</span></code></a> enable the operators
 to transfer data to and from each other. Hence, we need to create the
-<a class="reference internal" href="../indexes/plugins/kafka_io/pypz.plugins.kafka_io.ports.html#pypz.plugins.kafka_io.ports.KafkaChannelInputPort" title="pypz.plugins.kafka_io.ports.KafkaChannelInputPort"><code class="xref py py-class docutils literal notranslate"><span class="pre">KafkaChannelInputPort</span></code></a> plugin in the ctor of the operator.</p>
+<a class="reference internal" href="../indexes/plugins/kafka_io/pypz.plugins.kafka_io.ports.html#pypz.plugins.kafka_io.ports.KafkaChannelOutputPort" title="pypz.plugins.kafka_io.ports.KafkaChannelOutputPort"><code class="xref py py-class docutils literal notranslate"><span class="pre">KafkaChannelOutputPort</span></code></a> plugin in the ctor of the operator.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
 
 <span class="n">AvroSchemaString</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
@@ -286,7 +283,7 @@ to transfer data to and from each other. Hence, we need to create the
 <span class="o">...</span>
 </pre></div>
 </div>
-<p>Additionally, we create a variable to track, how many records have been sent already.</p>
+<p>Additionally, we create a variable to track, how many records have already been sent.</p>
 </section>
 <section id="on-init">
 <h3><em>_on_init()</em><a class="headerlink" href="#on-init" title="Link to this heading"></a></h3>
@@ -317,8 +314,8 @@ an error due to the unexpected return value type.</p>
 </section>
 <section id="on-interrupt-system-signal">
 <h3><em>_on_interrupt(system_signal)</em><a class="headerlink" href="#on-interrupt-system-signal" title="Link to this heading"></a></h3>
-<p>This method is called, if a system signal has been caught like SIGINT, SEGTERM etc. You can use it to stop
-your internal logic (e.g., loops), which is not accessible by <em>pypz</em>.
+<p>This method is called, if a system signal has been caught like SIGINT, SEGTERM etc. You can use it to
+eventually interrupt your internal logic (e.g., loops), which is not accessible by <em>pypz</em>.
 It does not expect any return value and we are not using it for this example, hence you can leave it.</p>
 </section>
 <section id="on-error">
@@ -331,9 +328,12 @@ an error.</p>
 <p>Check <a class="reference internal" href="../core/models.html#operator-methods"><span class="std std-ref">Methods</span></a> for the signature explanation.</p>
 <p>This method is called after the _on_init() has successfully finished and before _on_shutdown(). It runs until:</p>
 <ul class="simple">
-<li><p>the method returns True</p></li>
-<li><p>the method returns None and there is no more records to be received on any of the InputPortPlugins</p></li>
+<li><p>the method returns True <strong>OR</strong></p></li>
+<li><p>the method returns None and there is no more records to be received on any of the
+<a class="reference internal" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.InputPortPlugin" title="pypz.core.specs.plugin.InputPortPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">Input-</span></code></a></p></li>
 </ul>
+<p>Since we don’t have any <a class="reference internal" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.InputPortPlugin" title="pypz.core.specs.plugin.InputPortPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">InputPortPlugin</span></code></a> in the writer operator,
+we need to make sure that we have a termination condition i.e., at some point, we return <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
 <p>The following logic is implemented:</p>
 <ol class="arabic simple">
 <li><p>We create the record according to the defined schema</p></li>
@@ -391,7 +391,7 @@ an error.</p>
 </section>
 <section id="id1">
 <h3><em>__init__()</em><a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
-<p>For the reader operator we need to define the kafka input port.</p>
+<p>We need to define the <a class="reference internal" href="../indexes/plugins/kafka_io/pypz.plugins.kafka_io.ports.html#pypz.plugins.kafka_io.ports.KafkaChannelInputPort" title="pypz.plugins.kafka_io.ports.KafkaChannelInputPort"><code class="xref py py-class docutils literal notranslate"><span class="pre">KafkaChannelInputPort</span></code></a>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
 
 <span class="n">AvroSchemaString</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
@@ -475,12 +475,12 @@ of the variables as instance names. Check <a class="reference internal" href="..
 </section>
 <section id="optional-kafka-cluster">
 <h2>[Optional] Kafka Cluster<a class="headerlink" href="#optional-kafka-cluster" title="Link to this heading"></a></h2>
-<p>Since we are using Kafka port plugins in the example, you will need access to a Kafka cluster. Should it be not the case,
-you can start a cluster locally from the corresponding confluent image:</p>
+<p>Since we are using Kafka port plugins in the example, you will need ti have access to a Kafka cluster.
+Should it be not the case, you can start a cluster locally from the corresponding confluent image:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>-d<span class="w"> </span>--rm<span class="w"> </span>-p<span class="w"> </span><span class="m">9092</span>:9092<span class="w"> </span>confluentinc/confluent-local
 </pre></div>
 </div>
-<p>Then you can access the broker via <code class="docutils literal notranslate"><span class="pre">localhost:9092</span></code>.</p>
+<p>Then you can access the Kafka broker via <code class="docutils literal notranslate"><span class="pre">localhost:9092</span></code>.</p>
 </section>
 <section id="local-execution">
 <h2>Local execution<a class="headerlink" href="#local-execution" title="Link to this heading"></a></h2>
@@ -533,7 +533,7 @@ to set the following instance parameters:</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Notice that we configured the <a class="reference internal" href="../core/data_transfer.html#channel-expected-parameters"><span class="std std-ref">channels</span></a> in the port plugins directly and we
-used two-level, excluding <a class="reference internal" href="../core/parameters.html#cascading-parameters"><span class="std std-ref">cascading paremters</span></a>.</p>
+used <a class="reference internal" href="../core/parameters.html#cascading-parameters"><span class="std std-ref">two-level, excluding cascading parameters</span></a>.</p>
 </div>
 <p>If you start the executor now, you need to see something like this:</p>
 <img alt="../_images/ht_cp_execute_log_1.png" src="../_images/ht_cp_execute_log_1.png" />
@@ -544,6 +544,10 @@ As next, we will add the <a class="reference internal" href="../indexes/core/pyp
 to each operators and we will modify the code to use the
 new logger. The <a class="reference internal" href="../indexes/core/pypz.plugins.loggers.default.html#pypz.plugins.loggers.default.DefaultLoggerPlugin" title="pypz.plugins.loggers.default.DefaultLoggerPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">DefaultLoggerPlugin</span></code></a> sends the logs to stdout.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
+
+<span class="k">class</span> <span class="nc">DemoWriterOperator</span><span class="p">(</span><span class="n">Operator</span><span class="p">):</span>
+
+<span class="o">...</span>
 
 <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -578,6 +582,10 @@ new logger. The <a class="reference internal" href="../indexes/core/pypz.plugins
 </pre></div>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
+
+<span class="k">class</span> <span class="nc">DemoReaderOperator</span><span class="p">(</span><span class="n">Operator</span><span class="p">):</span>
+
+<span class="o">...</span>
 
 <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -663,7 +671,7 @@ we need to change the log level via setting the corresponding parameter.</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>build
 </pre></div>
 </div>
-<p>This command will create the sdist and wheel into the dist folder. This is important, since the Dockerfile
+<p>This command will create the sdist and wheel into the <strong>dist</strong> folder. This is important, since the Dockerfile
 references this folder.</p>
 <ol class="arabic simple" start="3">
 <li><p>Now you can build your docker image via</p></li>
@@ -679,7 +687,7 @@ references this folder.</p>
 <p class="admonition-title">Warning</p>
 <p>You might get the following error messages during building the Docker image.</p>
 <img alt="../_images/ht_cp_docker_error.png" src="../_images/ht_cp_docker_error.png" />
-<p>The following issues can cause this error:</p>
+<p>This can have the following root causes:</p>
 <ol class="arabic simple">
 <li><p>invalid DNS configuration -&gt; check /etc/resolv.conf on linux</p></li>
 <li><p>you are behind a proxy, but the Docker engine does not know about it -&gt; check ~/.docker/config.json</p></li>
@@ -720,7 +728,7 @@ configuration to it:</p>
 </pre></div>
 </div>
 <p>This is important, if you want to deploy your pipeline, since the deployer will use the provided image name to
-start the proper container with your project.</p>
+start the proper container with your project embedded in it.</p>
 </section>
 <section id="deploy-to-kubernetes">
 <h2>Deploy to Kubernetes<a class="headerlink" href="#deploy-to-kubernetes" title="Link to this heading"></a></h2>
@@ -759,7 +767,7 @@ installed Kind, then the necessary config file is already prepared under ~/.kube
 </section>
 <section id="certificates-optional">
 <h3>Certificates (optional)<a class="headerlink" href="#certificates-optional" title="Link to this heading"></a></h3>
-<p>If your cluster has a not commonly available certificate, then you need to import it into the certificate
+<p>If your cluster has a not commonly accepted certificate, then you need to import it into the certificate
 store of the python. <em>pypz</em> uses <code class="docutils literal notranslate"><span class="pre">certifi</span></code>. To get the location of the cacert file, you can execute
 the following:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import certifi; print(certifi.where())&quot;</span>
@@ -831,8 +839,6 @@ Modify your <code class="docutils literal notranslate"><span class="pre">deploy.
 you would not see the replicated operators in Sniffer, since the pipeline object created in the <code class="docutils literal notranslate"><span class="pre">sniffer.py</span></code> file
 has no replicated operators.</p>
 </div>
-<section id="adapt-the-sniffer">
-<h3>Adapt the Sniffer<a class="headerlink" href="#adapt-the-sniffer" title="Link to this heading"></a></h3>
 <p>You can either set the parameters as well in <code class="docutils literal notranslate"><span class="pre">sniffer.py</span></code>, but in this case every time you change something in
 the deployed pipeline, you need to replicate the change into your <code class="docutils literal notranslate"><span class="pre">sniffer.py</span></code>.</p>
 <p>There is a more robust solution for that. Instead of creating the sniffed pipeline manually, we can use the
@@ -851,9 +857,15 @@ KubernetesDeployer to retrieve the deployed pipeline for us, which then can be u
     <span class="n">sniffer</span><span class="o">.</span><span class="n">mainloop</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>You can now run the <code class="docutils literal notranslate"><span class="pre">deploy.py</span></code> and <code class="docutils literal notranslate"><span class="pre">sniffer.py</span></code> scripts. If everything is ok, you should see something like this:</p>
+<p>Now you can run the scripts:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">deploy.py</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sniffer.py</span></code></p></li>
+</ol>
+<p>Mind the order, since unlike in the previous cases, sniffer cannot be executed before the pipeline has
+been deployed, since now it relies on the deployed configuration.</p>
+<p>If everything is ok, you should see something like this:</p>
 <img alt="../_images/ht_cp_sniffer_2.gif" src="../_images/ht_cp_sniffer_2.gif" />
-</section>
 </section>
 <section id="additional-optimizations">
 <h2>Additional Optimizations<a class="headerlink" href="#additional-optimizations" title="Link to this heading"></a></h2>
@@ -861,7 +873,7 @@ KubernetesDeployer to retrieve the deployed pipeline for us, which then can be u
 <h3>Expected Parameters<a class="headerlink" href="#expected-parameters" title="Link to this heading"></a></h3>
 <p>In the <code class="docutils literal notranslate"><span class="pre">DemoWriterOperator</span></code> we are using hardcoded values for both the message and the maximal record count.
 These values should actually be parameters that the user can set from outside, so we are introducing the following
-<a class="reference internal" href="../core/parameters.html#expected-parameters"><span class="std std-ref">Expected parameters</span></a>:</p>
+<a class="reference internal" href="../core/parameters.html#expected-parameters"><span class="std std-ref">Expected Parameters</span></a>:</p>
 <ul class="simple">
 <li><p>recordCount, which will be a required parameter</p></li>
 <li><p>message, which will be an optional parameter with the default value of “HelloWorld”</p></li>

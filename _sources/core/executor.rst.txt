@@ -3,9 +3,11 @@
 Executor
 ========
 
-Since the operator entity in *pypz* is self-contained, an
-:class:`OperatorExecutor <pypz.executors.operator.executor.OperatorExecutor>`
-is required, which controls the execution flow of the entire operator incl. plugins.
+In *pypz* each operator is self-contained, which means that there is no external dependencies for its
+runtime (like an executor infrastructure) i.e., you can execute it for example on your local machine or in a Kubernetes
+cluster as well. This requires an embedded :class:`OperatorExecutor <pypz.executors.operator.executor.OperatorExecutor>`,
+which controls the execution flow of the entire operator incl. plugins.
+
 The executor has the following main components:
 
 - :class:`ExecutionContext <pypz.executors.operator.context.ExecutionContext>`
@@ -90,7 +92,7 @@ State machine
    }
 
 You can find more information incl. invoked plugin methods in the corresponding
-:class:`module <pypz.executors.operator.states>`.
+:class:`states module <pypz.executors.operator.states>`.
 
 Execution modes
 ---------------
