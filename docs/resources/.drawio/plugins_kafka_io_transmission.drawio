@@ -1,0 +1,118 @@
+<mxfile host="Electron" modified="2024-02-21T10:00:54.556Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.1.21 Chrome/120.0.6099.109 Electron/28.1.0 Safari/537.36" etag="0uo39-tS99LGKlaQ17KH" version="22.1.21" type="device">
+  <diagram name="Page-1" id="azc2-ThuC2YT-2fPCF3p">
+    <mxGraphModel dx="989" dy="589" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="3300" pageHeight="4681" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="arF1o24mGjveasYSjzpN-1" value="WriterOperator" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="80" y="60" width="300" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="arF1o24mGjveasYSjzpN-2" value="KafkaChannelOutputPort" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="230" y="120" width="150" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="arF1o24mGjveasYSjzpN-3" value="ChannelWriter" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="270" y="150" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="arF1o24mGjveasYSjzpN-4" value="WriterOperator_0" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="80" y="220" width="300" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="arF1o24mGjveasYSjzpN-5" value="KafkaChannelOutputPort" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="230" y="280" width="150" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="arF1o24mGjveasYSjzpN-6" value="ChannelWriter" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="270" y="310" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="arF1o24mGjveasYSjzpN-7" value="WriterOperator_1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="80" y="380" width="300" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="arF1o24mGjveasYSjzpN-8" value="KafkaChannelOutputPort" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="230" y="440" width="150" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="arF1o24mGjveasYSjzpN-9" value="ChannelWriter" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="270" y="470" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="arF1o24mGjveasYSjzpN-37" value="creates a topic with as many&lt;br&gt;partitions as many operators&lt;br&gt;in the replication grouo" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="arF1o24mGjveasYSjzpN-19" target="arF1o24mGjveasYSjzpN-28">
+          <mxGeometry x="-0.0301" y="-30" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="535" y="110" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arF1o24mGjveasYSjzpN-19" value="ReaderOperator" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="680" y="60" width="300" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="arF1o24mGjveasYSjzpN-20" value="KafkaChannelInputPort" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="680" y="120" width="150" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="arF1o24mGjveasYSjzpN-21" value="ChannelReader" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="680" y="150" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="arF1o24mGjveasYSjzpN-22" value="ReaderOperator_0" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="680" y="220" width="300" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="arF1o24mGjveasYSjzpN-23" value="KafkaChannelInputPort" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="680" y="280" width="150" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="arF1o24mGjveasYSjzpN-24" value="ChannelReader" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="680" y="310" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="arF1o24mGjveasYSjzpN-25" value="ReaderOperator_1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="680" y="380" width="300" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="arF1o24mGjveasYSjzpN-26" value="KafkaChannelInputPort" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="680" y="440" width="150" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="arF1o24mGjveasYSjzpN-27" value="ChannelReader" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="680" y="470" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="arF1o24mGjveasYSjzpN-28" value="Data Topic" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="480" y="130" width="110" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="arF1o24mGjveasYSjzpN-42" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="arF1o24mGjveasYSjzpN-38" target="arF1o24mGjveasYSjzpN-21">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arF1o24mGjveasYSjzpN-38" value="Partition_0" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="485" y="180" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="arF1o24mGjveasYSjzpN-43" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="arF1o24mGjveasYSjzpN-40" target="arF1o24mGjveasYSjzpN-24">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="650" y="240" />
+              <mxPoint x="650" y="325" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arF1o24mGjveasYSjzpN-40" value="Partition_1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="485" y="220" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="arF1o24mGjveasYSjzpN-44" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="arF1o24mGjveasYSjzpN-41" target="arF1o24mGjveasYSjzpN-27">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arF1o24mGjveasYSjzpN-41" value="Partition_2" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="485" y="260" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="arF1o24mGjveasYSjzpN-45" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=-0.006;entryY=0.557;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="arF1o24mGjveasYSjzpN-3" target="arF1o24mGjveasYSjzpN-28">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arF1o24mGjveasYSjzpN-46" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.009;entryY=0.617;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="arF1o24mGjveasYSjzpN-6" target="arF1o24mGjveasYSjzpN-28">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="410" y="325" />
+              <mxPoint x="410" y="241" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arF1o24mGjveasYSjzpN-47" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.667;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="arF1o24mGjveasYSjzpN-9" target="arF1o24mGjveasYSjzpN-28">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arF1o24mGjveasYSjzpN-48" value="Data sent to the topic in round-robin fashion" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="390" y="500" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="arF1o24mGjveasYSjzpN-49" value="Each operator&#39;s input port is assigned to a specific partition" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="630" y="530" width="140" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

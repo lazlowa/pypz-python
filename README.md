@@ -1,3 +1,11 @@
+# TLDR
+
+You don't necessarily need to touch this repo to use pypz, since all the artifacts
+are built and pushed to [PyPI](https://pypi.org/search/?q=pypz-) 
+and [Docker Hub](https://hub.docker.com/search?q=pypz%2F) respectively.
+
+If you want to jumpstart, follow this [tutorial](https://pypz.dev/guides/ht_create_pipeline.html). 
+
 # Description
 
 **pypz** (like pipes, pronounce as [paɪps]) is a lightweight and modular Pipeline as Code (PaC) framework.
@@ -10,9 +18,6 @@ Originally, *pypz* has been designed to address some data processing related cha
 - how could we speed up and modularize the development of such data processing tasks
 - how could we easily perform data processing on huge scale
 - how could we speed up the data processing itself
-
-If you want to start right away, follow this 
-[guide](https://lazlowa.github.io/pypz-python/guides/ht_create_pipeline.html).
 
 # *"When should I consider using it?"*
 You might consider using *pypz* in the following scenarios:
