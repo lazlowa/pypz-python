@@ -421,7 +421,7 @@ by the actual implementation. One developer can define it like an opened connect
 <span class="sig-name descname"><span class="pre">_partition_count</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pypz.plugins.kafka_io.channels.KafkaChannelReader._partition_count" title="Link to this definition"></a></dt>
 <dd><p>The number of partitions to be created for the data channel. If group mode,
 then it shall be 1, since all the channel readers in the group will read all
-the records sent to the channel. Otherwise it is the size of the group.</p>
+the records sent to the channel. Otherwise, it is the size of the group.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -914,8 +914,8 @@ to ensure that it will be ignored.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pypz.plugins.kafka_io.channels.KafkaChannelWriter._round_robin_partition_idx">
 <span class="sig-name descname"><span class="pre">_round_robin_partition_idx</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pypz.plugins.kafka_io.channels.KafkaChannelWriter._round_robin_partition_idx" title="Link to this definition"></a></dt>
-<dd><p>This index ensures that we produce in a true round robin fashion. It is necessary,
-since Kafka’s round robin considers batches of records instead of simple records</p>
+<dd><p>This index ensures that we produce in a true round-robin fashion. It is necessary,
+since Kafka’s round-robin considers batches of records instead of simple records</p>
 </dd></dl>
 
 <dl class="py method">
