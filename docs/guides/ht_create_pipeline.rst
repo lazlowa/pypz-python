@@ -195,7 +195,7 @@ This method is called after the _on_init() has successfully finished and before 
 
 - the method returns True **OR**
 - the method returns None and there is no more records to be received on any of the
-  :class:`Input- <pypz.core.specs.plugin.InputPortPlugin>`
+  :class:`InputPortPlugins <pypz.core.specs.plugin.InputPortPlugin>`
 
 Since we don't have any :class:`InputPortPlugin <pypz.core.specs.plugin.InputPortPlugin>` in the writer operator,
 we need to make sure that we have a termination condition i.e., at some point, we return ``True``.

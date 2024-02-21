@@ -114,8 +114,8 @@ class KafkaChannelWriter(ChannelWriter):
 
         self._round_robin_partition_idx: int = 0
         """
-        This index ensures that we produce in a true round robin fashion. It is necessary,
-        since Kafka's round robin considers batches of records instead of simple records
+        This index ensures that we produce in a true round-robin fashion. It is necessary,
+        since Kafka's round-robin considers batches of records instead of simple records
         """
 
         self._target_partition_count: int = 1
@@ -385,7 +385,7 @@ class KafkaChannelReader(ChannelReader):
         """
         The number of partitions to be created for the data channel. If group mode,
         then it shall be 1, since all the channel readers in the group will read all
-        the records sent to the channel. Otherwise it is the size of the group.
+        the records sent to the channel. Otherwise, it is the size of the group.
         """
 
         self._admin_client: Optional[KafkaAdminClient] = None
