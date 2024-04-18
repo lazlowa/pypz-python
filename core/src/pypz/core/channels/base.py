@@ -349,7 +349,7 @@ class ChannelBase(ABC):
 
         connected_channel_names = set()
 
-        for key, val in self._status_map.items():
+        for key, val in self._status_map.copy().items():
             if filter_function is not None:
                 if filter_function(val):
                     connected_channel_names.add(key)
