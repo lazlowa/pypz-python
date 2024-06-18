@@ -2,9 +2,13 @@
 requires = ["setuptools>=68.0"]
 build-backend = "setuptools.build_meta"
 
+[project.urls]
+Documentation = "https://pypz.dev"
+Repository = "https://github.com/lazlowa/pypz-python"
+
 [project]
 name = "pypz-amq-io"
-version = "0.9.2"
+version = "0.9.2b0"
 authors = [
     { name = "Laszlo Anka", email = "laszlo.anka@gmail.com" }
 ]

@@ -194,3 +194,7 @@ Expected Parameters
    .. code-block:: python
 
       plugin.set_parameter("channelConfig", {"metricsEnabled": True})
+
+Circularity
+-----------
+
