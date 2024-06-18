@@ -59,6 +59,8 @@ class KubernetesParameter:
                  labels: Optional[dict] = None,
                  containerSecurityContext: Optional[dict] = None,
                  podSecurityContext: Optional[dict] = None,
+                 hostAffinity: Optional[dict] = None,
+                 hostAntiAffinity: Optional[dict] = None,
                  nodeAffinity: Optional[dict] = None,
                  nodeAntiAffinity: Optional[dict] = None):
         self.imagePullPolicy: Optional[str] = imagePullPolicy
@@ -73,6 +75,8 @@ class KubernetesParameter:
         self.labels: Optional[dict] = labels
         self.containerSecurityContext: Optional[dict] = containerSecurityContext
         self.podSecurityContext: Optional[dict] = podSecurityContext
+        self.hostAffinity: Optional[dict] = hostAffinity
+        self.hostAntiAffinity: Optional[dict] = hostAntiAffinity
         self.nodeAffinity: Optional[dict] = nodeAffinity
         self.nodeAntiAffinity: Optional[dict] = nodeAntiAffinity
 
@@ -453,27 +457,27 @@ class KubernetesDeployer(Deployer):
             'securityContext': kubernetes_parameters.podSecurityContext
         }
 
-        if (kubernetes_parameters.nodeAffinity is not None) or (kubernetes_parameters.nodeAntiAffinity is not None):
+        if (kubernetes_parameters.hostAffinity is not None) or (kubernetes_parameters.hostAntiAffinity is not None):
             node_selector_terms = []
 
-            if kubernetes_parameters.nodeAffinity is not None:
+            if kubernetes_parameters.hostAffinity is not None:
                 node_selector_terms.append({
                     'matchExpressions': [
                         {
                             'key': "kubernetes.io/hostname",
                             'operator': 'In',
-                            'values': kubernetes_parameters.nodeAffinity
+                            'values': kubernetes_parameters.hostAffinity
                         }
                     ]
                 })
 
-            if kubernetes_parameters.nodeAntiAffinity is not None:
+            if kubernetes_parameters.hostAntiAffinity is not None:
                 node_selector_terms.append({
                     'matchExpressions': [
                         {
                             'key': "kubernetes.io/hostname",
                             'operator': 'NotIn',
-                            'values': kubernetes_parameters.nodeAntiAffinity
+                            'values': kubernetes_parameters.hostAntiAffinity
                         }
                     ]
                 })
@@ -485,6 +489,15 @@ class KubernetesDeployer(Deployer):
                     }
                 }
             }
+
+        """ Notice that since host affinity can be defined separately, we need
+            to handle the situation, where both nodeAffinity and hostAffinity is set.
+            This is not the case for nodeAntiAffinity. """
+        if kubernetes_parameters.nodeAffinity is not None:
+            spec['affinity'].update(kubernetes_parameters.nodeAffinity)
+
+        if kubernetes_parameters.nodeAntiAffinity is not None:
+            spec['nodeAntiAffinity'] = kubernetes_parameters.nodeAntiAffinity
 
         labels = {
             KubernetesDeployer._label_key_instance_type: KubernetesDeployer._label_value_operator,
