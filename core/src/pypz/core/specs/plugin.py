@@ -192,7 +192,7 @@ class PortPlugin(Plugin, RegisteredInterface, ABC):
             raise AttributeError("Invalid port connection attempt. Operators shall be in the same pipeline context.")
 
         if (self.__schema is not None) and (other_port.__schema is not None) and (self.__schema != other_port.__schema):
-            self.get_logger().warn(f"Mismatching schemas. Expected: {self.__schema}; Provided: {other_port.__schema}")
+            self.get_logger().warning(f"Mismatching schemas. Expected: {self.__schema}; Provided: {other_port.__schema}")
 
         self.__connected_ports.add(other_port)
         other_port.__connected_ports.add(self)

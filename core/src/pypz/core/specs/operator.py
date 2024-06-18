@@ -72,7 +72,7 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
             for logger_plugin in self.__logger_plugins:
                 logger_plugin._error(event, context_stack, *args, **kw)
 
-        def _warn(self, event: Optional[str] = None, context_stack: list[str] = None, *args: Any, **kw: Any) -> Any:
+        def _warning(self, event: Optional[str] = None, context_stack: list[str] = None, *args: Any, **kw: Any) -> Any:
             # TODO - maybe we should not care for recursion so we can avoid the execution cost?
             frame = inspect.currentframe()
             while (frame := frame.f_back) is not None:
@@ -81,7 +81,7 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
                         "Attempted to call operator logger from LoggerAddon. This causes infinite recursion.")
 
             for logger_plugin in self.__logger_plugins:
-                logger_plugin._warn(event, context_stack, *args, **kw)
+                logger_plugin._warning(event, context_stack, *args, **kw)
 
         def _info(self, event: Optional[str] = None, context_stack: list[str] = None, *args: Any, **kw: Any) -> Any:
             # TODO - maybe we should not care for recursion so we can avoid the execution cost?

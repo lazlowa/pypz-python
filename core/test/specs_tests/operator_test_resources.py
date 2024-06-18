@@ -44,7 +44,7 @@ class WrongLoggerPlugin(LoggerPlugin, BlankPlugin):
     def _error(self, event: Optional[str] = None, *args: Any, **kw: Any) -> Any:
         self.get_logger().info("This would introduce an endless recursion")
 
-    def _warn(self, event: Optional[str] = None, *args: Any, **kw: Any) -> Any:
+    def _warning(self, event: Optional[str] = None, *args: Any, **kw: Any) -> Any:
         self.get_logger().info("This would introduce an endless recursion")
 
     def _debug(self, event: Optional[str] = None, *args: Any, **kw: Any) -> Any:

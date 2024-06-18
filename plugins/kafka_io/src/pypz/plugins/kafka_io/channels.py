@@ -200,7 +200,7 @@ class KafkaChannelWriter(ChannelWriter):
         except (NoBrokersAvailable, NodeNotReadyError) as e:
             # These might be transient errors, if Kafka is overloaded, so retry makes sense
             # TODO - implement timeout mechanism?
-            self._logger.warn(e)
+            self._logger.warning(e)
             return False
 
     def _close_channel(self):
@@ -225,7 +225,7 @@ class KafkaChannelWriter(ChannelWriter):
         except (NoBrokersAvailable, NodeNotReadyError) as e:
             # These might be transient errors, if Kafka is overloaded, so retry makes sense
             # TODO - implement timeout mechanism?
-            self._logger.warn(e)
+            self._logger.warning(e)
             return False
 
     def _configure_channel(self, configuration: dict):
@@ -491,7 +491,7 @@ class KafkaChannelReader(ChannelReader):
         except (NoBrokersAvailable, NodeNotReadyError) as e:
             # These might be transient errors, if Kafka is overloaded, so retry makes sense
             # TODO - implement timeout mechanism?
-            self._logger.warn(e)
+            self._logger.warning(e)
             return False
 
     """
@@ -515,7 +515,7 @@ class KafkaChannelReader(ChannelReader):
         except (NoBrokersAvailable, NodeNotReadyError) as e:
             # These might be transient errors, if Kafka is overloaded, so retry makes sense
             # TODO - implement timeout mechanism?
-            self._logger.warn(e)
+            self._logger.warning(e)
             return False
 
     def _configure_channel(self, configuration: dict):
@@ -636,7 +636,7 @@ class KafkaChannelReader(ChannelReader):
         except (NoBrokersAvailable, NodeNotReadyError) as e:
             # These might be transient errors, if Kafka is overloaded, so retry makes sense
             # TODO - implement timeout mechanism?
-            self._logger.warn(e)
+            self._logger.warning(e)
             return False
 
     def _delete_resources(self):
@@ -664,7 +664,7 @@ class KafkaChannelReader(ChannelReader):
         except (NoBrokersAvailable, NodeNotReadyError) as e:
             # These might be transient errors, if Kafka is overloaded, so retry makes sense
             # TODO - implement timeout mechanism?
-            self._logger.warn(e)
+            self._logger.warning(e)
             return False
 
     def get_consumer_lag(self) -> int:

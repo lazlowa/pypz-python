@@ -526,7 +526,7 @@ class OperatorInstanceTest(unittest.TestCase):
             operator.get_logger().debug("This would introduce an endless recursion")
 
         with self.assertRaises(RecursionError):
-            operator.get_logger().warn("This would introduce an endless recursion")
+            operator.get_logger().warning("This would introduce an endless recursion")
 
         with self.assertRaises(RecursionError):
             operator.get_logger().error("This would introduce an endless recursion")
