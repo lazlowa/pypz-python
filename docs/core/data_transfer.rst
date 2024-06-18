@@ -195,6 +195,24 @@ Expected Parameters
 
       plugin.set_parameter("channelConfig", {"metricsEnabled": True})
 
-Circularity
------------
+Circular Data Transfer (Cyclic Pipelines)
+-----------------------------------------
 
+It is possible to define circular data transfer by connecting the corresponding ports.
+
+.. figure:: ../resources/images/pipeline_w_circularity.png
+   :alt: Pipeline with circular data transfer
+   :align: center
+
+To understand the implications of such a case, you need to understand the transfer control behind the scenes.
+As discussed above, the channels are coordinating themselves through control signals. For instance, the
+channels are sending state information to their counterparts such as open, started, stopped, closed. Every
+channel in each input ports are staying alive and waiting until the connected output channel is healthy and
+not closed. A channel will be closed, once the operator transits into the 'shutdown' state. Usually an operator
+will transit into the shutdown state, if all input connections are closed. In an acyclic case, this makes sure
+that once the operator w/o input port is finished, every succeeding operator in the pipeline can terminate.
+
+.. important::
+   As you might notice, in a cyclic pipeline no operator is transiting into shutdown, at least not automatically.
+   In a circular case you *ALWAYS* need to make sure, you handle termination manually, otherwise you will have
+   an infinitely running pipeline.
