@@ -22,6 +22,10 @@ keywords = [
     "pypz-core"
 ]
 
+dependencies = [
+    "PyYAML~=6.0.1"
+]
+
 [project.optional-dependencies]
 static = [
     "flake8 ~= 7.0.0",
