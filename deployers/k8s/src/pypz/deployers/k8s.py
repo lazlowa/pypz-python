@@ -368,6 +368,14 @@ class KubernetesDeployer(Deployer):
 
         env = [
             {
+                'name': "PYPZ_NODE_NAME",
+                'valueFrom': {
+                    "fieldRef": {
+                        "fieldPath": "spec.nodeName"
+                    }
+                },
+            },
+            {
                 'name': KubernetesDeployer._env_var_operator_name,
                 'value': operator.get_simple_name(),
             },

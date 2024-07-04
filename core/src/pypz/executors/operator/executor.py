@@ -13,7 +13,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # =============================================================================
+import os
 import signal
+import socket
 import sys
 import traceback
 
@@ -149,6 +151,8 @@ class OperatorExecutor:
             # ========= Start the state machine =========
 
             try:
+                self.__operator.get_logger().debug(f"Host: {os.getenv('PYPZ_NODE_NAME', socket.gethostname())}")
+
                 self.__operator.get_logger().debug(f"Version: {PROJECT_VERSION}")
 
                 self.__operator.get_logger().debug("Starting state machine ...")
