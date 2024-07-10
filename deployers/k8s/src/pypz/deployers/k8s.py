@@ -62,6 +62,8 @@ class KubernetesParameter:
                  hostAffinity: Optional[dict] = None,
                  hostAntiAffinity: Optional[dict] = None,
                  nodeAffinity: Optional[dict] = None,
+                 nodeSelector: Optional[dict] = None,
+                 tolerations: Optional[list] = None,
                  nodeAntiAffinity: Optional[dict] = None):
         self.imagePullPolicy: Optional[str] = imagePullPolicy
         self.restartPolicy: Optional[str] = restartPolicy
@@ -77,6 +79,8 @@ class KubernetesParameter:
         self.podSecurityContext: Optional[dict] = podSecurityContext
         self.hostAffinity: Optional[dict] = hostAffinity
         self.hostAntiAffinity: Optional[dict] = hostAntiAffinity
+        self.nodeSelector: Optional[dict] = nodeSelector
+        self.tolerations: Optional[list] = tolerations
         self.nodeAffinity: Optional[dict] = nodeAffinity
         self.nodeAntiAffinity: Optional[dict] = nodeAntiAffinity
 
@@ -506,6 +510,12 @@ class KubernetesDeployer(Deployer):
 
         if kubernetes_parameters.nodeAntiAffinity is not None:
             spec['nodeAntiAffinity'] = kubernetes_parameters.nodeAntiAffinity
+
+        if kubernetes_parameters.nodeSelector is not None:
+            spec['nodeSelector'] = kubernetes_parameters.nodeSelector
+
+        if kubernetes_parameters.tolerations is not None:
+            spec['tolerations'] = kubernetes_parameters.tolerations
 
         labels = {
             KubernetesDeployer._label_key_instance_type: KubernetesDeployer._label_value_operator,

@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # =============================================================================
+import copy
 import os
 import re
 import threading
@@ -46,9 +47,11 @@ class SynchronizedReference(Generic[ReferenceType]):
     """
     This class realizes a synchronized reference i.e., it locks the object during
     read and write to avoid race conditions. This class is intended to safeguard
-    pypz for the time after GIL has been removed for good.
+    for the time after the Global Interpreter Lock (GIL) has been removed.
+    Note that only access through the object of this class guarantees a synchronized
+    access.
 
-    :param reference: the reference to the object with the generic type ReferenceType
+    :param reference: The reference to the object with the generic type ReferenceType.
     """
 
     def __init__(self, reference: ReferenceType):
@@ -56,10 +59,28 @@ class SynchronizedReference(Generic[ReferenceType]):
         self.__lock = threading.Lock()
 
     def get(self) -> ReferenceType:
+        """
+        Retrieves the referred object in a synchronized manner i.e., no reads or other
+        writes will happen during this process.
+        Notice that, if the object is mutable, then a deep copy shall be made
+        to make sure that the consumer's copy is not changed by any set operation.
+
+        :return: referenced object
+        """
+
         with self.__lock:
-            return self.__reference
+            if isinstance(self.__reference, (int, float, str, bytes, frozenset, tuple)):
+                return self.__reference
+            else:
+                return copy.deepcopy(self.__reference)
 
     def set(self, reference: ReferenceType) -> None:
+        """
+        Sets the referenced object in a synchronized manner i.e., no reads or other
+        writes will happen during this process.
+
+        :param reference: reference to the object
+        """
         with self.__lock:
             self.__reference = reference
 
