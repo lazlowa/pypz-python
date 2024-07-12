@@ -14,4 +14,4 @@
 # limitations under the License.
 # =============================================================================
 
-PROJECT_VERSION = "0.9.2b2"
+PROJECT_VERSION = "0.9.2"
