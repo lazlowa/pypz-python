@@ -189,8 +189,8 @@ class State(ABC):
             return new_state
         else:
             if not isinstance(signal, SignalNoOp):
-                self._logger.warn("Unhandled signal in '%s': %s",
-                                  self.__class__.__name__, signal.__class__.__name__)
+                self._logger.warning("Unhandled signal in '%s': %s",
+                                     self.__class__.__name__, signal.__class__.__name__)
 
             return self
 

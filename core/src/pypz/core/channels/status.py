@@ -21,7 +21,6 @@ from typing import Callable, Any, Optional
 from pypz.core.commons.loggers import ContextLogger, DefaultContextLogger
 from pypz.core.commons.utils import current_time_millis
 
-
 NameSeparator = "@"
 """
 Used to construct channel unique name
@@ -229,11 +228,11 @@ class ChannelStatusMonitor(ChannelFilter):
         if status_update_time > self.last_update_sent_timestamp_ms:
             self.last_update_sent_timestamp_ms = status_update_time
         elif status_update_time < self.last_update_sent_timestamp_ms:
-            self.logger.warn(f"WARNING - the current status message has lower timestamp "
-                             f"({status_message.timestamp}) than the last received "
-                             f"({self.last_update_sent_timestamp_ms}). This may be caused by network latency, "
-                             f"but if you repeatedly see this warning, then you should investigate the causes. "
-                             f"({status_message})")
+            self.logger.warning(f"WARNING - the current status message has lower timestamp "
+                                f"({status_message.timestamp}) than the last received "
+                                f"({self.last_update_sent_timestamp_ms}). This may be caused by network latency, "
+                                f"but if you repeatedly see this warning, then you should investigate the causes. "
+                                f"({status_message})")
 
         new_status = self.current_status
 

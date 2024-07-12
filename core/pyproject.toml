@@ -2,6 +2,10 @@
 requires = ["setuptools>=68.0"]
 build-backend = "setuptools.build_meta"
 
+[project.urls]
+Documentation = "https://pypz.dev"
+Repository = "https://github.com/lazlowa/pypz-python"
+
 [project]
 name = "pypz-core"
 dynamic = ["version"]
@@ -20,6 +24,10 @@ classifiers = [
 keywords = [
     "pypz",
     "pypz-core"
+]
+
+dependencies = [
+    "PyYAML~=6.0.1"
 ]
 
 [project.optional-dependencies]

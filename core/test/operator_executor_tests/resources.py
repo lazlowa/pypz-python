@@ -39,7 +39,7 @@ class TestPluginBase(Plugin):
 
     def _on_interrupt(self, system_signal: int = None) -> None:
         self.call_counter_interrupt += 1
-        self.get_logger().warn(f"Interrupted by signal: {system_signal}")
+        self.get_logger().warning(f"Interrupted by signal: {system_signal}")
         self.interrupted = True
         return self.control_handler(TestPluginBase._on_interrupt.__name__, None)
 
@@ -226,7 +226,7 @@ class TestOperator(Operator):
 
     def _on_interrupt(self, system_signal: int = None) -> None:
         self.call_counter_interrupt += 1
-        self.get_logger().warn(f"Interrupted by signal: {system_signal}")
+        self.get_logger().warning(f"Interrupted by signal: {system_signal}")
         self.interrupted = True
         return self.control_handler(TestPluginBase._on_interrupt.__name__, None)
 

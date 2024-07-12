@@ -31,7 +31,7 @@ class ContextLoggerInterface(ABC):
         pass
 
     @abstractmethod
-    def _warn(self, event: Optional[str] = None, context_stack: list[str] = None, *args: Any, **kw: Any) -> Any:
+    def _warning(self, event: Optional[str] = None, context_stack: list[str] = None, *args: Any, **kw: Any) -> Any:
         pass
 
     @abstractmethod
@@ -81,8 +81,8 @@ class ContextLogger(ContextLoggerInterface):
     def _error(self, event: Optional[str] = None, context_stack: list[str] = None, *args: Any, **kw: Any) -> Any:
         self._logger._error(event, context_stack, *args, **kw)
 
-    def _warn(self, event: Optional[str] = None, context_stack: list[str] = None, *args: Any, **kw: Any) -> Any:
-        self._logger._warn(event, context_stack, *args, **kw)
+    def _warning(self, event: Optional[str] = None, context_stack: list[str] = None, *args: Any, **kw: Any) -> Any:
+        self._logger._warning(event, context_stack, *args, **kw)
 
     def _info(self, event: Optional[str] = None, context_stack: list[str] = None, *args: Any, **kw: Any) -> Any:
         self._logger._info(event, context_stack, *args, **kw)
@@ -96,8 +96,8 @@ class ContextLogger(ContextLoggerInterface):
     def error(self, event: Optional[str] = None, *args: Any, **kw: Any) -> Any:
         self._error(event, self._context_stack, *args, **kw)
 
-    def warn(self, event: Optional[str] = None, *args: Any, **kw: Any) -> Any:
-        self._warn(event, self._context_stack, *args, **kw)
+    def warning(self, event: Optional[str] = None, *args: Any, **kw: Any) -> Any:
+        self._warning(event, self._context_stack, *args, **kw)
 
     def info(self, event: Optional[str] = None, *args: Any, **kw: Any) -> Any:
         self._info(event, self._context_stack, *args, **kw)
@@ -167,7 +167,7 @@ class DefaultContextLogger(ContextLoggerInterface):
                            },
                            *args, **kw)
 
-    def _warn(self, event: Optional[str] = None, context_stack: list[str] = None, *args: Any, **kw: Any) -> Any:
+    def _warning(self, event: Optional[str] = None, context_stack: list[str] = None, *args: Any, **kw: Any) -> Any:
         self._logger.warning(event,
                              extra={
                                  "context": " | ".join(context_stack) if context_stack is not None else None

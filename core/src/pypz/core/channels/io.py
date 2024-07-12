@@ -173,9 +173,6 @@ class ChannelReader(ChannelBase):
         self._last_offset_committed = initial_record_offset
         self._read_record_offset = initial_record_offset
 
-    """
-    This method sets the initial values of the internal variables to the values retrieved by the implementation.
-    """
     def set_initial_record_offset_auto(self) -> None:
         """
         This method sets the initial values of the internal variables to the values retrieved by the implementation.
@@ -269,9 +266,9 @@ class ChannelReader(ChannelBase):
             self._last_offset_committed = offset_to_commit
 
         if offset_to_commit < self._last_offset_committed:
-            self._logger.warn(f"!WARNING! Offset to commit ({offset_to_commit}) "
-                              f"is lower than the last committed offset ({self._last_offset_committed}). "
-                              f"Commit ignored.")
+            self._logger.warning(f"!WARNING! Offset to commit ({offset_to_commit}) "
+                                 f"is lower than the last committed offset ({self._last_offset_committed}). "
+                                 f"Commit ignored.")
 
     def invoke_commit_current_read_offset(self) -> None:
         """

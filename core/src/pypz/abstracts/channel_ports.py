@@ -251,7 +251,7 @@ class ChannelInputPort(InputPortPlugin, ResourceHandlerPlugin, ExtendedPlugin, A
         return True
 
     def _on_interrupt(self, system_signal: int = None) -> None:
-        self.get_logger().warn(f"Interrupted by system signal: {system_signal}")
+        self.get_logger().warning(f"Interrupted by system signal: {system_signal}")
         self._interrupted = True
 
     def _on_error(self) -> None:
@@ -367,7 +367,7 @@ class ChannelOutputPort(OutputPortPlugin, ResourceHandlerPlugin, ExtendedPlugin,
             return False
 
         if 0 == len(self._channel_writers):
-            self.get_logger().warn("No channel reader(s) connected")
+            self.get_logger().warning("No channel reader(s) connected")
 
         return True
 
@@ -463,7 +463,7 @@ class ChannelOutputPort(OutputPortPlugin, ResourceHandlerPlugin, ExtendedPlugin,
             channel.invoke_write_records(data)
 
     def _on_interrupt(self, system_signal: int = None) -> None:
-        self.get_logger().warn(f"Interrupted by system signal: {system_signal}")
+        self.get_logger().warning(f"Interrupted by system signal: {system_signal}")
         self._interrupted = True
 
     def _on_error(self) -> None:

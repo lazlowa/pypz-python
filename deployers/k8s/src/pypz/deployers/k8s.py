@@ -59,7 +59,11 @@ class KubernetesParameter:
                  labels: Optional[dict] = None,
                  containerSecurityContext: Optional[dict] = None,
                  podSecurityContext: Optional[dict] = None,
+                 hostAffinity: Optional[dict] = None,
+                 hostAntiAffinity: Optional[dict] = None,
                  nodeAffinity: Optional[dict] = None,
+                 nodeSelector: Optional[dict] = None,
+                 tolerations: Optional[list] = None,
                  nodeAntiAffinity: Optional[dict] = None):
         self.imagePullPolicy: Optional[str] = imagePullPolicy
         self.restartPolicy: Optional[str] = restartPolicy
@@ -73,6 +77,10 @@ class KubernetesParameter:
         self.labels: Optional[dict] = labels
         self.containerSecurityContext: Optional[dict] = containerSecurityContext
         self.podSecurityContext: Optional[dict] = podSecurityContext
+        self.hostAffinity: Optional[dict] = hostAffinity
+        self.hostAntiAffinity: Optional[dict] = hostAntiAffinity
+        self.nodeSelector: Optional[dict] = nodeSelector
+        self.tolerations: Optional[list] = tolerations
         self.nodeAffinity: Optional[dict] = nodeAffinity
         self.nodeAntiAffinity: Optional[dict] = nodeAntiAffinity
 
@@ -364,6 +372,14 @@ class KubernetesDeployer(Deployer):
 
         env = [
             {
+                'name': "PYPZ_NODE_NAME",
+                'valueFrom': {
+                    "fieldRef": {
+                        "fieldPath": "spec.nodeName"
+                    }
+                },
+            },
+            {
                 'name': KubernetesDeployer._env_var_operator_name,
                 'value': operator.get_simple_name(),
             },
@@ -440,7 +456,7 @@ class KubernetesDeployer(Deployer):
             }
         ]
 
-        spec = {
+        spec: dict[str, Any] = {
             'containers': containers,
             'restartPolicy': 'Never'
             if kubernetes_parameters.restartPolicy is None else kubernetes_parameters.restartPolicy,
@@ -453,27 +469,27 @@ class KubernetesDeployer(Deployer):
             'securityContext': kubernetes_parameters.podSecurityContext
         }
 
-        if (kubernetes_parameters.nodeAffinity is not None) or (kubernetes_parameters.nodeAntiAffinity is not None):
+        if (kubernetes_parameters.hostAffinity is not None) or (kubernetes_parameters.hostAntiAffinity is not None):
             node_selector_terms = []
 
-            if kubernetes_parameters.nodeAffinity is not None:
+            if kubernetes_parameters.hostAffinity is not None:
                 node_selector_terms.append({
                     'matchExpressions': [
                         {
                             'key': "kubernetes.io/hostname",
                             'operator': 'In',
-                            'values': kubernetes_parameters.nodeAffinity
+                            'values': kubernetes_parameters.hostAffinity
                         }
                     ]
                 })
 
-            if kubernetes_parameters.nodeAntiAffinity is not None:
+            if kubernetes_parameters.hostAntiAffinity is not None:
                 node_selector_terms.append({
                     'matchExpressions': [
                         {
                             'key': "kubernetes.io/hostname",
                             'operator': 'NotIn',
-                            'values': kubernetes_parameters.nodeAntiAffinity
+                            'values': kubernetes_parameters.hostAntiAffinity
                         }
                     ]
                 })
@@ -485,6 +501,23 @@ class KubernetesDeployer(Deployer):
                     }
                 }
             }
+
+        """ Notice that since host affinity can be defined separately, we need
+            to handle the situation, where both nodeAffinity and hostAffinity is set.
+            This is not the case for nodeAntiAffinity. """
+        if kubernetes_parameters.nodeAffinity is not None:
+            if 'affinity' not in spec:
+                spec['affinity'] = dict()
+            spec['affinity'].update(kubernetes_parameters.nodeAffinity)
+
+        if kubernetes_parameters.nodeAntiAffinity is not None:
+            spec['nodeAntiAffinity'] = kubernetes_parameters.nodeAntiAffinity
+
+        if kubernetes_parameters.nodeSelector is not None:
+            spec['nodeSelector'] = kubernetes_parameters.nodeSelector
+
+        if kubernetes_parameters.tolerations is not None:
+            spec['tolerations'] = kubernetes_parameters.tolerations
 
         labels = {
             KubernetesDeployer._label_key_instance_type: KubernetesDeployer._label_value_operator,
