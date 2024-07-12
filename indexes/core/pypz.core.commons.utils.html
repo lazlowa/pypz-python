@@ -39,7 +39,7 @@
             pypz
           </a>
               <div class="version">
-                0.9.1
+                0.9.2
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -139,21 +139,39 @@ Note that this should not be used in cases, where accuracy matters.</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Generic</span></code>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">ReferenceType</span></code>]</p>
 <p>This class realizes a synchronized reference i.e., it locks the object during
 read and write to avoid race conditions. This class is intended to safeguard
-pypz for the time after GIL has been removed for good.</p>
+for the time after the Global Interpreter Lock (GIL) has been removed.
+Note that only access through the object of this class guarantees a synchronized
+access.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>reference</strong> – the reference to the object with the generic type ReferenceType</p>
+<dd class="field-odd"><p><strong>reference</strong> – The reference to the object with the generic type ReferenceType.</p>
 </dd>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="pypz.core.commons.utils.SynchronizedReference.get">
-<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ReferenceType</span></span></span><a class="headerlink" href="#pypz.core.commons.utils.SynchronizedReference.get" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ReferenceType</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bytes</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">frozenset</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tuple</span></span></span><a class="headerlink" href="#pypz.core.commons.utils.SynchronizedReference.get" title="Link to this definition"></a></dt>
+<dd><p>Retrieves the referred object in a synchronized manner i.e., no reads or other
+writes will happen during this process.
+Notice that, if the object is mutable, then a deep copy shall be made
+to make sure that the consumer’s copy is not changed by any set operation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>referenced object</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pypz.core.commons.utils.SynchronizedReference.set">
 <span class="sig-name descname"><span class="pre">set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reference</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ReferenceType</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.core.commons.utils.SynchronizedReference.set" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Sets the referenced object in a synchronized manner i.e., no reads or other
+writes will happen during this process.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>reference</strong> – reference to the object</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 

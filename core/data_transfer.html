@@ -41,7 +41,7 @@
             pypz
           </a>
               <div class="version">
-                0.9.1
+                0.9.2
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -71,6 +71,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#expected-parameters">Expected Parameters</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#circular-data-transfer-cyclic-pipelines">Circular Data Transfer (Cyclic Pipelines)</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="executor.html">Executor</a></li>
@@ -335,6 +336,26 @@ following parameters:</p>
 </div>
 </div>
 </section>
+</section>
+<section id="circular-data-transfer-cyclic-pipelines">
+<h2>Circular Data Transfer (Cyclic Pipelines)<a class="headerlink" href="#circular-data-transfer-cyclic-pipelines" title="Link to this heading"></a></h2>
+<p>It is possible to define circular data transfer by connecting the corresponding ports.</p>
+<figure class="align-center">
+<img alt="Pipeline with circular data transfer" src="../_images/pipeline_w_circularity.png" />
+</figure>
+<p>To understand the implications of such a case, you need to understand the transfer control behind the scenes.
+As discussed above, the channels are coordinating themselves through control signals. For instance, the
+channels are sending state information to their counterparts such as open, started, stopped, closed. Every
+channel in each input ports are staying alive and waiting until the connected output channel is healthy and
+not closed. A channel will be closed, once the operator transits into the ‘shutdown’ state. Usually an operator
+will transit into the shutdown state, if all input connections are closed. In an acyclic case, this makes sure
+that once the operator w/o input port is finished, every succeeding operator in the pipeline can terminate.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>As you might notice, in a cyclic pipeline no operator is transiting into shutdown, at least not automatically.
+In a circular case you <em>ALWAYS</em> need to make sure, you handle termination manually, otherwise you will have
+an infinitely running pipeline.</p>
+</div>
 </section>
 </section>
 
