@@ -274,7 +274,7 @@ class ChannelBase(ABC):
         pass
 
     @abstractmethod
-    def _retrieve_status_messages(self) -> list:
+    def _retrieve_status_messages(self) -> Optional[list]:
         """
         This method shall implement the logic that retrieves the status messages published by the counterpart
         channel. Notice that in case of ChannelWriter, there can be multiple InputChannels sending messages and
@@ -629,12 +629,12 @@ class ChannelBase(ABC):
         channel functionality.
         """
 
-        string_status_messages = self._retrieve_status_messages()
+        with self._channel_state_update_lock:
+            string_status_messages = self._retrieve_status_messages()
 
-        status_messages: list[ChannelStatusMessage] = list()
+            status_messages: list[ChannelStatusMessage] = list()
 
-        if string_status_messages is not None:
-            with self._channel_state_update_lock:
+            if string_status_messages is not None:
                 for string_status_message in string_status_messages:
                     status_message = ChannelStatusMessage.create_from_json(string_status_message)
                     status_messages.append(status_message)

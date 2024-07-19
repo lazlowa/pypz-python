@@ -15,6 +15,7 @@
 # =============================================================================
 from __future__ import annotations
 import concurrent.futures
+import time
 from concurrent.futures import ThreadPoolExecutor
 from abc import ABC, abstractmethod
 from typing import Callable, Type, Any, Tuple, Optional
@@ -369,6 +370,7 @@ class StateOperationInit(State):
                                     for level in self._context.get_dependency_graph_by_type(PortPlugin)],
                                   ("_on_init", {self._context.get_operator()}),
                                   break_on_exception=True):
+                time.sleep(1)
                 return SignalNoOp()
 
             return SignalOperationStart()
@@ -484,6 +486,7 @@ class StateOperationShutdown(State):
             if not self._schedule(("_on_shutdown", {self._context.get_operator()}),
                                   *[("_on_port_close", level)
                                     for level in reversed(self._context.get_dependency_graph_by_type(PortPlugin))]):
+                time.sleep(1)
                 return SignalNoOp()
 
             if ExecutionMode.WithoutResourceDeletion == self._context.get_execution_mode():
@@ -532,6 +535,7 @@ class StateResourceCreation(State):
             if not self._schedule(*[("_on_resource_creation", level)
                                     for level in self._context.get_dependency_graph_by_type(ResourceHandlerPlugin)],
                                   break_on_exception=True):
+                time.sleep(1)
                 return SignalNoOp()
 
             if ExecutionMode.ResourceCreationOnly == self._context.get_execution_mode():
@@ -578,6 +582,7 @@ class StateResourceDeletion(State):
         try:
             if not self._schedule(*[("_on_resource_deletion", level) for level in
                                     reversed(self._context.get_dependency_graph_by_type(ResourceHandlerPlugin))]):
+                time.sleep(1)
                 return SignalNoOp()
 
             return SignalServicesStop()
@@ -622,6 +627,7 @@ class StateServiceStart(State):
             if not self._schedule(*[("_on_service_start", level)
                                     for level in self._context.get_dependency_graph_by_type(ServicePlugin)],
                                   break_on_exception=True):
+                time.sleep(1)
                 return SignalNoOp()
 
             if ExecutionMode.ResourceDeletionOnly == self._context.get_execution_mode():
@@ -668,6 +674,7 @@ class StateServiceShutdown(State):
         try:
             if not self._schedule(*[("_on_service_shutdown", level)
                                     for level in reversed(self._context.get_dependency_graph_by_type(ServicePlugin))]):
+                time.sleep(1)
                 return SignalNoOp()
 
             return SignalKill()

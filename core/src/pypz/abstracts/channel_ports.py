@@ -147,7 +147,7 @@ class ChannelInputPort(InputPortPlugin, ResourceHandlerPlugin, ExtendedPlugin, A
 
             if self._channel_reader.invoke_resource_deletion():
                 self._channel_reader.get_logger().debug("Resource deleted.")
-            else:
+            elif not self._interrupted:
                 self._channel_reader.get_logger().debug("Waiting for resource deletion ...")
                 return False
         return True
@@ -241,7 +241,7 @@ class ChannelInputPort(InputPortPlugin, ResourceHandlerPlugin, ExtendedPlugin, A
         if self._channel_reader.is_channel_open():
             if self._channel_reader.can_close() and self._channel_reader.invoke_close_channel():
                 self._channel_reader.get_logger().debug("Channel closed.")
-            else:
+            elif not self._interrupted:
                 self._channel_reader.get_logger().debug("Waiting for channel to close...")
                 return False
 
@@ -256,7 +256,8 @@ class ChannelInputPort(InputPortPlugin, ResourceHandlerPlugin, ExtendedPlugin, A
 
     def _on_error(self) -> None:
         self._error_occurred = True
-        self._channel_reader.invoke_sync_send_status_message(ChannelStatus.Error)
+        if self._channel_reader.is_channel_open():
+            self._channel_reader.invoke_sync_send_status_message(ChannelStatus.Error)
 
 
 class ChannelOutputPort(OutputPortPlugin, ResourceHandlerPlugin, ExtendedPlugin, ABC):
@@ -392,7 +393,7 @@ class ChannelOutputPort(OutputPortPlugin, ResourceHandlerPlugin, ExtendedPlugin,
                     self.get_logger().error(traceback.format_exc())
                     self._resource_deletion_errors.add(channel)
 
-        if not all_resources_deleted:
+        if not all_resources_deleted and not self._interrupted:
             return False
 
         if 0 < len(self._resource_deletion_errors):
@@ -445,7 +446,7 @@ class ChannelOutputPort(OutputPortPlugin, ResourceHandlerPlugin, ExtendedPlugin,
                     self.get_logger().error(traceback.format_exc())
                     self._port_close_errors.add(channel)
 
-        if not all_channels_closed:
+        if not all_channels_closed and not self._interrupted:
             return False
 
         if 0 < len(self._port_close_errors):
@@ -472,7 +473,8 @@ class ChannelOutputPort(OutputPortPlugin, ResourceHandlerPlugin, ExtendedPlugin,
         error_channels: set[ChannelWriter] = set()
         for channel in self._channel_writers:
             try:
-                channel.invoke_sync_send_status_message(ChannelStatus.Error)
+                if channel.is_channel_open():
+                    channel.invoke_sync_send_status_message(ChannelStatus.Error)
             except:  # noqa: E722
                 # We catch the fact that error occurred, but not interrupting the error handling
                 # process of the other channels

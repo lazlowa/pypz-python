@@ -40,7 +40,7 @@ class ChannelReader(ChannelBase):
 
     # ======================= static fields =======================
 
-    NotInitialized = -1
+    NotInitialized = -9999
     """
     Some helper static to init or identify if offset is not initialized
     """
@@ -260,6 +260,7 @@ class ChannelReader(ChannelBase):
                 raise ValueError(f"Offset is out of range: {offset_to_commit}; "
                                  f"Current read offset? {self._read_record_offset}")
 
+        # TODO - shall it be rather 'offset_to_commit > self._last_offset_committed' ?
         if offset_to_commit != self._last_offset_committed:
             self._commit_offset(offset_to_commit)
 
