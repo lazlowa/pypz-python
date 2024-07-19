@@ -16,9 +16,9 @@
 import concurrent.futures
 from typing import TYPE_CHECKING, Optional, Any
 
-from amqp import Connection, PreconditionFailed
+from amqp import Connection
 
-from pypz.amqp_io.utils import MessageConsumer, MessageProducer
+from pypz.amqp_io.utils import MessageConsumer, MessageProducer, is_queue_existing
 from pypz.core.channels.io import ChannelWriter, ChannelReader
 
 if TYPE_CHECKING:
@@ -88,6 +88,13 @@ class AMQPChannelWriter(ChannelWriter):
         if self._data_queue_name is None:
             raise AttributeError("Missing channel name.")
 
+        with Connection(host=self.get_location()) as admin_connection:
+            admin_channel = admin_connection.channel()
+            if not is_queue_existing(self._data_queue_name, admin_channel) or \
+                    not is_queue_existing(self._reader_status_stream_name, admin_channel) or \
+                    not is_queue_existing(self._writer_status_stream_name, admin_channel):
+                return False
+
         if self._reader_status_consumer is None:
             self._reader_status_consumer = MessageConsumer(
                 consumer_name="reader-status-consumer",
@@ -101,11 +108,6 @@ class AMQPChannelWriter(ChannelWriter):
 
         if self._writer_status_producer is None:
             self._writer_status_producer = MessageProducer(host=self.get_location())
-
-        if not self._data_producer.is_queue_existing(self._data_queue_name) or \
-                not self._reader_status_consumer.is_queue_existing(self._reader_status_stream_name) or \
-                not self._writer_status_producer.is_queue_existing(self._writer_status_stream_name):
-            return False
 
         return True
 
@@ -202,6 +204,22 @@ class AMQPChannelReader(ChannelReader):
         """
         return -1
 
+    def can_close(self) -> bool:
+        if (not self._context.is_principal()) or (self._context.get_group_name() is None):
+            return True
+
+        self.invoke_sync_status_update()
+
+        if 0 == self.retrieve_all_connected_channel_count():
+            return True
+
+        finished_replica_count = len(self.retrieve_connected_channel_unique_names(
+            lambda flt: (flt.get_channel_group_name() == self._context.get_group_name()) and
+                        ((not flt.is_channel_healthy()) or flt.is_channel_stopped() or flt.is_channel_closed())
+        ))
+
+        return finished_replica_count == (self._context.get_group_size() - 1)
+
     def has_records(self) -> bool:
         return self._data_consumer.has_records()
 
@@ -245,6 +263,13 @@ class AMQPChannelReader(ChannelReader):
         if self._data_queue_name is None:
             raise AttributeError("Missing channel name.")
 
+        with Connection(host=self.get_location()) as admin_connection:
+            admin_channel = admin_connection.channel()
+            if not is_queue_existing(self._data_queue_name, admin_channel) or \
+                    not is_queue_existing(self._reader_status_stream_name, admin_channel) or \
+                    not is_queue_existing(self._writer_status_stream_name, admin_channel):
+                return False
+
         if self._writer_status_consumer is None:
             self._writer_status_consumer = MessageConsumer(
                 consumer_name="writer-status-consumer",
@@ -263,11 +288,6 @@ class AMQPChannelReader(ChannelReader):
 
         if self._reader_status_producer is None:
             self._reader_status_producer = MessageProducer(host=self.get_location())
-
-        if not self._data_consumer.is_queue_existing(self._data_queue_name) or \
-                not self._reader_status_producer.is_queue_existing(self._reader_status_stream_name) or \
-                not self._writer_status_consumer.is_queue_existing(self._writer_status_stream_name):
-            return False
 
         return True
 

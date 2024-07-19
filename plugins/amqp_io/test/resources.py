@@ -35,7 +35,6 @@ class TestWriterOperator(BlankOperator):
         self.output_port = AMQPChannelOutputPort()
         # self.group_output_port = AMQPChannelOutputPort(group_mode=True)
         self.logger = DefaultLoggerPlugin()
-        self.logger.set_parameter("logLevel", "DEBUG")
 
         self.max_record_count = 200000
         self.record_count = 0
@@ -63,7 +62,6 @@ class TestReaderOperator(BlankOperator):
         self.input_port = AMQPChannelInputPort()
         # self.group_input_port = AMQPChannelInputPort(group_mode=True)
         self.logger = DefaultLoggerPlugin()
-        self.logger.set_parameter("logLevel", "DEBUG")
         self.received_records: list = list()
 
     def _on_init(self) -> bool:
@@ -75,8 +73,9 @@ class TestReaderOperator(BlankOperator):
     def _on_running(self) -> bool:
         records = self.input_port.retrieve()
         self.received_records.extend(records)
-        for record in records:
-            self.get_logger().debug(record)
+        # for record in records:
+        #     self.get_logger().debug(record)
+        self.get_logger().debug(str(len(self.received_records)))
         return not self.input_port.can_retrieve()
 
 
@@ -87,7 +86,10 @@ class TestPipeline(Pipeline):
 
         self.reader = TestReaderOperator()
         self.writer = TestWriterOperator()
-        # self.reader.set_parameter("replicationFactor", 1)
+        self.reader.set_parameter("replicationFactor", 1)
+
+        self.set_parameter(">>logLevel", "DEBUG")
+
         # self.writer.set_parameter("replicationFactor", 1)
 
         self.reader.input_port.connect(self.writer.output_port)

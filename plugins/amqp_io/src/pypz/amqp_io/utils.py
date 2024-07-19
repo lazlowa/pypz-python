@@ -19,6 +19,14 @@ from typing import Optional
 from amqp import Connection, Channel, Message, NotFound
 
 
+def is_queue_existing(queue_name: str, channel: Channel):
+    try:
+        channel.queue_declare(queue=queue_name, passive=True)
+        return True
+    except NotFound:
+        return False
+
+
 class _MessagingBase:
     def __init__(self,
                  connection: Optional[Connection] = None,
@@ -33,13 +41,6 @@ class _MessagingBase:
 
     def close(self) -> None:
         self._connection.close()
-
-    def is_queue_existing(self, queue_name: str) -> bool:
-        try:
-            self._channel.queue_declare(queue=queue_name, passive=True)
-            return True
-        except NotFound:
-            return False
 
 
 class MessageConsumer(_MessagingBase):
@@ -88,11 +89,8 @@ class MessageConsumer(_MessagingBase):
         if self._subscribed_queue is None:
             raise AttributeError("Missing queue subscription, call subscribe() first")
 
-        if 0 < self._retrieved_data_messages.qsize():
-            return True
-
         queue_data = self._channel.queue_declare(self._subscribed_queue, passive=True)
-        return 0 < queue_data.message_count
+        return (0 < queue_data.message_count) or (0 < self._retrieved_data_messages.qsize())
 
     def poll(self, timeout: Optional[int] = 0) -> list[str]:
         if self._subscribed_queue is None:
