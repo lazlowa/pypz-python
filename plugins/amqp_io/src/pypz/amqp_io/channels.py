@@ -206,8 +206,7 @@ class AMQPChannelReader(ChannelReader):
         return self._data_consumer.has_records()
 
     def _read_records(self) -> list[Any]:
-        # return self._data_consumer.poll(self._config_data_consumer_timeout_sec)
-        return self._data_consumer.poll(0)
+        return self._data_consumer.poll(self._config_data_consumer_timeout_sec)
 
     def _commit_offset(self, offset: int) -> None:
         self._data_consumer.commit_messages()

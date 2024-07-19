@@ -147,7 +147,7 @@ class ChannelInputPort(InputPortPlugin, ResourceHandlerPlugin, ExtendedPlugin, A
 
             if self._channel_reader.invoke_resource_deletion():
                 self._channel_reader.get_logger().debug("Resource deleted.")
-            elif not self._interrupted:
+            else:
                 self._channel_reader.get_logger().debug("Waiting for resource deletion ...")
                 return False
         return True
@@ -241,7 +241,7 @@ class ChannelInputPort(InputPortPlugin, ResourceHandlerPlugin, ExtendedPlugin, A
         if self._channel_reader.is_channel_open():
             if self._channel_reader.can_close() and self._channel_reader.invoke_close_channel():
                 self._channel_reader.get_logger().debug("Channel closed.")
-            elif not self._interrupted:
+            else:
                 self._channel_reader.get_logger().debug("Waiting for channel to close...")
                 return False
 
@@ -393,7 +393,7 @@ class ChannelOutputPort(OutputPortPlugin, ResourceHandlerPlugin, ExtendedPlugin,
                     self.get_logger().error(traceback.format_exc())
                     self._resource_deletion_errors.add(channel)
 
-        if not all_resources_deleted and not self._interrupted:
+        if not all_resources_deleted:
             return False
 
         if 0 < len(self._resource_deletion_errors):
@@ -446,7 +446,7 @@ class ChannelOutputPort(OutputPortPlugin, ResourceHandlerPlugin, ExtendedPlugin,
                     self.get_logger().error(traceback.format_exc())
                     self._port_close_errors.add(channel)
 
-        if not all_channels_closed and not self._interrupted:
+        if not all_channels_closed:
             return False
 
         if 0 < len(self._port_close_errors):
