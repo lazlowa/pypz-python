@@ -139,7 +139,20 @@ class AMQPChannelWriter(ChannelWriter):
         self._writer_status_producer.publish(message, self._writer_status_stream_name)
 
     def _retrieve_status_messages(self) -> Optional[list]:
-        retrieved_messages = self._reader_status_consumer.poll(self._config_status_consumer_timeout_sec)
+        """
+        This implementation retrieves the status messages from the corresponding stream.
+        Notice that unlike in case of the queue, where arbitrary amount of messages
+        can be received via a drain_events() call, for streams it is always only 1
+        message. For this reason, we need to poll all available records at most the
+        number of MaxStatusMessageRetrieveCount.
+        """
+
+        retrieved_messages = []
+        poll_results = self._reader_status_consumer.poll(self._config_status_consumer_timeout_sec)
+        while (0 < len(poll_results)) and (MaxStatusMessageRetrieveCount > len(retrieved_messages)):
+            retrieved_messages.extend(poll_results)
+            poll_results = self._reader_status_consumer.poll(self._config_status_consumer_timeout_sec)
+
         self._reader_status_consumer.commit_messages()
         return retrieved_messages
 
@@ -323,6 +336,19 @@ class AMQPChannelReader(ChannelReader):
         self._reader_status_producer.publish(message, self._reader_status_stream_name)
 
     def _retrieve_status_messages(self) -> Optional[list]:
-        retrieved_messages = self._writer_status_consumer.poll(self._config_status_consumer_timeout_sec)
+        """
+        This implementation retrieves the status messages from the corresponding stream.
+        Notice that unlike in case of the queue, where arbitrary amount of messages
+        can be received via a drain_events() call, for streams it is always only 1
+        message. For this reason, we need to poll all available records at most the
+        number of MaxStatusMessageRetrieveCount.
+        """
+
+        retrieved_messages = []
+        poll_results = self._writer_status_consumer.poll(self._config_status_consumer_timeout_sec)
+        while (0 < len(poll_results)) and (MaxStatusMessageRetrieveCount > len(retrieved_messages)):
+            retrieved_messages.extend(poll_results)
+            poll_results = self._writer_status_consumer.poll(self._config_status_consumer_timeout_sec)
+
         self._writer_status_consumer.commit_messages()
         return retrieved_messages

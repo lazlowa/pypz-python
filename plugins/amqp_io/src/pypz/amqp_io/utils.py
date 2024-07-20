@@ -69,13 +69,15 @@ class MessageConsumer(_MessagingBase):
         self._retrieved_data_messages.put(message)
 
     def subscribe(self, queue_name: str, arguments: Any = None) -> None:
-        if queue_name not in self._subscriptions:
-            self._channel.basic_consume(
-                queue_name, consumer_tag=f"{self._consumer_name}-{queue_name}",
-                callback=self._on_message_received,
-                arguments=arguments
-            )
-            self._subscriptions.add(queue_name)
+        if queue_name in self._subscriptions:
+            raise AttributeError(f"Queue already subscribed: {queue_name}")
+
+        self._channel.basic_consume(
+            queue_name, consumer_tag=f"{self._consumer_name}-{queue_name}",
+            callback=self._on_message_received,
+            arguments=arguments
+        )
+        self._subscriptions.add(queue_name)
 
     def unsubscribe(self, queue_name: str) -> None:
         if queue_name not in self._subscriptions:
@@ -86,12 +88,18 @@ class MessageConsumer(_MessagingBase):
         if 0 == len(self._subscriptions):
             raise AttributeError("Missing queue subscription, call subscribe() first")
 
+        return (0 < self.get_available_record_count()) or (0 < self._retrieved_data_messages.qsize())
+
+    def get_available_record_count(self) -> int:
+        if 0 == len(self._subscriptions):
+            raise AttributeError("Missing queue subscription, call subscribe() first")
+
         record_count = 0
         for queue in self._subscriptions:
             queue_data = self._channel.queue_declare(queue, passive=True)
             record_count += queue_data.message_count
 
-        return (0 < record_count) or (0 < self._retrieved_data_messages.qsize())
+        return record_count
 
     def poll(self, timeout: Optional[float] = 0) -> list[str]:
         if 0 == len(self._subscriptions):
