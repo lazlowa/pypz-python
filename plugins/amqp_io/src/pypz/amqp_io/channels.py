@@ -296,7 +296,15 @@ class AMQPChannelReader(ChannelReader):
                 self._writer_status_consumer.subscribe(self._reader_status_stream_name,
                                                        arguments={"x-stream-offset": "first"})
 
-        if self._data_consumer is None:
+        """ Notice checking the silent mode. Silent mode is the mode, how sniffer sniffs
+            the channels, since the sniffer creates an actual channel. Silent mode prevents
+            the sniffer to send status signals or to interfere by any means with the pipeline.
+            The issue in this case that, if the sniffer opens a channel and by that registers
+            a consumer, the server will send records to this consumer, which obviously not
+            intended. Therefore, we check the silent mode here and simply ignore the data
+            consumer creation, if set. This way, the sniffer will not have any registered
+            data consumer. """
+        if (self._data_consumer is None) and (not self._silent_mode):
             self._data_consumer = MessageConsumer(
                 consumer_name="data-consumer",
                 max_poll_record=self._config_max_poll_records,
