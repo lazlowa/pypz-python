@@ -14,7 +14,7 @@
 # limitations under the License.
 # =============================================================================
 from queue import Queue
-from typing import Optional
+from typing import Optional, Any
 
 from amqp import Connection, Channel, Message, NotFound
 
@@ -55,7 +55,7 @@ class MessageConsumer(_MessagingBase):
             the prefetch count defines the max number of messages pushed
             by the server before requiring 'acknowledge' signal."""
 
-        self._subscribed_queue: Optional[str] = None
+        self._subscriptions: set[str] = set()
 
         self._consumer_name: str = consumer_name
 
@@ -65,35 +65,36 @@ class MessageConsumer(_MessagingBase):
         the max_poll_records configuration.
         """
 
-        self._data_messages_to_acknowledge: Queue = Queue()
-        """
-        This list stores the messages returned to the user and hence ready to acknowledge.
-        """
-
     def _on_message_received(self, message: Message) -> None:
         self._retrieved_data_messages.put(message)
 
-    def subscribe(self, queue_name: str) -> None:
-        if self._subscribed_queue != queue_name:
-            if self._subscribed_queue is not None:
-                self._channel.basic_cancel(consumer_tag=f"{self._consumer_name}-{self._subscribed_queue}")
-
-            self._subscribed_queue = queue_name
-
+    def subscribe(self, queue_name: str, arguments: Any = None) -> None:
+        if queue_name not in self._subscriptions:
             self._channel.basic_consume(
-                queue_name, consumer_tag=f"{self._consumer_name}-{self._subscribed_queue}",
-                callback=self._on_message_received
+                queue_name, consumer_tag=f"{self._consumer_name}-{queue_name}",
+                callback=self._on_message_received,
+                arguments=arguments
             )
+            self._subscriptions.add(queue_name)
+
+    def unsubscribe(self, queue_name: str) -> None:
+        if queue_name not in self._subscriptions:
+            raise KeyError(f"Queue not subscribed: {queue_name}")
+        self._channel.basic_cancel(consumer_tag=f"{self._consumer_name}-{queue_name}")
 
     def has_records(self) -> bool:
-        if self._subscribed_queue is None:
+        if 0 == len(self._subscriptions):
             raise AttributeError("Missing queue subscription, call subscribe() first")
 
-        queue_data = self._channel.queue_declare(self._subscribed_queue, passive=True)
-        return (0 < queue_data.message_count) or (0 < self._retrieved_data_messages.qsize())
+        record_count = 0
+        for queue in self._subscriptions:
+            queue_data = self._channel.queue_declare(queue, passive=True)
+            record_count += queue_data.message_count
 
-    def poll(self, timeout: Optional[int] = 0) -> list[str]:
-        if self._subscribed_queue is None:
+        return (0 < record_count) or (0 < self._retrieved_data_messages.qsize())
+
+    def poll(self, timeout: Optional[float] = 0) -> list[str]:
+        if 0 == len(self._subscriptions):
             raise AttributeError("Missing queue subscription, call subscribe() first")
 
         try:
@@ -107,16 +108,13 @@ class MessageConsumer(_MessagingBase):
         while 0 < self._retrieved_data_messages.qsize():
             message = self._retrieved_data_messages.get()
             retrieved_messages.append(message.body)
-            self._data_messages_to_acknowledge.put(message)
         return retrieved_messages
 
     def commit_messages(self):
-        if self._subscribed_queue is None:
+        if 0 == len(self._subscriptions):
             raise AttributeError("Missing queue subscription, call subscribe() first")
 
-        while 0 < self._data_messages_to_acknowledge.qsize():
-            message = self._data_messages_to_acknowledge.get()
-            self._channel.basic_ack(message.delivery_tag)
+        self._channel.basic_ack(delivery_tag=0, multiple=True)
 
 
 class MessageProducer(_MessagingBase):

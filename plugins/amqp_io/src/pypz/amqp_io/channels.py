@@ -101,7 +101,11 @@ class AMQPChannelWriter(ChannelWriter):
                 max_poll_record=MaxStatusMessageRetrieveCount,
                 host=self.get_location()
             )
-            self._reader_status_consumer.subscribe(self._reader_status_stream_name)
+            self._reader_status_consumer.subscribe(self._reader_status_stream_name,
+                                                   arguments={"x-stream-offset": "first"})
+            if (1 < self._context.get_group_size()) and self._context.is_principal():
+                self._reader_status_consumer.subscribe(self._writer_status_stream_name,
+                                                       arguments={"x-stream-offset": "first"})
 
         if self._data_producer is None:
             self._data_producer = MessageProducer(host=self.get_location())
@@ -133,9 +137,6 @@ class AMQPChannelWriter(ChannelWriter):
 
     def _send_status_message(self, message: str) -> None:
         self._writer_status_producer.publish(message, self._writer_status_stream_name)
-
-        if 1 < self._context.get_group_size():
-            self._writer_status_producer.publish(message, self._reader_status_stream_name)
 
     def _retrieve_status_messages(self) -> Optional[list]:
         retrieved_messages = self._reader_status_consumer.poll(self._config_status_consumer_timeout_sec)
@@ -187,12 +188,12 @@ class AMQPChannelReader(ChannelReader):
         Configuration parameter to specify the max number of messages to process in one go
         """
 
-        self._config_data_consumer_timeout_sec: int = 1
+        self._config_data_consumer_timeout_sec: float = 1.
         """
         Configuration parameter to specify the timeout for draining events from the data queue
         """
 
-        self._config_status_consumer_timeout_sec: int = 1
+        self._config_status_consumer_timeout_sec: float = 1.
         """
         Configuration parameter to specify the timeout for draining events from the status stream
         """
@@ -276,7 +277,11 @@ class AMQPChannelReader(ChannelReader):
                 max_poll_record=MaxStatusMessageRetrieveCount,
                 host=self.get_location()
             )
-            self._writer_status_consumer.subscribe(self._writer_status_stream_name)
+            self._writer_status_consumer.subscribe(self._writer_status_stream_name,
+                                                   arguments={"x-stream-offset": "first"})
+            if (1 < self._context.get_group_size()) and self._context.is_principal():
+                self._writer_status_consumer.subscribe(self._reader_status_stream_name,
+                                                       arguments={"x-stream-offset": "first"})
 
         if self._data_consumer is None:
             self._data_consumer = MessageConsumer(
@@ -316,9 +321,6 @@ class AMQPChannelReader(ChannelReader):
 
     def _send_status_message(self, message: str) -> None:
         self._reader_status_producer.publish(message, self._reader_status_stream_name)
-
-        if 1 < self._context.get_group_size():
-            self._reader_status_producer.publish(message, self._writer_status_stream_name)
 
     def _retrieve_status_messages(self) -> Optional[list]:
         retrieved_messages = self._writer_status_consumer.poll(self._config_status_consumer_timeout_sec)
