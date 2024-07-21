@@ -18,6 +18,10 @@ from typing import Optional, Any
 
 from amqp import Connection, Channel, Message, NotFound
 
+WriterStatusQueueNameExtension = ".writer.status"
+ReaderStatusQueueNameExtension = ".reader.status"
+MaxStatusMessageRetrieveCount = 100
+
 
 def is_queue_existing(queue_name: str, channel: Channel):
     try:
@@ -106,7 +110,12 @@ class MessageConsumer(_MessagingBase):
             raise AttributeError("Missing queue subscription, call subscribe() first")
 
         try:
-            self._connection.drain_events(timeout=timeout)
+            """ We need to acquire either the max number of messages or, if there
+                are no more messages, then the timeout will make sure to terminate
+                the loop. Notice that drain_events() will retrieve arbitrary number
+                of messages in one go instead of all available. """
+            while MaxStatusMessageRetrieveCount > self._retrieved_data_messages.qsize():
+                self._connection.drain_events(timeout=timeout)
         except TimeoutError:
             """ After timeout expires, a TimeoutError is raised, which
                 is in our case a normal condition, therefor we ignore it. """

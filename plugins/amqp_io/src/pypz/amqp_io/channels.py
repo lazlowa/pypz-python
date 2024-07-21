@@ -18,15 +18,12 @@ from typing import TYPE_CHECKING, Optional, Any
 
 from amqp import Connection
 
-from pypz.amqp_io.utils import MessageConsumer, MessageProducer, is_queue_existing
+from pypz.amqp_io.utils import MessageConsumer, MessageProducer, is_queue_existing, ReaderStatusQueueNameExtension, \
+    WriterStatusQueueNameExtension, MaxStatusMessageRetrieveCount
 from pypz.core.channels.io import ChannelWriter, ChannelReader
 
 if TYPE_CHECKING:
     from pypz.core.specs.plugin import InputPortPlugin, OutputPortPlugin
-
-WriterStatusQueueNameExtension = ".writer.status"
-ReaderStatusQueueNameExtension = ".reader.status"
-MaxStatusMessageRetrieveCount = 100
 
 
 class AMQPChannelWriter(ChannelWriter):
@@ -147,12 +144,7 @@ class AMQPChannelWriter(ChannelWriter):
         number of MaxStatusMessageRetrieveCount.
         """
 
-        retrieved_messages = []
-        poll_results = self._reader_status_consumer.poll(self._config_status_consumer_timeout_sec)
-        while (0 < len(poll_results)) and (MaxStatusMessageRetrieveCount > len(retrieved_messages)):
-            retrieved_messages.extend(poll_results)
-            poll_results = self._reader_status_consumer.poll(self._config_status_consumer_timeout_sec)
-
+        retrieved_messages = self._reader_status_consumer.poll(self._config_status_consumer_timeout_sec)
         self._reader_status_consumer.commit_messages()
         return retrieved_messages
 
@@ -352,11 +344,6 @@ class AMQPChannelReader(ChannelReader):
         number of MaxStatusMessageRetrieveCount.
         """
 
-        retrieved_messages = []
-        poll_results = self._writer_status_consumer.poll(self._config_status_consumer_timeout_sec)
-        while (0 < len(poll_results)) and (MaxStatusMessageRetrieveCount > len(retrieved_messages)):
-            retrieved_messages.extend(poll_results)
-            poll_results = self._writer_status_consumer.poll(self._config_status_consumer_timeout_sec)
-
+        retrieved_messages = self._writer_status_consumer.poll(self._config_status_consumer_timeout_sec)
         self._writer_status_consumer.commit_messages()
         return retrieved_messages
