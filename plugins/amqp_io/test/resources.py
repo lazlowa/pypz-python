@@ -13,11 +13,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # =============================================================================
-import time
 from typing import Optional
 
 from pypz.amqp_io.ports import AMQPChannelOutputPort, AMQPChannelInputPort
-from pypz.executors.pipeline.executor import PipelineExecutor
 from pypz.plugins.loggers.default import DefaultLoggerPlugin
 from pypz.core.commons.parameters import OptionalParameter
 from pypz.core.specs.misc import BlankOperator
@@ -123,4 +121,3 @@ class TestGroupInfo(InstanceGroup):
 
     def is_principal(self) -> bool:
         return self._is_principal
-

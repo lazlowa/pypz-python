@@ -192,9 +192,9 @@ class OperatorExecutor:
                 try:
                     self.__context.for_each_plugin_objects_with_type(
                         ExtendedPlugin, lambda plugin: plugin.get_protected().post_execution())
-                except Exception as e:
+                except Exception as e:  # noqa: F841
                     self.__context.for_each_plugin_objects_with_type(
-                        ExtendedPlugin, lambda plugin: plugin.get_protected().on_error(self.__class__, e)
+                        ExtendedPlugin, lambda plugin: plugin.get_protected().on_error(self.__class__, e)  # noqa: F821
                     )
                     raise
         except:  # noqa: E722
@@ -225,9 +225,9 @@ class OperatorExecutor:
             # of the execution
             self.__context.for_each_plugin_objects_with_type(
                 ExtendedPlugin, lambda plugin: plugin.get_protected().pre_execution())
-        except Exception as e:
+        except Exception as e:  # noqa: F841
             self.__context.for_each_plugin_objects_with_type(
-                ExtendedPlugin, lambda plugin: plugin.get_protected().on_error(self.__class__, e)
+                ExtendedPlugin, lambda plugin: plugin.get_protected().on_error(self.__class__, e)  # noqa: F821
             )
             raise
 
