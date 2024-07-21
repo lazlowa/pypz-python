@@ -16,7 +16,7 @@
 import concurrent.futures
 from typing import TYPE_CHECKING, Optional, Any
 
-from amqp import Connection
+from amqp import Connection, PreconditionFailed
 
 from pypz.amqp_io.utils import MessageConsumer, MessageProducer, is_queue_existing, ReaderStatusQueueNameExtension, \
     WriterStatusQueueNameExtension, MaxStatusMessageRetrieveCount
@@ -259,9 +259,35 @@ class AMQPChannelReader(ChannelReader):
     def _delete_resources(self) -> bool:
         with Connection(host=self.get_location()) as admin_connection:
             admin_channel = admin_connection.channel()
-            admin_channel.queue_delete(self._data_queue_name, if_unused=True, if_empty=True)
-            admin_channel.queue_delete(self._reader_status_stream_name, if_unused=True)
-            admin_channel.queue_delete(self._writer_status_stream_name, if_unused=True)
+
+            """ Note that although pypz has its own flow control, which makes sure that
+                no other channel uses the resources already at this point, glitch can
+                happen, which we shall signalize. The strategy is, if a resource is still
+                in use, then we simply wait for another iteration. In case of data
+                queue, if it is not used, but not empty, then we allow the deletion
+                to conclude, but we display a corresponding error message. """
+            if is_queue_existing(self._data_queue_name, admin_channel):
+                try:
+                    admin_channel.queue_delete(self._data_queue_name, if_unused=True, if_empty=True)
+                except PreconditionFailed as e:
+                    try:
+                        # Either used or not empty
+                        admin_channel.queue_delete(self._data_queue_name, if_unused=True)
+                        # Not used, but not empty
+                        self._logger.error(f"Resource deleted, but was not empty: {e}")
+                    except PreconditionFailed as e2:
+                        # Empty, but used
+                        self._logger.error(f"Resources cannot be deleted, still used: {e2}")
+                        return False
+
+            try:
+                if is_queue_existing(self._reader_status_stream_name, admin_channel):
+                    admin_channel.queue_delete(self._reader_status_stream_name, if_unused=True)
+                if is_queue_existing(self._writer_status_stream_name, admin_channel):
+                    admin_channel.queue_delete(self._writer_status_stream_name, if_unused=True)
+            except PreconditionFailed as e:
+                self._logger.error(f"Resources cannot be deleted, still used: {e}")
+                return False
 
         return True
 
