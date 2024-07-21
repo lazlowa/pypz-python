@@ -19,7 +19,7 @@ from typing import TYPE_CHECKING, Optional, Any
 from amqp import Connection, PreconditionFailed
 
 from pypz.amqp_io.utils import MessageConsumer, MessageProducer, is_queue_existing, ReaderStatusQueueNameExtension, \
-    WriterStatusQueueNameExtension, MaxStatusMessageRetrieveCount
+    WriterStatusQueueNameExtension, MaxStatusMessageRetrieveCount, is_exchange_existing
 from pypz.core.channels.io import ChannelWriter, ChannelReader
 
 if TYPE_CHECKING:
@@ -73,7 +73,7 @@ class AMQPChannelWriter(ChannelWriter):
 
     def _write_records(self, records: list[Any]) -> None:
         for record in records:
-            self._data_producer.publish(record, self._data_queue_name)
+            self._data_producer.publish(message=record, exchange_name=self._data_queue_name)
 
     def _create_resources(self) -> bool:
         return True
@@ -133,7 +133,7 @@ class AMQPChannelWriter(ChannelWriter):
             self._config_status_consumer_timeout_sec = channel_configuration["status_consumer_timeout_sec"]
 
     def _send_status_message(self, message: str) -> None:
-        self._writer_status_producer.publish(message, self._writer_status_stream_name)
+        self._writer_status_producer.publish(message=message, queue_name=self._writer_status_stream_name)
 
     def _retrieve_status_messages(self) -> Optional[list]:
         """
@@ -239,10 +239,15 @@ class AMQPChannelReader(ChannelReader):
         with Connection(host=self.get_location()) as admin_connection:
             admin_channel = admin_connection.channel()
 
-            admin_channel.queue_declare(
-                self._data_queue_name,
-                passive=False, durable=True, exclusive=False, auto_delete=False
+            admin_channel.exchange_declare(
+                exchange=self._data_queue_name, type="direct", passive=False, auto_delete=False, durable=True
             )
+
+            admin_channel.queue_declare(
+                self._data_queue_name, passive=False, durable=True, exclusive=False, auto_delete=False
+            )
+
+            admin_channel.queue_bind(queue=self._data_queue_name, exchange=self._data_queue_name)
 
             admin_channel.queue_declare(
                 self._reader_status_stream_name,
@@ -266,19 +271,26 @@ class AMQPChannelReader(ChannelReader):
                 in use, then we simply wait for another iteration. In case of data
                 queue, if it is not used, but not empty, then we allow the deletion
                 to conclude, but we display a corresponding error message. """
-            if is_queue_existing(self._data_queue_name, admin_channel):
+            if is_queue_existing(queue_name=self._data_queue_name, channel=admin_channel):
                 try:
-                    admin_channel.queue_delete(self._data_queue_name, if_unused=True, if_empty=True)
+                    admin_channel.queue_delete(queue=self._data_queue_name, if_unused=True, if_empty=True)
                 except PreconditionFailed as e:
                     try:
                         # Either used or not empty
-                        admin_channel.queue_delete(self._data_queue_name, if_unused=True)
+                        admin_channel.queue_delete(queue=self._data_queue_name, if_unused=True)
                         # Not used, but not empty
-                        self._logger.error(f"Resource deleted, but was not empty: {e}")
+                        self._logger.error(f"Queue deleted, but was not empty: {e}")
                     except PreconditionFailed as e2:
                         # Empty, but used
-                        self._logger.error(f"Resources cannot be deleted, still used: {e2}")
+                        self._logger.error(f"Queue cannot be deleted, still used: {e2}")
                         return False
+
+            if is_exchange_existing(exchange_name=self._data_queue_name, exchange_type="direct", channel=admin_channel):
+                try:
+                    admin_channel.exchange_delete(exchange=self._data_queue_name, if_unused=True)
+                except PreconditionFailed as e:
+                    self._logger.error(f"Exchange cannot be deleted, still used: {e}")
+                    return False
 
             try:
                 if is_queue_existing(self._reader_status_stream_name, admin_channel):
@@ -359,7 +371,7 @@ class AMQPChannelReader(ChannelReader):
             self._config_status_consumer_timeout_sec = channel_configuration["status_consumer_timeout_sec"]
 
     def _send_status_message(self, message: str) -> None:
-        self._reader_status_producer.publish(message, self._reader_status_stream_name)
+        self._reader_status_producer.publish(message=message, queue_name=self._reader_status_stream_name)
 
     def _retrieve_status_messages(self) -> Optional[list]:
         """

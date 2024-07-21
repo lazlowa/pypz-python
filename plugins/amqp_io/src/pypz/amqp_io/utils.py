@@ -31,6 +31,14 @@ def is_queue_existing(queue_name: str, channel: Channel):
         return False
 
 
+def is_exchange_existing(exchange_name: str, exchange_type: str, channel: Channel):
+    try:
+        channel.exchange_declare(exchange=exchange_name, type=exchange_type, passive=True)
+        return True
+    except NotFound:
+        return False
+
+
 class _MessagingBase:
     def __init__(self,
                  connection: Optional[Connection] = None,
@@ -138,5 +146,7 @@ class MessageProducer(_MessagingBase):
     def __init__(self, connection: Optional[Connection] = None, *args, **kwargs):
         super().__init__(connection, *args, **kwargs)
 
-    def publish(self, message: str, queue_name: str):
-        self._channel.basic_publish(Message(message), routing_key=queue_name)
+    def publish(self, message: str, queue_name: str = "", exchange_name: str = ""):
+        self._channel.basic_publish(
+            Message(message), mandatory=True, exchange=exchange_name, routing_key=queue_name
+        )
