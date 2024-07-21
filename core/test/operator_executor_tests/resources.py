@@ -14,7 +14,7 @@
 # limitations under the License.
 # =============================================================================
 import time
-from typing import Optional
+from typing import Optional, Any
 
 from pypz.core.commons.parameters import RequiredParameter
 from pypz.core.specs.misc import BlankInputPortPlugin, BlankOutputPortPlugin, BlankPlugin, BlankOperator
@@ -43,7 +43,7 @@ class TestPluginBase(Plugin):
         self.interrupted = True
         return self.control_handler(TestPluginBase._on_interrupt.__name__, None)
 
-    def _on_error(self) -> None:
+    def _on_error(self, source: Any, exception: Exception) -> None:
         self.call_counter_error += 1
         return self.control_handler(TestPluginBase._on_error.__name__, None)
 
@@ -230,7 +230,7 @@ class TestOperator(Operator):
         self.interrupted = True
         return self.control_handler(TestPluginBase._on_interrupt.__name__, None)
 
-    def _on_error(self) -> None:
+    def _on_error(self, source: Any, exception: Exception) -> None:
         self.call_counter_error += 1
         return self.control_handler(TestPluginBase._on_error.__name__, None)
 

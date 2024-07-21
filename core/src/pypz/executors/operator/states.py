@@ -18,7 +18,7 @@ import concurrent.futures
 import time
 from concurrent.futures import ThreadPoolExecutor
 from abc import ABC, abstractmethod
-from typing import Callable, Type, Any, Tuple, Optional
+from typing import Callable, Type, Any, Optional
 import types
 import traceback
 import inspect
@@ -45,6 +45,13 @@ class State(ABC):
 
     # ============ inner classes =============
 
+    class Execution:
+        def __init__(self, method: Any, instances: set[Instance], *args, **kwargs):
+            self.method = method
+            self.instances = instances
+            self.args = args
+            self.kwargs = kwargs
+
     class MethodWrapper:
         """
         This class represents the invocation of the plugin objects' method as action. It
@@ -57,7 +64,7 @@ class State(ABC):
 
         def __init__(self, state: State,
                      instance_name: str,
-                     callable_method: Callable[[], bool]):
+                     callable_method: Callable[..., bool]):
             self.__state = state
             self.__instance_name = instance_name
             self.__callable_method = callable_method
@@ -69,7 +76,7 @@ class State(ABC):
             try:
                 # Invocation of the actual plugin object's method, which was given as
                 # parameter to this class
-                is_completed = self.__callable_method()
+                is_completed = self.__callable_method(*args, **kwargs)
 
                 # If method's return type has been annotated, then we need to check, if the
                 # method indeed returns the expected type. Raising error if not.
@@ -195,7 +202,7 @@ class State(ABC):
 
             return self
 
-    def _schedule(self, *execution_chain: Tuple[str, set[Instance]],
+    def _schedule(self, *execution_chain: Execution,
                   break_on_exception: bool = False) -> bool:
         """
         Schedules a chain of instances' specified methods for execution via the thread pool
@@ -214,17 +221,15 @@ class State(ABC):
         all_instances_finished: bool = True
         error_in_instances: list[str] = list()
 
-        for execution_element in execution_chain:
+        for execution in execution_chain:
 
-            method_name = execution_element[0] \
-                if isinstance(execution_element[0], str) else execution_element[0].__name__  # type: ignore
-
-            instances = execution_element[1]
+            method_name = execution.method \
+                if isinstance(execution.method, str) else execution.method.__name__  # type: ignore
 
             futures: dict[concurrent.futures.Future, Callable[[], Any]] = dict()
             method_to_instance: dict[Callable[[], Any], Instance] = dict()
 
-            for instance in instances:
+            for instance in execution.instances:
                 # Early termination in case an actual instance object does not implement the
                 # specified method
                 if not hasattr(instance, method_name):
@@ -242,8 +247,12 @@ class State(ABC):
                     self._response_collector[method_reference] = False
 
                 if not self._response_collector[method_reference]:
-                    futures[self.__executor.submit(State.MethodWrapper(self, instance.get_simple_name(),
-                                                                       method_reference))] = method_reference
+                    futures[
+                        self.__executor.submit(
+                            State.MethodWrapper(self, instance.get_simple_name(), method_reference),
+                            *execution.args, **execution.kwargs
+                        )
+                    ] = method_reference
 
             for future, method_reference in futures.items():
                 # Early termination, if the future has been prematurely cancelled. This can be
@@ -366,9 +375,9 @@ class StateOperationInit(State):
 
     def on_execute(self) -> BaseSignal:
         try:
-            if not self._schedule(*[("_on_port_open", level)
+            if not self._schedule(*[State.Execution("_on_port_open", level)
                                     for level in self._context.get_dependency_graph_by_type(PortPlugin)],
-                                  ("_on_init", {self._context.get_operator()}),
+                                  State.Execution("_on_init", {self._context.get_operator()}),
                                   break_on_exception=True):
                 time.sleep(1)
                 return SignalNoOp()
@@ -380,8 +389,12 @@ class StateOperationInit(State):
             self._logger.error("============================================")
 
             try:
-                self._schedule(("_on_error", {self._context.get_operator()}),
-                               ("_on_error", self._context.get_plugin_instances_by_type(PortPlugin)))
+                self._schedule(State.Execution("_on_error",
+                                               {self._context.get_operator()},
+                                               source=self.__class__, exception=e.__context__),
+                               State.Execution("_on_error",
+                                               self._context.get_plugin_instances_by_type(PortPlugin),
+                                               source=self.__class__, exception=e.__context__))
             except Exception as ex:
                 self._logger.error(f"Exception at error handling: {ex}")
                 self._logger.error(traceback.format_exc())
@@ -421,8 +434,9 @@ class StateOperationRunning(State):
         try:
             is_finished = self._context.get_operator()._on_running()
             # TODO - on_running shall be submitted to the executor as well
-            # is_finished = self._schedule(("_on_running", {self._context.get_operator()}))
-            self._schedule(("commit_current_read_offset", self._context.get_plugin_instances_by_type(InputPortPlugin)))
+            # is_finished = self._schedule(State.Execution("_on_running", {self._context.get_operator()}))
+            self._schedule(State.Execution("commit_current_read_offset",
+                                           self._context.get_plugin_instances_by_type(InputPortPlugin)))
 
             # If nothing or None is returned from on_running, then it will be automatically
             # determined, whether to terminate the state or not
@@ -440,8 +454,12 @@ class StateOperationRunning(State):
             self._logger.error("============================================")
 
             try:
-                self._schedule(("_on_error", {self._context.get_operator()}),
-                               ("_on_error", self._context.get_plugin_instances_by_type(PortPlugin)))
+                self._schedule(State.Execution("_on_error",
+                                               {self._context.get_operator()},
+                                               source=self.__class__, exception=e.__context__),
+                               State.Execution("_on_error",
+                                               self._context.get_plugin_instances_by_type(PortPlugin),
+                                               source=self.__class__, exception=e.__context__))
             except Exception as ex:
                 self._logger.error(f"Exception at error handling: {ex}")
                 self._logger.error(traceback.format_exc())
@@ -483,8 +501,8 @@ class StateOperationShutdown(State):
 
     def on_execute(self) -> BaseSignal:
         try:
-            if not self._schedule(("_on_shutdown", {self._context.get_operator()}),
-                                  *[("_on_port_close", level)
+            if not self._schedule(State.Execution("_on_shutdown", {self._context.get_operator()}),
+                                  *[State.Execution("_on_port_close", level)
                                     for level in reversed(self._context.get_dependency_graph_by_type(PortPlugin))]):
                 time.sleep(1)
                 return SignalNoOp()
@@ -499,8 +517,12 @@ class StateOperationShutdown(State):
             self._logger.error("============================================")
 
             try:
-                self._schedule(("_on_error", {self._context.get_operator()}),
-                               ("_on_error", self._context.get_plugin_instances_by_type(PortPlugin)))
+                self._schedule(State.Execution("_on_error",
+                                               {self._context.get_operator()},
+                                               source=self.__class__, exception=e.__context__),
+                               State.Execution("_on_error",
+                                               self._context.get_plugin_instances_by_type(PortPlugin),
+                                               source=self.__class__, exception=e.__context__))
             except Exception as ex:
                 self._logger.error(f"Exception at error handling: {ex}")
                 self._logger.error(traceback.format_exc())
@@ -532,7 +554,7 @@ class StateResourceCreation(State):
 
     def on_execute(self) -> BaseSignal:
         try:
-            if not self._schedule(*[("_on_resource_creation", level)
+            if not self._schedule(*[State.Execution("_on_resource_creation", level)
                                     for level in self._context.get_dependency_graph_by_type(ResourceHandlerPlugin)],
                                   break_on_exception=True):
                 time.sleep(1)
@@ -548,7 +570,9 @@ class StateResourceCreation(State):
             self._logger.error("============================================")
 
             try:
-                self._schedule(("_on_error", self._context.get_plugin_instances_by_type(ResourceHandlerPlugin)))
+                self._schedule(State.Execution("_on_error",
+                                               self._context.get_plugin_instances_by_type(ResourceHandlerPlugin),
+                                               source=self.__class__, exception=e.__context__))
             except Exception as ex:
                 self._logger.error(f"Exception at error handling: {ex}")
                 self._logger.error(traceback.format_exc())
@@ -580,7 +604,7 @@ class StateResourceDeletion(State):
 
     def on_execute(self) -> BaseSignal:
         try:
-            if not self._schedule(*[("_on_resource_deletion", level) for level in
+            if not self._schedule(*[State.Execution("_on_resource_deletion", level) for level in
                                     reversed(self._context.get_dependency_graph_by_type(ResourceHandlerPlugin))]):
                 time.sleep(1)
                 return SignalNoOp()
@@ -592,7 +616,9 @@ class StateResourceDeletion(State):
             self._logger.error("============================================")
 
             try:
-                self._schedule(("_on_error", self._context.get_plugin_instances_by_type(ResourceHandlerPlugin)))
+                self._schedule(State.Execution("_on_error",
+                                               self._context.get_plugin_instances_by_type(ResourceHandlerPlugin),
+                                               source=self.__class__, exception=e.__context__))
             except Exception as ex:
                 self._logger.error(f"Exception at error handling: {ex}")
                 self._logger.error(traceback.format_exc())
@@ -624,7 +650,7 @@ class StateServiceStart(State):
 
     def on_execute(self) -> BaseSignal:
         try:
-            if not self._schedule(*[("_on_service_start", level)
+            if not self._schedule(*[State.Execution("_on_service_start", level)
                                     for level in self._context.get_dependency_graph_by_type(ServicePlugin)],
                                   break_on_exception=True):
                 time.sleep(1)
@@ -640,7 +666,9 @@ class StateServiceStart(State):
             self._logger.error("============================================")
 
             try:
-                self._schedule(("_on_error", self._context.get_plugin_instances_by_type(ServicePlugin)))
+                self._schedule(State.Execution("_on_error",
+                                               self._context.get_plugin_instances_by_type(ServicePlugin),
+                                               source=self.__class__, exception=e.__context__))
             except Exception as ex:
                 self._logger.error(f"Exception at error handling: {ex}")
                 self._logger.error(traceback.format_exc())
@@ -672,19 +700,21 @@ class StateServiceShutdown(State):
 
     def on_execute(self) -> BaseSignal:
         try:
-            if not self._schedule(*[("_on_service_shutdown", level)
+            if not self._schedule(*[State.Execution("_on_service_shutdown", level)
                                     for level in reversed(self._context.get_dependency_graph_by_type(ServicePlugin))]):
                 time.sleep(1)
                 return SignalNoOp()
 
             return SignalKill()
-        except:  # noqa: E722
+        except Exception as e:
             self._logger.error("========== Exception at execution ==========")
             self._logger.error(traceback.format_exc())
             self._logger.error("============================================")
 
             try:
-                self._schedule(("_on_error", self._context.get_plugin_instances_by_type(ServicePlugin)))
+                self._schedule(State.Execution("_on_error",
+                                               self._context.get_plugin_instances_by_type(ServicePlugin),
+                                               source=self.__class__, exception=e.__context__))
             except Exception as ex:
                 self._logger.error(f"Exception at error handling: {ex}")
                 self._logger.error(traceback.format_exc())

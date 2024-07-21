@@ -192,9 +192,10 @@ class OperatorExecutor:
                 try:
                     self.__context.for_each_plugin_objects_with_type(
                         ExtendedPlugin, lambda plugin: plugin.get_protected().post_execution())
-                except:  # noqa: E722
+                except Exception as e:
                     self.__context.for_each_plugin_objects_with_type(
-                        ExtendedPlugin, lambda plugin: plugin.get_protected().on_error())
+                        ExtendedPlugin, lambda plugin: plugin.get_protected().on_error(self.__class__, e)
+                    )
                     raise
         except:  # noqa: E722
             # Catching exceptions not handled at this point
@@ -224,9 +225,10 @@ class OperatorExecutor:
             # of the execution
             self.__context.for_each_plugin_objects_with_type(
                 ExtendedPlugin, lambda plugin: plugin.get_protected().pre_execution())
-        except:  # noqa: E722
-            self.__context.for_each_plugin_objects_with_type(ExtendedPlugin,
-                                                             lambda plugin: plugin.get_protected().on_error())
+        except Exception as e:
+            self.__context.for_each_plugin_objects_with_type(
+                ExtendedPlugin, lambda plugin: plugin.get_protected().on_error(self.__class__, e)
+            )
             raise
 
         # ========= Initialize state machine =========

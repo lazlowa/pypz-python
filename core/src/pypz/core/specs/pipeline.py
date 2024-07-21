@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # =============================================================================
-from typing import cast
+from typing import cast, Any
 
 import yaml
 
@@ -60,5 +60,5 @@ class Pipeline(Instance[Operator], RegisteredInterface):
     def _on_interrupt(self, system_signal: int = None) -> None:
         pass
 
-    def _on_error(self) -> None:
+    def _on_error(self, source: Any, exception: Exception) -> None:
         pass

@@ -241,7 +241,7 @@ class Instance(Generic[NestedInstanceType], RegisteredInterface, ABC, metaclass=
         pass
 
     @abstractmethod
-    def _on_error(self) -> None:
+    def _on_error(self, source: Any, exception: Exception) -> None:
         """
         This method can be implemented to react to error events during
         execution. The error itself may come from arbitrary sources.

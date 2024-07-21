@@ -13,6 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # =============================================================================
+from typing import Any
+
 from pypz.core.commons.loggers import DefaultContextLogger
 from pypz.core.commons.parameters import OptionalParameter
 from pypz.core.specs.plugin import LoggerPlugin
@@ -43,5 +45,5 @@ class DefaultLoggerPlugin(LoggerPlugin, DefaultContextLogger):
     def _on_interrupt(self, system_signal: int = None) -> None:
         pass
 
-    def _on_error(self) -> None:
+    def _on_error(self, source: Any, exception: Exception) -> None:
         pass

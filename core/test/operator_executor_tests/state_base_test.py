@@ -198,7 +198,7 @@ class BaseStateTest(unittest.TestCase):
         state = TestState1(context)
 
         start_time = pypz.core.commons.utils.current_time_millis()
-        self.assertTrue(state._schedule((Operator._on_init, {pipeline.operator_a})))
+        self.assertTrue(state._schedule(State.Execution(Operator._on_init, {pipeline.operator_a})))
         self.assertTrue(1100 > (pypz.core.commons.utils.current_time_millis() - start_time))
 
         state.shutdown()
@@ -212,7 +212,7 @@ class BaseStateTest(unittest.TestCase):
         pipeline.operator_a.set_parameter("return__on_init", False)
 
         start_time = pypz.core.commons.utils.current_time_millis()
-        self.assertFalse(state._schedule((Operator._on_init, {pipeline.operator_a})))
+        self.assertFalse(state._schedule(State.Execution(Operator._on_init, {pipeline.operator_a})))
         self.assertTrue(1100 > (pypz.core.commons.utils.current_time_millis() - start_time))
 
         state.shutdown()
@@ -223,9 +223,9 @@ class BaseStateTest(unittest.TestCase):
 
         state = TestState1(context)
 
-        self.assertTrue(state._schedule((Operator._on_init, {pipeline.operator_a})))
-        self.assertTrue(state._schedule((Operator._on_init, {pipeline.operator_a})))
-        self.assertTrue(state._schedule((Operator._on_init, {pipeline.operator_a})))
+        self.assertTrue(state._schedule(State.Execution(Operator._on_init, {pipeline.operator_a})))
+        self.assertTrue(state._schedule(State.Execution(Operator._on_init, {pipeline.operator_a})))
+        self.assertTrue(state._schedule(State.Execution(Operator._on_init, {pipeline.operator_a})))
 
         state.shutdown()
 
@@ -238,6 +238,6 @@ class BaseStateTest(unittest.TestCase):
         pipeline.operator_a.set_parameter("return__on_init", None)
 
         with self.assertRaises(RuntimeError):
-            state._schedule((Operator._on_init, {pipeline.operator_a}))
+            state._schedule(State.Execution(Operator._on_init, {pipeline.operator_a}))
 
         state.shutdown()
