@@ -18,7 +18,7 @@ from typing import TYPE_CHECKING, Optional, Any
 
 from amqp import Connection, PreconditionFailed
 
-from pypz.amqp_io.utils import MessageConsumer, MessageProducer, is_queue_existing, ReaderStatusQueueNameExtension, \
+from pypz.rmq_io.utils import MessageConsumer, MessageProducer, is_queue_existing, ReaderStatusQueueNameExtension, \
     WriterStatusQueueNameExtension, MaxStatusMessageRetrieveCount, is_exchange_existing
 from pypz.core.channels.io import ChannelWriter, ChannelReader
 
@@ -26,7 +26,7 @@ if TYPE_CHECKING:
     from pypz.core.specs.plugin import InputPortPlugin, OutputPortPlugin
 
 
-class AMQPChannelWriter(ChannelWriter):
+class RMQChannelWriter(ChannelWriter):
 
     def __init__(self, channel_name: str,
                  context: 'OutputPortPlugin',
@@ -72,7 +72,7 @@ class AMQPChannelWriter(ChannelWriter):
         Consumer wrapper to consume status messages sent by the ChannelReaders
         """
 
-        self._config_status_consumer_timeout_sec: int = 1
+        self._config_status_consumer_timeout_sec: float = 0.1
         """
         Configuration parameter to specify the timeout for draining events from the status stream
         """
@@ -88,27 +88,33 @@ class AMQPChannelWriter(ChannelWriter):
         return True
 
     def _open_channel(self) -> bool:
-        if self._channel_name is None:
-            raise AttributeError("Missing channel name.")
+        if self.get_location() is None:
+            raise ValueError(f"Missing channel location for channel: {self._channel_name}")
 
         with Connection(host=self.get_location()) as admin_connection:
             admin_channel = admin_connection.channel()
             if not is_queue_existing(self._data_queue_name, admin_channel) or \
                     not is_queue_existing(self._reader_status_stream_name, admin_channel) or \
-                    not is_queue_existing(self._writer_status_stream_name, admin_channel):
+                    not is_queue_existing(self._writer_status_stream_name, admin_channel) or \
+                    not is_exchange_existing(self._data_exchange_name, exchange_type="", channel=admin_channel):
                 return False
 
         if self._reader_status_consumer is None:
-            self._reader_status_consumer = MessageConsumer(
-                consumer_name="reader-status-consumer",
-                max_poll_record=MaxStatusMessageRetrieveCount,
-                host=self.get_location()
-            )
-            self._reader_status_consumer.subscribe(self._reader_status_stream_name,
-                                                   arguments={"x-stream-offset": "first"})
-            if (1 < self._context.get_group_size()) and self._context.is_principal():
-                self._reader_status_consumer.subscribe(self._writer_status_stream_name,
+            try:
+                self._reader_status_consumer = MessageConsumer(
+                    consumer_name="reader-status-consumer",
+                    max_poll_record=MaxStatusMessageRetrieveCount,
+                    host=self.get_location()
+                )
+                self._reader_status_consumer.subscribe(self._reader_status_stream_name,
                                                        arguments={"x-stream-offset": "first"})
+                if (1 < self._context.get_group_size()) and self._context.is_principal():
+                    self._reader_status_consumer.subscribe(self._writer_status_stream_name,
+                                                           arguments={"x-stream-offset": "first"})
+            except PreconditionFailed as e:
+                if (406 == e.code) and ("" in e.message):
+                    raise ConnectionError("Invalid resource type, stream expected")
+                raise
 
         if self._data_producer is None:
             self._data_producer = MessageProducer(host=self.get_location())
@@ -155,7 +161,7 @@ class AMQPChannelWriter(ChannelWriter):
         return retrieved_messages
 
 
-class AMQPChannelReader(ChannelReader):
+class RMQChannelReader(ChannelReader):
     def __init__(self, channel_name: str,
                  context: 'InputPortPlugin',
                  executor: Optional[concurrent.futures.ThreadPoolExecutor] = None,
@@ -256,6 +262,9 @@ class AMQPChannelReader(ChannelReader):
         self._data_consumer.commit_messages()
 
     def _create_resources(self) -> bool:
+        if self.get_location() is None:
+            raise ValueError(f"Missing channel location for channel: {self._channel_name}")
+
         with (Connection(host=self.get_location()) as admin_connection):
             admin_channel = admin_connection.channel()
 
@@ -289,6 +298,9 @@ class AMQPChannelReader(ChannelReader):
         return True
 
     def _delete_resources(self) -> bool:
+        if self.get_location() is None:
+            raise ValueError(f"Missing channel location for channel: {self._channel_name}")
+
         with Connection(host=self.get_location()) as admin_connection:
             admin_channel = admin_connection.channel()
 
@@ -340,8 +352,8 @@ class AMQPChannelReader(ChannelReader):
         return True
 
     def _open_channel(self) -> bool:
-        if self._channel_name is None:
-            raise AttributeError("Missing channel name.")
+        if self.get_location() is None:
+            raise ValueError(f"Missing channel location for channel: {self._channel_name}")
 
         with Connection(host=self.get_location()) as admin_connection:
             admin_channel = admin_connection.channel()
@@ -351,16 +363,21 @@ class AMQPChannelReader(ChannelReader):
                 return False
 
         if self._writer_status_consumer is None:
-            self._writer_status_consumer = MessageConsumer(
-                consumer_name="writer-status-consumer",
-                max_poll_record=MaxStatusMessageRetrieveCount,
-                host=self.get_location()
-            )
-            self._writer_status_consumer.subscribe(self._writer_status_stream_name,
-                                                   arguments={"x-stream-offset": "first"})
-            if (1 < self._context.get_group_size()) and self._context.is_principal():
-                self._writer_status_consumer.subscribe(self._reader_status_stream_name,
+            try:
+                self._writer_status_consumer = MessageConsumer(
+                    consumer_name="writer-status-consumer",
+                    max_poll_record=MaxStatusMessageRetrieveCount,
+                    host=self.get_location()
+                )
+                self._writer_status_consumer.subscribe(self._writer_status_stream_name,
                                                        arguments={"x-stream-offset": "first"})
+                if (1 < self._context.get_group_size()) and self._context.is_principal():
+                    self._writer_status_consumer.subscribe(self._reader_status_stream_name,
+                                                           arguments={"x-stream-offset": "first"})
+            except PreconditionFailed as e:
+                if (406 == e.code) and ("" in e.message):
+                    raise ConnectionError("Invalid resource type, stream expected")
+                raise
 
         """ Notice checking the silent mode. Silent mode is the mode, how sniffer sniffs
             the channels, since the sniffer creates an actual channel. Silent mode prevents

@@ -16,16 +16,16 @@
 from typing import Optional, Any
 
 from pypz.abstracts.channel_ports import ChannelInputPort, ChannelOutputPort
-from pypz.amqp_io.channels import AMQPChannelReader, AMQPChannelWriter
+from pypz.rmq_io.channels import RMQChannelReader, RMQChannelWriter
 
 
 class AMQPChannelInputPort(ChannelInputPort):
 
     def __init__(self, name: str = None, schema: Any = None, group_mode: bool = False, *args, **kwargs):
-        super().__init__(name, schema, group_mode, AMQPChannelReader, *args, **kwargs)
+        super().__init__(name, schema, group_mode, RMQChannelReader, *args, **kwargs)
 
 
 class AMQPChannelOutputPort(ChannelOutputPort):
 
     def __init__(self, name: str = None, schema: Optional[Any] = None, *args, **kwargs):
-        super().__init__(name, schema, AMQPChannelWriter, *args, **kwargs)
+        super().__init__(name, schema, RMQChannelWriter, *args, **kwargs)
