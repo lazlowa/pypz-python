@@ -19,7 +19,7 @@ from typing import TYPE_CHECKING, Optional, Any
 from amqp import Connection, PreconditionFailed
 
 from pypz.amqp_io.utils import MessageConsumer, MessageProducer, is_queue_existing, ReaderStatusQueueNameExtension, \
-    WriterStatusQueueNameExtension, MaxStatusMessageRetrieveCount, is_exchange_existing
+    WriterStatusQueueNameExtension, MaxStatusMessageRetrieveCount
 from pypz.core.channels.io import ChannelWriter, ChannelReader
 
 if TYPE_CHECKING:
@@ -73,7 +73,7 @@ class AMQPChannelWriter(ChannelWriter):
 
     def _write_records(self, records: list[Any]) -> None:
         for record in records:
-            self._data_producer.publish(message=record, exchange_name=self._data_queue_name)
+            self._data_producer.publish(message=record, queue_name=self._data_queue_name)
 
     def _create_resources(self) -> bool:
         return True
@@ -239,15 +239,10 @@ class AMQPChannelReader(ChannelReader):
         with Connection(host=self.get_location()) as admin_connection:
             admin_channel = admin_connection.channel()
 
-            admin_channel.exchange_declare(
-                exchange=self._data_queue_name, type="direct", passive=False, auto_delete=False, durable=True
-            )
-
             admin_channel.queue_declare(
-                self._data_queue_name, passive=False, durable=True, exclusive=False, auto_delete=False
+                self._data_queue_name,
+                passive=False, durable=True, exclusive=False, auto_delete=False
             )
-
-            admin_channel.queue_bind(queue=self._data_queue_name, exchange=self._data_queue_name)
 
             admin_channel.queue_declare(
                 self._reader_status_stream_name,
@@ -284,13 +279,6 @@ class AMQPChannelReader(ChannelReader):
                         # Empty, but used
                         self._logger.error(f"Queue cannot be deleted, still used: {e2}")
                         return False
-
-            if is_exchange_existing(exchange_name=self._data_queue_name, exchange_type="direct", channel=admin_channel):
-                try:
-                    admin_channel.exchange_delete(exchange=self._data_queue_name, if_unused=True)
-                except PreconditionFailed as e:
-                    self._logger.error(f"Exchange cannot be deleted, still used: {e}")
-                    return False
 
             try:
                 if is_queue_existing(self._reader_status_stream_name, admin_channel):
