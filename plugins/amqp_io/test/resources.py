@@ -31,10 +31,9 @@ class TestWriterOperator(BlankOperator):
         super().__init__(name, *args, **kwargs)
 
         self.output_port = AMQPChannelOutputPort()
-        self.group_output_port = AMQPChannelOutputPort(group_mode=True)
         self.logger = DefaultLoggerPlugin()
 
-        self.max_record_count = 200000
+        self.max_record_count = 20000
         self.record_count = 0
 
     def _on_init(self) -> bool:
@@ -50,7 +49,6 @@ class TestWriterOperator(BlankOperator):
         #     self.record_count += 1
         # self.output_port.send(records)
         self.output_port.send([f"demo_text-{self.record_count}"])
-        # self.group_output_port.send([f"group_text-{self.record_count}"])
         self.record_count += 1
         if self.record_count >= self.max_record_count:
             return True
@@ -79,7 +77,7 @@ class TestReaderOperator(BlankOperator):
         # for record in records:
         #     self.get_logger().debug(record)
         self.get_logger().debug(str(len(self.received_records)))
-        # print(self.group_input_port.retrieve())
+        self.group_input_port.retrieve()
         # return not self.input_port.can_retrieve()
 
 
@@ -97,7 +95,7 @@ class TestPipeline(Pipeline):
         # self.writer.set_parameter("replicationFactor", 1)
 
         self.reader.input_port.connect(self.writer.output_port)
-        # self.reader.group_input_port.connect(self.writer.group_output_port)
+        self.reader.group_input_port.connect(self.writer.output_port)
 
 
 class TestGroupInfo(InstanceGroup):

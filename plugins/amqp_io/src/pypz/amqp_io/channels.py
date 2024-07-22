@@ -36,6 +36,12 @@ class AMQPChannelWriter(ChannelWriter):
 
         self._context: 'OutputPortPlugin' = context
 
+        self._data_exchange_name: str = channel_name
+        """
+        Data goes through exchanges, a dedicated exchange with this name will be
+        created for this channel.
+        """
+
         self._data_queue_name: str = channel_name
         """
         Data queue name
@@ -73,7 +79,7 @@ class AMQPChannelWriter(ChannelWriter):
 
     def _write_records(self, records: list[Any]) -> None:
         for record in records:
-            self._data_producer.publish(message=record, exchange_name=self._data_queue_name)
+            self._data_producer.publish(message=record, exchange_name=self._data_exchange_name)
 
     def _create_resources(self) -> bool:
         return True
@@ -82,7 +88,7 @@ class AMQPChannelWriter(ChannelWriter):
         return True
 
     def _open_channel(self) -> bool:
-        if self._data_queue_name is None:
+        if self._channel_name is None:
             raise AttributeError("Missing channel name.")
 
         with Connection(host=self.get_location()) as admin_connection:
@@ -158,7 +164,21 @@ class AMQPChannelReader(ChannelReader):
 
         self._context: 'InputPortPlugin' = context
 
-        self._data_queue_name: str = channel_name
+        self._data_exchange_name: str = channel_name
+        """
+        Data goes through exchanges, a dedicated exchange with this name will be
+        created for this channel.
+        """
+
+        self._exchange_type = "direct" if not self._context.is_in_group_mode() else "fanout"
+        """
+        This controls, how the exchange shall forward messages to the consumers. In group
+        mode, all the consumers shall get all the messages, hence we need to specify it as "fanout"
+        """
+
+        self._data_queue_name: str = channel_name \
+            if (not self._context.is_in_group_mode()) or (self._context.is_principal()) \
+            else f"{channel_name}-{self._context.get_group_index()}"
         """
         Data queue name, where all the data messages go through
         """
@@ -236,18 +256,25 @@ class AMQPChannelReader(ChannelReader):
         self._data_consumer.commit_messages()
 
     def _create_resources(self) -> bool:
-        with Connection(host=self.get_location()) as admin_connection:
+        with (Connection(host=self.get_location()) as admin_connection):
             admin_channel = admin_connection.channel()
 
             admin_channel.exchange_declare(
-                exchange=self._data_queue_name, type="direct", passive=False, auto_delete=False, durable=True
+                exchange=self._data_exchange_name, type=self._exchange_type,
+                passive=False, auto_delete=False, durable=True
             )
 
-            admin_channel.queue_declare(
-                self._data_queue_name, passive=False, durable=True, exclusive=False, auto_delete=False
-            )
+            data_queues: list = [self._channel_name]
 
-            admin_channel.queue_bind(queue=self._data_queue_name, exchange=self._data_queue_name)
+            if self._context.is_in_group_mode():
+                data_queues.extend(
+                    [f"{self._channel_name}-{idx}" for idx in range(1, self._context.get_group_size())])
+
+            for data_queue in data_queues:
+                admin_channel.queue_declare(
+                    data_queue, passive=False, durable=True, exclusive=False, auto_delete=False
+                )
+                admin_channel.queue_bind(queue=data_queue, exchange=self._data_exchange_name)
 
             admin_channel.queue_declare(
                 self._reader_status_stream_name,
@@ -265,29 +292,38 @@ class AMQPChannelReader(ChannelReader):
         with Connection(host=self.get_location()) as admin_connection:
             admin_channel = admin_connection.channel()
 
-            """ Note that although pypz has its own flow control, which makes sure that
-                no other channel uses the resources already at this point, glitch can
-                happen, which we shall signalize. The strategy is, if a resource is still
-                in use, then we simply wait for another iteration. In case of data
-                queue, if it is not used, but not empty, then we allow the deletion
-                to conclude, but we display a corresponding error message. """
-            if is_queue_existing(queue_name=self._data_queue_name, channel=admin_channel):
-                try:
-                    admin_channel.queue_delete(queue=self._data_queue_name, if_unused=True, if_empty=True)
-                except PreconditionFailed as e:
-                    try:
-                        # Either used or not empty
-                        admin_channel.queue_delete(queue=self._data_queue_name, if_unused=True)
-                        # Not used, but not empty
-                        self._logger.error(f"Queue deleted, but was not empty: {e}")
-                    except PreconditionFailed as e2:
-                        # Empty, but used
-                        self._logger.error(f"Queue cannot be deleted, still used: {e2}")
-                        return False
+            data_queues: list = [self._channel_name]
 
-            if is_exchange_existing(exchange_name=self._data_queue_name, exchange_type="direct", channel=admin_channel):
+            if self._context.is_in_group_mode():
+                data_queues.extend(
+                    [f"{self._channel_name}-{idx}" for idx in range(1, self._context.get_group_size())])
+
+            for data_queue in data_queues:
+                """ Note that although pypz has its own flow control, which makes sure that
+                    no other channel uses the resources already at this point, glitch can
+                    happen, which we shall signalize. The strategy is, if a resource is still
+                    in use, then we simply wait for another iteration. In case of data
+                    queue, if it is not used, but not empty, then we allow the deletion
+                    to conclude, but we display a corresponding error message. """
+                if is_queue_existing(queue_name=data_queue, channel=admin_channel):
+                    try:
+                        admin_channel.queue_delete(queue=data_queue, if_unused=True, if_empty=True)
+                    except PreconditionFailed as e:
+                        try:
+                            # Either used or not empty
+                            admin_channel.queue_delete(queue=data_queue, if_unused=True)
+                            # Not used, but not empty
+                            self._logger.error(f"Queue deleted, but was not empty: {e}")
+                        except PreconditionFailed as e2:
+                            # Empty, but used
+                            self._logger.error(f"Queue cannot be deleted, still used: {e2}")
+                            return False
+
+            if is_exchange_existing(exchange_name=self._data_exchange_name,
+                                    exchange_type=self._exchange_type,
+                                    channel=admin_channel):
                 try:
-                    admin_channel.exchange_delete(exchange=self._data_queue_name, if_unused=True)
+                    admin_channel.exchange_delete(exchange=self._data_exchange_name, if_unused=True)
                 except PreconditionFailed as e:
                     self._logger.error(f"Exchange cannot be deleted, still used: {e}")
                     return False
@@ -304,7 +340,7 @@ class AMQPChannelReader(ChannelReader):
         return True
 
     def _open_channel(self) -> bool:
-        if self._data_queue_name is None:
+        if self._channel_name is None:
             raise AttributeError("Missing channel name.")
 
         with Connection(host=self.get_location()) as admin_connection:
