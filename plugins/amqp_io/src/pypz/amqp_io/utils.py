@@ -67,6 +67,8 @@ class MessageConsumer(_MessagingBase):
             the prefetch count defines the max number of messages pushed
             by the server before requiring 'acknowledge' signal."""
 
+        self._max_poll_record: int = max_poll_record
+
         self._subscriptions: set[str] = set()
 
         self._consumer_name: str = consumer_name
@@ -122,7 +124,7 @@ class MessageConsumer(_MessagingBase):
                 are no more messages, then the timeout will make sure to terminate
                 the loop. Notice that drain_events() will retrieve arbitrary number
                 of messages in one go instead of all available. """
-            while MaxStatusMessageRetrieveCount > self._retrieved_data_messages.qsize():
+            while self._max_poll_record > self._retrieved_data_messages.qsize():
                 self._connection.drain_events(timeout=timeout)
         except TimeoutError:
             """ After timeout expires, a TimeoutError is raised, which

@@ -31,7 +31,7 @@ class TestWriterOperator(BlankOperator):
         super().__init__(name, *args, **kwargs)
 
         self.output_port = AMQPChannelOutputPort()
-        # self.group_output_port = AMQPChannelOutputPort(group_mode=True)
+        self.group_output_port = AMQPChannelOutputPort(group_mode=True)
         self.logger = DefaultLoggerPlugin()
 
         self.max_record_count = 200000
@@ -44,10 +44,15 @@ class TestWriterOperator(BlankOperator):
         return True
 
     def _on_running(self) -> bool:
+        # records = []
+        # for idx in range(100):
+        #     records.append(f"demo_text-{self.record_count}")
+        #     self.record_count += 1
+        # self.output_port.send(records)
         self.output_port.send([f"demo_text-{self.record_count}"])
-
+        # self.group_output_port.send([f"group_text-{self.record_count}"])
         self.record_count += 1
-        if self.record_count == self.max_record_count:
+        if self.record_count >= self.max_record_count:
             return True
         return False
 
@@ -58,7 +63,7 @@ class TestReaderOperator(BlankOperator):
         super().__init__(name, *args, **kwargs)
 
         self.input_port = AMQPChannelInputPort()
-        # self.group_input_port = AMQPChannelInputPort(group_mode=True)
+        self.group_input_port = AMQPChannelInputPort(group_mode=True)
         self.logger = DefaultLoggerPlugin()
         self.received_records: list = list()
 
@@ -74,7 +79,8 @@ class TestReaderOperator(BlankOperator):
         # for record in records:
         #     self.get_logger().debug(record)
         self.get_logger().debug(str(len(self.received_records)))
-        return not self.input_port.can_retrieve()
+        # print(self.group_input_port.retrieve())
+        # return not self.input_port.can_retrieve()
 
 
 class TestPipeline(Pipeline):
