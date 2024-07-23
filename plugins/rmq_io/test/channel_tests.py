@@ -17,10 +17,11 @@ import unittest
 
 from amqp import Connection, Message
 
-from plugins.rmq_io.src.pypz.rmq_io.utils import ReaderStatusQueueNameExtension, WriterStatusQueueNameExtension
+from plugins.rmq_io.src.pypz.rmq_io.utils import ReaderStatusQueueNameExtension, WriterStatusQueueNameExtension, \
+    is_queue_existing, is_exchange_existing
 from pypz.core.channels.status import ChannelStatusMessage, ChannelStatus
-from pypz.core.specs.misc import BlankOutputPortPlugin, BlankInputPortPlugin
-from pypz.rmq_io.channels import RMQChannelWriter
+from pypz.core.specs.misc import BlankOutputPortPlugin, BlankInputPortPlugin, BlankOperator
+from pypz.rmq_io.channels import RMQChannelWriter, RMQChannelReader
 
 
 class RMQChannelTest(unittest.TestCase):
@@ -302,24 +303,445 @@ class RMQChannelTest(unittest.TestCase):
                 self.assertIn(f"{RMQChannelTest.test_channel_name}@reader_0", connected_open_channel_count)
             finally:
                 self.assertTrue(channel_writer.invoke_close_channel())
-# Reader
-# Test create resources
-# Test create resources in group mode
-# Test delete resources
-# Test delete resources in group mode
-# Test delete resources if not empty
-# Test delete resources if used
-# Test open channel w/o resources
-# Test open channel w/ resources
-# Test open channel if replicated
-# Test has_records w/ records
-# Test has_records w/o records
-# Test retrieve w/ records
-# Test retrieve w/o records
-# Test retrieve w/o commit
-# Test retrieve w/ commit
-# Test can_close w/ records
-# Test can_close w/o records
-# Test can_close w/ connected channel (all combinations of healthy, stopped, closed)
-# Test can_close as principal w/ connected channel
-# Test max poll records
+
+    def test_channel_reader_resource_creation_without_location_expect_error(self):
+        channel_reader = RMQChannelReader(channel_name=RMQChannelTest.test_channel_name,
+                                          context=BlankInputPortPlugin("reader"))
+        with self.assertRaises(ValueError):
+            channel_reader.invoke_resource_creation()
+
+    def test_channel_reader_resource_creation_expect_ok(self):
+        channel_reader = RMQChannelReader(channel_name=RMQChannelTest.test_channel_name,
+                                          context=BlankInputPortPlugin("reader"))
+        channel_reader.set_location(RMQChannelTest.bootstrap_url)
+        self.assertTrue(channel_reader.invoke_resource_creation())
+
+        with Connection(host=RMQChannelTest.bootstrap_url) as admin_connection:
+            admin_channel = admin_connection.channel()
+
+            self.assertTrue(is_queue_existing(RMQChannelTest.test_channel_name, admin_channel))
+            self.assertTrue(is_queue_existing(RMQChannelTest.test_reader_status_queue_name, admin_channel))
+            self.assertTrue(is_queue_existing(RMQChannelTest.test_writer_status_queue_name, admin_channel))
+            self.assertTrue(is_exchange_existing(RMQChannelTest.test_channel_name, "", admin_channel))
+
+    def test_channel_reader_resource_creation_in_group_mode_expect_ok(self):
+        operator_context = BlankOperator("blank")
+        operator_context.set_parameter("replicationFactor", 2)
+        plugin_context = BlankInputPortPlugin("reader", group_mode=True, context=operator_context)
+        channel_reader = RMQChannelReader(channel_name=RMQChannelTest.test_channel_name,
+                                          context=plugin_context)
+        channel_reader.set_location(RMQChannelTest.bootstrap_url)
+        self.assertTrue(channel_reader.invoke_resource_creation())
+
+        with Connection(host=RMQChannelTest.bootstrap_url) as admin_connection:
+            admin_channel = admin_connection.channel()
+
+            try:
+                self.assertTrue(is_queue_existing(RMQChannelTest.test_channel_name, admin_channel))
+                self.assertTrue(is_queue_existing(RMQChannelTest.test_channel_name + "-1", admin_channel))
+                self.assertTrue(is_queue_existing(RMQChannelTest.test_channel_name + "-2", admin_channel))
+                self.assertTrue(is_queue_existing(RMQChannelTest.test_reader_status_queue_name, admin_channel))
+                self.assertTrue(is_queue_existing(RMQChannelTest.test_writer_status_queue_name, admin_channel))
+                self.assertTrue(is_exchange_existing(RMQChannelTest.test_channel_name, "", admin_channel))
+            finally:
+                admin_channel.queue_delete(RMQChannelTest.test_channel_name + "-1")
+                admin_channel.queue_delete(RMQChannelTest.test_channel_name + "-2")
+
+    def test_channel_reader_resource_creation_idempotence(self):
+        channel_reader = RMQChannelReader(channel_name=RMQChannelTest.test_channel_name,
+                                          context=BlankInputPortPlugin("reader"))
+        channel_reader.set_location(RMQChannelTest.bootstrap_url)
+        self.assertTrue(channel_reader.invoke_resource_creation())
+        self.assertTrue(channel_reader.invoke_resource_creation())
+
+    def test_channel_reader_resource_deletion_expect_ok(self):
+        channel_reader = RMQChannelReader(channel_name=RMQChannelTest.test_channel_name,
+                                          context=BlankInputPortPlugin("reader"))
+        channel_reader.set_location(RMQChannelTest.bootstrap_url)
+        self.assertTrue(channel_reader.invoke_resource_creation())
+        self.assertTrue(channel_reader.invoke_resource_deletion())
+
+        with Connection(host=RMQChannelTest.bootstrap_url) as admin_connection:
+            admin_channel = admin_connection.channel()
+
+            self.assertFalse(is_queue_existing(RMQChannelTest.test_channel_name, admin_channel))
+            self.assertFalse(is_queue_existing(RMQChannelTest.test_reader_status_queue_name, admin_channel))
+            self.assertFalse(is_queue_existing(RMQChannelTest.test_writer_status_queue_name, admin_channel))
+            self.assertFalse(is_exchange_existing(RMQChannelTest.test_channel_name, "", admin_channel))
+
+    def test_channel_reader_resource_deletion_in_group_mode_expect_ok(self):
+        operator_context = BlankOperator("blank")
+        operator_context.set_parameter("replicationFactor", 2)
+        plugin_context = BlankInputPortPlugin("reader", group_mode=True, context=operator_context)
+        channel_reader = RMQChannelReader(channel_name=RMQChannelTest.test_channel_name,
+                                          context=plugin_context)
+        channel_reader.set_location(RMQChannelTest.bootstrap_url)
+        self.assertTrue(channel_reader.invoke_resource_creation())
+        self.assertTrue(channel_reader.invoke_resource_deletion())
+
+        with Connection(host=RMQChannelTest.bootstrap_url) as admin_connection:
+            admin_channel = admin_connection.channel()
+
+            self.assertFalse(is_queue_existing(RMQChannelTest.test_channel_name, admin_channel))
+            self.assertFalse(is_queue_existing(RMQChannelTest.test_channel_name + "-1", admin_channel))
+            self.assertFalse(is_queue_existing(RMQChannelTest.test_channel_name + "-2", admin_channel))
+            self.assertFalse(is_queue_existing(RMQChannelTest.test_reader_status_queue_name, admin_channel))
+            self.assertFalse(is_queue_existing(RMQChannelTest.test_writer_status_queue_name, admin_channel))
+            self.assertFalse(is_exchange_existing(RMQChannelTest.test_channel_name, "", admin_channel))
+
+    def test_channel_reader_resource_deletion_with_active_consumer_expect_nok(self):
+        channel_reader = RMQChannelReader(channel_name=RMQChannelTest.test_channel_name,
+                                          context=BlankInputPortPlugin("reader"))
+        channel_reader.set_location(RMQChannelTest.bootstrap_url)
+        self.assertTrue(channel_reader.invoke_resource_creation())
+
+        with Connection(host=RMQChannelTest.bootstrap_url) as admin_connection:
+            admin_channel = admin_connection.channel()
+            admin_channel.basic_consume(RMQChannelTest.test_channel_name,
+                                        callback=lambda: None, consumer_tag="test-consumer")
+            self.assertFalse(channel_reader.invoke_resource_deletion())
+            self.assertTrue(is_queue_existing(RMQChannelTest.test_channel_name, admin_channel))
+            self.assertTrue(is_queue_existing(RMQChannelTest.test_reader_status_queue_name, admin_channel))
+            self.assertTrue(is_queue_existing(RMQChannelTest.test_writer_status_queue_name, admin_channel))
+            self.assertTrue(is_exchange_existing(RMQChannelTest.test_channel_name, "", admin_channel))
+
+            admin_channel.basic_cancel(consumer_tag="test-consumer")
+            self.assertTrue(channel_reader.invoke_resource_deletion())
+            self.assertFalse(is_queue_existing(RMQChannelTest.test_channel_name, admin_channel))
+            self.assertFalse(is_queue_existing(RMQChannelTest.test_reader_status_queue_name, admin_channel))
+            self.assertFalse(is_queue_existing(RMQChannelTest.test_writer_status_queue_name, admin_channel))
+            self.assertFalse(is_exchange_existing(RMQChannelTest.test_channel_name, "", admin_channel))
+
+    def test_channel_reader_resource_deletion_if_non_empty_expect_ok(self):
+        channel_reader = RMQChannelReader(channel_name=RMQChannelTest.test_channel_name,
+                                          context=BlankInputPortPlugin("reader"))
+        channel_reader.set_location(RMQChannelTest.bootstrap_url)
+        self.assertTrue(channel_reader.invoke_resource_creation())
+
+        with Connection(host=RMQChannelTest.bootstrap_url) as admin_connection:
+            admin_channel = admin_connection.channel()
+            admin_channel.basic_publish(Message(str("dummy")), routing_key=RMQChannelTest.test_channel_name)
+            self.assertTrue(channel_reader.invoke_resource_deletion())
+            self.assertFalse(is_queue_existing(RMQChannelTest.test_channel_name, admin_channel))
+            self.assertFalse(is_queue_existing(RMQChannelTest.test_reader_status_queue_name, admin_channel))
+            self.assertFalse(is_queue_existing(RMQChannelTest.test_writer_status_queue_name, admin_channel))
+            self.assertFalse(is_exchange_existing(RMQChannelTest.test_channel_name, "", admin_channel))
+
+    def test_channel_reader_resource_deletion_idempotence(self):
+        channel_reader = RMQChannelReader(channel_name=RMQChannelTest.test_channel_name,
+                                          context=BlankInputPortPlugin("reader"))
+        channel_reader.set_location(RMQChannelTest.bootstrap_url)
+        self.assertTrue(channel_reader.invoke_resource_creation())
+        self.assertTrue(channel_reader.invoke_resource_deletion())
+        self.assertTrue(channel_reader.invoke_resource_deletion())
+
+    def test_channel_reader_open_without_resources_expect_nok(self):
+        channel_reader = RMQChannelReader(channel_name=RMQChannelTest.test_channel_name,
+                                          context=BlankInputPortPlugin("reader"))
+        channel_reader.set_location(RMQChannelTest.bootstrap_url)
+        self.assertFalse(channel_reader.invoke_open_channel())
+
+    def test_channel_reader_open_without_location_expect_error(self):
+        channel_reader = RMQChannelReader(channel_name=RMQChannelTest.test_channel_name,
+                                          context=BlankInputPortPlugin("reader"))
+        with self.assertRaises(ValueError):
+            channel_reader.invoke_open_channel()
+
+    def test_channel_reader_open_close_with_resources_expect_ok(self):
+        channel_reader = RMQChannelReader(channel_name=RMQChannelTest.test_channel_name,
+                                          context=BlankInputPortPlugin("reader"))
+        channel_reader.set_location(RMQChannelTest.bootstrap_url)
+        self.assertTrue(channel_reader.invoke_resource_creation())
+        self.assertTrue(channel_reader.invoke_open_channel())
+        self.assertTrue(channel_reader.invoke_close_channel())
+        self.assertTrue(channel_reader.invoke_resource_deletion())
+
+    def test_channel_reader_open_close_idempotence(self):
+        channel_reader = RMQChannelReader(channel_name=RMQChannelTest.test_channel_name,
+                                          context=BlankInputPortPlugin("reader"))
+        channel_reader.set_location(RMQChannelTest.bootstrap_url)
+        self.assertTrue(channel_reader.invoke_resource_creation())
+        self.assertTrue(channel_reader.invoke_open_channel())
+        self.assertTrue(channel_reader.invoke_open_channel())
+        self.assertTrue(channel_reader.invoke_close_channel())
+        self.assertTrue(channel_reader.invoke_close_channel())
+        self.assertTrue(channel_reader.invoke_resource_deletion())
+
+    def test_channel_reader_retrieve_without_commit_expect_ok(self):
+        channel_reader = RMQChannelReader(channel_name=RMQChannelTest.test_channel_name,
+                                          context=BlankInputPortPlugin("reader"))
+        channel_reader.set_location(RMQChannelTest.bootstrap_url)
+
+        with Connection(host=RMQChannelTest.bootstrap_url) as admin_connection:
+            admin_channel = admin_connection.channel()
+            try:
+                self.assertTrue(channel_reader.invoke_resource_creation())
+                self.assertTrue(channel_reader.invoke_open_channel())
+                retrieved = channel_reader.invoke_read_records()
+                self.assertEqual(0, len(retrieved))
+                admin_channel.basic_publish(Message(str("dummy_0")), routing_key=RMQChannelTest.test_channel_name)
+                retrieved = channel_reader.invoke_read_records()
+                self.assertEqual(1, len(retrieved))
+                self.assertEqual("dummy_0", retrieved[0])
+                admin_channel.basic_publish(Message(str("dummy_1")), routing_key=RMQChannelTest.test_channel_name)
+                admin_channel.basic_publish(Message(str("dummy_2")), routing_key=RMQChannelTest.test_channel_name)
+                retrieved = channel_reader.invoke_read_records()
+                self.assertEqual("dummy_1", retrieved[0])
+                self.assertEqual("dummy_2", retrieved[1])
+                self.assertEqual(2, len(retrieved))
+            finally:
+                self.assertTrue(channel_reader.invoke_close_channel())
+                self.assertEqual(3, admin_channel.queue_declare(RMQChannelTest.test_channel_name,
+                                                                passive=True).message_count)
+                self.assertTrue(channel_reader.invoke_resource_deletion())
+
+    def test_channel_reader_retrieve_with_commit_expect_ok(self):
+        channel_reader = RMQChannelReader(channel_name=RMQChannelTest.test_channel_name,
+                                          context=BlankInputPortPlugin("reader"))
+        channel_reader.set_location(RMQChannelTest.bootstrap_url)
+
+        with Connection(host=RMQChannelTest.bootstrap_url) as admin_connection:
+            admin_channel = admin_connection.channel()
+            try:
+                self.assertTrue(channel_reader.invoke_resource_creation())
+                self.assertTrue(channel_reader.invoke_open_channel())
+                retrieved = channel_reader.invoke_read_records()
+                self.assertEqual(0, len(retrieved))
+                admin_channel.basic_publish(Message(str("dummy_0")), routing_key=RMQChannelTest.test_channel_name)
+                retrieved = channel_reader.invoke_read_records()
+                self.assertEqual(1, len(retrieved))
+                self.assertEqual("dummy_0", retrieved[0])
+                admin_channel.basic_publish(Message(str("dummy_1")), routing_key=RMQChannelTest.test_channel_name)
+                admin_channel.basic_publish(Message(str("dummy_2")), routing_key=RMQChannelTest.test_channel_name)
+                retrieved = channel_reader.invoke_read_records()
+                self.assertEqual("dummy_1", retrieved[0])
+                self.assertEqual("dummy_2", retrieved[1])
+                self.assertEqual(2, len(retrieved))
+                channel_reader.invoke_commit_current_read_offset()
+            finally:
+                self.assertTrue(channel_reader.invoke_close_channel())
+                self.assertEqual(0, admin_channel.queue_declare(RMQChannelTest.test_channel_name,
+                                                                passive=True).message_count)
+                self.assertTrue(channel_reader.invoke_resource_deletion())
+
+    def test_channel_reader_has_records_expect_ok(self):
+        channel_reader = RMQChannelReader(channel_name=RMQChannelTest.test_channel_name,
+                                          context=BlankInputPortPlugin("reader"))
+        channel_reader.set_location(RMQChannelTest.bootstrap_url)
+
+        with Connection(host=RMQChannelTest.bootstrap_url) as admin_connection:
+            admin_channel = admin_connection.channel()
+            try:
+                self.assertTrue(channel_reader.invoke_resource_creation())
+                self.assertTrue(channel_reader.invoke_open_channel())
+                self.assertFalse(channel_reader.has_records())
+                for idx in range(200):
+                    admin_channel.basic_publish(Message(str(f"dummy_{idx}")),
+                                                routing_key=RMQChannelTest.test_channel_name)
+                self.assertTrue(channel_reader.has_records())
+            finally:
+                self.assertTrue(channel_reader.invoke_close_channel())
+                self.assertTrue(channel_reader.invoke_resource_deletion())
+
+    def test_channel_reader_can_close_without_replication_expect_ok(self):
+        channel_reader = RMQChannelReader(channel_name=RMQChannelTest.test_channel_name,
+                                          context=BlankInputPortPlugin("reader"))
+        channel_reader.set_location(RMQChannelTest.bootstrap_url)
+
+        try:
+            self.assertTrue(channel_reader.invoke_resource_creation())
+            self.assertTrue(channel_reader.invoke_open_channel())
+            self.assertTrue(channel_reader.can_close())
+        finally:
+            self.assertTrue(channel_reader.invoke_close_channel())
+            self.assertTrue(channel_reader.invoke_resource_deletion())
+
+    def test_channel_reader_can_close_with_replication_as_principal_with_connection_expect_ok(self):
+        operator_context = BlankOperator("blank")
+        operator_context.__setattr__("reader", BlankInputPortPlugin("reader", context=operator_context))
+        operator_context.set_parameter("replicationFactor", 1)
+        channel_reader = RMQChannelReader(channel_name=RMQChannelTest.test_channel_name,
+                                          context=operator_context.reader)
+        channel_reader.set_location(RMQChannelTest.bootstrap_url)
+
+        with Connection(host=RMQChannelTest.bootstrap_url) as admin_connection:
+            admin_channel = admin_connection.channel()
+            try:
+                self.assertTrue(channel_reader.invoke_resource_creation())
+                self.assertTrue(channel_reader.invoke_open_channel())
+
+                # With no connected replica channel
+                self.assertTrue(channel_reader.can_close())
+
+                # With connected replica channel
+                admin_channel.basic_publish(Message(
+                    str(
+                        ChannelStatusMessage(
+                            channel_name=RMQChannelTest.test_channel_name,
+                            channel_context_name=operator_context.get_replica(0).reader.get_full_name(),
+                            channel_group_name=operator_context.get_replica(0).reader.get_group_name(),
+                            channel_group_index=operator_context.get_replica(0).reader.get_group_index(),
+                            status=ChannelStatus.Opened
+                        )
+                    )), routing_key=RMQChannelTest.test_writer_status_queue_name)
+                admin_channel.basic_publish(Message(
+                    str(
+                        ChannelStatusMessage(
+                            channel_name=RMQChannelTest.test_channel_name,
+                            channel_context_name=operator_context.get_replica(0).reader.get_full_name(),
+                            channel_group_name=operator_context.get_replica(0).reader.get_group_name(),
+                            channel_group_index=operator_context.get_replica(0).reader.get_group_index(),
+                            status=ChannelStatus.HealthCheck
+                        )
+                    )), routing_key=RMQChannelTest.test_writer_status_queue_name)
+                self.assertFalse(channel_reader.can_close())
+
+                # With connected and closed channel
+                admin_channel.basic_publish(Message(
+                    str(
+                        ChannelStatusMessage(
+                            channel_name=RMQChannelTest.test_channel_name,
+                            channel_context_name=operator_context.get_replica(0).reader.get_full_name(),
+                            channel_group_name=operator_context.get_replica(0).reader.get_group_name(),
+                            channel_group_index=operator_context.get_replica(0).reader.get_group_index(),
+                            status=ChannelStatus.Closed
+                        )
+                    )), routing_key=RMQChannelTest.test_writer_status_queue_name)
+                self.assertTrue(channel_reader.can_close())
+            finally:
+                self.assertTrue(channel_reader.invoke_close_channel())
+                self.assertTrue(channel_reader.invoke_resource_deletion())
+
+    def test_channel_reader_can_close_with_replication_as_replica_with_connection_expect_ok(self):
+        operator_context = BlankOperator("blank")
+        operator_context.__setattr__("reader", BlankInputPortPlugin("reader", context=operator_context))
+        operator_context.set_parameter("replicationFactor", 2)
+        channel_reader = RMQChannelReader(channel_name=RMQChannelTest.test_channel_name,
+                                          context=operator_context.get_replica(1).reader)
+        channel_reader.set_location(RMQChannelTest.bootstrap_url)
+
+        with Connection(host=RMQChannelTest.bootstrap_url) as admin_connection:
+            admin_channel = admin_connection.channel()
+            try:
+                self.assertTrue(channel_reader.invoke_resource_creation())
+                self.assertTrue(channel_reader.invoke_open_channel())
+
+                # With no connected replica channel
+                self.assertTrue(channel_reader.can_close())
+
+                # With connected replica channel
+                admin_channel.basic_publish(Message(
+                    str(
+                        ChannelStatusMessage(
+                            channel_name=RMQChannelTest.test_channel_name,
+                            channel_context_name=operator_context.get_replica(0).reader.get_full_name(),
+                            channel_group_name=operator_context.get_replica(0).reader.get_group_name(),
+                            channel_group_index=operator_context.get_replica(0).reader.get_group_index(),
+                            status=ChannelStatus.Opened
+                        )
+                    )), routing_key=RMQChannelTest.test_writer_status_queue_name)
+                admin_channel.basic_publish(Message(
+                    str(
+                        ChannelStatusMessage(
+                            channel_name=RMQChannelTest.test_channel_name,
+                            channel_context_name=operator_context.get_replica(0).reader.get_full_name(),
+                            channel_group_name=operator_context.get_replica(0).reader.get_group_name(),
+                            channel_group_index=operator_context.get_replica(0).reader.get_group_index(),
+                            status=ChannelStatus.HealthCheck
+                        )
+                    )), routing_key=RMQChannelTest.test_writer_status_queue_name)
+                self.assertTrue(channel_reader.can_close())
+
+                # With connected and closed channel
+                admin_channel.basic_publish(Message(
+                    str(
+                        ChannelStatusMessage(
+                            channel_name=RMQChannelTest.test_channel_name,
+                            channel_context_name=operator_context.get_replica(0).reader.get_full_name(),
+                            channel_group_name=operator_context.get_replica(0).reader.get_group_name(),
+                            channel_group_index=operator_context.get_replica(0).reader.get_group_index(),
+                            status=ChannelStatus.Closed
+                        )
+                    )), routing_key=RMQChannelTest.test_writer_status_queue_name)
+                self.assertTrue(channel_reader.can_close())
+            finally:
+                self.assertTrue(channel_reader.invoke_close_channel())
+                self.assertTrue(channel_reader.invoke_resource_deletion())
+
+    def test_channel_reader_max_poll_record_1_expect_ok(self):
+        channel_reader = RMQChannelReader(channel_name=RMQChannelTest.test_channel_name,
+                                          context=BlankInputPortPlugin("reader"))
+        channel_reader.set_location(RMQChannelTest.bootstrap_url)
+        channel_reader.invoke_configure_channel({"max_poll_records": 1})
+
+        with Connection(host=RMQChannelTest.bootstrap_url) as admin_connection:
+            admin_channel = admin_connection.channel()
+            try:
+                self.assertTrue(channel_reader.invoke_resource_creation())
+                self.assertTrue(channel_reader.invoke_open_channel())
+                for idx in range(100):
+                    admin_channel.basic_publish(Message(str(f"dummy_{idx}")),
+                                                routing_key=RMQChannelTest.test_channel_name)
+                retrieved = channel_reader.invoke_read_records()
+                self.assertEqual(1, len(retrieved))
+                channel_reader.invoke_commit_current_read_offset()
+                retrieved = channel_reader.invoke_read_records()
+                self.assertEqual(1, len(retrieved))
+                channel_reader.invoke_commit_current_read_offset()
+            finally:
+                self.assertTrue(channel_reader.invoke_close_channel())
+                self.assertTrue(channel_reader.invoke_resource_deletion())
+
+    def test_channel_reader_max_poll_record_27_expect_ok(self):
+        channel_reader = RMQChannelReader(channel_name=RMQChannelTest.test_channel_name,
+                                          context=BlankInputPortPlugin("reader"))
+        channel_reader.set_location(RMQChannelTest.bootstrap_url)
+        channel_reader.invoke_configure_channel({"max_poll_records": 27})
+
+        with Connection(host=RMQChannelTest.bootstrap_url) as admin_connection:
+            admin_channel = admin_connection.channel()
+            try:
+                self.assertTrue(channel_reader.invoke_resource_creation())
+                self.assertTrue(channel_reader.invoke_open_channel())
+                for idx in range(100):
+                    admin_channel.basic_publish(Message(str(f"dummy_{idx}")),
+                                                routing_key=RMQChannelTest.test_channel_name)
+                retrieved = channel_reader.invoke_read_records()
+                self.assertEqual(27, len(retrieved))
+                channel_reader.invoke_commit_current_read_offset()
+                retrieved = channel_reader.invoke_read_records()
+                self.assertEqual(27, len(retrieved))
+                channel_reader.invoke_commit_current_read_offset()
+            finally:
+                self.assertTrue(channel_reader.invoke_close_channel())
+                self.assertTrue(channel_reader.invoke_resource_deletion())
+
+    def test_channel_reader_writer_connection_expect_ok(self):
+        channel_reader = RMQChannelReader(channel_name=RMQChannelTest.test_channel_name,
+                                          context=BlankInputPortPlugin("reader"))
+        channel_reader.set_location(RMQChannelTest.bootstrap_url)
+        channel_writer = RMQChannelWriter(channel_name=RMQChannelTest.test_channel_name,
+                                          context=BlankOutputPortPlugin("writer"))
+        channel_writer.set_location(RMQChannelTest.bootstrap_url)
+
+        try:
+            self.assertTrue(channel_writer.invoke_resource_creation())
+            self.assertFalse(channel_writer.invoke_open_channel())
+            self.assertTrue(channel_reader.invoke_resource_creation())
+            self.assertTrue(channel_reader.invoke_open_channel())
+            self.assertTrue(channel_writer.invoke_resource_creation())
+            self.assertTrue(channel_writer.invoke_open_channel())
+
+            channel_writer.invoke_write_records(["dummy_0", "dummy_1"])
+            retrieved = channel_reader.invoke_read_records()
+            channel_reader.invoke_commit_current_read_offset()
+            self.assertEqual(2, len(retrieved))
+            self.assertEqual("dummy_0", retrieved[0])
+            self.assertEqual("dummy_1", retrieved[1])
+        finally:
+            self.assertTrue(channel_writer.invoke_close_channel())
+            self.assertTrue(channel_writer.invoke_resource_deletion())
+            self.assertTrue(channel_reader.invoke_close_channel())
+            self.assertTrue(channel_reader.invoke_resource_deletion())
+
+# complete chain
