@@ -19,13 +19,13 @@ from pypz.abstracts.channel_ports import ChannelInputPort, ChannelOutputPort
 from pypz.rmq_io.channels import RMQChannelReader, RMQChannelWriter
 
 
-class AMQPChannelInputPort(ChannelInputPort):
+class RMQChannelInputPort(ChannelInputPort):
 
     def __init__(self, name: str = None, schema: Any = None, group_mode: bool = False, *args, **kwargs):
         super().__init__(name, schema, group_mode, RMQChannelReader, *args, **kwargs)
 
 
-class AMQPChannelOutputPort(ChannelOutputPort):
+class RMQChannelOutputPort(ChannelOutputPort):
 
     def __init__(self, name: str = None, schema: Optional[Any] = None, *args, **kwargs):
         super().__init__(name, schema, RMQChannelWriter, *args, **kwargs)

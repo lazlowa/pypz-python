@@ -8,7 +8,7 @@ Repository = "https://github.com/lazlowa/pypz-python"
 
 [project]
 name = "pypz-rmq-io"
-version = "0.9.3b0"
+version = "0.9.3b1"
 authors = [
     { name = "Laszlo Anka", email = "laszlo.anka@gmail.com" }
 ]
