@@ -112,6 +112,7 @@ class RMQChannelWriter(ChannelWriter):
                     self._reader_status_consumer.subscribe(self._writer_status_stream_name,
                                                            arguments={"x-stream-offset": "first"})
             except PreconditionFailed as e:
+                self._reader_status_consumer.close()
                 if (406 == e.code) and ("" in e.message):
                     raise ConnectionError("Invalid resource type, stream expected")
                 raise
@@ -375,6 +376,7 @@ class RMQChannelReader(ChannelReader):
                     self._writer_status_consumer.subscribe(self._reader_status_stream_name,
                                                            arguments={"x-stream-offset": "first"})
             except PreconditionFailed as e:
+                self._writer_status_consumer.close()
                 if (406 == e.code) and ("" in e.message):
                     raise ConnectionError("Invalid resource type, stream expected")
                 raise

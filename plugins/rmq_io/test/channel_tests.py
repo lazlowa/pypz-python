@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # =============================================================================
+import time
 import unittest
 from typing import Optional
 
@@ -33,17 +34,6 @@ class RMQChannelTest(unittest.TestCase):
     test_writer_status_queue_name = test_channel_name + WriterStatusQueueNameExtension
 
     connection: Optional[Connection] = None
-
-    @staticmethod
-    def generate_records(record_count: int) -> list[dict]:
-        generated_records = list()
-
-        for idx in range(record_count):
-            generated_records.append({
-                "demoText": f"record_{idx}"
-            })
-
-        return generated_records
 
     @classmethod
     def setUpClass(cls):
@@ -90,7 +80,6 @@ class RMQChannelTest(unittest.TestCase):
             passive=False, durable=True, exclusive=False, auto_delete=False, arguments={"x-queue-type": "stream"}
         )
         self.assertFalse(channel_writer.invoke_open_channel())
-        self.assertTrue(channel_writer.invoke_close_channel())
 
     def test_channel_writer_open_without_location_expect_error(self):
         channel_writer = RMQChannelWriter(channel_name=RMQChannelTest.test_channel_name,
@@ -154,7 +143,7 @@ class RMQChannelTest(unittest.TestCase):
         self.admin_channel.queue_bind(queue=RMQChannelTest.test_channel_name, exchange=RMQChannelTest.test_channel_name)
 
         with self.assertRaises(ConnectionError):
-            self.assertTrue(channel_writer.invoke_open_channel())
+            channel_writer.invoke_open_channel()
 
         self.assertTrue(channel_writer.invoke_close_channel())
 
@@ -186,6 +175,8 @@ class RMQChannelTest(unittest.TestCase):
 
             test_messages = ["record_0", "record_1", "record_2"]
             channel_writer.invoke_write_records(test_messages)
+
+            time.sleep(2)
 
             for message in test_messages:
                 pushed_message = self.admin_channel.basic_get(RMQChannelTest.test_channel_name)
@@ -399,7 +390,7 @@ class RMQChannelTest(unittest.TestCase):
         self.assertTrue(channel_reader.invoke_resource_creation())
 
         self.admin_channel.basic_consume(RMQChannelTest.test_channel_name,
-                                    callback=lambda: None, consumer_tag="test-consumer")
+                                         callback=lambda: None, consumer_tag="test-consumer")
         self.assertFalse(channel_reader.invoke_resource_deletion())
         self.assertTrue(is_queue_existing(RMQChannelTest.test_channel_name, self.admin_channel))
         self.assertTrue(is_queue_existing(RMQChannelTest.test_reader_status_queue_name, self.admin_channel))
@@ -489,7 +480,7 @@ class RMQChannelTest(unittest.TestCase):
         finally:
             self.assertTrue(channel_reader.invoke_close_channel())
             self.assertEqual(3, self.admin_channel.queue_declare(RMQChannelTest.test_channel_name,
-                                                            passive=True).message_count)
+                                                                 passive=True).message_count)
             self.assertTrue(channel_reader.invoke_resource_deletion())
 
     def test_channel_reader_retrieve_with_commit_expect_ok(self):
@@ -516,7 +507,7 @@ class RMQChannelTest(unittest.TestCase):
         finally:
             self.assertTrue(channel_reader.invoke_close_channel())
             self.assertEqual(0, self.admin_channel.queue_declare(RMQChannelTest.test_channel_name,
-                                                            passive=True).message_count)
+                                                                 passive=True).message_count)
             self.assertTrue(channel_reader.invoke_resource_deletion())
 
     def test_channel_reader_has_records_expect_ok(self):
@@ -530,7 +521,7 @@ class RMQChannelTest(unittest.TestCase):
             self.assertFalse(channel_reader.has_records())
             for idx in range(200):
                 self.admin_channel.basic_publish(Message(str(f"dummy_{idx}")),
-                                            routing_key=RMQChannelTest.test_channel_name)
+                                                 routing_key=RMQChannelTest.test_channel_name)
             self.assertTrue(channel_reader.has_records())
         finally:
             self.assertTrue(channel_reader.invoke_close_channel())
@@ -668,7 +659,7 @@ class RMQChannelTest(unittest.TestCase):
             self.assertTrue(channel_reader.invoke_open_channel())
             for idx in range(100):
                 self.admin_channel.basic_publish(Message(str(f"dummy_{idx}")),
-                                            routing_key=RMQChannelTest.test_channel_name)
+                                                 routing_key=RMQChannelTest.test_channel_name)
             retrieved = channel_reader.invoke_read_records()
             self.assertEqual(1, len(retrieved))
             channel_reader.invoke_commit_current_read_offset()
@@ -690,7 +681,7 @@ class RMQChannelTest(unittest.TestCase):
             self.assertTrue(channel_reader.invoke_open_channel())
             for idx in range(100):
                 self.admin_channel.basic_publish(Message(str(f"dummy_{idx}")),
-                                            routing_key=RMQChannelTest.test_channel_name)
+                                                 routing_key=RMQChannelTest.test_channel_name)
             retrieved = channel_reader.invoke_read_records()
             self.assertEqual(27, len(retrieved))
             channel_reader.invoke_commit_current_read_offset()

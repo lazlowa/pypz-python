@@ -257,7 +257,7 @@ class ChannelInputPort(InputPortPlugin, ResourceHandlerPlugin, ExtendedPlugin, A
         self._interrupted = True
 
     def _on_error(self, source: Any, exception: Exception) -> None:
-        if isinstance(source, (StateOperationInit, StateOperationRunning, StateOperationShutdown)):
+        if issubclass(source, (StateOperationInit, StateOperationRunning, StateOperationShutdown)):
             self._delete_resources = False
 
         if self._channel_reader.is_channel_open():
@@ -473,7 +473,7 @@ class ChannelOutputPort(OutputPortPlugin, ResourceHandlerPlugin, ExtendedPlugin,
         self._interrupted = True
 
     def _on_error(self, source: Any, exception: Exception) -> None:
-        if isinstance(source, (StateOperationInit, StateOperationRunning, StateOperationShutdown)):
+        if issubclass(source, (StateOperationInit, StateOperationRunning, StateOperationShutdown)):
             self._delete_resources = False
 
         error_channels: set[ChannelWriter] = set()
