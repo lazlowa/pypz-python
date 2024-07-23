@@ -16,6 +16,7 @@ jobs:
       core: ${{ steps.changes.outputs.core }}
       deployer_k8s: ${{ steps.changes.outputs.deployer_k8s }}
       plugin_kafka_io: ${{ steps.changes.outputs.plugin_kafka_io }}
+      plugin_rmq_io: ${{ steps.changes.outputs.plugin_rmq_io }}
       sniffer: ${{ steps.changes.outputs.sniffer }}
     steps:
       - uses: actions/checkout@v3
@@ -40,6 +41,12 @@ jobs:
               - "plugins/kafka_io/pyproject.toml"
               - "plugins/kafka_io/src/**"
               - "plugins/kafka_io/test/**"
+            plugin_rmq_io:
+              - ".github/workflows/test.yml"
+              - "core/src/**"
+              - "plugins/rmq_io/pyproject.toml"
+              - "plugins/rmq_io/src/**"
+              - "plugins/rmq_io/test/**"
             sniffer:
               - ".github/workflows/test.yml"
               - "core/src/**"
@@ -138,6 +145,35 @@ jobs:
       run: sleep 5
     - name: Test
       run: coverage run -m unittest discover plugins/kafka_io/test -p "*.py"
+
+  plugin_rmq_io:
+    name: "Plugin :: RabbitMQ IO"
+    needs: check-changes
+    runs-on: ubuntu-latest
+    if: needs.check-changes.outputs.plugin_rmq_io == 'true'
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.11"
+    - name: Install
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install pyyaml
+        python -m pip install coverage
+        python -m pip install -e core/
+        python -m pip install -e plugins/rmq_io/
+    - name: Start Local RabbitMQ
+      run: |
+        echo "[rabbitmq_amqp1_0,rabbitmq_management,rabbitmq_stream]." > "${{ github.workspace }}/enabled_plugins"
+        docker run -d -it --rm --name rabbitmq --hostname localhost -p 5672:5672 \
+          -v "${{ github.workspace }}/enabled_plugins":/etc/rabbitmq/enabled_plugins \
+          rabbitmq:3-management
+    - name: Waiting
+      run: sleep 5
+    - name: Test
+      run: coverage run -m unittest discover plugins/rmq_io/test -p "*.py"
 
   sniffer:
     name: "Sniffer"
