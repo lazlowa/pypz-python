@@ -29,6 +29,7 @@ Welcome to pypz's documentation!
    :caption: Plugins
 
    plugins/kafka_io
+   plugins/rmq_io
 
 .. toctree::
    :maxdepth: 1

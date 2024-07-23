@@ -16,7 +16,7 @@
 from typing import Optional, Any
 
 from pypz.abstracts.channel_ports import ChannelInputPort, ChannelOutputPort
-from pypz.rmq_io.channels import RMQChannelReader, RMQChannelWriter
+from pypz.plugins.rmq_io.channels import RMQChannelReader, RMQChannelWriter
 
 
 class RMQChannelInputPort(ChannelInputPort):

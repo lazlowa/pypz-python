@@ -19,11 +19,11 @@ from typing import Optional
 
 from amqp import Connection, Message
 
-from plugins.rmq_io.src.pypz.rmq_io.utils import ReaderStatusQueueNameExtension, WriterStatusQueueNameExtension, \
+from pypz.plugins.rmq_io.utils import ReaderStatusQueueNameExtension, WriterStatusQueueNameExtension, \
     is_queue_existing, is_exchange_existing
 from pypz.core.channels.status import ChannelStatusMessage, ChannelStatus
 from pypz.core.specs.misc import BlankOutputPortPlugin, BlankInputPortPlugin, BlankOperator
-from pypz.rmq_io.channels import RMQChannelWriter, RMQChannelReader
+from pypz.plugins.rmq_io.channels import RMQChannelWriter, RMQChannelReader
 
 
 class RMQChannelTest(unittest.TestCase):

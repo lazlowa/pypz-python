@@ -18,7 +18,7 @@ from typing import TYPE_CHECKING, Optional, Any
 
 from amqp import Connection, PreconditionFailed
 
-from pypz.rmq_io.utils import MessageConsumer, MessageProducer, is_queue_existing, ReaderStatusQueueNameExtension, \
+from pypz.plugins.rmq_io.utils import MessageConsumer, MessageProducer, is_queue_existing, ReaderStatusQueueNameExtension, \
     WriterStatusQueueNameExtension, MaxStatusMessageRetrieveCount, is_exchange_existing
 from pypz.core.channels.io import ChannelWriter, ChannelReader
 
