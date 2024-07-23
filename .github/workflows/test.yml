@@ -171,7 +171,7 @@ jobs:
           -v "${{ github.workspace }}/enabled_plugins":/etc/rabbitmq/enabled_plugins \
           rabbitmq:3-management
     - name: Waiting
-      run: sleep 5
+      run: sleep 20
     - name: Test
       run: coverage run -m unittest discover plugins/rmq_io/test -p "*.py"
 
