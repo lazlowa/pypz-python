@@ -1,0 +1,43 @@
+name: "Publish :: Plugin :: RabbitMQ IO"
+
+on: workflow_dispatch
+
+jobs:
+  build:
+    name: "Build"
+    runs-on: ubuntu-latest
+    environment: release
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.11"
+    - name: Install
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install build
+    - name: Build
+      run: |
+        python -m build plugins/rmq_io/
+    - name: Store Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: artifacts
+        path: plugins/rmq_io/dist/
+
+  publish-to-pypi:
+    needs: build
+    name: "Publish to PyPi"
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      id-token: write
+    steps:
+    - name: Retrieve Artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: artifacts
+        path: dist/
+    - name: Publish to PyPI
+      uses: pypa/gh-action-pypi-publish@release/v1
