@@ -98,10 +98,49 @@ automatically as nested instance.
 
 Once the port plugins are constructed, you can send/retrieve data through the usual methods.
 
-.. important::
-   Note that as of 08/2024, the RMQ channels can send and retrieved string data i.e.,
-   you need to care for serialization and deserialization. At a later time, you will
-   be able to specify Avro schema.
+The channel implementations are supporting data transfer through `Avro <https://avro.apache.org/>`_.
+To enable Avro serde, you need to provide an Avro schema string to the port plugin.
+
+.. code-block:: python
+
+   from pypz.core.specs.operator import Operator
+   from pypz.plugins.rmq_io.ports import RMQChannelOutputPort, RMQChannelInputPort
+
+   avro_schema_string = """
+   {
+       "type": "record",
+       "name": "DemoRecord",
+       "fields": [
+           {
+               "name": "demoText",
+               "type": "string"
+           }
+       ]
+   }
+   """
+
+   class DemoOperator(Operator):
+
+       def __init__(self, name: str = None, *args, **kwargs):
+           super().__init__(name, *args, **kwargs)
+
+           self.input_port = RMQChannelInputPort(schema=avro_schema_string)
+           self.output_port = RMQChannelOutputPort(schema=avro_schema_string)
+
+
+       ...
+
+       def _on_running(self):
+           self.output_port.send([
+               {
+                   "demoText": "dummy_0"
+               }
+           ])
+           messages = self.input_port.retrieve()
+           print(messages[0])
+           # Will result in {"demoText": "dummy_0"}
+
+       ...
 
 .. _load_vs_data_distribution:
 

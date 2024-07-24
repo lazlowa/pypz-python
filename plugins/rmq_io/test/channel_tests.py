@@ -719,3 +719,88 @@ class RMQChannelTest(unittest.TestCase):
             self.assertTrue(channel_writer.invoke_resource_deletion())
             self.assertTrue(channel_reader.invoke_close_channel())
             self.assertTrue(channel_reader.invoke_resource_deletion())
+
+    def test_channel_reader_writer_connection_with_avro_expect_ok(self):
+        avro_schema_string = """
+        {
+            "type": "record",
+            "name": "DemoRecord",
+            "fields": [
+                {
+                    "name": "demoText",
+                    "type": "string"
+                }
+            ]
+        }
+        """
+
+        channel_reader = RMQChannelReader(channel_name=RMQChannelTest.test_channel_name,
+                                          context=BlankInputPortPlugin("reader", schema=avro_schema_string))
+        channel_reader.set_location(RMQChannelTest.bootstrap_url)
+        channel_writer = RMQChannelWriter(channel_name=RMQChannelTest.test_channel_name,
+                                          context=BlankOutputPortPlugin("writer", schema=avro_schema_string))
+        channel_writer.set_location(RMQChannelTest.bootstrap_url)
+
+        try:
+            self.assertTrue(channel_reader.invoke_resource_creation())
+            self.assertTrue(channel_reader.invoke_open_channel())
+            self.assertTrue(channel_writer.invoke_resource_creation())
+            self.assertTrue(channel_writer.invoke_open_channel())
+
+            channel_writer.invoke_write_records([
+                {
+                    "demoText": "dummy_0"
+                },
+                {
+                    "demoText": "dummy_1"
+                }
+            ])
+            retrieved = channel_reader.invoke_read_records()
+            channel_reader.invoke_commit_current_read_offset()
+            self.assertEqual(2, len(retrieved))
+            self.assertEqual({'demoText': 'dummy_0'}, retrieved[0])
+            self.assertEqual({'demoText': 'dummy_1'}, retrieved[1])
+        finally:
+            self.assertTrue(channel_writer.invoke_close_channel())
+            self.assertTrue(channel_writer.invoke_resource_deletion())
+            self.assertTrue(channel_reader.invoke_close_channel())
+            self.assertTrue(channel_reader.invoke_resource_deletion())
+
+    def test_channel_reader_writer_connection_with_avro_with_invalid_writer_record_expect_ok(self):
+        avro_schema_string = """
+        {
+            "type": "record",
+            "name": "DemoRecord",
+            "fields": [
+                {
+                    "name": "demoText",
+                    "type": "string"
+                }
+            ]
+        }
+        """
+
+        channel_reader = RMQChannelReader(channel_name=RMQChannelTest.test_channel_name,
+                                          context=BlankInputPortPlugin("reader", schema=avro_schema_string))
+        channel_reader.set_location(RMQChannelTest.bootstrap_url)
+        channel_writer = RMQChannelWriter(channel_name=RMQChannelTest.test_channel_name,
+                                          context=BlankOutputPortPlugin("writer", schema=avro_schema_string))
+        channel_writer.set_location(RMQChannelTest.bootstrap_url)
+
+        try:
+            self.assertTrue(channel_reader.invoke_resource_creation())
+            self.assertTrue(channel_reader.invoke_open_channel())
+            self.assertTrue(channel_writer.invoke_resource_creation())
+            self.assertTrue(channel_writer.invoke_open_channel())
+
+            with self.assertRaises(ValueError):
+                channel_writer.invoke_write_records([
+                    {
+                        "invalid": "dummy_0"
+                    }
+                ])
+        finally:
+            self.assertTrue(channel_writer.invoke_close_channel())
+            self.assertTrue(channel_writer.invoke_resource_deletion())
+            self.assertTrue(channel_reader.invoke_close_channel())
+            self.assertTrue(channel_reader.invoke_resource_deletion())

@@ -1,6 +1,6 @@
 name: "Publish :: Plugin :: RabbitMQ IO"
 
-on: workflow_dispatch
+on: push
 
 jobs:
   build:

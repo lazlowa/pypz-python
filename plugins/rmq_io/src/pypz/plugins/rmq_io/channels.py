@@ -14,11 +14,16 @@
 # limitations under the License.
 # =============================================================================
 import concurrent.futures
+import io
 from typing import TYPE_CHECKING, Optional, Any
 
 from amqp import Connection, PreconditionFailed
+from avro.io import DatumWriter, BinaryEncoder, AvroTypeException, DatumReader, BinaryDecoder
+from avro.schema import parse
+from avro_validator import Schema
 
-from pypz.plugins.rmq_io.utils import MessageConsumer, MessageProducer, is_queue_existing, ReaderStatusQueueNameExtension, \
+from pypz.plugins.rmq_io.utils import MessageConsumer, MessageProducer, is_queue_existing, \
+    ReaderStatusQueueNameExtension, \
     WriterStatusQueueNameExtension, MaxStatusMessageRetrieveCount, is_exchange_existing
 from pypz.core.channels.io import ChannelWriter, ChannelReader
 
@@ -77,9 +82,46 @@ class RMQChannelWriter(ChannelWriter):
         Configuration parameter to specify the timeout for draining events from the status stream
         """
 
+        self._generic_datum_writer: Optional[DatumWriter] = None
+        """
+        This is the datum writer that converts generic records to byte data. It
+        is only initialized, if schema is provided.
+        """
+
     def _write_records(self, records: list[Any]) -> None:
-        for record in records:
-            self._data_producer.publish(message=record, exchange_name=self._data_exchange_name)
+        if (self._generic_datum_writer is None) and (self._context.get_schema() is not None):
+            self._generic_datum_writer = DatumWriter(writers_schema=parse(self._context.get_schema()))
+
+        if self._generic_datum_writer is None:
+            """
+            If no schema provided, and therefore no Avro will be used, 
+            then send the records as string.
+            """
+            for record in records:
+                self._data_producer.publish(message=record, exchange_name=self._data_exchange_name)
+        else:
+            converted_records = list()
+
+            """ Record preparation and sending is separated not to send any record from
+                the batch, if some records are not valid """
+            for record in records:
+                record_bytes = io.BytesIO()
+                encoder = BinaryEncoder(record_bytes)
+
+                try:
+                    self._generic_datum_writer.write(record, encoder)
+                    converted_records.append(record_bytes.getvalue())
+                except AvroTypeException:
+                    # This line is only executed, if there is an issue with the
+                    # data w.r.t. the schema. The used package gives a better message
+                    # what is the issue and where
+                    self._logger.error(record)
+                    schema = Schema(self._context.get_schema())
+                    parsed_schema = schema.parse()
+                    parsed_schema.validate(record)
+
+            for converted_record in converted_records:
+                self._data_producer.publish(message=converted_record, exchange_name=self._data_exchange_name)
 
     def _create_resources(self) -> bool:
         return True
@@ -230,6 +272,12 @@ class RMQChannelReader(ChannelReader):
         Configuration parameter to specify the timeout for draining events from the status stream
         """
 
+        self._generic_datum_reader: Optional[DatumReader] = None
+        """
+        This is the generic datum reader, which converts bytes to generic records.
+        It will be only initialized, if a schema is provided.
+        """
+
     def _load_input_record_offset(self) -> int:
         """
         Offset has no meaning in queues, nevertheless the value -1 is necessary,
@@ -257,7 +305,21 @@ class RMQChannelReader(ChannelReader):
         return self._data_consumer.has_records()
 
     def _read_records(self) -> list[Any]:
-        return self._data_consumer.poll(self._config_data_consumer_timeout_sec)
+        if (self._generic_datum_reader is None) and (self._context.get_schema() is not None):
+            self._generic_datum_reader = DatumReader(parse(self._context.get_schema()))
+
+        if self._generic_datum_reader is None:
+            return self._data_consumer.poll(self._config_data_consumer_timeout_sec)
+        else:
+            converted_records = []
+
+            records = self._data_consumer.poll(self._config_data_consumer_timeout_sec)
+
+            for record in records:
+                decoder = BinaryDecoder(io.BytesIO(record))
+                converted_records.append(self._generic_datum_reader.read(decoder))
+
+            return converted_records
 
     def _commit_offset(self, offset: int) -> None:
         self._data_consumer.commit_messages()

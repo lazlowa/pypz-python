@@ -8,7 +8,7 @@ Repository = "https://github.com/lazlowa/pypz-python"
 
 [project]
 name = "pypz-rmq-io"
-version = "0.9.3b2"
+version = "0.9.3b3"
 authors = [
     { name = "Laszlo Anka", email = "laszlo.anka@gmail.com" }
 ]
@@ -28,7 +28,9 @@ keywords = [
 ]
 dependencies = [
     "pypz-core",
-    "amqp==5.2.0"
+    "amqp==5.2.0",
+    "avro==1.10.1",
+    "avro-validator==1.2.1"
 ]
 
 [project.optional-dependencies]

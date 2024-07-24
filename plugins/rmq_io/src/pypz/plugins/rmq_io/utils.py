@@ -115,7 +115,7 @@ class MessageConsumer(_MessagingBase):
 
         return record_count
 
-    def poll(self, timeout: Optional[float] = 0) -> list[str]:
+    def poll(self, timeout: Optional[float] = 0) -> list[str | bytes]:
         if 0 == len(self._subscriptions):
             raise AttributeError("Missing queue subscription, call subscribe() first")
 
@@ -148,7 +148,7 @@ class MessageProducer(_MessagingBase):
     def __init__(self, connection: Optional[Connection] = None, *args, **kwargs):
         super().__init__(connection, *args, **kwargs)
 
-    def publish(self, message: str, queue_name: str = "", exchange_name: str = ""):
+    def publish(self, message: str | bytes, queue_name: str = "", exchange_name: str = ""):
         self._channel.basic_publish(
             Message(message), mandatory=True, exchange=exchange_name, routing_key=queue_name
         )
