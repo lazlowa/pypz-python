@@ -1,0 +1,77 @@
+<mxfile host="Electron" modified="2024-07-24T06:11:18.455Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.1.21 Chrome/120.0.6099.109 Electron/28.1.0 Safari/537.36" etag="OHPDWUOq5PsaTQugJzGu" version="22.1.21" type="device">
+  <diagram name="Page-1" id="o64NpprVTSWZZvMz7yd-">
+    <mxGraphModel dx="1050" dy="638" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="3300" pageHeight="4681" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="3XOHIzN-QDrIGu9JBo-n-1" value="RMQChannelWriter" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="60" y="70" width="190" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="3XOHIzN-QDrIGu9JBo-n-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="3XOHIzN-QDrIGu9JBo-n-2" target="3XOHIzN-QDrIGu9JBo-n-12" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="3XOHIzN-QDrIGu9JBo-n-2" value="Status Connection" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=middle;align=center;" parent="1" vertex="1">
+          <mxGeometry x="80" y="130" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="3XOHIzN-QDrIGu9JBo-n-3" value="Reader Status Connection" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=middle;align=center;" parent="1" vertex="1">
+          <mxGeometry x="80" y="160" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="3XOHIzN-QDrIGu9JBo-n-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="3XOHIzN-QDrIGu9JBo-n-4" target="3XOHIzN-QDrIGu9JBo-n-11" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="3XOHIzN-QDrIGu9JBo-n-4" value="Data Connection" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=middle;align=center;" parent="1" vertex="1">
+          <mxGeometry x="80" y="100" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="3XOHIzN-QDrIGu9JBo-n-5" value="RMQChanneReader" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="520" y="70" width="190" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="3XOHIzN-QDrIGu9JBo-n-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="3XOHIzN-QDrIGu9JBo-n-6" target="3XOHIzN-QDrIGu9JBo-n-13" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="3XOHIzN-QDrIGu9JBo-n-6" value="Status Connection" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=middle;align=center;" parent="1" vertex="1">
+          <mxGeometry x="520" y="160" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="3XOHIzN-QDrIGu9JBo-n-7" value="Writer Status Connection" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=middle;align=center;" parent="1" vertex="1">
+          <mxGeometry x="520" y="130" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="3XOHIzN-QDrIGu9JBo-n-8" value="Data Connection" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=middle;align=center;" parent="1" vertex="1">
+          <mxGeometry x="520" y="100" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="3XOHIzN-QDrIGu9JBo-n-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="3XOHIzN-QDrIGu9JBo-n-11" target="3XOHIzN-QDrIGu9JBo-n-8" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="3XOHIzN-QDrIGu9JBo-n-11" value="Data Queue" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=middle;align=center;" parent="1" vertex="1">
+          <mxGeometry x="300" y="100" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="3XOHIzN-QDrIGu9JBo-n-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="3XOHIzN-QDrIGu9JBo-n-12" target="3XOHIzN-QDrIGu9JBo-n-7" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="3XOHIzN-QDrIGu9JBo-n-12" value="Writer Status Stream" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=middle;align=center;" parent="1" vertex="1">
+          <mxGeometry x="300" y="130" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="3XOHIzN-QDrIGu9JBo-n-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="3XOHIzN-QDrIGu9JBo-n-13" target="3XOHIzN-QDrIGu9JBo-n-3" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="3XOHIzN-QDrIGu9JBo-n-13" value="Reader Status Stream" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=middle;align=center;" parent="1" vertex="1">
+          <mxGeometry x="300" y="160" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="3XOHIzN-QDrIGu9JBo-n-23" value="creates" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.75;entryY=1;entryDx=0;entryDy=0;" parent="1" source="3XOHIzN-QDrIGu9JBo-n-21" target="3XOHIzN-QDrIGu9JBo-n-13" edge="1">
+          <mxGeometry x="-0.2157" y="15" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="3XOHIzN-QDrIGu9JBo-n-21" value="Admin Connection" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=middle;align=center;" parent="1" vertex="1">
+          <mxGeometry x="520" y="210" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="3XOHIzN-QDrIGu9JBo-n-24" value="checks created" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.25;entryY=1;entryDx=0;entryDy=0;" parent="1" source="3XOHIzN-QDrIGu9JBo-n-22" target="3XOHIzN-QDrIGu9JBo-n-13" edge="1">
+          <mxGeometry x="-0.2157" y="-15" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="3XOHIzN-QDrIGu9JBo-n-22" value="Admin Connection" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=middle;align=center;" parent="1" vertex="1">
+          <mxGeometry x="80" y="210" width="170" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
