@@ -15,6 +15,8 @@
 # =============================================================================
 import unittest
 import os
+from typing import Any
+
 from pypz.core.commons.utils import TemplateResolver
 
 
@@ -126,7 +128,7 @@ class TemplateResolverTest(unittest.TestCase):
         ref_set.add("${env:PPFW_TEST}")
         ref_set.add("env:PPFW_TEST")
 
-        reference_map = dict()
+        reference_map: dict[str, Any] = dict()
         reference_map["key1"] = "${env:PPFW_TEST}"
         reference_map["key2"] = "env:PPFW_TEST"
         reference_map["key3"] = ref_set

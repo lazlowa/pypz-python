@@ -7,12 +7,12 @@ Documentation = "https://pypz.dev"
 Repository = "https://github.com/lazlowa/pypz-python"
 
 [project]
-name = "pypz-amq-io"
-version = "0.9.2"
+name = "pypz-rmq-io"
+version = "0.9.3"
 authors = [
     { name = "Laszlo Anka", email = "laszlo.anka@gmail.com" }
 ]
-description = "Provides an Active Message Queue Protocol implementation of the ChannelInput/OutputPort in pypz."
+description = "Provides an AMQP implementation for RabbitMQ of the ChannelInput/OutputPort in pypz."
 readme = "README.md"
 license = { text = "Apache-2.0" }
 requires-python = ">=3.11"
@@ -28,8 +28,9 @@ keywords = [
 ]
 dependencies = [
     "pypz-core",
-    "stomp.py==7.0.0",
-    "stompest==2.3.0"
+    "amqp==5.2.0",
+    "avro==1.10.1",
+    "avro-validator==1.2.1"
 ]
 
 [project.optional-dependencies]

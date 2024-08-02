@@ -1,5 +1,11 @@
 # Contributor License Agreement
 
+## Disclaimer
+
+The following document outlines the rules and regulations for individual contributors.
+Corporate contributions are always subject of case-by-case evaluation and agreement.
+Without such an agreement, corporate contributions will be rejected.
+
 ## Introduction
 
 Thank you for your interest in contributing to *pypz*! 

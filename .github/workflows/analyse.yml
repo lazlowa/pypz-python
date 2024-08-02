@@ -44,4 +44,4 @@ jobs:
         python -m pip install mypy[reports]~=1.8.0
     - name: "Invoke mypy"
       run: |
-        mypy --install-types --non-interactive .
+        mypy --install-types --non-interactive --check-untyped-defs .

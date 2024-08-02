@@ -78,7 +78,7 @@ class ChannelBase(ABC):
         if context is None:
             raise ValueError("Context instance must be provided")
 
-        self.__silent_mode: bool = kwargs["silent_mode"] if "silent_mode" in kwargs else False
+        self._silent_mode: bool = kwargs["silent_mode"] if "silent_mode" in kwargs else False
         """
         If this flag is set, then this channel will not send status messages. One use-case is,
         if a channelRW is created to sniff the status of channels.
@@ -274,7 +274,7 @@ class ChannelBase(ABC):
         pass
 
     @abstractmethod
-    def _retrieve_status_messages(self) -> list:
+    def _retrieve_status_messages(self) -> Optional[list]:
         """
         This method shall implement the logic that retrieves the status messages published by the counterpart
         channel. Notice that in case of ChannelWriter, there can be multiple InputChannels sending messages and
@@ -524,7 +524,7 @@ class ChannelBase(ABC):
         self.invoke_sync_send_status_message(ChannelStatus.Opened)
         self.invoke_sync_status_update()
 
-        if (not self._executor_started) and (not self.__silent_mode):
+        if (not self._executor_started) and (not self._silent_mode):
             if self._executor is None:
                 self._executor = concurrent.futures.ThreadPoolExecutor(thread_name_prefix=self.get_unique_name())
 
@@ -611,7 +611,7 @@ class ChannelBase(ABC):
         channel functionality.
         """
 
-        if not self.__silent_mode:
+        if not self._silent_mode:
             self._send_status_message(str(ChannelStatusMessage(self._channel_name,
                                                                self._context.get_full_name(),
                                                                self._context.get_group_name(),
@@ -629,12 +629,12 @@ class ChannelBase(ABC):
         channel functionality.
         """
 
-        string_status_messages = self._retrieve_status_messages()
+        with self._channel_state_update_lock:
+            string_status_messages = self._retrieve_status_messages()
 
-        status_messages: list[ChannelStatusMessage] = list()
+            status_messages: list[ChannelStatusMessage] = list()
 
-        if string_status_messages is not None:
-            with self._channel_state_update_lock:
+            if string_status_messages is not None:
                 for string_status_message in string_status_messages:
                     status_message = ChannelStatusMessage.create_from_json(string_status_message)
                     status_messages.append(status_message)

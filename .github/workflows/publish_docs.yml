@@ -27,6 +27,7 @@ jobs:
         sphinx-apidoc --implicit-namespaces -e -f --private -o ./docs/indexes/core ./core/src/pypz/
         sphinx-apidoc --implicit-namespaces -e -f --private -o ./docs/indexes/sniffer ./sniffer/src/pypz/
         sphinx-apidoc --implicit-namespaces -e -f --private -o ./docs/indexes/plugins/kafka_io ./plugins/kafka_io/src/pypz/
+        sphinx-apidoc --implicit-namespaces -e -f --private -o ./docs/indexes/plugins/rmq_io ./plugins/rmq_io/src/pypz/
         sphinx-apidoc --implicit-namespaces -e -f --private -o ./docs/indexes/deployers/k8s ./deployers/k8s/src/pypz/
     - name: Build HTML
       run: |

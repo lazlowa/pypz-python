@@ -241,7 +241,7 @@ class Instance(Generic[NestedInstanceType], RegisteredInterface, ABC, metaclass=
         pass
 
     @abstractmethod
-    def _on_error(self) -> None:
+    def _on_error(self, source: Any, exception: Exception) -> None:
         """
         This method can be implemented to react to error events during
         execution. The error itself may come from arbitrary sources.
@@ -538,13 +538,15 @@ class Instance(Generic[NestedInstanceType], RegisteredInterface, ABC, metaclass=
                 if self.__reference is not None else None
             if (self.__nested_instance_type is not None) and \
                     (issubclass(value.context_class, self.__nested_instance_type)):
-                instance = value.context_class(final_instance_name, context=self, reference=nested_instance_reference,
-                                               *value.args,  **value.kwargs)
+                instance: Instance[Any] = value.context_class(final_instance_name, context=self,
+                                                              reference=nested_instance_reference,
+                                                              *value.args, **value.kwargs)
             else:
-                instance = value.context_class(final_instance_name, context=None, reference=nested_instance_reference,
-                                               *value.args, **value.kwargs)
+                instance: Instance[Any] = value.context_class(final_instance_name, context=None,
+                                                              reference=nested_instance_reference,
+                                                              *value.args, **value.kwargs)
         else:
-            instance = value
+            instance: Instance[Any] = value
 
         object.__setattr__(self, name, instance)
 

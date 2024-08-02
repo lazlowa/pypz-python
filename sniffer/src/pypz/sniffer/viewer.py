@@ -53,7 +53,7 @@ class PipelineSnifferViewer(tk.Tk):
         self._operator_view_channel_writer_count: dict[Operator, int] = dict()
         self._stopped: bool = False
         self._shutdown: bool = False
-        self._start_time: int = 0
+        self._start_time: float = 0.0
 
         # Initialize graphical elements
         # =============================

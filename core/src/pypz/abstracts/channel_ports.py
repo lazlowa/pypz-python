@@ -23,6 +23,7 @@ from pypz.core.channels.status import ChannelStatus
 from pypz.core.commons.utils import current_time_millis
 from pypz.core.commons.parameters import RequiredParameter, OptionalParameter
 from pypz.core.specs.plugin import InputPortPlugin, ResourceHandlerPlugin, OutputPortPlugin, ExtendedPlugin
+from pypz.executors.operator.states import StateOperationRunning, StateOperationInit, StateOperationShutdown
 
 ParamKeyChannelLocationConfig = "channelLocation"
 ParamKeyChannelConfig = "channelConfig"
@@ -86,10 +87,11 @@ class ChannelInputPort(InputPortPlugin, ResourceHandlerPlugin, ExtendedPlugin, A
         Helper flag to register, if the execution has been interrupted.
         """
 
-        self._error_occurred: bool = False
+        self._delete_resources: bool = True
         """
-        Helper flag to register, if error occurred during execution. This flag will
-        be used to prevent resource deletion on error.
+        This flag signalizes, if resource deletion can be performed. It will
+        be cleared, if there is an error on OperationRunning state to allow
+        process restart.
         """
 
         self._need_to_check_connections_opened: bool = True
@@ -142,7 +144,7 @@ class ChannelInputPort(InputPortPlugin, ResourceHandlerPlugin, ExtendedPlugin, A
     def _on_resource_deletion(self) -> bool:
         if self.is_principal() and (not self._channel_reader.is_resource_deleted()):
             # Do not delete resources on error
-            if self._error_occurred:
+            if not self._delete_resources:
                 return True
 
             if self._channel_reader.invoke_resource_deletion():
@@ -254,9 +256,12 @@ class ChannelInputPort(InputPortPlugin, ResourceHandlerPlugin, ExtendedPlugin, A
         self.get_logger().warning(f"Interrupted by system signal: {system_signal}")
         self._interrupted = True
 
-    def _on_error(self) -> None:
-        self._error_occurred = True
-        self._channel_reader.invoke_sync_send_status_message(ChannelStatus.Error)
+    def _on_error(self, source: Any, exception: Exception) -> None:
+        if issubclass(source, (StateOperationInit, StateOperationRunning, StateOperationShutdown)):
+            self._delete_resources = False
+
+        if self._channel_reader.is_channel_open():
+            self._channel_reader.invoke_sync_send_status_message(ChannelStatus.Error)
 
 
 class ChannelOutputPort(OutputPortPlugin, ResourceHandlerPlugin, ExtendedPlugin, ABC):
@@ -306,10 +311,11 @@ class ChannelOutputPort(OutputPortPlugin, ResourceHandlerPlugin, ExtendedPlugin,
         Helper flag to register, if the execution has been interrupted.
         """
 
-        self._error_occurred: bool = False
+        self._delete_resources: bool = True
         """
-        Helper flag to register, if error occurred during execution. This flag will
-        be used to prevent resource deletion on error.
+        This flag signalizes, if resource deletion can be performed. It will
+        be cleared, if there is an error on OperationRunning state to allow
+        process restart.
         """
 
         self._resource_deletion_errors: set[ChannelWriter] = set()
@@ -380,7 +386,7 @@ class ChannelOutputPort(OutputPortPlugin, ResourceHandlerPlugin, ExtendedPlugin,
         for channel in self._channel_writers:
             if (not channel.is_resource_deleted()) and (channel not in self._resource_deletion_errors):
                 try:
-                    if not self._error_occurred:
+                    if self._delete_resources:
                         if channel.invoke_resource_deletion():
                             channel.get_logger().debug("Resource deleted.")
                         else:
@@ -466,13 +472,15 @@ class ChannelOutputPort(OutputPortPlugin, ResourceHandlerPlugin, ExtendedPlugin,
         self.get_logger().warning(f"Interrupted by system signal: {system_signal}")
         self._interrupted = True
 
-    def _on_error(self) -> None:
-        self._error_occurred = True
+    def _on_error(self, source: Any, exception: Exception) -> None:
+        if issubclass(source, (StateOperationInit, StateOperationRunning, StateOperationShutdown)):
+            self._delete_resources = False
 
         error_channels: set[ChannelWriter] = set()
         for channel in self._channel_writers:
             try:
-                channel.invoke_sync_send_status_message(ChannelStatus.Error)
+                if channel.is_channel_open():
+                    channel.invoke_sync_send_status_message(ChannelStatus.Error)
             except:  # noqa: E722
                 # We catch the fact that error occurred, but not interrupting the error handling
                 # process of the other channels

@@ -485,7 +485,7 @@ class InstanceTest(TestCase):
         try:
             l0.update("{}")
             l0.update({})
-        except AttributeError | TypeError:
+        except (AttributeError, TypeError):
             self.fail()
 
     def test_instance_update_with_invalid_source_types(self):

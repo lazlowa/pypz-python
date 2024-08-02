@@ -47,7 +47,7 @@ class InstanceParameters(dict):
         self.__update_callbacks: dict[str, list[Callable[[Any], None]]] = dict()
 
     def __setitem__(self, name, value):
-        if ((name not in self) or (value != self[name])):
+        if (name not in self) or (value != self[name]):
             super().__setitem__(name, value)
             if name in self.__update_callbacks:
                 for callback in self.__update_callbacks[name]:

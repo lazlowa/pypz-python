@@ -19,6 +19,7 @@ import unittest
 from kafka import KafkaAdminClient
 from kafka.errors import UnknownTopicOrPartitionError
 
+from pypz.executors.operator.states import StateOperationRunning
 from pypz.plugins.kafka_io.channels import ReaderStatusTopicNameExtension, WriterStatusTopicNameExtension
 from plugins.kafka_io.test.resources import TestPipeline
 
@@ -228,7 +229,7 @@ class KafkaIOPortTest(unittest.TestCase):
             reader.input_port._pre_execution()
             reader.input_port._on_resource_creation()
             reader.input_port._on_port_open()
-            reader.input_port._on_error()
+            reader.input_port._on_error(StateOperationRunning, Exception("Dummy"))
             reader.input_port._on_resource_deletion()
 
             existing_topics = KafkaIOPortTest.test_admin_client.list_topics()

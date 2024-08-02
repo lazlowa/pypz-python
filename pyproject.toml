@@ -38,6 +38,7 @@ files = [
     "./core/src/**/*.py",
     "./deployers/k8s/src/**/*.py",
     "./plugins/kafka_io/src/**/*.py",
+    "./plugins/rmq_io/src/**/*.py",
     "./plugins/amq_io/src/**/*.py",
     "./sniffer/src/**/*.py"
 ]

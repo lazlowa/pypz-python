@@ -192,9 +192,10 @@ class OperatorExecutor:
                 try:
                     self.__context.for_each_plugin_objects_with_type(
                         ExtendedPlugin, lambda plugin: plugin.get_protected().post_execution())
-                except:  # noqa: E722
+                except Exception as e:  # noqa: F841
                     self.__context.for_each_plugin_objects_with_type(
-                        ExtendedPlugin, lambda plugin: plugin.get_protected().on_error())
+                        ExtendedPlugin, lambda plugin: plugin.get_protected().on_error(self.__class__, e)  # noqa: F821
+                    )
                     raise
         except:  # noqa: E722
             # Catching exceptions not handled at this point
@@ -224,9 +225,10 @@ class OperatorExecutor:
             # of the execution
             self.__context.for_each_plugin_objects_with_type(
                 ExtendedPlugin, lambda plugin: plugin.get_protected().pre_execution())
-        except:  # noqa: E722
-            self.__context.for_each_plugin_objects_with_type(ExtendedPlugin,
-                                                             lambda plugin: plugin.get_protected().on_error())
+        except Exception as e:  # noqa: F841
+            self.__context.for_each_plugin_objects_with_type(
+                ExtendedPlugin, lambda plugin: plugin.get_protected().on_error(self.__class__, e)  # noqa: F821
+            )
             raise
 
         # ========= Initialize state machine =========
@@ -283,7 +285,8 @@ class OperatorExecutor:
             self.__operator.get_logger().debug("Processing interrupt signal ...")
 
             # Current state shutdown shall be called here to interrupt scheduling and cancel futures
-            self.__current_state.shutdown()
+            # TODO - removed, shall it hang in shutdown in the future, remember to check this
+            # self.__current_state.shutdown()
 
             # Invoking plugins' on_interrupt() method
             try:
@@ -292,7 +295,6 @@ class OperatorExecutor:
             except:  # noqa: E722
                 # Ignore exception to be able to proceed with the shutdown
                 traceback.print_exc(file=sys.stderr)
-                pass
 
             # Invoking operator's on_interrupt() method
             try:
@@ -300,7 +302,6 @@ class OperatorExecutor:
             except:  # noqa: E722
                 # Ignore exception to be able to proceed with the shutdown
                 traceback.print_exc(file=sys.stderr)
-                pass
 
             self.__context.set_exit_code(ExitCodes.SigTerm)
             self.__priority_signal.set(SignalShutdown())

@@ -29,7 +29,7 @@ class BlankInstance(Instance[BlankNestedInstanceType]):
     def _on_interrupt(self, system_signal: int = None) -> None:
         pass
 
-    def _on_error(self) -> None:
+    def _on_error(self, source: Any, exception: Exception) -> None:
         pass
 
 
