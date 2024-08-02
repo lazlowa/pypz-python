@@ -94,7 +94,7 @@ class RMQChannelWriter(ChannelWriter):
 
         if self._generic_datum_writer is None:
             """
-            If no schema provided, and therefore no Avro will be used, 
+            If no schema provided, and therefore no Avro will be used,
             then send the records as string.
             """
             for record in records:

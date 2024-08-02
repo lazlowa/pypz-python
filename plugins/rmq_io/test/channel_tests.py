@@ -17,7 +17,7 @@ import time
 import unittest
 from typing import Optional
 
-from amqp import Connection, Message
+from amqp import Connection, Message, Channel
 
 from pypz.plugins.rmq_io.utils import ReaderStatusQueueNameExtension, WriterStatusQueueNameExtension, \
     is_queue_existing, is_exchange_existing
@@ -34,6 +34,8 @@ class RMQChannelTest(unittest.TestCase):
     test_writer_status_queue_name = test_channel_name + WriterStatusQueueNameExtension
 
     connection: Optional[Connection] = None
+
+    admin_channel: Optional[Channel] = None
 
     @classmethod
     def setUpClass(cls):

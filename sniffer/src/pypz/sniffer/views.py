@@ -52,8 +52,8 @@ class ChannelView:
     def __init__(self, canvas: tk.Canvas, channel_reader_idx: int, channel_writer_idx: int):
         self.canvas = canvas
 
-        self.channel_reader_idx = channel_reader_idx
-        self.channel_writer_idx = channel_writer_idx
+        self.channel_reader_idx: int = channel_reader_idx
+        self.channel_writer_idx: int = channel_writer_idx
         self.channel_reader_views: list[ChannelRWView] = list()
         self.channel_writer_views: list[ChannelRWView] = list()
 
@@ -124,10 +124,10 @@ class ChannelRWView:
     def __init__(self, canvas: tk.Canvas):
         self.canvas = canvas
 
-        self.channel_box = None
-        self.channel_text = None
-        self.status_display_l = None
-        self.status_display_r = None
+        self.channel_box: Optional[int] = None
+        self.channel_text: Optional[int] = None
+        self.status_display_l: Optional[int] = None
+        self.status_display_r: Optional[int] = None
 
         self.left: Optional[int] = None
         self.top: Optional[int] = None
@@ -167,7 +167,7 @@ class ChannelRWView:
             elif "receivedRecordCount" in status_message.payload:
                 self.canvas.itemconfig(self.channel_text, text=status_message.payload["receivedRecordCount"])
 
-    def draw(self, left, right):
+    def draw(self, left: int, right: int):
         self.left = left
         self.top = right
         self.right = left + ViewConfig.channel_width
@@ -193,13 +193,13 @@ class PortView:
 
         self.channel_views: list[ChannelRWView] = list()
 
-        self.port_name_text = None
-        self.port_box = None
+        self.port_name_text: Optional[int] = None
+        self.port_box: Optional[int] = None
 
-        self.left = None
-        self.top = None
-        self.right = None
-        self.bottom = None
+        self.left: Optional[int] = None
+        self.top: Optional[int] = None
+        self.right: Optional[int] = None
+        self.bottom: Optional[int] = None
 
     def draw(self, left, top):
         self.left = left
@@ -234,10 +234,10 @@ class OperatorView:
             operator.get_protected().get_nested_instances().values() if isinstance(output_port, ChannelOutputPort)
         }
 
-        self.left = None
-        self.top = None
-        self.right = None
-        self.bottom = None
+        self.left: Optional[int] = None
+        self.top: Optional[int] = None
+        self.right: Optional[int] = None
+        self.bottom: Optional[int] = None
 
     def draw(self, left, top):
         self.left = left
