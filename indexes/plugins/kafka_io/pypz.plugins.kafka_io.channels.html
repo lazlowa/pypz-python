@@ -39,7 +39,7 @@
             pypz
           </a>
               <div class="version">
-                0.9.2
+                0.9.3
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -66,6 +66,7 @@
 <p class="caption" role="heading"><span class="caption-text">Plugins</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../plugins/kafka_io.html">Kafka IO Plugin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../plugins/rmq_io.html">RabbitMQ IO Plugin</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Deployers</span></p>
 <ul>
@@ -133,13 +134,6 @@
 <dt class="sig sig-object py" id="pypz.plugins.kafka_io.channels.KafkaChannelReader.StatusConsumerTimeoutInMs">
 <span class="sig-name descname"><span class="pre">StatusConsumerTimeoutInMs</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1000</span></em><a class="headerlink" href="#pypz.plugins.kafka_io.channels.KafkaChannelReader.StatusConsumerTimeoutInMs" title="Link to this definition"></a></dt>
 <dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pypz.plugins.kafka_io.channels.KafkaChannelReader.__silent_mode">
-<span class="sig-name descname"><span class="pre">__silent_mode</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pypz.plugins.kafka_io.channels.KafkaChannelReader.__silent_mode" title="Link to this definition"></a></dt>
-<dd><p>If this flag is set, then this channel will not send status messages. One use-case is,
-if a channelRW is created to sniff the status of channels.</p>
-</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pypz.plugins.kafka_io.channels.KafkaChannelReader._abc_impl">
@@ -513,6 +507,13 @@ append as string separated by StateMessageSeparatorChar.</p>
 </dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.kafka_io.channels.KafkaChannelReader._silent_mode">
+<span class="sig-name descname"><span class="pre">_silent_mode</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pypz.plugins.kafka_io.channels.KafkaChannelReader._silent_mode" title="Link to this definition"></a></dt>
+<dd><p>If this flag is set, then this channel will not send status messages. One use-case is,
+if a channelRW is created to sniff the status of channels.</p>
+</dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="pypz.plugins.kafka_io.channels.KafkaChannelReader._status_map">
 <span class="sig-name descname"><span class="pre">_status_map</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../../core/pypz.core.channels.status.html#pypz.core.channels.status.ChannelStatusMonitor" title="pypz.core.channels.status.ChannelStatusMonitor"><span class="pre">ChannelStatusMonitor</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.plugins.kafka_io.channels.KafkaChannelReader._status_map" title="Link to this definition"></a></dt>
 <dd><p>This map stores the health statuses of all connected channels</p>
@@ -619,13 +620,6 @@ the channel has been stopped.</p>
 <dt class="sig sig-object py" id="pypz.plugins.kafka_io.channels.KafkaChannelWriter">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.plugins.kafka_io.channels.</span></span><span class="sig-name descname"><span class="pre">KafkaChannelWriter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.OutputPortPlugin" title="pypz.core.specs.plugin.OutputPortPlugin"><span class="pre">OutputPortPlugin</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">executor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ThreadPoolExecutor</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.plugins.kafka_io.channels.KafkaChannelWriter" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="../../core/pypz.core.channels.io.html#pypz.core.channels.io.ChannelWriter" title="pypz.core.channels.io.ChannelWriter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelWriter</span></code></a></p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pypz.plugins.kafka_io.channels.KafkaChannelWriter.__silent_mode">
-<span class="sig-name descname"><span class="pre">__silent_mode</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pypz.plugins.kafka_io.channels.KafkaChannelWriter.__silent_mode" title="Link to this definition"></a></dt>
-<dd><p>If this flag is set, then this channel will not send status messages. One use-case is,
-if a channelRW is created to sniff the status of channels.</p>
-</dd></dl>
-
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pypz.plugins.kafka_io.channels.KafkaChannelWriter._abc_impl">
 <span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pypz.plugins.kafka_io.channels.KafkaChannelWriter._abc_impl" title="Link to this definition"></a></dt>
@@ -930,6 +924,13 @@ append as string separated by StateMessageSeparatorChar.</p>
 <dd class="field-odd"><p><strong>message</strong> – message that shall be sent</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.kafka_io.channels.KafkaChannelWriter._silent_mode">
+<span class="sig-name descname"><span class="pre">_silent_mode</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pypz.plugins.kafka_io.channels.KafkaChannelWriter._silent_mode" title="Link to this definition"></a></dt>
+<dd><p>If this flag is set, then this channel will not send status messages. One use-case is,
+if a channelRW is created to sniff the status of channels.</p>
 </dd></dl>
 
 <dl class="py attribute">

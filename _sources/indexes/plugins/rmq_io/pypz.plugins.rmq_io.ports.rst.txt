@@ -1,0 +1,8 @@
+pypz.plugins.rmq\_io.ports module
+=================================
+
+.. automodule:: pypz.plugins.rmq_io.ports
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

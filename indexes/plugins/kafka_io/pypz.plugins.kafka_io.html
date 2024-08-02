@@ -39,7 +39,7 @@
             pypz
           </a>
               <div class="version">
-                0.9.2
+                0.9.3
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -66,6 +66,7 @@
 <p class="caption" role="heading"><span class="caption-text">Plugins</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../plugins/kafka_io.html">Kafka IO Plugin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../plugins/rmq_io.html">RabbitMQ IO Plugin</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Deployers</span></p>
 <ul>
@@ -124,7 +125,6 @@
 <li class="toctree-l3"><a class="reference internal" href="pypz.plugins.kafka_io.channels.html#pypz.plugins.kafka_io.channels.KafkaChannelReader.DataConsumerTimeoutInMs"><code class="docutils literal notranslate"><span class="pre">KafkaChannelReader.DataConsumerTimeoutInMs</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="pypz.plugins.kafka_io.channels.html#pypz.plugins.kafka_io.channels.KafkaChannelReader.InitialDataConsumerTimeoutInMs"><code class="docutils literal notranslate"><span class="pre">KafkaChannelReader.InitialDataConsumerTimeoutInMs</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="pypz.plugins.kafka_io.channels.html#pypz.plugins.kafka_io.channels.KafkaChannelReader.StatusConsumerTimeoutInMs"><code class="docutils literal notranslate"><span class="pre">KafkaChannelReader.StatusConsumerTimeoutInMs</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="pypz.plugins.kafka_io.channels.html#pypz.plugins.kafka_io.channels.KafkaChannelReader.__silent_mode"><code class="docutils literal notranslate"><span class="pre">KafkaChannelReader.__silent_mode</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="pypz.plugins.kafka_io.channels.html#pypz.plugins.kafka_io.channels.KafkaChannelReader._abc_impl"><code class="docutils literal notranslate"><span class="pre">KafkaChannelReader._abc_impl</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="pypz.plugins.kafka_io.channels.html#pypz.plugins.kafka_io.channels.KafkaChannelReader._admin_client"><code class="docutils literal notranslate"><span class="pre">KafkaChannelReader._admin_client</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="pypz.plugins.kafka_io.channels.html#pypz.plugins.kafka_io.channels.KafkaChannelReader._aggregated_record_count"><code class="docutils literal notranslate"><span class="pre">KafkaChannelReader._aggregated_record_count</span></code></a></li>
@@ -173,6 +173,7 @@
 <li class="toctree-l3"><a class="reference internal" href="pypz.plugins.kafka_io.channels.html#pypz.plugins.kafka_io.channels.KafkaChannelReader._resources_deleted"><code class="docutils literal notranslate"><span class="pre">KafkaChannelReader._resources_deleted</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="pypz.plugins.kafka_io.channels.html#pypz.plugins.kafka_io.channels.KafkaChannelReader._retrieve_status_messages"><code class="docutils literal notranslate"><span class="pre">KafkaChannelReader._retrieve_status_messages()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="pypz.plugins.kafka_io.channels.html#pypz.plugins.kafka_io.channels.KafkaChannelReader._send_status_message"><code class="docutils literal notranslate"><span class="pre">KafkaChannelReader._send_status_message()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.plugins.kafka_io.channels.html#pypz.plugins.kafka_io.channels.KafkaChannelReader._silent_mode"><code class="docutils literal notranslate"><span class="pre">KafkaChannelReader._silent_mode</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="pypz.plugins.kafka_io.channels.html#pypz.plugins.kafka_io.channels.KafkaChannelReader._status_map"><code class="docutils literal notranslate"><span class="pre">KafkaChannelReader._status_map</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="pypz.plugins.kafka_io.channels.html#pypz.plugins.kafka_io.channels.KafkaChannelReader._stopping_executor"><code class="docutils literal notranslate"><span class="pre">KafkaChannelReader._stopping_executor</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="pypz.plugins.kafka_io.channels.html#pypz.plugins.kafka_io.channels.KafkaChannelReader._target_partition"><code class="docutils literal notranslate"><span class="pre">KafkaChannelReader._target_partition</span></code></a></li>
@@ -189,7 +190,6 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="pypz.plugins.kafka_io.channels.html#pypz.plugins.kafka_io.channels.KafkaChannelWriter"><code class="docutils literal notranslate"><span class="pre">KafkaChannelWriter</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="pypz.plugins.kafka_io.channels.html#pypz.plugins.kafka_io.channels.KafkaChannelWriter.__silent_mode"><code class="docutils literal notranslate"><span class="pre">KafkaChannelWriter.__silent_mode</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="pypz.plugins.kafka_io.channels.html#pypz.plugins.kafka_io.channels.KafkaChannelWriter._abc_impl"><code class="docutils literal notranslate"><span class="pre">KafkaChannelWriter._abc_impl</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="pypz.plugins.kafka_io.channels.html#pypz.plugins.kafka_io.channels.KafkaChannelWriter._admin_client"><code class="docutils literal notranslate"><span class="pre">KafkaChannelWriter._admin_client</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="pypz.plugins.kafka_io.channels.html#pypz.plugins.kafka_io.channels.KafkaChannelWriter._aggregated_record_count"><code class="docutils literal notranslate"><span class="pre">KafkaChannelWriter._aggregated_record_count</span></code></a></li>
@@ -231,6 +231,7 @@
 <li class="toctree-l3"><a class="reference internal" href="pypz.plugins.kafka_io.channels.html#pypz.plugins.kafka_io.channels.KafkaChannelWriter._retrieve_status_messages"><code class="docutils literal notranslate"><span class="pre">KafkaChannelWriter._retrieve_status_messages()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="pypz.plugins.kafka_io.channels.html#pypz.plugins.kafka_io.channels.KafkaChannelWriter._round_robin_partition_idx"><code class="docutils literal notranslate"><span class="pre">KafkaChannelWriter._round_robin_partition_idx</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="pypz.plugins.kafka_io.channels.html#pypz.plugins.kafka_io.channels.KafkaChannelWriter._send_status_message"><code class="docutils literal notranslate"><span class="pre">KafkaChannelWriter._send_status_message()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.plugins.kafka_io.channels.html#pypz.plugins.kafka_io.channels.KafkaChannelWriter._silent_mode"><code class="docutils literal notranslate"><span class="pre">KafkaChannelWriter._silent_mode</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="pypz.plugins.kafka_io.channels.html#pypz.plugins.kafka_io.channels.KafkaChannelWriter._status_map"><code class="docutils literal notranslate"><span class="pre">KafkaChannelWriter._status_map</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="pypz.plugins.kafka_io.channels.html#pypz.plugins.kafka_io.channels.KafkaChannelWriter._stopping_executor"><code class="docutils literal notranslate"><span class="pre">KafkaChannelWriter._stopping_executor</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="pypz.plugins.kafka_io.channels.html#pypz.plugins.kafka_io.channels.KafkaChannelWriter._target_partition_count"><code class="docutils literal notranslate"><span class="pre">KafkaChannelWriter._target_partition_count</span></code></a></li>
@@ -265,7 +266,7 @@
 <li class="toctree-l3"><a class="reference internal" href="pypz.plugins.kafka_io.ports.html#pypz.plugins.kafka_io.ports.KafkaChannelInputPort.__spec_name"><code class="docutils literal notranslate"><span class="pre">KafkaChannelInputPort.__spec_name</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="pypz.plugins.kafka_io.ports.html#pypz.plugins.kafka_io.ports.KafkaChannelInputPort._abc_impl"><code class="docutils literal notranslate"><span class="pre">KafkaChannelInputPort._abc_impl</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="pypz.plugins.kafka_io.ports.html#pypz.plugins.kafka_io.ports.KafkaChannelInputPort._channel_reader"><code class="docutils literal notranslate"><span class="pre">KafkaChannelInputPort._channel_reader</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="pypz.plugins.kafka_io.ports.html#pypz.plugins.kafka_io.ports.KafkaChannelInputPort._error_occurred"><code class="docutils literal notranslate"><span class="pre">KafkaChannelInputPort._error_occurred</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.plugins.kafka_io.ports.html#pypz.plugins.kafka_io.ports.KafkaChannelInputPort._delete_resources"><code class="docutils literal notranslate"><span class="pre">KafkaChannelInputPort._delete_resources</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="pypz.plugins.kafka_io.ports.html#pypz.plugins.kafka_io.ports.KafkaChannelInputPort._expected_output_count"><code class="docutils literal notranslate"><span class="pre">KafkaChannelInputPort._expected_output_count</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="pypz.plugins.kafka_io.ports.html#pypz.plugins.kafka_io.ports.KafkaChannelInputPort._group_mode"><code class="docutils literal notranslate"><span class="pre">KafkaChannelInputPort._group_mode</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="pypz.plugins.kafka_io.ports.html#pypz.plugins.kafka_io.ports.KafkaChannelInputPort._interrupted"><code class="docutils literal notranslate"><span class="pre">KafkaChannelInputPort._interrupted</span></code></a></li>
@@ -289,7 +290,7 @@
 <li class="toctree-l3"><a class="reference internal" href="pypz.plugins.kafka_io.ports.html#pypz.plugins.kafka_io.ports.KafkaChannelOutputPort.__spec_name"><code class="docutils literal notranslate"><span class="pre">KafkaChannelOutputPort.__spec_name</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="pypz.plugins.kafka_io.ports.html#pypz.plugins.kafka_io.ports.KafkaChannelOutputPort._abc_impl"><code class="docutils literal notranslate"><span class="pre">KafkaChannelOutputPort._abc_impl</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="pypz.plugins.kafka_io.ports.html#pypz.plugins.kafka_io.ports.KafkaChannelOutputPort._channel_writers"><code class="docutils literal notranslate"><span class="pre">KafkaChannelOutputPort._channel_writers</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="pypz.plugins.kafka_io.ports.html#pypz.plugins.kafka_io.ports.KafkaChannelOutputPort._error_occurred"><code class="docutils literal notranslate"><span class="pre">KafkaChannelOutputPort._error_occurred</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pypz.plugins.kafka_io.ports.html#pypz.plugins.kafka_io.ports.KafkaChannelOutputPort._delete_resources"><code class="docutils literal notranslate"><span class="pre">KafkaChannelOutputPort._delete_resources</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="pypz.plugins.kafka_io.ports.html#pypz.plugins.kafka_io.ports.KafkaChannelOutputPort._interrupted"><code class="docutils literal notranslate"><span class="pre">KafkaChannelOutputPort._interrupted</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="pypz.plugins.kafka_io.ports.html#pypz.plugins.kafka_io.ports.KafkaChannelOutputPort._port_close_errors"><code class="docutils literal notranslate"><span class="pre">KafkaChannelOutputPort._port_close_errors</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="pypz.plugins.kafka_io.ports.html#pypz.plugins.kafka_io.ports.KafkaChannelOutputPort._resource_deletion_errors"><code class="docutils literal notranslate"><span class="pre">KafkaChannelOutputPort._resource_deletion_errors</span></code></a></li>

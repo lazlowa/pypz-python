@@ -1,0 +1,8 @@
+pypz.plugins.rmq\_io.channels module
+====================================
+
+.. automodule:: pypz.plugins.rmq_io.channels
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

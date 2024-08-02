@@ -39,7 +39,7 @@
             pypz
           </a>
               <div class="version">
-                0.9.2
+                0.9.3
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -66,6 +66,7 @@
 <p class="caption" role="heading"><span class="caption-text">Plugins</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../plugins/kafka_io.html">Kafka IO Plugin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plugins/rmq_io.html">RabbitMQ IO Plugin</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Deployers</span></p>
 <ul>
@@ -159,13 +160,6 @@ counterpart channel.</p>
 <dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase.__executor_thread_handler">
 <span class="sig-name descname"><span class="pre">__executor_thread_handler</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pypz.core.channels.base.ChannelBase.__executor_thread_handler" title="Link to this definition"></a></dt>
 <dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase.__silent_mode">
-<span class="sig-name descname"><span class="pre">__silent_mode</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pypz.core.channels.base.ChannelBase.__silent_mode" title="Link to this definition"></a></dt>
-<dd><p>If this flag is set, then this channel will not send status messages. One use-case is,
-if a channelRW is created to sniff the status of channels.</p>
-</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase._abc_impl">
@@ -358,7 +352,7 @@ by the actual implementation. One developer can define it like an opened connect
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase._retrieve_status_messages">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_retrieve_status_messages</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="headerlink" href="#pypz.core.channels.base.ChannelBase._retrieve_status_messages" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_retrieve_status_messages</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.core.channels.base.ChannelBase._retrieve_status_messages" title="Link to this definition"></a></dt>
 <dd><p>This method shall implement the logic that retrieves the status messages published by the counterpart
 channel. Notice that in case of ChannelWriter, there can be multiple InputChannels sending messages and
 in case of ChannelReader there can be multiple messages sent by the ChannelWriter, therefore this method
@@ -384,6 +378,13 @@ append as string separated by StateMessageSeparatorChar.</p>
 <dd class="field-odd"><p><strong>message</strong> – message that shall be sent</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.core.channels.base.ChannelBase._silent_mode">
+<span class="sig-name descname"><span class="pre">_silent_mode</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pypz.core.channels.base.ChannelBase._silent_mode" title="Link to this definition"></a></dt>
+<dd><p>If this flag is set, then this channel will not send status messages. One use-case is,
+if a channelRW is created to sniff the status of channels.</p>
 </dd></dl>
 
 <dl class="py attribute">

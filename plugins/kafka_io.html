@@ -25,7 +25,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Kubernetes Deployer" href="../deployers/kubernetes.html" />
+    <link rel="next" title="RabbitMQ IO Plugin" href="rmq_io.html" />
     <link rel="prev" title="Deployer" href="../core/deployer.html" /> 
 </head>
 
@@ -41,7 +41,7 @@
             pypz
           </a>
               <div class="version">
-                0.9.2
+                0.9.3
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -69,10 +69,11 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Kafka IO Plugin</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#features">Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="rmq_io.html">RabbitMQ IO Plugin</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Deployers</span></p>
 <ul>
@@ -121,7 +122,7 @@
            <div itemprop="articleBody">
              
   <section id="kafka-io-plugin">
-<h1>Kafka IO Plugin<a class="headerlink" href="#kafka-io-plugin" title="Link to this heading"></a></h1>
+<span id="kafka-io-docs"></span><h1>Kafka IO Plugin<a class="headerlink" href="#kafka-io-plugin" title="Link to this heading"></a></h1>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
 <p>The <a class="reference internal" href="../indexes/plugins/kafka_io/pypz.plugins.kafka_io.ports.html#pypz.plugins.kafka_io.ports.KafkaChannelInputPort" title="pypz.plugins.kafka_io.ports.KafkaChannelInputPort"><code class="xref py py-class docutils literal notranslate"><span class="pre">KafkaChannelInputPort</span></code></a> and
@@ -135,45 +136,25 @@ an operator to send and receive data through Kafka. It extends the abstract plug
 the <a class="reference internal" href="../indexes/core/pypz.core.channels.io.html#pypz.core.channels.io.ChannelReader" title="pypz.core.channels.io.ChannelReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelReader</span></code></a> and
 <a class="reference internal" href="../indexes/core/pypz.core.channels.io.html#pypz.core.channels.io.ChannelWriter" title="pypz.core.channels.io.ChannelWriter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelWriter</span></code></a> abstracts by taking care
 of all complexities and boilerplates for you.</p>
-</section>
-<section id="usage">
-<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h2>
-<p>Plugins shall be defined in the operator’s constructor. It is important, since attributes
-will be scanned in construction time and plugins defined in the constructor will be register
-automatically as nested instance.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pypz.core.specs.operator</span> <span class="kn">import</span> <span class="n">Operator</span>
-<span class="kn">from</span> <span class="nn">pypz.plugins.kafka_io.ports</span> <span class="kn">import</span> <span class="n">KafkaChannelOutputPort</span><span class="p">,</span> <span class="n">KafkaChannelInputPort</span>
-
-
-<span class="k">class</span> <span class="nc">DemoOperator</span><span class="p">(</span><span class="n">Operator</span><span class="p">):</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">input_port</span> <span class="o">=</span> <span class="n">KafkaChannelInputPort</span><span class="p">(</span><span class="n">schema</span><span class="o">=</span><span class="s2">&quot;SCHEMA STRING&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">output_port</span> <span class="o">=</span> <span class="n">KafkaChannelOutputPort</span><span class="p">(</span><span class="n">schema</span><span class="o">=</span><span class="s2">&quot;SCHEMA STRING&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Note that theoretically it would not be necessary to create a separate class for a channel
-port plugin, since both <a class="reference internal" href="../indexes/core/pypz.abstracts.channel_ports.html#pypz.abstracts.channel_ports.ChannelInputPort" title="pypz.abstracts.channel_ports.ChannelInputPort"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelInputPort</span></code></a> and
-<a class="reference internal" href="../indexes/core/pypz.abstracts.channel_ports.html#pypz.abstracts.channel_ports.ChannelOutputPort" title="pypz.abstracts.channel_ports.ChannelOutputPort"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelOutputPort</span></code></a> accepts channel implementations
-as constructor argument, hence the following code is equivalent to the code above:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pypz.core.specs.operator</span> <span class="kn">import</span> <span class="n">Operator</span>
-<span class="kn">from</span> <span class="nn">pypz.abstracts.channel_ports</span> <span class="kn">import</span> <span class="n">ChannelInputPort</span><span class="p">,</span> <span class="n">ChannelOutputPort</span>
-<span class="kn">from</span> <span class="nn">pypz.plugins.kafka_io.channels</span> <span class="kn">import</span> <span class="n">KafkaChannelReader</span><span class="p">,</span> <span class="n">KafkaChannelWriter</span>
-
-
-<span class="k">class</span> <span class="nc">DemoOperator</span><span class="p">(</span><span class="n">Operator</span><span class="p">):</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">input_port</span> <span class="o">=</span> <span class="n">ChannelInputPort</span><span class="p">(</span><span class="n">schema</span><span class="o">=</span><span class="s2">&quot;SCHEMA STRING&quot;</span><span class="p">,</span> <span class="n">channel_reader_type</span><span class="o">=</span><span class="n">KafkaChannelReader</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">output_port</span> <span class="o">=</span> <span class="n">ChannelOutputPort</span><span class="p">(</span><span class="n">schema</span><span class="o">=</span><span class="s2">&quot;SCHEMA STRING&quot;</span><span class="p">,</span> <span class="n">channel_reader_type</span><span class="o">=</span><span class="n">KafkaChannelWriter</span><span class="p">)</span>
-</pre></div>
-</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p><strong>When should I use it?</strong></p>
+<ul class="simple">
+<li><p>if you have any dependency between the data records e.g., time continuous signals</p></li>
+<li><p>where the ordering of the records is important</p></li>
+<li><p>if you require some kind of replaying, logging ability or append-only behavior</p></li>
+</ul>
+<p>For example, if you want to process time continuous signals by an algorithm but with
+different parametrization. In this case the first operator would provide the data, and
+there would be as many instance of the operator with the algorithm as many different
+parameters you would like to test. Each processor operator gets the entire signal with
+guaranteed ordering.</p>
+<p><strong>When should I not use it?</strong></p>
+<ul class="simple">
+<li><p>if the data records represent a distinct, independent package of work to be done</p></li>
+<li><p>where ordering is not important, every record can be processed by any operator</p></li>
+</ul>
+<p>Although Kafka can be used in those cases, it is more efficient to use <a class="reference internal" href="rmq_io.html#rmq-io-docs"><span class="std std-ref">RabbitMQ IO Plugin</span></a>.</p>
 </div>
 </section>
 <section id="features">
@@ -225,6 +206,46 @@ and directly assigning consumers to partitions based on their replication group 
 to accommodate 100 to 1000s of consumers within the same group.</p>
 </div>
 </section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h2>
+<p>Plugins shall be defined in the operator’s constructor. It is important, since attributes
+will be scanned in construction time and plugins defined in the constructor will be register
+automatically as nested instance.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pypz.core.specs.operator</span> <span class="kn">import</span> <span class="n">Operator</span>
+<span class="kn">from</span> <span class="nn">pypz.plugins.kafka_io.ports</span> <span class="kn">import</span> <span class="n">KafkaChannelOutputPort</span><span class="p">,</span> <span class="n">KafkaChannelInputPort</span>
+
+
+<span class="k">class</span> <span class="nc">DemoOperator</span><span class="p">(</span><span class="n">Operator</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_port</span> <span class="o">=</span> <span class="n">KafkaChannelInputPort</span><span class="p">(</span><span class="n">schema</span><span class="o">=</span><span class="s2">&quot;SCHEMA STRING&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_port</span> <span class="o">=</span> <span class="n">KafkaChannelOutputPort</span><span class="p">(</span><span class="n">schema</span><span class="o">=</span><span class="s2">&quot;SCHEMA STRING&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Note that theoretically it would not be necessary to create a separate class for a channel
+port plugin, since both <a class="reference internal" href="../indexes/core/pypz.abstracts.channel_ports.html#pypz.abstracts.channel_ports.ChannelInputPort" title="pypz.abstracts.channel_ports.ChannelInputPort"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelInputPort</span></code></a> and
+<a class="reference internal" href="../indexes/core/pypz.abstracts.channel_ports.html#pypz.abstracts.channel_ports.ChannelOutputPort" title="pypz.abstracts.channel_ports.ChannelOutputPort"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelOutputPort</span></code></a> accepts channel implementations
+as constructor argument, hence the following code is equivalent to the code above:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pypz.core.specs.operator</span> <span class="kn">import</span> <span class="n">Operator</span>
+<span class="kn">from</span> <span class="nn">pypz.abstracts.channel_ports</span> <span class="kn">import</span> <span class="n">ChannelInputPort</span><span class="p">,</span> <span class="n">ChannelOutputPort</span>
+<span class="kn">from</span> <span class="nn">pypz.plugins.kafka_io.channels</span> <span class="kn">import</span> <span class="n">KafkaChannelReader</span><span class="p">,</span> <span class="n">KafkaChannelWriter</span>
+
+
+<span class="k">class</span> <span class="nc">DemoOperator</span><span class="p">(</span><span class="n">Operator</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_port</span> <span class="o">=</span> <span class="n">ChannelInputPort</span><span class="p">(</span><span class="n">schema</span><span class="o">=</span><span class="s2">&quot;SCHEMA STRING&quot;</span><span class="p">,</span> <span class="n">channel_reader_type</span><span class="o">=</span><span class="n">KafkaChannelReader</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_port</span> <span class="o">=</span> <span class="n">ChannelOutputPort</span><span class="p">(</span><span class="n">schema</span><span class="o">=</span><span class="s2">&quot;SCHEMA STRING&quot;</span><span class="p">,</span> <span class="n">channel_reader_type</span><span class="o">=</span><span class="n">KafkaChannelWriter</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
 </section>
 
 
@@ -232,7 +253,7 @@ to accommodate 100 to 1000s of consumers within the same group.</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="../core/deployer.html" class="btn btn-neutral float-left" title="Deployer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../deployers/kubernetes.html" class="btn btn-neutral float-right" title="Kubernetes Deployer" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="rmq_io.html" class="btn btn-neutral float-right" title="RabbitMQ IO Plugin" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

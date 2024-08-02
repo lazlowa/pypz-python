@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pypz.plugins.rmq_io.channels module &mdash; pypz  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            pypz
+          </a>
+              <div class="version">
+                0.9.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">General</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../general/overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../general/changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../core/models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../core/parameters.html">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../core/data_transfer.html">Data Transfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../core/executor.html">Executor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../core/logging.html">Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../core/deployer.html">Deployer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Plugins</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../plugins/kafka_io.html">Kafka IO Plugin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../plugins/rmq_io.html">RabbitMQ IO Plugin</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Deployers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../deployers/kubernetes.html">Kubernetes Deployer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Sniffer</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../sniffer/overview.html">Overview</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/ht_create_pipeline.html">How to create a pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/ht_debug_in_operator.html">How to debug in a deployed operator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/ht_contribute.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/ht_develop.html">Developer’s Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lazlowa/pypz-python">Source Code</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lazlowa/pypz-starter-template">Starter Template Project</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lazlowa/pypz-examples">Examples</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pypz</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">pypz.plugins.rmq_io.channels module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/indexes/plugins/rmq_io/pypz.plugins.rmq_io.channels.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-pypz.plugins.rmq_io.channels">
+<span id="pypz-plugins-rmq-io-channels-module"></span><h1>pypz.plugins.rmq_io.channels module<a class="headerlink" href="#module-pypz.plugins.rmq_io.channels" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.plugins.rmq_io.channels.</span></span><span class="sig-name descname"><span class="pre">RMQChannelReader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.InputPortPlugin" title="pypz.core.specs.plugin.InputPortPlugin"><span class="pre">InputPortPlugin</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">executor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ThreadPoolExecutor</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../core/pypz.core.channels.io.html#pypz.core.channels.io.ChannelReader" title="pypz.core.channels.io.ChannelReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelReader</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._aggregated_record_count">
+<span class="sig-name descname"><span class="pre">_aggregated_record_count</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._aggregated_record_count" title="Link to this definition"></a></dt>
+<dd><p>Metric value to store the summed up record count</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._aggregated_time_between_reads">
+<span class="sig-name descname"><span class="pre">_aggregated_time_between_reads</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._aggregated_time_between_reads" title="Link to this definition"></a></dt>
+<dd><p>Metric value to store the summed up times between reads</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._channel_name">
+<span class="sig-name descname"><span class="pre">_channel_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._channel_name" title="Link to this definition"></a></dt>
+<dd><p>This member stores the name of the channel, which normally reflects to the resource’s name.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._channel_opened">
+<span class="sig-name descname"><span class="pre">_channel_opened</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._channel_opened" title="Link to this definition"></a></dt>
+<dd><p>This member is a flag to signalize, whether a channel is open and ready to use.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._channel_started">
+<span class="sig-name descname"><span class="pre">_channel_started</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._channel_started" title="Link to this definition"></a></dt>
+<dd><p>Status flag to signalize, whether the channel has been started.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._channel_stopped">
+<span class="sig-name descname"><span class="pre">_channel_stopped</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._channel_stopped" title="Link to this definition"></a></dt>
+<dd><p>Status flag to signalize, whether the channel has been stopped. Note that this additional flag is
+necessary, since having the _channel_started on false does not necessarily mean that the
+output was ever started and is now finished.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._close_channel">
+<span class="sig-name descname"><span class="pre">_close_channel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._close_channel" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic to close a channel. Normally closing a channel is the last step so
+clean up of used resource shall happen here as well.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True, if done, False if it is still in progress</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._commit_offset">
+<span class="sig-name descname"><span class="pre">_commit_offset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._commit_offset" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic that commits the provided offset using the underlying technology.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>offset</strong> – provided offset to commit</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._config_data_consumer_timeout_sec">
+<span class="sig-name descname"><span class="pre">_config_data_consumer_timeout_sec</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._config_data_consumer_timeout_sec" title="Link to this definition"></a></dt>
+<dd><p>Configuration parameter to specify the timeout for draining events from the data queue</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._config_max_poll_records">
+<span class="sig-name descname"><span class="pre">_config_max_poll_records</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._config_max_poll_records" title="Link to this definition"></a></dt>
+<dd><p>Configuration parameter to specify the max number of messages to process in one go</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._config_status_consumer_timeout_sec">
+<span class="sig-name descname"><span class="pre">_config_status_consumer_timeout_sec</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._config_status_consumer_timeout_sec" title="Link to this definition"></a></dt>
+<dd><p>Configuration parameter to specify the timeout for draining events from the status stream</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._configuration">
+<span class="sig-name descname"><span class="pre">_configuration</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._configuration" title="Link to this definition"></a></dt>
+<dd><p>This member stores the configuration string of the channel. This is a kind of serialized storage, since
+the configuration can be an arbitrary type with arbitrary schema as long as the interpretation is knonw.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._configure_channel">
+<span class="sig-name descname"><span class="pre">_configure_channel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_configuration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._configure_channel" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic to interpret the provided configuration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>channel_configuration</strong> – config string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._context">
+<span class="sig-name descname"><span class="pre">_context</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../../core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.PortPlugin" title="pypz.core.specs.plugin.PortPlugin"><span class="pre">PortPlugin</span></a></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._context" title="Link to this definition"></a></dt>
+<dd><p>The context of this channel, which shall be an object of PortPlugin type</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._control_loop_exception_timer">
+<span class="sig-name descname"><span class="pre">_control_loop_exception_timer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._control_loop_exception_timer" title="Link to this definition"></a></dt>
+<dd><p>Control loop is, where the control information are sent to the counter channel. Should
+there an exception occur, we need to make sure that we give some time to recover, before
+terminating the channel. This timer defines that grace period.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._create_resources">
+<span class="sig-name descname"><span class="pre">_create_resources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._create_resources" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic of creating resources of the channel.
+IMPORTANT NOTE - this method shall be invoked before the open_channel() to make sure that the resources
+are existing beforehand.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True, if done, False if it is still in progress</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._current_read_record_count">
+<span class="sig-name descname"><span class="pre">_current_read_record_count</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._current_read_record_count" title="Link to this definition"></a></dt>
+<dd><p>Stores the record count of the most current read</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._current_read_timestamp">
+<span class="sig-name descname"><span class="pre">_current_read_timestamp</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._current_read_timestamp" title="Link to this definition"></a></dt>
+<dd><p>Stores the timestamp of the most current read to be able to calculate elapsed time</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._data_consumer">
+<span class="sig-name descname"><span class="pre">_data_consumer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.plugins.rmq_io.utils.html#pypz.plugins.rmq_io.utils.MessageConsumer" title="pypz.plugins.rmq_io.utils.MessageConsumer"><span class="pre">MessageConsumer</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._data_consumer" title="Link to this definition"></a></dt>
+<dd><p>Consumer wrapper to consume data messages sent by the ChannelWriter</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._data_exchange_name">
+<span class="sig-name descname"><span class="pre">_data_exchange_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._data_exchange_name" title="Link to this definition"></a></dt>
+<dd><p>Data goes through exchanges, a dedicated exchange with this name will be
+created for this channel.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._data_queue_name">
+<span class="sig-name descname"><span class="pre">_data_queue_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._data_queue_name" title="Link to this definition"></a></dt>
+<dd><p>Data queue name, where all the data messages go through</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._delete_resources">
+<span class="sig-name descname"><span class="pre">_delete_resources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._delete_resources" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic of deleting resources of the channel.
+IMPORTANT NOTE - this method shall be invoked after the close_channel()</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True, if done, False if it is still in progress</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._exchange_type">
+<span class="sig-name descname"><span class="pre">_exchange_type</span></span><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._exchange_type" title="Link to this definition"></a></dt>
+<dd><p>This controls, how the exchange shall forward messages to the consumers. In group
+mode, all the consumers shall get all the messages, hence we need to specify it as “fanout”</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._executor">
+<span class="sig-name descname"><span class="pre">_executor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">concurrent.futures.ThreadPoolExecutor</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._executor" title="Link to this definition"></a></dt>
+<dd><p>This executor is used to execute the background thread, which will invoke the sendHealthStatus method</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._executor_started">
+<span class="sig-name descname"><span class="pre">_executor_started</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._executor_started" title="Link to this definition"></a></dt>
+<dd><p>Flag to signalize, whether the executor thread started</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._executor_stopped">
+<span class="sig-name descname"><span class="pre">_executor_stopped</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../../core/pypz.core.commons.utils.html#pypz.core.commons.utils.SynchronizedReference" title="pypz.core.commons.utils.SynchronizedReference"><span class="pre">SynchronizedReference</span></a><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._executor_stopped" title="Link to this definition"></a></dt>
+<dd><p>Flag to signalize that the executor thread has been terminated. This flag is necessary along wi
+_stopping_executor to synchronize the termination. Otherwise it can happen that the
+thread did not terminate yet, but the channel has already been closed resulting in exceptions.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._generic_datum_reader">
+<span class="sig-name descname"><span class="pre">_generic_datum_reader</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">DatumReader</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._generic_datum_reader" title="Link to this definition"></a></dt>
+<dd><p>This is the generic datum reader, which converts bytes to generic records.
+It will be only initialized, if a schema is provided.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._health_check_payload">
+<span class="sig-name descname"><span class="pre">_health_check_payload</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._health_check_payload" title="Link to this definition"></a></dt>
+<dd><p>It is possible to send additional information along with health check events. This
+member serves as the storage of this additional payload.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._initial_input_record_offset">
+<span class="sig-name descname"><span class="pre">_initial_input_record_offset</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._initial_input_record_offset" title="Link to this definition"></a></dt>
+<dd><p>This is variable stores the initial offset, which can be different than 0 in case of crash-restart. In this
+case this value is actually the difference by which the framework calculated offset shall be compensated.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._last_offset_committed">
+<span class="sig-name descname"><span class="pre">_last_offset_committed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._last_offset_committed" title="Link to this definition"></a></dt>
+<dd><p>This value tracks the last committed offset. The main use-case of this variable is to prevent offset commit
+if the new offset equals the last committed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._load_input_record_offset">
+<span class="sig-name descname"><span class="pre">_load_input_record_offset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._load_input_record_offset" title="Link to this definition"></a></dt>
+<dd><p>Offset has no meaning in queues, nevertheless the value -1 is necessary,
+since if it signalizes that no offset ever was committed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._location">
+<span class="sig-name descname"><span class="pre">_location</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._location" title="Link to this definition"></a></dt>
+<dd><p>This member stores the location string of the channel. The location depends on the technology. It can refer
+to either a remote or a local URL as well.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._log_level">
+<span class="sig-name descname"><span class="pre">_log_level</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._log_level" title="Link to this definition"></a></dt>
+<dd><p>Default log level. This is ok to set here, since if Operator’s context logger is present,
+its log level cannot be overriden, but if not, the DefaultContextLogger’s can be.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._logger">
+<span class="sig-name descname"><span class="pre">_logger</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../../core/pypz.core.commons.loggers.html#pypz.core.commons.loggers.ContextLogger" title="pypz.core.commons.loggers.ContextLogger"><span class="pre">ContextLogger</span></a></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._logger" title="Link to this definition"></a></dt>
+<dd><p>Channel logger</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._metrics_buffer">
+<span class="sig-name descname"><span class="pre">_metrics_buffer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../core/pypz.core.channels.base.html#pypz.core.channels.base.ChannelMetric" title="pypz.core.channels.base.ChannelMetric"><span class="pre">ChannelMetric</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._metrics_buffer" title="Link to this definition"></a></dt>
+<dd><p>This list holds metric elements, however the only purpose is to be aware of the first
+element to discard like in a circular buffer</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._metrics_enabled">
+<span class="sig-name descname"><span class="pre">_metrics_enabled</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._metrics_enabled" title="Link to this definition"></a></dt>
+<dd><p>Enables metric calculation i.e., to calculate additional i/o related information</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._on_status_message_received_callbacks">
+<span class="sig-name descname"><span class="pre">_on_status_message_received_callbacks</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">set</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../core/pypz.core.channels.status.html#pypz.core.channels.status.ChannelStatusMessage" title="pypz.core.channels.status.ChannelStatusMessage"><span class="pre">ChannelStatusMessage</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._on_status_message_received_callbacks" title="Link to this definition"></a></dt>
+<dd><p>Stores the callbacks, which will be executed, if status messages received</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._open_channel">
+<span class="sig-name descname"><span class="pre">_open_channel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._open_channel" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic to open a channel. The meaning of ‘open’ however is to be defined
+by the actual implementation. One developer can define it like an opened connection, other as created file etc.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True, if done, False if it is still in progress</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._read_record_count">
+<span class="sig-name descname"><span class="pre">_read_record_count</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._read_record_count" title="Link to this definition"></a></dt>
+<dd><p>Counter for how many records have been read by this channel. Note that this value can differ from the
+offset value in case of crash-restart. Still the framework maintains the difference between this value
+and the loaded offset and will compensate the framework calculated offset by that difference.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._read_record_offset">
+<span class="sig-name descname"><span class="pre">_read_record_offset</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._read_record_offset" title="Link to this definition"></a></dt>
+<dd><p>The actual write offset of the read records. Eg. if 10 records have been read and provided to the plugin
+then the offset is 10. Note that this might differ from the m_inputRecordCount_i64 in case of crash-restart.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._read_records">
+<span class="sig-name descname"><span class="pre">_read_records</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._read_records" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic to read records from the input channel. An ArrayList of records is
+expected.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of records OR empty ArrayList if no records read. Null is not accepted.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._reader_status_producer">
+<span class="sig-name descname"><span class="pre">_reader_status_producer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.plugins.rmq_io.utils.html#pypz.plugins.rmq_io.utils.MessageProducer" title="pypz.plugins.rmq_io.utils.MessageProducer"><span class="pre">MessageProducer</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._reader_status_producer" title="Link to this definition"></a></dt>
+<dd><p>Producer wrapper to produce status messages for the ChannelWriters</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._reader_status_stream_name">
+<span class="sig-name descname"><span class="pre">_reader_status_stream_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._reader_status_stream_name" title="Link to this definition"></a></dt>
+<dd><p>Name of the stream, which contains the reader status signals</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._resources_created">
+<span class="sig-name descname"><span class="pre">_resources_created</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._resources_created" title="Link to this definition"></a></dt>
+<dd><p>Status flag to signalize that the channel’s resources are created</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._resources_deleted">
+<span class="sig-name descname"><span class="pre">_resources_deleted</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._resources_deleted" title="Link to this definition"></a></dt>
+<dd><p>Status flag to signalize that the channel’s resources are deleted</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._retrieve_status_messages">
+<span class="sig-name descname"><span class="pre">_retrieve_status_messages</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._retrieve_status_messages" title="Link to this definition"></a></dt>
+<dd><p>This implementation retrieves the status messages from the corresponding stream.
+Notice that unlike in case of the queue, where arbitrary amount of messages
+can be received via a drain_events() call, for streams it is always only 1
+message. For this reason, we need to poll all available records at most the
+number of MaxStatusMessageRetrieveCount.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._send_status_message">
+<span class="sig-name descname"><span class="pre">_send_status_message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._send_status_message" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic that publishes the channel’s state to the counterpart channel. The
+state string is provided by the channel itself. Note that there is defined schema, how and what will be
+provided by the channel as string, however you can append your own custom information, you only need to
+append as string separated by StateMessageSeparatorChar.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>message</strong> – message that shall be sent</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._silent_mode">
+<span class="sig-name descname"><span class="pre">_silent_mode</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._silent_mode" title="Link to this definition"></a></dt>
+<dd><p>If this flag is set, then this channel will not send status messages. One use-case is,
+if a channelRW is created to sniff the status of channels.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._status_map">
+<span class="sig-name descname"><span class="pre">_status_map</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../../core/pypz.core.channels.status.html#pypz.core.channels.status.ChannelStatusMonitor" title="pypz.core.channels.status.ChannelStatusMonitor"><span class="pre">ChannelStatusMonitor</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._status_map" title="Link to this definition"></a></dt>
+<dd><p>This map stores the health statuses of all connected channels</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._stopping_executor">
+<span class="sig-name descname"><span class="pre">_stopping_executor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._stopping_executor" title="Link to this definition"></a></dt>
+<dd><p>Flag to signalize the termination attempt of the executor thread</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._unique_name">
+<span class="sig-name descname"><span class="pre">_unique_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._unique_name" title="Link to this definition"></a></dt>
+<dd><p>This name identifies the channel in its context. It is necessary, since channel name on
+its own is not unique, can be reused by different owners.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._writer_status_consumer">
+<span class="sig-name descname"><span class="pre">_writer_status_consumer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.plugins.rmq_io.utils.html#pypz.plugins.rmq_io.utils.MessageConsumer" title="pypz.plugins.rmq_io.utils.MessageConsumer"><span class="pre">MessageConsumer</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._writer_status_consumer" title="Link to this definition"></a></dt>
+<dd><p>Consumer wrapper to consume status messages sent by the ChannelWriters</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader._writer_status_stream_name">
+<span class="sig-name descname"><span class="pre">_writer_status_stream_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader._writer_status_stream_name" title="Link to this definition"></a></dt>
+<dd><p>Name of the stream, which contains the writer status signals</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader.can_close">
+<span class="sig-name descname"><span class="pre">can_close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader.can_close" title="Link to this definition"></a></dt>
+<dd><p>This method can implement the logic to determine, if the channel can
+be closed or not.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if the channel can be closed, False otherwise</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelReader.has_records">
+<span class="sig-name descname"><span class="pre">has_records</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelReader.has_records" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic to check, if the reader can still read records.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if channel has still records, False if not</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelWriter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypz.plugins.rmq_io.channels.</span></span><span class="sig-name descname"><span class="pre">RMQChannelWriter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.OutputPortPlugin" title="pypz.core.specs.plugin.OutputPortPlugin"><span class="pre">OutputPortPlugin</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">executor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ThreadPoolExecutor</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelWriter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../core/pypz.core.channels.io.html#pypz.core.channels.io.ChannelWriter" title="pypz.core.channels.io.ChannelWriter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelWriter</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelWriter._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelWriter._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelWriter._aggregated_record_count">
+<span class="sig-name descname"><span class="pre">_aggregated_record_count</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelWriter._aggregated_record_count" title="Link to this definition"></a></dt>
+<dd><p>Metric value to store the summed up record count</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelWriter._aggregated_time_between_outputs">
+<span class="sig-name descname"><span class="pre">_aggregated_time_between_outputs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelWriter._aggregated_time_between_outputs" title="Link to this definition"></a></dt>
+<dd><p>Metric value to store the summed up times between reads</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelWriter._channel_name">
+<span class="sig-name descname"><span class="pre">_channel_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelWriter._channel_name" title="Link to this definition"></a></dt>
+<dd><p>This member stores the name of the channel, which normally reflects to the resource’s name.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelWriter._channel_opened">
+<span class="sig-name descname"><span class="pre">_channel_opened</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelWriter._channel_opened" title="Link to this definition"></a></dt>
+<dd><p>This member is a flag to signalize, whether a channel is open and ready to use.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelWriter._channel_started">
+<span class="sig-name descname"><span class="pre">_channel_started</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelWriter._channel_started" title="Link to this definition"></a></dt>
+<dd><p>Status flag to signalize, whether the channel has been started.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelWriter._channel_stopped">
+<span class="sig-name descname"><span class="pre">_channel_stopped</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelWriter._channel_stopped" title="Link to this definition"></a></dt>
+<dd><p>Status flag to signalize, whether the channel has been stopped. Note that this additional flag is
+necessary, since having the _channel_started on false does not necessarily mean that the
+output was ever started and is now finished.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelWriter._close_channel">
+<span class="sig-name descname"><span class="pre">_close_channel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelWriter._close_channel" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic to close a channel. Normally closing a channel is the last step so
+clean up of used resource shall happen here as well.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True, if done, False if it is still in progress</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelWriter._config_status_consumer_timeout_sec">
+<span class="sig-name descname"><span class="pre">_config_status_consumer_timeout_sec</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelWriter._config_status_consumer_timeout_sec" title="Link to this definition"></a></dt>
+<dd><p>Configuration parameter to specify the timeout for draining events from the status stream</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelWriter._configuration">
+<span class="sig-name descname"><span class="pre">_configuration</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelWriter._configuration" title="Link to this definition"></a></dt>
+<dd><p>This member stores the configuration string of the channel. This is a kind of serialized storage, since
+the configuration can be an arbitrary type with arbitrary schema as long as the interpretation is knonw.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelWriter._configure_channel">
+<span class="sig-name descname"><span class="pre">_configure_channel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_configuration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelWriter._configure_channel" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic to interpret the provided configuration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>channel_configuration</strong> – config string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelWriter._context">
+<span class="sig-name descname"><span class="pre">_context</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../../core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.PortPlugin" title="pypz.core.specs.plugin.PortPlugin"><span class="pre">PortPlugin</span></a></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelWriter._context" title="Link to this definition"></a></dt>
+<dd><p>The context of this channel, which shall be an object of PortPlugin type</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelWriter._control_loop_exception_timer">
+<span class="sig-name descname"><span class="pre">_control_loop_exception_timer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelWriter._control_loop_exception_timer" title="Link to this definition"></a></dt>
+<dd><p>Control loop is, where the control information are sent to the counter channel. Should
+there an exception occur, we need to make sure that we give some time to recover, before
+terminating the channel. This timer defines that grace period.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelWriter._create_resources">
+<span class="sig-name descname"><span class="pre">_create_resources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelWriter._create_resources" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic of creating resources of the channel.
+IMPORTANT NOTE - this method shall be invoked before the open_channel() to make sure that the resources
+are existing beforehand.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True, if done, False if it is still in progress</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelWriter._current_output_record_count">
+<span class="sig-name descname"><span class="pre">_current_output_record_count</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelWriter._current_output_record_count" title="Link to this definition"></a></dt>
+<dd><p>Stores the record count of the most current read</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelWriter._current_output_timestamp">
+<span class="sig-name descname"><span class="pre">_current_output_timestamp</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelWriter._current_output_timestamp" title="Link to this definition"></a></dt>
+<dd><p>Stores the timestamp of the most current read to be able to calculate elapsed time</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelWriter._data_exchange_name">
+<span class="sig-name descname"><span class="pre">_data_exchange_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelWriter._data_exchange_name" title="Link to this definition"></a></dt>
+<dd><p>Data goes through exchanges, a dedicated exchange with this name will be
+created for this channel.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelWriter._data_producer">
+<span class="sig-name descname"><span class="pre">_data_producer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.plugins.rmq_io.utils.html#pypz.plugins.rmq_io.utils.MessageProducer" title="pypz.plugins.rmq_io.utils.MessageProducer"><span class="pre">MessageProducer</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelWriter._data_producer" title="Link to this definition"></a></dt>
+<dd><p>Producer wrapper to produce data messages for the ChannelReaders</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelWriter._data_queue_name">
+<span class="sig-name descname"><span class="pre">_data_queue_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelWriter._data_queue_name" title="Link to this definition"></a></dt>
+<dd><p>Data queue name</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelWriter._delete_resources">
+<span class="sig-name descname"><span class="pre">_delete_resources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelWriter._delete_resources" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic of deleting resources of the channel.
+IMPORTANT NOTE - this method shall be invoked after the close_channel()</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True, if done, False if it is still in progress</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelWriter._executor">
+<span class="sig-name descname"><span class="pre">_executor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">concurrent.futures.ThreadPoolExecutor</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelWriter._executor" title="Link to this definition"></a></dt>
+<dd><p>This executor is used to execute the background thread, which will invoke the sendHealthStatus method</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelWriter._executor_started">
+<span class="sig-name descname"><span class="pre">_executor_started</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelWriter._executor_started" title="Link to this definition"></a></dt>
+<dd><p>Flag to signalize, whether the executor thread started</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelWriter._executor_stopped">
+<span class="sig-name descname"><span class="pre">_executor_stopped</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../../core/pypz.core.commons.utils.html#pypz.core.commons.utils.SynchronizedReference" title="pypz.core.commons.utils.SynchronizedReference"><span class="pre">SynchronizedReference</span></a><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelWriter._executor_stopped" title="Link to this definition"></a></dt>
+<dd><p>Flag to signalize that the executor thread has been terminated. This flag is necessary along wi
+_stopping_executor to synchronize the termination. Otherwise it can happen that the
+thread did not terminate yet, but the channel has already been closed resulting in exceptions.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelWriter._generic_datum_writer">
+<span class="sig-name descname"><span class="pre">_generic_datum_writer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">DatumWriter</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelWriter._generic_datum_writer" title="Link to this definition"></a></dt>
+<dd><p>This is the datum writer that converts generic records to byte data. It
+is only initialized, if schema is provided.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelWriter._health_check_payload">
+<span class="sig-name descname"><span class="pre">_health_check_payload</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelWriter._health_check_payload" title="Link to this definition"></a></dt>
+<dd><p>It is possible to send additional information along with health check events. This
+member serves as the storage of this additional payload.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelWriter._location">
+<span class="sig-name descname"><span class="pre">_location</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelWriter._location" title="Link to this definition"></a></dt>
+<dd><p>This member stores the location string of the channel. The location depends on the technology. It can refer
+to either a remote or a local URL as well.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelWriter._log_level">
+<span class="sig-name descname"><span class="pre">_log_level</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelWriter._log_level" title="Link to this definition"></a></dt>
+<dd><p>Default log level. This is ok to set here, since if Operator’s context logger is present,
+its log level cannot be overriden, but if not, the DefaultContextLogger’s can be.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelWriter._logger">
+<span class="sig-name descname"><span class="pre">_logger</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../../core/pypz.core.commons.loggers.html#pypz.core.commons.loggers.ContextLogger" title="pypz.core.commons.loggers.ContextLogger"><span class="pre">ContextLogger</span></a></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelWriter._logger" title="Link to this definition"></a></dt>
+<dd><p>Channel logger</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelWriter._metrics_buffer">
+<span class="sig-name descname"><span class="pre">_metrics_buffer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../core/pypz.core.channels.base.html#pypz.core.channels.base.ChannelMetric" title="pypz.core.channels.base.ChannelMetric"><span class="pre">ChannelMetric</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelWriter._metrics_buffer" title="Link to this definition"></a></dt>
+<dd><p>This list holds metric elements, however the only purpose is to be aware of the first
+element to discard like in a circular buffer</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelWriter._metrics_enabled">
+<span class="sig-name descname"><span class="pre">_metrics_enabled</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelWriter._metrics_enabled" title="Link to this definition"></a></dt>
+<dd><p>Enables metric calculation i.e., to calculate additional i/o related information</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelWriter._on_status_message_received_callbacks">
+<span class="sig-name descname"><span class="pre">_on_status_message_received_callbacks</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">set</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../core/pypz.core.channels.status.html#pypz.core.channels.status.ChannelStatusMessage" title="pypz.core.channels.status.ChannelStatusMessage"><span class="pre">ChannelStatusMessage</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelWriter._on_status_message_received_callbacks" title="Link to this definition"></a></dt>
+<dd><p>Stores the callbacks, which will be executed, if status messages received</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelWriter._open_channel">
+<span class="sig-name descname"><span class="pre">_open_channel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelWriter._open_channel" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic to open a channel. The meaning of ‘open’ however is to be defined
+by the actual implementation. One developer can define it like an opened connection, other as created file etc.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True, if done, False if it is still in progress</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelWriter._reader_status_consumer">
+<span class="sig-name descname"><span class="pre">_reader_status_consumer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.plugins.rmq_io.utils.html#pypz.plugins.rmq_io.utils.MessageConsumer" title="pypz.plugins.rmq_io.utils.MessageConsumer"><span class="pre">MessageConsumer</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelWriter._reader_status_consumer" title="Link to this definition"></a></dt>
+<dd><p>Consumer wrapper to consume status messages sent by the ChannelReaders</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelWriter._reader_status_stream_name">
+<span class="sig-name descname"><span class="pre">_reader_status_stream_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelWriter._reader_status_stream_name" title="Link to this definition"></a></dt>
+<dd><p>Name of the stream, which contains the reader status signals</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelWriter._resources_created">
+<span class="sig-name descname"><span class="pre">_resources_created</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelWriter._resources_created" title="Link to this definition"></a></dt>
+<dd><p>Status flag to signalize that the channel’s resources are created</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelWriter._resources_deleted">
+<span class="sig-name descname"><span class="pre">_resources_deleted</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelWriter._resources_deleted" title="Link to this definition"></a></dt>
+<dd><p>Status flag to signalize that the channel’s resources are deleted</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelWriter._retrieve_status_messages">
+<span class="sig-name descname"><span class="pre">_retrieve_status_messages</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelWriter._retrieve_status_messages" title="Link to this definition"></a></dt>
+<dd><p>This implementation retrieves the status messages from the corresponding stream.
+Notice that unlike in case of the queue, where arbitrary amount of messages
+can be received via a drain_events() call, for streams it is always only 1
+message. For this reason, we need to poll all available records at most the
+number of MaxStatusMessageRetrieveCount.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelWriter._send_status_message">
+<span class="sig-name descname"><span class="pre">_send_status_message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelWriter._send_status_message" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic that publishes the channel’s state to the counterpart channel. The
+state string is provided by the channel itself. Note that there is defined schema, how and what will be
+provided by the channel as string, however you can append your own custom information, you only need to
+append as string separated by StateMessageSeparatorChar.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>message</strong> – message that shall be sent</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelWriter._silent_mode">
+<span class="sig-name descname"><span class="pre">_silent_mode</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelWriter._silent_mode" title="Link to this definition"></a></dt>
+<dd><p>If this flag is set, then this channel will not send status messages. One use-case is,
+if a channelRW is created to sniff the status of channels.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelWriter._status_map">
+<span class="sig-name descname"><span class="pre">_status_map</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../../core/pypz.core.channels.status.html#pypz.core.channels.status.ChannelStatusMonitor" title="pypz.core.channels.status.ChannelStatusMonitor"><span class="pre">ChannelStatusMonitor</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelWriter._status_map" title="Link to this definition"></a></dt>
+<dd><p>This map stores the health statuses of all connected channels</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelWriter._stopping_executor">
+<span class="sig-name descname"><span class="pre">_stopping_executor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelWriter._stopping_executor" title="Link to this definition"></a></dt>
+<dd><p>Flag to signalize the termination attempt of the executor thread</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelWriter._unique_name">
+<span class="sig-name descname"><span class="pre">_unique_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelWriter._unique_name" title="Link to this definition"></a></dt>
+<dd><p>This name identifies the channel in its context. It is necessary, since channel name on
+its own is not unique, can be reused by different owners.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelWriter._write_records">
+<span class="sig-name descname"><span class="pre">_write_records</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">records</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelWriter._write_records" title="Link to this definition"></a></dt>
+<dd><p>This method shall implement the logic that writes the records to the output resource. It will automatically
+be invoked by the plugin via the corresponding invoker method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>records</strong> – list of records to be written</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelWriter._writer_status_producer">
+<span class="sig-name descname"><span class="pre">_writer_status_producer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pypz.plugins.rmq_io.utils.html#pypz.plugins.rmq_io.utils.MessageProducer" title="pypz.plugins.rmq_io.utils.MessageProducer"><span class="pre">MessageProducer</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelWriter._writer_status_producer" title="Link to this definition"></a></dt>
+<dd><p>Producer wrapper to produce status messages for the ChannelReaders</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelWriter._writer_status_stream_name">
+<span class="sig-name descname"><span class="pre">_writer_status_stream_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelWriter._writer_status_stream_name" title="Link to this definition"></a></dt>
+<dd><p>Name of the stream, which contains the writer status signals</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelWriter._written_record_count">
+<span class="sig-name descname"><span class="pre">_written_record_count</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelWriter._written_record_count" title="Link to this definition"></a></dt>
+<dd><p>Number of outputted records.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypz.plugins.rmq_io.channels.RMQChannelWriter.can_close">
+<span class="sig-name descname"><span class="pre">can_close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pypz.plugins.rmq_io.channels.RMQChannelWriter.can_close" title="Link to this definition"></a></dt>
+<dd><p>This method can implement the logic to determine, if the channel can
+be closed or not.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if the channel can be closed, False otherwise</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Laszlo Anka.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

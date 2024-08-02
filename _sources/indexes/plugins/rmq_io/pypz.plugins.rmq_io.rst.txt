@@ -1,0 +1,21 @@
+pypz.plugins.rmq\_io package
+============================
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   pypz.plugins.rmq_io.channels
+   pypz.plugins.rmq_io.ports
+   pypz.plugins.rmq_io.utils
+
+Module contents
+---------------
+
+.. automodule:: pypz.plugins.rmq_io
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
