@@ -320,7 +320,12 @@ class KubernetesDeployerTest(unittest.TestCase):
         KubernetesDeployerTest.kubernetes_deployer.deploy(pipeline)
 
         while KubernetesDeployerTest.kubernetes_deployer.is_any_operator_in_state(
-                pipeline.get_full_name(), DeploymentState.Open, DeploymentState.Running, DeploymentState.NotExisting):
+                pipeline.get_full_name(),
+                DeploymentState.Open,
+                DeploymentState.Running,
+                DeploymentState.NotExisting,
+                DeploymentState.Unknown
+        ):
             time.sleep(1)
 
         self.assertEqual(DeploymentState.Failed,
