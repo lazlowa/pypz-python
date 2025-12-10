@@ -140,7 +140,7 @@ class DefaultContextLogger(ContextLoggerInterface):
             elif record.levelno == logging.INFO:
                 record.color = DefaultContextLogger.ColoredFormatter.LIGHT_GRAY
             elif record.levelno == logging.DEBUG:
-                record.color = DefaultContextLogger.ColoredFormatter.BLUE
+                record.color = DefaultContextLogger.ColoredFormatter.CYAN
             else:
                 record.color = DefaultContextLogger.ColoredFormatter.RESET
 

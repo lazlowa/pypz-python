@@ -13,5 +13,31 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # =============================================================================
+FROM python:3.11-alpine3.18
 
-PROJECT_VERSION = "0.9.4b1"
+ARG BUILD_VERSION
+
+ENV CONTAINER_ROOT=/operator
+ENV CONTAINER_CONFIG=$CONTAINER_ROOT/config
+ENV PYTHON_PROJECT=$CONTAINER_ROOT/project
+
+ENV PYTHONPATH=/operator/project
+ENV PYPZ_VERSION=$BUILD_VERSION
+
+RUN mkdir -p $CONTAINER_CONFIG && \
+    chmod 777 -R $CONTAINER_ROOT
+
+WORKDIR $CONTAINER_ROOT
+
+RUN /usr/local/bin/python -m pip install --upgrade pip
+
+COPY . .
+
+RUN pip install -e \
+    core \
+    deployers/k8s \
+    plugins/kafka_io \
+    plugins/rmq_io
+
+ENTRYPOINT ["/bin/sh"]
+CMD [".docker/pypz-startup.sh"]

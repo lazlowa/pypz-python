@@ -19,32 +19,17 @@ import unittest
 from kubernetes import config
 from kubernetes.client import V1Secret, V1PodList, ApiException, V1Pod, Configuration, V1ObjectMeta, V1Namespace
 
+from deployers.k8s.test.resources.pipeline import TestPipeline
 from pypz.core.commons.utils import convert_to_dict
-from pypz.core.specs.misc import BlankOperator
 from pypz.core.specs.operator import Operator
-from pypz.core.specs.pipeline import Pipeline
 from pypz.deployers.base import DeploymentState
 from pypz.deployers.k8s import KubernetesDeployer, DeploymentConflictException, KubernetesParameter
-from pypz.executors.commons import ExecutionMode
-
-
-class TestPipeline(Pipeline):
-
-    def __init__(self, name: str, *args, **kwargs):
-        super().__init__(name, *args, **kwargs)
-
-        self.operator_a: BlankOperator = BlankOperator()
-        self.operator_a.set_parameter("replicationFactor", 1)
-
-        self.operator_b: BlankOperator = BlankOperator()
-        self.operator_c: BlankOperator = BlankOperator()
-        self.operator_d: BlankOperator = BlankOperator()
 
 
 class KubernetesDeployerTest(unittest.TestCase):
 
     test_namespace = "pypz-test"
-    test_image = "pypz-test-image"
+    test_image = "pypz-test-base"
 
     config.load_kube_config()
     kubernetes_deployer: KubernetesDeployer = KubernetesDeployer(namespace=test_namespace,
@@ -91,7 +76,7 @@ class KubernetesDeployerTest(unittest.TestCase):
 
     def test_deploy_normal_pipeline_expect_secret_and_pods_deployed(self):
         client = KubernetesDeployerTest.kubernetes_deployer._core_v1_api
-        pipeline = TestPipeline("pipeline")
+        pipeline = TestPipeline("pipeline0")
         pipeline.set_parameter(">kubernetes", convert_to_dict(KubernetesParameter(imagePullPolicy="Never")))
         pipeline.set_parameter(">operatorImageName", KubernetesDeployerTest.test_image)
 
@@ -110,17 +95,17 @@ class KubernetesDeployerTest(unittest.TestCase):
         pod_names = {pod.metadata.name for pod in pod_list.items}
 
         self.assertEqual(5, len(pod_list.items))
-        self.assertIn("pipeline-operator-a", pod_names)
-        self.assertIn("pipeline-operator-a-0", pod_names)
-        self.assertIn("pipeline-operator-b", pod_names)
-        self.assertIn("pipeline-operator-c", pod_names)
-        self.assertIn("pipeline-operator-d", pod_names)
+        self.assertIn("pipeline0-operator-a", pod_names)
+        self.assertIn("pipeline0-operator-a-0", pod_names)
+        self.assertIn("pipeline0-operator-b", pod_names)
+        self.assertIn("pipeline0-operator-c", pod_names)
+        self.assertIn("pipeline0-operator-d", pod_names)
 
         for pod_name in pod_names:
             self.assertIn(pod_name, secret.metadata.labels)
 
     def test_deploy_with_existing_pipeline_deployment_expect_error(self):
-        pipeline = TestPipeline("pipeline")
+        pipeline = TestPipeline("pipeline1")
         pipeline.set_parameter(">kubernetes", convert_to_dict(KubernetesParameter(imagePullPolicy="Never")))
         pipeline.set_parameter(">operatorImageName", KubernetesDeployerTest.test_image)
 
@@ -131,7 +116,7 @@ class KubernetesDeployerTest(unittest.TestCase):
 
     def test_deploy_with_existing_operator_deployments_expect_error(self):
         client = KubernetesDeployerTest.kubernetes_deployer._core_v1_api
-        pipeline = TestPipeline("pipeline")
+        pipeline = TestPipeline("pipeline2")
         pipeline.set_parameter(">kubernetes", convert_to_dict(KubernetesParameter(imagePullPolicy="Never")))
         pipeline.set_parameter(">operatorImageName", KubernetesDeployerTest.test_image)
 
@@ -144,7 +129,7 @@ class KubernetesDeployerTest(unittest.TestCase):
 
     def test_deploy_with_error_during_deployment_expect_rollback(self):
         client = KubernetesDeployerTest.kubernetes_deployer._core_v1_api
-        pipeline = TestPipeline("pipeline")
+        pipeline = TestPipeline("pipeline3")
         pipeline.set_parameter(">kubernetes", convert_to_dict(KubernetesParameter(imagePullPolicy="Never")))
         pipeline.set_parameter(">operatorImageName", KubernetesDeployerTest.test_image)
 
@@ -163,7 +148,7 @@ class KubernetesDeployerTest(unittest.TestCase):
 
     def test_destroy_expect_deleted_secret_and_pods(self):
         client = KubernetesDeployerTest.kubernetes_deployer._core_v1_api
-        pipeline = TestPipeline("pipeline")
+        pipeline = TestPipeline("pipeline4")
         pipeline.set_parameter(">kubernetes", convert_to_dict(KubernetesParameter(imagePullPolicy="Never")))
         pipeline.set_parameter(">operatorImageName", KubernetesDeployerTest.test_image)
 
@@ -184,7 +169,7 @@ class KubernetesDeployerTest(unittest.TestCase):
 
     def test_destroy_with_force_mode_expect_deleted_secret_and_pods(self):
         client = KubernetesDeployerTest.kubernetes_deployer._core_v1_api
-        pipeline = TestPipeline("pipeline")
+        pipeline = TestPipeline("pipeline5")
         pipeline.set_parameter(">kubernetes", convert_to_dict(KubernetesParameter(imagePullPolicy="Never")))
         pipeline.set_parameter(">operatorImageName", KubernetesDeployerTest.test_image)
 
@@ -200,7 +185,7 @@ class KubernetesDeployerTest(unittest.TestCase):
 
     def test_destroy_operator_expect_operator_to_be_deleted(self):
         client = KubernetesDeployerTest.kubernetes_deployer._core_v1_api
-        pipeline = TestPipeline("pipeline")
+        pipeline = TestPipeline("pipeline6")
         pipeline.set_parameter(">kubernetes", convert_to_dict(KubernetesParameter(imagePullPolicy="Never")))
         pipeline.set_parameter(">operatorImageName", KubernetesDeployerTest.test_image)
 
@@ -214,7 +199,7 @@ class KubernetesDeployerTest(unittest.TestCase):
 
     def test_restart_destroyed_operator_expect_operator_pod_to_be_deployed(self):
         client = KubernetesDeployerTest.kubernetes_deployer._core_v1_api
-        pipeline = TestPipeline("pipeline")
+        pipeline = TestPipeline("pipeline7")
         pipeline.set_parameter(">kubernetes", convert_to_dict(KubernetesParameter(imagePullPolicy="Never")))
         pipeline.set_parameter(">operatorImageName", KubernetesDeployerTest.test_image)
 
@@ -223,12 +208,12 @@ class KubernetesDeployerTest(unittest.TestCase):
         time.sleep(1)
         KubernetesDeployerTest.kubernetes_deployer.restart_operator(pipeline.operator_a.get_full_name())
 
-        self.assertIsNotNone(client.read_namespaced_pod("pipeline-operator-a",
+        self.assertIsNotNone(client.read_namespaced_pod("pipeline7-operator-a",
                                                         KubernetesDeployerTest.test_namespace))
 
     def test_restart_running_operator_expect_operator_pod_to_be_destroyed_and_deployed(self):
         client = KubernetesDeployerTest.kubernetes_deployer._core_v1_api
-        pipeline = TestPipeline("pipeline")
+        pipeline = TestPipeline("pipeline8")
         pipeline.set_parameter(">kubernetes", convert_to_dict(KubernetesParameter(imagePullPolicy="Never")))
         pipeline.set_parameter(">operatorImageName", KubernetesDeployerTest.test_image)
 
@@ -238,7 +223,7 @@ class KubernetesDeployerTest(unittest.TestCase):
                                                                                       DeploymentState.Completed):
             time.sleep(1)
 
-        pod: V1Pod = client.read_namespaced_pod("pipeline-operator-a", KubernetesDeployerTest.test_namespace)
+        pod: V1Pod = client.read_namespaced_pod("pipeline8-operator-a", KubernetesDeployerTest.test_namespace)
         time.sleep(1)
         KubernetesDeployerTest.kubernetes_deployer.restart_operator(pipeline.operator_a.get_full_name())
 
@@ -246,13 +231,13 @@ class KubernetesDeployerTest(unittest.TestCase):
                                                                                       DeploymentState.Completed):
             time.sleep(1)
 
-        restarted_pod: V1Pod = client.read_namespaced_pod("pipeline-operator-a",
+        restarted_pod: V1Pod = client.read_namespaced_pod("pipeline8-operator-a",
                                                           KubernetesDeployerTest.test_namespace)
 
         self.assertTrue(1 < (restarted_pod.status.start_time.timestamp() - pod.status.start_time.timestamp()))
 
     def test_is_deployed(self):
-        pipeline = TestPipeline("pipeline")
+        pipeline = TestPipeline("pipeline9")
         pipeline.set_parameter(">kubernetes", convert_to_dict(KubernetesParameter(imagePullPolicy="Never")))
         pipeline.set_parameter(">operatorImageName", KubernetesDeployerTest.test_image)
 
@@ -265,7 +250,7 @@ class KubernetesDeployerTest(unittest.TestCase):
         self.assertTrue(KubernetesDeployerTest.kubernetes_deployer.is_deployed(pipeline.get_full_name()))
 
     def test_retrieve_pipeline_deployments(self):
-        pipeline = TestPipeline("pipeline")
+        pipeline = TestPipeline("pipeline10")
         pipeline.set_parameter(">kubernetes", convert_to_dict(KubernetesParameter(imagePullPolicy="Never")))
         pipeline.set_parameter(">operatorImageName", KubernetesDeployerTest.test_image)
 
@@ -275,10 +260,10 @@ class KubernetesDeployerTest(unittest.TestCase):
                                                                                       DeploymentState.Completed):
             time.sleep(1)
 
-        self.assertEqual({"pipeline"}, KubernetesDeployerTest.kubernetes_deployer.retrieve_pipeline_deployments())
+        self.assertEqual({"pipeline10"}, KubernetesDeployerTest.kubernetes_deployer.retrieve_pipeline_deployments())
 
     def test_retrieve_deployed_pipeline(self):
-        pipeline = TestPipeline("pipeline")
+        pipeline = TestPipeline("pipeline11")
         pipeline.set_parameter(">kubernetes", convert_to_dict(KubernetesParameter(imagePullPolicy="Never")))
         pipeline.set_parameter(">operatorImageName", KubernetesDeployerTest.test_image)
 
@@ -294,7 +279,7 @@ class KubernetesDeployerTest(unittest.TestCase):
         self.assertEqual(pipeline, deployed_pipeline)
 
     def test_retrieve_operator_state_all_normal(self):
-        pipeline = TestPipeline("pipeline")
+        pipeline = TestPipeline("pipeline12")
         pipeline.set_parameter(">kubernetes", convert_to_dict(KubernetesParameter(imagePullPolicy="Never")))
         pipeline.set_parameter(">operatorImageName", KubernetesDeployerTest.test_image)
 
@@ -310,7 +295,7 @@ class KubernetesDeployerTest(unittest.TestCase):
                                  operator.get_full_name()))
 
     def test_retrieve_pipeline_state_all_normal(self):
-        pipeline = TestPipeline("pipeline")
+        pipeline = TestPipeline("pipeline13")
         pipeline.set_parameter(">kubernetes", convert_to_dict(KubernetesParameter(imagePullPolicy="Never")))
         pipeline.set_parameter(">operatorImageName", KubernetesDeployerTest.test_image)
 
@@ -327,17 +312,10 @@ class KubernetesDeployerTest(unittest.TestCase):
             self.assertEqual(DeploymentState.Completed, operator_states[operator.get_full_name()])
 
     def test_retrieve_operator_state_one_error(self):
-        pipeline = TestPipeline("pipeline")
+        pipeline = TestPipeline("pipeline14")
         pipeline.set_parameter(">kubernetes", convert_to_dict(KubernetesParameter(imagePullPolicy="Never")))
         pipeline.set_parameter(">operatorImageName", KubernetesDeployerTest.test_image)
-        pipeline.operator_a.set_parameter("kubernetes", convert_to_dict(KubernetesParameter(
-            imagePullPolicy="Never",
-            env=[
-                {
-                    "name": "PYPZ_TEST_RAISE_ERROR",
-                    "value": "true"
-                }
-            ])))
+        pipeline.operator_a.set_parameter("error", True)
 
         KubernetesDeployerTest.kubernetes_deployer.deploy(pipeline)
 
@@ -362,7 +340,7 @@ class KubernetesDeployerTest(unittest.TestCase):
                              pipeline.operator_d.get_full_name()))
 
     def test_retrieve_operator_logs(self):
-        pipeline = TestPipeline("pipeline")
+        pipeline = TestPipeline("pipeline15")
         pipeline.set_parameter(">kubernetes", convert_to_dict(KubernetesParameter(imagePullPolicy="Never")))
         pipeline.set_parameter(">operatorImageName", KubernetesDeployerTest.test_image)
 
@@ -375,13 +353,11 @@ class KubernetesDeployerTest(unittest.TestCase):
             KubernetesDeployerTest.kubernetes_deployer.retrieve_operator_logs(pipeline.operator_a.get_full_name())
 
         self.assertIsNotNone(operator_logs)
-        self.assertIn(f"{KubernetesDeployer._env_var_operator_exec_mode}={ExecutionMode.Standard.value}",
-                      operator_logs)
-        self.assertIn(f"{KubernetesDeployer._env_var_operator_name}={pipeline.operator_a.get_simple_name()}",
+        self.assertIn(f"Operator to execute: {pipeline.operator_a.get_full_name()}; Execution mode: Standard",
                       operator_logs)
 
     def test_attach_with_one_operator_failing(self):
-        pipeline = TestPipeline("pipeline")
+        pipeline = TestPipeline("pipeline16")
         pipeline.set_parameter(">kubernetes", convert_to_dict(KubernetesParameter(imagePullPolicy="Never")))
         pipeline.set_parameter(">operatorImageName", KubernetesDeployerTest.test_image)
         pipeline.operator_a.set_parameter("kubernetes", convert_to_dict(KubernetesParameter(
@@ -403,7 +379,7 @@ class KubernetesDeployerTest(unittest.TestCase):
                                                           on_operator_state_change=on_operator_failure)
 
     def test_deploy_with_kubernetes_parameters_from_class(self):
-        pipeline = TestPipeline("pipeline")
+        pipeline = TestPipeline("pipeline17")
         pipeline.set_parameter(">kubernetes", convert_to_dict(KubernetesParameter(imagePullPolicy="Never")))
         pipeline.set_parameter(">operatorImageName", KubernetesDeployerTest.test_image)
 
@@ -417,7 +393,7 @@ class KubernetesDeployerTest(unittest.TestCase):
             self.fail()
 
     def test_deploy_with_kubernetes_parameters_from_dict(self):
-        pipeline = TestPipeline("pipeline")
+        pipeline = TestPipeline("pipeline18")
         pipeline.set_parameter(">kubernetes", convert_to_dict(KubernetesParameter(imagePullPolicy="Never")))
         pipeline.set_parameter(">operatorImageName", KubernetesDeployerTest.test_image)
 
@@ -429,7 +405,7 @@ class KubernetesDeployerTest(unittest.TestCase):
             self.fail()
 
     def test_deploy_with_kubernetes_parameters_with_invalid_type(self):
-        pipeline = TestPipeline("pipeline")
+        pipeline = TestPipeline("pipeline19")
         pipeline.set_parameter(">kubernetes", convert_to_dict(KubernetesParameter(imagePullPolicy="Never")))
         pipeline.set_parameter(">operatorImageName", KubernetesDeployerTest.test_image)
 
@@ -439,9 +415,10 @@ class KubernetesDeployerTest(unittest.TestCase):
             KubernetesDeployerTest.kubernetes_deployer.deploy(pipeline)
 
     def test_deploy_with_kubernetes_parameters_with_env_var(self):
-        pipeline = TestPipeline("pipeline")
+        pipeline = TestPipeline("pipeline20")
         pipeline.set_parameter(">kubernetes", convert_to_dict(KubernetesParameter(imagePullPolicy="Never")))
         pipeline.set_parameter(">operatorImageName", KubernetesDeployerTest.test_image)
+        pipeline.set_parameter(">env_var", "PYPZ_TEST_ENV_VAR")
 
         kubernetes_parameters: KubernetesParameter = KubernetesParameter()
         kubernetes_parameters.imagePullPolicy = "Never"
@@ -482,9 +459,10 @@ class KubernetesDeployerTest(unittest.TestCase):
 
         client.create_namespaced_config_map(KubernetesDeployerTest.test_namespace, body=config_map)
 
-        pipeline = TestPipeline("pipeline")
+        pipeline = TestPipeline("pipeline21")
         pipeline.set_parameter(">kubernetes", convert_to_dict(KubernetesParameter(imagePullPolicy="Never")))
         pipeline.set_parameter(">operatorImageName", KubernetesDeployerTest.test_image)
+        pipeline.set_parameter(">env_var", "PYPZ_TEST_ENV_VAR")
 
         kubernetes_parameters: KubernetesParameter = KubernetesParameter()
         kubernetes_parameters.imagePullPolicy = "Never"
@@ -530,9 +508,10 @@ class KubernetesDeployerTest(unittest.TestCase):
 
         client.create_namespaced_secret(KubernetesDeployerTest.test_namespace, body=secret)
 
-        pipeline = TestPipeline("pipeline")
+        pipeline = TestPipeline("pipeline22")
         pipeline.set_parameter(">kubernetes", convert_to_dict(KubernetesParameter(imagePullPolicy="Never")))
         pipeline.set_parameter(">operatorImageName", KubernetesDeployerTest.test_image)
+        pipeline.set_parameter(">env_var", "PYPZ_TEST_ENV_VAR")
 
         kubernetes_parameters: KubernetesParameter = KubernetesParameter()
         kubernetes_parameters.imagePullPolicy = "Never"

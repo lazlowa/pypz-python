@@ -28,6 +28,7 @@ class DeploymentState(enum.Enum):
     Running = "Running",
     Completed = "Completed",
     Failed = "Failed",
+    Unhealthy = "Unhealthy",
     Unknown = "Unknown",
     NotExisting = "NotExisting"
 
