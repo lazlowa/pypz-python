@@ -17,12 +17,13 @@ import os
 from typing import Optional, Any
 
 from pypz.core.commons.parameters import OptionalParameter
+from pypz.core.specs.operator import Operator
 from pypz.core.specs.pipeline import Pipeline
 from pypz.operators.k8s import KubernetesOperator
 from pypz.plugins.loggers.default import DefaultLoggerPlugin
 
 
-class TestOperator(KubernetesOperator):
+class TestOperator(Operator):
 
     error = OptionalParameter(bool)
     env_var = OptionalParameter(str)
