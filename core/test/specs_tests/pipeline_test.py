@@ -16,7 +16,10 @@
 import unittest
 
 from pypz.core.specs.pipeline import Pipeline
-from core.test.abstracts_tests.channel_ports_resources import TestPipelineWithReplicatedOperators
+
+from core.test.abstracts_tests.channel_ports_resources import (
+    TestPipelineWithReplicatedOperators,
+)
 
 
 class PipelineTest(unittest.TestCase):
@@ -312,19 +315,36 @@ class PipelineTest(unittest.TestCase):
 
         self.assertEqual(ref_pipeline, pipeline)
         self.assertEqual(1, len(ref_pipeline.reader.input_port_a.get_connected_ports()))
-        self.assertIn(ref_pipeline.writer.output_port, ref_pipeline.reader.input_port_a.get_connected_ports())
-        self.assertEqual(1, len(ref_pipeline.reader.get_replica(0).input_port_a.get_connected_ports()))
-        self.assertIn(ref_pipeline.writer.output_port,
-                      ref_pipeline.reader.get_replica(0).input_port_a.get_connected_ports())
+        self.assertIn(
+            ref_pipeline.writer.output_port,
+            ref_pipeline.reader.input_port_a.get_connected_ports(),
+        )
+        self.assertEqual(
+            1,
+            len(ref_pipeline.reader.get_replica(0).input_port_a.get_connected_ports()),
+        )
+        self.assertIn(
+            ref_pipeline.writer.output_port,
+            ref_pipeline.reader.get_replica(0).input_port_a.get_connected_ports(),
+        )
 
         self.assertEqual(2, len(ref_pipeline.writer.output_port.get_connected_ports()))
-        self.assertIn(ref_pipeline.reader.input_port_a, ref_pipeline.writer.output_port.get_connected_ports())
+        self.assertIn(
+            ref_pipeline.reader.input_port_a,
+            ref_pipeline.writer.output_port.get_connected_ports(),
+        )
 
-        self.assertEqual(2, len(ref_pipeline.writer.get_replica(0).output_port.get_connected_ports()))
-        self.assertIn(ref_pipeline.reader.input_port_a,
-                      ref_pipeline.writer.get_replica(0).output_port.get_connected_ports())
+        self.assertEqual(
+            2, len(ref_pipeline.writer.get_replica(0).output_port.get_connected_ports())
+        )
+        self.assertIn(
+            ref_pipeline.reader.input_port_a,
+            ref_pipeline.writer.get_replica(0).output_port.get_connected_ports(),
+        )
 
-    def test_pipeline_creation_from_json_with_mocked_instances_expect_existing_connections(self):
+    def test_pipeline_creation_from_json_with_mocked_instances_expect_existing_connections(
+        self,
+    ):
         json_string = """
         {
           "name": "pipeline",
@@ -612,17 +632,35 @@ class PipelineTest(unittest.TestCase):
         pipeline = Pipeline.create_from_string(json_string, mock_nonexistent=True)
 
         self.assertEqual(1, len(pipeline.reader.input_port_a.get_connected_ports()))
-        self.assertIn(pipeline.writer.output_port, pipeline.reader.input_port_a.get_connected_ports())
-        self.assertEqual(1, len(pipeline.reader.get_replica(0).input_port_a.get_connected_ports()))
-        self.assertIn(pipeline.writer.output_port, pipeline.reader.get_replica(0).input_port_a.get_connected_ports())
+        self.assertIn(
+            pipeline.writer.output_port,
+            pipeline.reader.input_port_a.get_connected_ports(),
+        )
+        self.assertEqual(
+            1, len(pipeline.reader.get_replica(0).input_port_a.get_connected_ports())
+        )
+        self.assertIn(
+            pipeline.writer.output_port,
+            pipeline.reader.get_replica(0).input_port_a.get_connected_ports(),
+        )
 
         self.assertEqual(2, len(pipeline.writer.output_port.get_connected_ports()))
-        self.assertIn(pipeline.reader.input_port_a, pipeline.writer.output_port.get_connected_ports())
+        self.assertIn(
+            pipeline.reader.input_port_a,
+            pipeline.writer.output_port.get_connected_ports(),
+        )
 
-        self.assertEqual(2, len(pipeline.writer.get_replica(0).output_port.get_connected_ports()))
-        self.assertIn(pipeline.reader.input_port_a, pipeline.writer.get_replica(0).output_port.get_connected_ports())
+        self.assertEqual(
+            2, len(pipeline.writer.get_replica(0).output_port.get_connected_ports())
+        )
+        self.assertIn(
+            pipeline.reader.input_port_a,
+            pipeline.writer.get_replica(0).output_port.get_connected_ports(),
+        )
 
-    def test_pipeline_creation_from_json_with_one_operator_mocked_expect_existing_connections(self):
+    def test_pipeline_creation_from_json_with_one_operator_mocked_expect_existing_connections(
+        self,
+    ):
         json_string = """
         {
           "name": "pipeline",
@@ -910,12 +948,28 @@ class PipelineTest(unittest.TestCase):
         pipeline = Pipeline.create_from_string(json_string, mock_nonexistent=True)
 
         self.assertEqual(1, len(pipeline.reader.input_port_a.get_connected_ports()))
-        self.assertIn(pipeline.writer.output_port, pipeline.reader.input_port_a.get_connected_ports())
-        self.assertEqual(1, len(pipeline.reader.get_replica(0).input_port_a.get_connected_ports()))
-        self.assertIn(pipeline.writer.output_port, pipeline.reader.get_replica(0).input_port_a.get_connected_ports())
+        self.assertIn(
+            pipeline.writer.output_port,
+            pipeline.reader.input_port_a.get_connected_ports(),
+        )
+        self.assertEqual(
+            1, len(pipeline.reader.get_replica(0).input_port_a.get_connected_ports())
+        )
+        self.assertIn(
+            pipeline.writer.output_port,
+            pipeline.reader.get_replica(0).input_port_a.get_connected_ports(),
+        )
 
         self.assertEqual(2, len(pipeline.writer.output_port.get_connected_ports()))
-        self.assertIn(pipeline.reader.input_port_a, pipeline.writer.output_port.get_connected_ports())
+        self.assertIn(
+            pipeline.reader.input_port_a,
+            pipeline.writer.output_port.get_connected_ports(),
+        )
 
-        self.assertEqual(2, len(pipeline.writer.get_replica(0).output_port.get_connected_ports()))
-        self.assertIn(pipeline.reader.input_port_a, pipeline.writer.get_replica(0).output_port.get_connected_ports())
+        self.assertEqual(
+            2, len(pipeline.writer.get_replica(0).output_port.get_connected_ports())
+        )
+        self.assertIn(
+            pipeline.reader.input_port_a,
+            pipeline.writer.get_replica(0).output_port.get_connected_ports(),
+        )

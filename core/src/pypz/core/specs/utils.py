@@ -13,11 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # =============================================================================
-import types
 import re
+import types
 import typing
 from importlib import import_module
-from typing import Callable, Any, Iterable
+from typing import Any, Callable, Iterable
 
 IncludedCascadingParameterPrefix = "#"
 """
@@ -44,7 +44,7 @@ class InstanceParameters(dict):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.__update_callbacks: dict[str, list[Callable[[Any], None]]] = dict()
+        self.__update_callbacks: dict[str, list[Callable[[Any], None]]] = {}
 
     def __setitem__(self, name, value):
         if (name not in self) or (value != self[name]):
@@ -58,13 +58,15 @@ class InstanceParameters(dict):
         super().update(__m, **kwargs)
 
         for name, value in __m.items():
-            if ((name not in self) or (value != self[name])) and (name in self.__update_callbacks):
+            if ((name not in self) or (value != self[name])) and (
+                name in self.__update_callbacks
+            ):
                 for callback in self.__update_callbacks[name]:
                     callback(value)
 
     def on_parameter_update(self, name, callback: Callable[[Any], None]):
         if name not in self.__update_callbacks:
-            self.__update_callbacks[name] = list()
+            self.__update_callbacks[name] = []
         self.__update_callbacks[name].append(callback)
 
 
@@ -85,7 +87,7 @@ def resolve_dependency_graph(instances: set | Iterable) -> list[set]:
 
     if 0 < len(instance_set):
         resolved_instances: set = set()
-        dependency_level_list: list[set] = list()
+        dependency_level_list: list[set] = []
 
         for level in range(len(instance_set)):
             # We cannot have more dependency levels than instances we have, hence
@@ -97,11 +99,14 @@ def resolve_dependency_graph(instances: set | Iterable) -> list[set]:
                 # It is possible that instances have dependencies that are not present
                 # in the list provided as argument, hence we need to create an intersection,
                 # so we attempt to resolve dependencies only present in the provided list.
-                available_dependencies = instance.get_protected().get_depends_on().intersection(instance_set)
+                available_dependencies = (
+                    instance.get_protected().get_depends_on().intersection(instance_set)
+                )
 
-                if (instance not in resolved_instances) and \
-                        ((0 == len(available_dependencies)) or
-                         available_dependencies.issubset(resolved_instances)):
+                if (instance not in resolved_instances) and (
+                    (0 == len(available_dependencies))
+                    or available_dependencies.issubset(resolved_instances)
+                ):
                     dependency_level_list[level].add(instance)
 
             resolved_instances.update(dependency_level_list[level])
@@ -125,7 +130,7 @@ class SingletonAccessWrapper(type):
     allows to reuse the AccessWrapper object instead of creating a new one.
     """
 
-    __singletons: dict[int, 'AccessWrapper'] = dict()
+    __singletons: dict[int, "AccessWrapper"] = {}
 
     def __call__(cls, instance, *args, **kwargs):
         if id(instance) in SingletonAccessWrapper.__singletons:
@@ -150,10 +155,13 @@ class AccessWrapper(metaclass=SingletonAccessWrapper):
         for name in dir(instance):
             if hasattr(instance, name):
                 attr = getattr(instance, name)
-                if isinstance(attr, types.MethodType) and (not re.match(r"^__\w+__$", name)):
+                if isinstance(attr, types.MethodType) and (
+                    not re.match(r"^__\w+__$", name)
+                ):
                     public_name = re.sub(AccessWrapper.PATTERN, "", name)
-                    if (not hasattr(instance, public_name)) or \
-                            (not isinstance(getattr(instance, public_name), types.MethodType)):
+                    if (not hasattr(instance, public_name)) or (
+                        not isinstance(getattr(instance, public_name), types.MethodType)
+                    ):
                         self.__dict__[public_name] = attr
 
         # Wrapping fields
@@ -164,9 +172,12 @@ class AccessWrapper(metaclass=SingletonAccessWrapper):
 
             if re.match(AccessWrapper.PATTERN, name):
                 getter_name = re.sub(AccessWrapper.PATTERN, "get_", name)
-                if (not hasattr(instance, getter_name)) or \
-                        (not isinstance(getattr(instance, getter_name), types.MethodType)):
-                    self.__dict__[getter_name] = types.MethodType(lambda this, n=name: this.__dict__[n], self)
+                if (not hasattr(instance, getter_name)) or (
+                    not isinstance(getattr(instance, getter_name), types.MethodType)
+                ):
+                    self.__dict__[getter_name] = types.MethodType(
+                        lambda this, n=name: this.__dict__[n], self
+                    )
 
     def get_nested_instance(self, name):
         return self.get_nested_instances()[name]
@@ -185,8 +196,10 @@ def load_class_by_name(class_name: str) -> type:
     """
 
     if 0 > class_name.find("."):
-        raise ValueError(f"Class loading error. Invalid class specifier: {class_name}; "
-                         f"Class specifier must be composed of [PACKAGE_NAME.]MODULE_NAME:CLASS_NAME[.CLASS_NAME+]")
+        raise ValueError(
+            f"Class loading error. Invalid class specifier: {class_name}; "
+            f"Class specifier must be composed of [PACKAGE_NAME.]MODULE_NAME:CLASS_NAME[.CLASS_NAME+]"
+        )
     trimmed_name = class_name.replace("<class '", "").replace("'>", "")
 
     loaded = None
@@ -200,7 +213,9 @@ def load_class_by_name(class_name: str) -> type:
                 try:
                     loaded = import_module(loaded.__name__ + "." + segment)
                 except ModuleNotFoundError:
-                    raise AttributeError(f"Class not found: {loaded.__name__}.{segment}")
+                    raise AttributeError(
+                        f"Class not found: {loaded.__name__}.{segment}"
+                    )
 
     if not isinstance(loaded, type):
         raise TypeError(f"Specified class name results in a non-type: {loaded}")
@@ -215,4 +230,8 @@ def remove_super_classes(classes: set[type]) -> set[type]:
     Deadly Diamond of Death situation at dynamic class creation.
     """
 
-    return {cls for cls in classes if not any(issubclass(pot, cls) and cls is not pot for pot in classes)}
+    return {
+        cls
+        for cls in classes
+        if not any(issubclass(pot, cls) and cls is not pot for pot in classes)
+    }

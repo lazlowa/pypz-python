@@ -13,19 +13,28 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # =============================================================================
+import concurrent.futures
+import json
 import logging
 import threading
 import time
 import traceback
-from typing import Callable, Any, TYPE_CHECKING, Optional
 from abc import ABC, abstractmethod
-import concurrent.futures
-import json
+from typing import TYPE_CHECKING, Any, Callable, Optional
 
-from pypz.core.channels.status import ChannelStatusMonitor, ChannelFilter, ChannelStatusMessage, ChannelStatus, \
-    NameSeparator
+from pypz.core.channels.status import (
+    ChannelFilter,
+    ChannelStatus,
+    ChannelStatusMessage,
+    ChannelStatusMonitor,
+    NameSeparator,
+)
 from pypz.core.commons.loggers import ContextLogger
-from pypz.core.commons.utils import ensure_type, current_time_millis, SynchronizedReference
+from pypz.core.commons.utils import (
+    SynchronizedReference,
+    current_time_millis,
+    ensure_type,
+)
 
 if TYPE_CHECKING:
     from pypz.core.specs.plugin import PortPlugin
@@ -67,10 +76,13 @@ class ChannelBase(ABC):
 
     # ======================= Ctor =======================
 
-    def __init__(self, channel_name: str,
-                 context: 'PortPlugin',
-                 executor: Optional[concurrent.futures.ThreadPoolExecutor] = None,
-                 **kwargs):
+    def __init__(
+        self,
+        channel_name: str,
+        context: "PortPlugin",
+        executor: Optional[concurrent.futures.ThreadPoolExecutor] = None,
+        **kwargs,
+    ):
 
         if channel_name is None:
             raise ValueError("Channel name must be provided")
@@ -78,7 +90,9 @@ class ChannelBase(ABC):
         if context is None:
             raise ValueError("Context instance must be provided")
 
-        self._silent_mode: bool = kwargs["silent_mode"] if "silent_mode" in kwargs else False
+        self._silent_mode: bool = (
+            kwargs["silent_mode"] if "silent_mode" in kwargs else False
+        )
         """
         If this flag is set, then this channel will not send status messages. One use-case is,
         if a channelRW is created to sniff the status of channels.
@@ -94,7 +108,9 @@ class ChannelBase(ABC):
         The context of this channel, which shall be an object of PortPlugin type
         """
 
-        self._unique_name: str = f"{self._channel_name}{NameSeparator}{self._context.get_full_name()}"
+        self._unique_name: str = (
+            f"{self._channel_name}{NameSeparator}{self._context.get_full_name()}"
+        )
         """
         This name identifies the channel in its context. It is necessary, since channel name on
         its own is not unique, can be reused by different owners.
@@ -143,20 +159,22 @@ class ChannelBase(ABC):
         Flag to signalize the termination attempt of the executor thread
         """
 
-        self._executor_stopped: SynchronizedReference[bool] = SynchronizedReference(False)
+        self._executor_stopped: SynchronizedReference[bool] = SynchronizedReference(
+            False
+        )
         """
         Flag to signalize that the executor thread has been terminated. This flag is necessary along wi
         _stopping_executor to synchronize the termination. Otherwise it can happen that the
         thread did not terminate yet, but the channel has already been closed resulting in exceptions.
         """
 
-        self._configuration: dict = dict()
+        self._configuration: dict = {}
         """
         This member stores the configuration string of the channel. This is a kind of serialized storage, since
         the configuration can be an arbitrary type with arbitrary schema as long as the interpretation is knonw.
         """
 
-        self._status_map: dict[str, ChannelStatusMonitor] = dict()
+        self._status_map: dict[str, ChannelStatusMonitor] = {}
         """
         This map stores the health statuses of all connected channels
         """
@@ -173,7 +191,7 @@ class ChannelBase(ABC):
         terminating the channel. This timer defines that grace period.
         """
 
-        self._health_check_payload: dict[str, Any] = dict()
+        self._health_check_payload: dict[str, Any] = {}
         """
         It is possible to send additional information along with health check events. This
         member serves as the storage of this additional payload.
@@ -189,14 +207,18 @@ class ChannelBase(ABC):
         This lock is used to synchronize the logic that updates channel states
         """
 
-        self._on_status_message_received_callbacks: set[Callable[[list[ChannelStatusMessage]], None]] = set()
+        self._on_status_message_received_callbacks: set[
+            Callable[[list[ChannelStatusMessage]], None]
+        ] = set()
         """
         Stores the callbacks, which will be executed, if status messages received
         """
 
-        self._logger: ContextLogger = ContextLogger(self._context.get_logger(),
-                                                    self._context.get_full_name(),
-                                                    self._channel_name)
+        self._logger: ContextLogger = ContextLogger(
+            self._context.get_logger(),
+            self._context.get_full_name(),
+            self._channel_name,
+        )
         """
         Channel logger
         """
@@ -301,7 +323,7 @@ class ChannelBase(ABC):
     def get_location(self):
         return self._location
 
-    def get_context(self) -> 'PortPlugin':
+    def get_context(self) -> "PortPlugin":
         return self._context
 
     def get_configuration(self) -> dict:
@@ -336,8 +358,7 @@ class ChannelBase(ABC):
         return len(self._status_map)
 
     def retrieve_connected_channel_unique_names(
-            self,
-            filter_function: Optional[Callable[[ChannelFilter], bool]] = None
+        self, filter_function: Optional[Callable[[ChannelFilter], bool]] = None
     ) -> set:
         """
         This method returns a set of connected channel names given the evaluation
@@ -385,7 +406,10 @@ class ChannelBase(ABC):
         """
 
         for status_monitor in list(self._status_map.values()):
-            if status_monitor.is_channel_healthy() and not status_monitor.is_channel_stopped():
+            if (
+                status_monitor.is_channel_healthy()
+                and not status_monitor.is_channel_stopped()
+            ):
                 return True
         return False
 
@@ -400,7 +424,10 @@ class ChannelBase(ABC):
         """
 
         for status_monitor in list(self._status_map.values()):
-            if status_monitor.is_channel_healthy() and not status_monitor.is_channel_closed():
+            if (
+                status_monitor.is_channel_healthy()
+                and not status_monitor.is_channel_closed()
+            ):
                 return True
         return False
 
@@ -416,9 +443,11 @@ class ChannelBase(ABC):
         """
 
         for status_monitor in list(self._status_map.values()):
-            if status_monitor.is_channel_healthy() and \
-                    not status_monitor.is_channel_stopped() and \
-                    not status_monitor.is_channel_closed():
+            if (
+                status_monitor.is_channel_healthy()
+                and not status_monitor.is_channel_stopped()
+                and not status_monitor.is_channel_closed()
+            ):
                 return True
         return False
 
@@ -526,7 +555,9 @@ class ChannelBase(ABC):
 
         if (not self._executor_started) and (not self._silent_mode):
             if self._executor is None:
-                self._executor = concurrent.futures.ThreadPoolExecutor(thread_name_prefix=self.get_unique_name())
+                self._executor = concurrent.futures.ThreadPoolExecutor(
+                    thread_name_prefix=self.get_unique_name()
+                )
 
             self._executor.submit(self.__executor_thread_handler)
             self._executor_started = True
@@ -563,14 +594,18 @@ class ChannelBase(ABC):
             try:
                 self.stop_channel()
             except Exception:
-                self._logger.error("Exception at channel stopping, status message will not be sent.")
+                self._logger.error(
+                    "Exception at channel stopping, status message will not be sent."
+                )
                 self._logger.error(traceback.format_exc())
                 self.stop_channel(False)
 
         try:
             self.invoke_sync_send_status_message(ChannelStatus.Closed)
         except Exception:
-            self._logger.error("Exception at channel closing, status message will not be sent.")
+            self._logger.error(
+                "Exception at channel closing, status message will not be sent."
+            )
             self._logger.error(traceback.format_exc())
 
         try:
@@ -597,14 +632,18 @@ class ChannelBase(ABC):
         self._configure_channel(channel_configuration)
 
         if ChannelBase.ParamKeyMetricsEnabled in self._configuration:
-            self._metrics_enabled = self._configuration[ChannelBase.ParamKeyMetricsEnabled]
+            self._metrics_enabled = self._configuration[
+                ChannelBase.ParamKeyMetricsEnabled
+            ]
 
         if ChannelBase.ParamKeyLogLevel in self._configuration:
             self._log_level = self._configuration[ChannelBase.ParamKeyLogLevel]
 
         self._logger.set_log_level(logging.getLevelName(self._log_level))
 
-    def invoke_sync_send_status_message(self, status: ChannelStatus, payload: Any = None) -> None:
+    def invoke_sync_send_status_message(
+        self, status: ChannelStatus, payload: Any = None
+    ) -> None:
         """
         An invoker method that encapsulates the actual implementation. This method
         MUST be called instead of the implemented method directly to ensure proper
@@ -612,16 +651,24 @@ class ChannelBase(ABC):
         """
 
         if not self._silent_mode:
-            self._send_status_message(str(ChannelStatusMessage(self._channel_name,
-                                                               self._context.get_full_name(),
-                                                               self._context.get_group_name(),
-                                                               self._context.get_group_index(),
-                                                               status, payload)))
+            self._send_status_message(
+                str(
+                    ChannelStatusMessage(
+                        self._channel_name,
+                        self._context.get_full_name(),
+                        self._context.get_group_name(),
+                        self._context.get_group_index(),
+                        status,
+                        payload,
+                    )
+                )
+            )
 
     """
     This invoker is just for being consistent with the Java part, since in Java this method is synchronized due
     to the fact that it can be invoked from different threads. In python however this should not be an issue.
     """
+
     def invoke_sync_status_update(self):
         """
         An invoker method that encapsulates the actual implementation. This method
@@ -632,27 +679,42 @@ class ChannelBase(ABC):
         with self._channel_state_update_lock:
             string_status_messages = self._retrieve_status_messages()
 
-            status_messages: list[ChannelStatusMessage] = list()
+            status_messages: list[ChannelStatusMessage] = []
 
             if string_status_messages is not None:
                 for string_status_message in string_status_messages:
-                    status_message = ChannelStatusMessage.create_from_json(string_status_message)
+                    status_message = ChannelStatusMessage.create_from_json(
+                        string_status_message
+                    )
                     status_messages.append(status_message)
 
                     # Needs to be made sure that we don't maintain a monitor for ourselves
-                    if (status_message.channel_name != self._channel_name) or \
-                            (status_message.channel_context_name != self._context.get_full_name()):
-                        if status_message.get_channel_unique_name() not in self._status_map:
-                            self._status_map[status_message.get_channel_unique_name()] = \
-                                ChannelStatusMonitor(status_message.channel_name,
-                                                     status_message.channel_context_name,
-                                                     status_message.channel_group_name,
-                                                     self._logger)
+                    if (status_message.channel_name != self._channel_name) or (
+                        status_message.channel_context_name
+                        != self._context.get_full_name()
+                    ):
+                        if (
+                            status_message.get_channel_unique_name()
+                            not in self._status_map
+                        ):
+                            self._status_map[
+                                status_message.get_channel_unique_name()
+                            ] = ChannelStatusMonitor(
+                                status_message.channel_name,
+                                status_message.channel_context_name,
+                                status_message.channel_group_name,
+                                self._logger,
+                            )
 
                             self.on_new_channel_status_monitor(
-                                self._status_map[status_message.get_channel_unique_name()])
+                                self._status_map[
+                                    status_message.get_channel_unique_name()
+                                ]
+                            )
 
-                        self._status_map[status_message.get_channel_unique_name()].update(status_message)
+                        self._status_map[
+                            status_message.get_channel_unique_name()
+                        ].update(status_message)
 
             for callback in self._on_status_message_received_callbacks:
                 try:
@@ -661,7 +723,9 @@ class ChannelBase(ABC):
                     self._logger.error(f"Error at status message callback: {e}")
                     self._logger.error(f"{traceback.format_exc()}")
 
-    def on_status_message_received(self, callback: Callable[[list[ChannelStatusMessage]], None]) -> None:
+    def on_status_message_received(
+        self, callback: Callable[[list[ChannelStatusMessage]], None]
+    ) -> None:
         """
         Adds a callback to the set of callbacks, which will be executed upon status
         message received.
@@ -671,7 +735,9 @@ class ChannelBase(ABC):
 
         self._on_status_message_received_callbacks.add(callback)
 
-    def on_new_channel_status_monitor(self, status_monitor: ChannelStatusMonitor) -> None:
+    def on_new_channel_status_monitor(
+        self, status_monitor: ChannelStatusMonitor
+    ) -> None:
         """
         This method can be overridden to handle the creation of the new ChannelStatusMonitor e.g.
         registering callbacks.
@@ -696,6 +762,7 @@ class ChannelBase(ABC):
     """
     This method implements the logic to be executed in the background thread.
     """
+
     def __executor_thread_handler(self):
         self._logger.debug("Starting status sender thread ...")
         while not self._stopping_executor:
@@ -705,10 +772,14 @@ class ChannelBase(ABC):
             try:
                 self.on_status_message_send()
 
-                self.invoke_sync_send_status_message(ChannelStatus.HealthCheck, self._health_check_payload)
+                self.invoke_sync_send_status_message(
+                    ChannelStatus.HealthCheck, self._health_check_payload
+                )
 
                 if self._metrics_enabled:
-                    self._logger.debug(f"Metrics: {json.dumps(self._health_check_payload)}")
+                    self._logger.debug(
+                        f"Metrics: {json.dumps(self._health_check_payload)}"
+                    )
 
                 self.invoke_sync_status_update()
 
@@ -720,13 +791,16 @@ class ChannelBase(ABC):
 
                 # Note that we ignore all exceptions here, since we cannot risk to close this loop
                 # upon a recoverable exception. Hence, we are only plotting the error.
-                self._logger.error(f"Unhandled exception in control loop. Timeout in "
-                                   f"{current_time_millis() - self._control_loop_exception_timer}/"
-                                   f"{ChannelBase.ControlLoopExceptionTimeoutInMs}")
+                self._logger.error(
+                    f"Unhandled exception in control loop. Timeout in "
+                    f"{current_time_millis() - self._control_loop_exception_timer}/"
+                    f"{ChannelBase.ControlLoopExceptionTimeoutInMs}"
+                )
                 self._logger.error(traceback.format_exc())
 
-                if ChannelBase.ControlLoopExceptionTimeoutInMs < \
-                        (current_time_millis() - self._control_loop_exception_timer):
+                if ChannelBase.ControlLoopExceptionTimeoutInMs < (
+                    current_time_millis() - self._control_loop_exception_timer
+                ):
                     self._stopping_executor = True
             finally:
                 control_loop_duration = current_time_millis() - control_loop_start_time
@@ -739,11 +813,19 @@ class ChannelBase(ABC):
                 the sleep will wait 2000-1500=500ms. Notice that it can never gol below 0.
                 """
                 if ChannelBase.DefaultStatusThreadIntervalInMs > control_loop_duration:
-                    time.sleep((ChannelBase.DefaultStatusThreadIntervalInMs - control_loop_duration) / 1000.0)
+                    time.sleep(
+                        (
+                            ChannelBase.DefaultStatusThreadIntervalInMs
+                            - control_loop_duration
+                        )
+                        / 1000.0
+                    )
 
         try:
             # Sending one last status message to make sure that all relevant payloads are transferred.
-            self.invoke_sync_send_status_message(ChannelStatus.HealthCheck, self._health_check_payload)
+            self.invoke_sync_send_status_message(
+                ChannelStatus.HealthCheck, self._health_check_payload
+            )
         except Exception as ignored:
             self._logger.debug(str(ignored))
 

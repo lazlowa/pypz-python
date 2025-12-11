@@ -15,8 +15,7 @@
 # =============================================================================
 import json
 from enum import Enum
-
-from typing import Callable, Any, Optional
+from typing import Any, Callable, Optional
 
 from pypz.core.commons.loggers import ContextLogger, DefaultContextLogger
 from pypz.core.commons.utils import current_time_millis
@@ -89,21 +88,27 @@ class ChannelStatusMessage:
     :param timestamp: timestamp of the message at creation
     """
 
-    def __init__(self,
-                 channel_name: str,
-                 channel_context_name: str,
-                 channel_group_name: str = None,
-                 channel_group_index: int = 0,
-                 status: ChannelStatus | str = None,
-                 payload: Any = None,
-                 timestamp: int = None):
+    def __init__(
+        self,
+        channel_name: str,
+        channel_context_name: str,
+        channel_group_name: str = None,
+        channel_group_index: int = 0,
+        status: ChannelStatus | str = None,
+        payload: Any = None,
+        timestamp: int = None,
+    ):
         self.channel_name: str = channel_name
         self.channel_context_name: str = channel_context_name
         self.channel_group_name: str = channel_group_name
         self.channel_group_index: int = channel_group_index
-        self.status: ChannelStatus = status if isinstance(status, ChannelStatus) else ChannelStatus[status]
+        self.status: ChannelStatus = (
+            status if isinstance(status, ChannelStatus) else ChannelStatus[status]
+        )
         self.payload: Any = payload
-        self.timestamp: int = timestamp if timestamp is not None else current_time_millis()
+        self.timestamp: int = (
+            timestamp if timestamp is not None else current_time_millis()
+        )
 
     def get_channel_unique_name(self):
         return f"{self.channel_name}@{self.channel_context_name}"
@@ -116,13 +121,19 @@ class ChannelStatusMessage:
         if isinstance(source, dict):
             return ChannelStatusMessage(**source)
 
-        raise TypeError("Invalid data type provided for json conversion: " + str(type(source)))
+        raise TypeError(
+            "Invalid data type provided for json conversion: " + str(type(source))
+        )
 
     def __str__(self):
-        return json.dumps(self,
-                          default=lambda k: list(k)
-                          if isinstance(k, set) else
-                          k.__dict__ if not isinstance(k, Enum) else k.value)
+        return json.dumps(
+            self,
+            default=lambda k: (
+                list(k)
+                if isinstance(k, set)
+                else k.__dict__ if not isinstance(k, Enum) else k.value
+            ),
+        )
 
 
 class ChannelStatusMonitor(ChannelFilter):
@@ -143,18 +154,20 @@ class ChannelStatusMonitor(ChannelFilter):
     is up, the ChannelReader will be invalidated
     """
 
-    def __init__(self,
-                 channel_name: str,
-                 channel_context_name: str,
-                 channel_group_name: str = None,
-                 logger: ContextLogger = None):
+    def __init__(
+        self,
+        channel_name: str,
+        channel_context_name: str,
+        channel_group_name: str = None,
+        logger: ContextLogger = None,
+    ):
         self.channel_name: str = channel_name
 
         self.channel_context_name: str = channel_context_name
 
         self.channel_group_name: str = channel_group_name
 
-        self.status_update_map: dict[ChannelStatus, int] = dict()
+        self.status_update_map: dict[ChannelStatus, int] = {}
 
         self.current_status: Optional[ChannelStatus] = None
 
@@ -164,11 +177,15 @@ class ChannelStatusMonitor(ChannelFilter):
 
         self.monitor_start_timestamp: int = current_time_millis()
 
-        self.status_update_callback: Optional[Callable[[ChannelStatusMessage], None]] = None
+        self.status_update_callback: Optional[
+            Callable[[ChannelStatusMessage], None]
+        ] = None
 
-        self.logger: ContextLogger = \
-            ContextLogger(logger, *logger.get_context_stack(), channel_context_name) \
-            if logger is not None else ContextLogger(DefaultContextLogger(self.get_channel_unique_name()))
+        self.logger: ContextLogger = (
+            ContextLogger(logger, *logger.get_context_stack(), channel_context_name)
+            if logger is not None
+            else ContextLogger(DefaultContextLogger(self.get_channel_unique_name()))
+        )
 
     def get_channel_unique_name(self) -> str:
         return f"{self.channel_name}{NameSeparator}{self.channel_context_name}"
@@ -180,9 +197,13 @@ class ChannelStatusMonitor(ChannelFilter):
         return self.channel_group_name
 
     def is_channel_healthy(self) -> bool:
-        return ChannelStatusMonitor.ValidPatienceTimeInMs > (current_time_millis() - self.monitor_start_timestamp) \
-            if 0 == self.last_update_sent_timestamp_ms else \
-            ChannelStatusMonitor.ValidPatienceTimeInMs > (current_time_millis() - self.last_update_sent_timestamp_ms)
+        return (
+            ChannelStatusMonitor.ValidPatienceTimeInMs
+            > (current_time_millis() - self.monitor_start_timestamp)
+            if 0 == self.last_update_sent_timestamp_ms
+            else ChannelStatusMonitor.ValidPatienceTimeInMs
+            > (current_time_millis() - self.last_update_sent_timestamp_ms)
+        )
 
     def is_channel_not_initialised(self):
         return self.current_status is None
@@ -219,8 +240,10 @@ class ChannelStatusMonitor(ChannelFilter):
         """
 
         if status_message.get_channel_unique_name() != self.get_channel_unique_name():
-            raise AttributeError(f"Invalid status message, "
-                                 f"mismatching channel name: {status_message.get_channel_unique_name()}")
+            raise AttributeError(
+                f"Invalid status message, "
+                f"mismatching channel name: {status_message.get_channel_unique_name()}"
+            )
 
         # int has been merged with long https://www.python.org/dev/peps/pep-0237/
         status_update_time = int(float(status_message.timestamp))
@@ -228,28 +251,35 @@ class ChannelStatusMonitor(ChannelFilter):
         if status_update_time > self.last_update_sent_timestamp_ms:
             self.last_update_sent_timestamp_ms = status_update_time
         elif status_update_time < self.last_update_sent_timestamp_ms:
-            self.logger.warning(f"WARNING - the current status message has lower timestamp "
-                                f"({status_message.timestamp}) than the last received "
-                                f"({self.last_update_sent_timestamp_ms}). This may be caused by network latency, "
-                                f"but if you repeatedly see this warning, then you should investigate the causes. "
-                                f"({status_message})")
+            self.logger.warning(
+                f"WARNING - the current status message has lower timestamp "
+                f"({status_message.timestamp}) than the last received "
+                f"({self.last_update_sent_timestamp_ms}). This may be caused by network latency, "
+                f"but if you repeatedly see this warning, then you should investigate the causes. "
+                f"({status_message})"
+            )
 
         new_status = self.current_status
 
-        if (ChannelStatus.Opened == status_message.status) or \
-           (ChannelStatus.Closed == status_message.status) or \
-           (ChannelStatus.Started == status_message.status) or \
-           (ChannelStatus.Stopped == status_message.status) or \
-           (ChannelStatus.Error == status_message.status):
+        if (
+            (ChannelStatus.Opened == status_message.status)
+            or (ChannelStatus.Closed == status_message.status)
+            or (ChannelStatus.Started == status_message.status)
+            or (ChannelStatus.Stopped == status_message.status)
+            or (ChannelStatus.Error == status_message.status)
+        ):
             if status_update_time >= self.last_status_change_timestamp_ms:
                 if ChannelStatus.Error != self.current_status:
                     new_status = status_message.status
-                elif (ChannelStatus.Opened == status_message.status) or \
-                     (ChannelStatus.Started == status_message.status):
+                elif (ChannelStatus.Opened == status_message.status) or (
+                    ChannelStatus.Started == status_message.status
+                ):
                     new_status = status_message.status
 
         if (new_status is None) or (new_status != self.current_status):
-            self.logger.debug(f"{self.current_status} -> {new_status} @ {status_update_time}")
+            self.logger.debug(
+                f"{self.current_status} -> {new_status} @ {status_update_time}"
+            )
             self.current_status = new_status
             self.last_status_change_timestamp_ms = status_update_time
 

@@ -16,7 +16,12 @@
 import unittest
 
 from pypz.executors.operator.executor import OperatorExecutor
-from pypz.executors.operator.signals import SignalOperationStart, SignalNoOp, SignalError
+from pypz.executors.operator.signals import (
+    SignalError,
+    SignalNoOp,
+    SignalOperationStart,
+)
+
 from core.test.operator_executor_tests.resources import TestPipeline
 
 

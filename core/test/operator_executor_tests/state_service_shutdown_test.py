@@ -17,6 +17,7 @@ import unittest
 
 from pypz.executors.operator.executor import OperatorExecutor
 from pypz.executors.operator.signals import SignalKill, SignalNoOp
+
 from core.test.operator_executor_tests.resources import TestPipeline
 
 
@@ -27,26 +28,36 @@ class StateServiceShutdownTest(unittest.TestCase):
         ex = OperatorExecutor(pipeline.operator_a)
         ex._OperatorExecutor__initialize()
 
-        ex._OperatorExecutor__current_state = ex._OperatorExecutor__state_service_shutdown
+        ex._OperatorExecutor__current_state = (
+            ex._OperatorExecutor__state_service_shutdown
+        )
 
         self.assertIsInstance(ex.get_current_state().on_execute(), SignalKill)
 
     def test_state_execution_results_with_unfinished_plugin(self):
         pipeline = TestPipeline("pipeline")
-        pipeline.operator_a.service_plugin.set_parameter("return__on_service_shutdown", False)
+        pipeline.operator_a.service_plugin.set_parameter(
+            "return__on_service_shutdown", False
+        )
         ex = OperatorExecutor(pipeline.operator_a)
         ex._OperatorExecutor__initialize()
 
-        ex._OperatorExecutor__current_state = ex._OperatorExecutor__state_service_shutdown
+        ex._OperatorExecutor__current_state = (
+            ex._OperatorExecutor__state_service_shutdown
+        )
 
         self.assertIsInstance(ex.get_current_state().on_execute(), SignalNoOp)
 
     def test_state_execution_results_with_error_raised_from_plugin(self):
         pipeline = TestPipeline("pipeline")
-        pipeline.operator_a.service_plugin.set_parameter("raise__on_service_shutdown", "Test Error")
+        pipeline.operator_a.service_plugin.set_parameter(
+            "raise__on_service_shutdown", "Test Error"
+        )
         ex = OperatorExecutor(pipeline.operator_a)
         ex._OperatorExecutor__initialize()
 
-        ex._OperatorExecutor__current_state = ex._OperatorExecutor__state_service_shutdown
+        ex._OperatorExecutor__current_state = (
+            ex._OperatorExecutor__state_service_shutdown
+        )
 
         self.assertIsInstance(ex.get_current_state().on_execute(), SignalKill)

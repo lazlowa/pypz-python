@@ -18,9 +18,12 @@ import unittest
 
 from kafka import KafkaAdminClient
 from kafka.errors import UnknownTopicOrPartitionError
-
 from pypz.executors.operator.states import StateOperationRunning
-from pypz.plugins.kafka_io.channels import ReaderStatusTopicNameExtension, WriterStatusTopicNameExtension
+from pypz.plugins.kafka_io.channels import (
+    ReaderStatusTopicNameExtension,
+    WriterStatusTopicNameExtension,
+)
+
 from plugins.kafka_io.test.resources import TestPipeline
 
 
@@ -36,16 +39,20 @@ class KafkaIOPortTest(unittest.TestCase):
     def setUpClass(cls) -> None:
         time.sleep(2)
 
-        cls.test_admin_client = KafkaAdminClient(bootstrap_servers=KafkaIOPortTest.bootstrap_url)
+        cls.test_admin_client = KafkaAdminClient(
+            bootstrap_servers=KafkaIOPortTest.bootstrap_url
+        )
 
     @classmethod
     def tearDownClass(cls) -> None:
         try:
-            cls.test_admin_client.delete_topics([
-                cls.test_channel_name,
-                cls.test_writer_status_name,
-                cls.test_reader_status_name
-            ])
+            cls.test_admin_client.delete_topics(
+                [
+                    cls.test_channel_name,
+                    cls.test_writer_status_name,
+                    cls.test_reader_status_name,
+                ]
+            )
         except UnknownTopicOrPartitionError:
             pass
 
@@ -53,11 +60,13 @@ class KafkaIOPortTest(unittest.TestCase):
 
     def setUp(self) -> None:
         try:
-            KafkaIOPortTest.test_admin_client.delete_topics([
-                KafkaIOPortTest.test_channel_name,
-                KafkaIOPortTest.test_writer_status_name,
-                KafkaIOPortTest.test_reader_status_name
-            ])
+            KafkaIOPortTest.test_admin_client.delete_topics(
+                [
+                    KafkaIOPortTest.test_channel_name,
+                    KafkaIOPortTest.test_writer_status_name,
+                    KafkaIOPortTest.test_reader_status_name,
+                ]
+            )
         except UnknownTopicOrPartitionError:
             pass
 
@@ -150,7 +159,10 @@ class KafkaIOPortTest(unittest.TestCase):
             self.assertFalse(reader._on_running())
             self.assertFalse(reader_0._on_running())
 
-            self.assertEqual([{"demoText": "record_0"}, {"demoText": "record_0"}], reader.received_records)
+            self.assertEqual(
+                [{"demoText": "record_0"}, {"demoText": "record_0"}],
+                reader.received_records,
+            )
             self.assertEqual([{"demoText": "record_1"}], reader_0.received_records)
 
             reader.input_port.commit_current_read_offset()
@@ -170,8 +182,14 @@ class KafkaIOPortTest(unittest.TestCase):
             # Outputs closed, so can_retrieve shall return False -> expect True
             self.assertTrue(reader._on_running())
             self.assertTrue(reader_0._on_running())
-            self.assertEqual([{"demoText": "record_0"}, {"demoText": "record_0"}], reader.received_records)
-            self.assertEqual([{"demoText": "record_1"}, {"demoText": "record_1"}], reader_0.received_records)
+            self.assertEqual(
+                [{"demoText": "record_0"}, {"demoText": "record_0"}],
+                reader.received_records,
+            )
+            self.assertEqual(
+                [{"demoText": "record_1"}, {"demoText": "record_1"}],
+                reader_0.received_records,
+            )
             reader._on_shutdown()
 
             # Case #9
@@ -220,7 +238,9 @@ class KafkaIOPortTest(unittest.TestCase):
             reader_0.input_port._on_resource_deletion()
             self.fail(e)
 
-    def test_reader_delete_resources_with_error_occurred_expect_no_resource_deletion(self):
+    def test_reader_delete_resources_with_error_occurred_expect_no_resource_deletion(
+        self,
+    ):
         pipeline = TestPipeline("pipeline")
         pipeline.set_parameter("##channelLocation", KafkaIOPortTest.bootstrap_url)
         reader = pipeline.reader
@@ -296,7 +316,9 @@ class KafkaIOPortTest(unittest.TestCase):
             reader_0.input_port._on_resource_deletion()
             self.fail(e)
 
-    def test_writer_sends_record_to_reader_group_expect_all_reader_got_the_same_record(self):
+    def test_writer_sends_record_to_reader_group_expect_all_reader_got_the_same_record(
+        self,
+    ):
         pipeline = TestPipeline("pipeline")
         pipeline.set_parameter("##channelLocation", KafkaIOPortTest.bootstrap_url)
 
@@ -326,14 +348,22 @@ class KafkaIOPortTest(unittest.TestCase):
             writer_0.group_output_port.send([{"demoText": "from_writer_0_for_all"}])
             time.sleep(1)
 
-            self.assertEqual([{"demoText": "from_writer_for_all"}],
-                             reader.group_input_port.retrieve())
-            self.assertEqual([{"demoText": "from_writer_0_for_all"}],
-                             reader.group_input_port.retrieve())
-            self.assertEqual([{"demoText": "from_writer_for_all"}],
-                             reader_0.group_input_port.retrieve())
-            self.assertEqual([{"demoText": "from_writer_0_for_all"}],
-                             reader_0.group_input_port.retrieve())
+            self.assertEqual(
+                [{"demoText": "from_writer_for_all"}],
+                reader.group_input_port.retrieve(),
+            )
+            self.assertEqual(
+                [{"demoText": "from_writer_0_for_all"}],
+                reader.group_input_port.retrieve(),
+            )
+            self.assertEqual(
+                [{"demoText": "from_writer_for_all"}],
+                reader_0.group_input_port.retrieve(),
+            )
+            self.assertEqual(
+                [{"demoText": "from_writer_0_for_all"}],
+                reader_0.group_input_port.retrieve(),
+            )
 
         finally:
             writer.group_output_port._on_port_close()

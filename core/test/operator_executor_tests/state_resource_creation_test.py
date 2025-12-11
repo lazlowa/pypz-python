@@ -17,7 +17,13 @@ import unittest
 
 from pypz.executors.commons import ExecutionMode
 from pypz.executors.operator.executor import OperatorExecutor
-from pypz.executors.operator.signals import SignalOperationInit, SignalNoOp, SignalError, SignalServicesStop
+from pypz.executors.operator.signals import (
+    SignalError,
+    SignalNoOp,
+    SignalOperationInit,
+    SignalServicesStop,
+)
+
 from core.test.operator_executor_tests.resources import TestPipeline
 
 
@@ -28,27 +34,37 @@ class StateResourceCreationTest(unittest.TestCase):
         ex = OperatorExecutor(pipeline.operator_a)
         ex._OperatorExecutor__initialize()
 
-        ex._OperatorExecutor__current_state = ex._OperatorExecutor__state_resource_creation
+        ex._OperatorExecutor__current_state = (
+            ex._OperatorExecutor__state_resource_creation
+        )
 
         self.assertIsInstance(ex.get_current_state().on_execute(), SignalOperationInit)
 
     def test_state_execution_results_with_unfinished_plugin(self):
         pipeline = TestPipeline("pipeline")
-        pipeline.operator_a.resource_handler.set_parameter("return__on_resource_creation", False)
+        pipeline.operator_a.resource_handler.set_parameter(
+            "return__on_resource_creation", False
+        )
         ex = OperatorExecutor(pipeline.operator_a)
         ex._OperatorExecutor__initialize()
 
-        ex._OperatorExecutor__current_state = ex._OperatorExecutor__state_resource_creation
+        ex._OperatorExecutor__current_state = (
+            ex._OperatorExecutor__state_resource_creation
+        )
 
         self.assertIsInstance(ex.get_current_state().on_execute(), SignalNoOp)
 
     def test_state_execution_results_with_error_raised_from_plugin(self):
         pipeline = TestPipeline("pipeline")
-        pipeline.operator_a.resource_handler.set_parameter("raise__on_resource_creation", "Test Error")
+        pipeline.operator_a.resource_handler.set_parameter(
+            "raise__on_resource_creation", "Test Error"
+        )
         ex = OperatorExecutor(pipeline.operator_a)
         ex._OperatorExecutor__initialize()
 
-        ex._OperatorExecutor__current_state = ex._OperatorExecutor__state_resource_creation
+        ex._OperatorExecutor__current_state = (
+            ex._OperatorExecutor__state_resource_creation
+        )
 
         self.assertIsInstance(ex.get_current_state().on_execute(), SignalError)
 
@@ -57,6 +73,8 @@ class StateResourceCreationTest(unittest.TestCase):
         ex = OperatorExecutor(pipeline.operator_a)
         ex._OperatorExecutor__initialize(ExecutionMode.ResourceCreationOnly)
 
-        ex._OperatorExecutor__current_state = ex._OperatorExecutor__state_resource_creation
+        ex._OperatorExecutor__current_state = (
+            ex._OperatorExecutor__state_resource_creation
+        )
 
         self.assertIsInstance(ex.get_current_state().on_execute(), SignalServicesStop)

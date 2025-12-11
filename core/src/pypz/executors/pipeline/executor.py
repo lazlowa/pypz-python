@@ -17,9 +17,9 @@ import concurrent.futures
 import signal
 from typing import Optional
 
+from pypz.core.specs.pipeline import Pipeline
 from pypz.executors.commons import ExecutionMode
 from pypz.executors.operator.executor import OperatorExecutor
-from pypz.core.specs.pipeline import Pipeline
 
 
 class PipelineExecutor:
@@ -59,12 +59,16 @@ class PipelineExecutor:
         """ Creating the OperatorExecutor objects. Notice that none of the OperatorExecutors
             may handle interrupts, since this will be handled on PipelineExecutor level. """
         for operator in self.__pipeline.get_protected().get_nested_instances().values():
-            self.__operator_executors.add(OperatorExecutor(operator, handle_interrupts=False))
+            self.__operator_executors.add(
+                OperatorExecutor(operator, handle_interrupts=False)
+            )
 
         if PipelineExecutor._max_operator_count < len(self.__operator_executors):
-            raise AttributeError(f"Max number of operators exceeded "
-                                 f"({PipelineExecutor._max_operator_count}): "
-                                 f"{len(self.__operator_executors)}")
+            raise AttributeError(
+                f"Max number of operators exceeded "
+                f"({PipelineExecutor._max_operator_count}): "
+                f"{len(self.__operator_executors)}"
+            )
 
     def start(self, exec_mode: ExecutionMode = ExecutionMode.Standard):
         """
@@ -76,11 +80,15 @@ class PipelineExecutor:
         """
 
         if self.__executor is None:
-            self.__executor = concurrent.futures.ThreadPoolExecutor(max_workers=PipelineExecutor._max_operator_count,
-                                                                    thread_name_prefix=self.__class__.__name__)
+            self.__executor = concurrent.futures.ThreadPoolExecutor(
+                max_workers=PipelineExecutor._max_operator_count,
+                thread_name_prefix=self.__class__.__name__,
+            )
             self.__futures.clear()
             for operator_executor in self.__operator_executors:
-                self.__futures.add(self.__executor.submit(operator_executor.execute, exec_mode))
+                self.__futures.add(
+                    self.__executor.submit(operator_executor.execute, exec_mode)
+                )
 
             while any(not future.done() for future in self.__futures):
                 pass

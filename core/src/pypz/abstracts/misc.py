@@ -21,7 +21,14 @@ from pypz.core.channels.misc import BlankChannelReader, BlankChannelWriter
 
 class BlankChannelInputPort(ChannelInputPort):
 
-    def __init__(self, name: str = None, schema: Any = None, group_mode: bool = False, *args, **kwargs):
+    def __init__(
+        self,
+        name: str = None,
+        schema: Any = None,
+        group_mode: bool = False,
+        *args,
+        **kwargs,
+    ):
         super().__init__(name, schema, group_mode, BlankChannelReader, *args, **kwargs)
 
 

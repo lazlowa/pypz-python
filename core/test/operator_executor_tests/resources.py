@@ -14,13 +14,24 @@
 # limitations under the License.
 # =============================================================================
 import time
-from typing import Optional, Any
+from typing import Any, Optional
 
 from pypz.core.commons.parameters import RequiredParameter
-from pypz.core.specs.misc import BlankInputPortPlugin, BlankOutputPortPlugin, BlankPlugin, BlankOperator
+from pypz.core.specs.misc import (
+    BlankInputPortPlugin,
+    BlankOperator,
+    BlankOutputPortPlugin,
+    BlankPlugin,
+)
 from pypz.core.specs.operator import Operator
 from pypz.core.specs.pipeline import Pipeline
-from pypz.core.specs.plugin import ServicePlugin, ResourceHandlerPlugin, ExtendedPlugin, PortPlugin, Plugin
+from pypz.core.specs.plugin import (
+    ExtendedPlugin,
+    Plugin,
+    PortPlugin,
+    ResourceHandlerPlugin,
+    ServicePlugin,
+)
 from pypz.plugins.loggers.default import DefaultLoggerPlugin
 
 
@@ -50,13 +61,21 @@ class TestPluginBase(Plugin):
     def control_handler(self, method_name: str, default_return_value=None):
         self.get_logger().debug(method_name)
         if self.has_parameter(TestPluginBase.ParameterPrefixRaiseError + method_name):
-            raise AttributeError(self.get_parameter(TestPluginBase.ParameterPrefixRaiseError + method_name))
+            raise AttributeError(
+                self.get_parameter(
+                    TestPluginBase.ParameterPrefixRaiseError + method_name
+                )
+            )
 
         if self.has_parameter(TestPluginBase.ParameterPrefixSleep + method_name):
-            time.sleep(self.get_parameter(TestPluginBase.ParameterPrefixSleep + method_name))
+            time.sleep(
+                self.get_parameter(TestPluginBase.ParameterPrefixSleep + method_name)
+            )
 
         if self.has_parameter(TestPluginBase.ParameterPrefixReturnValue + method_name):
-            return self.get_parameter(TestPluginBase.ParameterPrefixReturnValue + method_name)
+            return self.get_parameter(
+                TestPluginBase.ParameterPrefixReturnValue + method_name
+            )
 
         return default_return_value
 
@@ -152,13 +171,17 @@ class TestResourceHandlerPlugin(TestPluginBase, ResourceHandlerPlugin):
         self.call_counter_resource_creation += 1
         self.init_order_idx = TestResourceHandlerPlugin.init_order_idx
         TestResourceHandlerPlugin.init_order_idx += 1
-        return self.control_handler(TestResourceHandlerPlugin._on_resource_creation.__name__, True)
+        return self.control_handler(
+            TestResourceHandlerPlugin._on_resource_creation.__name__, True
+        )
 
     def _on_resource_deletion(self) -> bool:
         self.call_counter_resource_deletion += 1
         self.shutdown_order_idx = TestResourceHandlerPlugin.shutdown_order_idx
         TestResourceHandlerPlugin.shutdown_order_idx += 1
-        return self.control_handler(TestResourceHandlerPlugin._on_resource_deletion.__name__, True)
+        return self.control_handler(
+            TestResourceHandlerPlugin._on_resource_deletion.__name__, True
+        )
 
 
 class TestServicePlugin(TestPluginBase, ServicePlugin):
@@ -184,7 +207,9 @@ class TestServicePlugin(TestPluginBase, ServicePlugin):
         self.call_counter_service_shutdown += 1
         self.shutdown_order_idx = TestServicePlugin.shutdown_order_idx
         TestServicePlugin.shutdown_order_idx += 1
-        return self.control_handler(TestServicePlugin._on_service_shutdown.__name__, True)
+        return self.control_handler(
+            TestServicePlugin._on_service_shutdown.__name__, True
+        )
 
 
 class TestServicePluginWithRequiredParam(ServicePlugin, BlankPlugin):
@@ -249,13 +274,21 @@ class TestOperator(Operator):
     def control_handler(self, method_name: str, default_return_value=None):
         self.get_logger().debug(method_name)
         if self.has_parameter(TestPluginBase.ParameterPrefixRaiseError + method_name):
-            raise AttributeError(self.get_parameter(TestPluginBase.ParameterPrefixRaiseError + method_name))
+            raise AttributeError(
+                self.get_parameter(
+                    TestPluginBase.ParameterPrefixRaiseError + method_name
+                )
+            )
 
         if self.has_parameter(TestPluginBase.ParameterPrefixSleep + method_name):
-            time.sleep(self.get_parameter(TestPluginBase.ParameterPrefixSleep + method_name))
+            time.sleep(
+                self.get_parameter(TestPluginBase.ParameterPrefixSleep + method_name)
+            )
 
         if self.has_parameter(TestPluginBase.ParameterPrefixReturnValue + method_name):
-            return self.get_parameter(TestPluginBase.ParameterPrefixReturnValue + method_name)
+            return self.get_parameter(
+                TestPluginBase.ParameterPrefixReturnValue + method_name
+            )
 
         return default_return_value
 

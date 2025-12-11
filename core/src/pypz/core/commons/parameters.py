@@ -14,8 +14,9 @@
 # limitations under the License.
 # =============================================================================
 from __future__ import annotations
+
 from types import GenericAlias
-from typing import Generic, TypeVar, Type, Any, Callable, Optional
+from typing import Any, Callable, Generic, Optional, Type, TypeVar
 
 from pypz.core.commons.utils import is_type_allowed
 
@@ -65,12 +66,14 @@ class ExpectedParameter(Generic[ParameterType]):
     This prefix is used to prefix the actual variables created by this descriptor
     """
 
-    def __init__(self,
-                 required: bool,
-                 parameter_type: Type[ParameterType],
-                 alt_name: Optional[str] = None,
-                 description: Optional[str] = None,
-                 on_update: Callable[[Any, Any], None] = None):
+    def __init__(
+        self,
+        required: bool,
+        parameter_type: Type[ParameterType],
+        alt_name: Optional[str] = None,
+        description: Optional[str] = None,
+        on_update: Callable[[Any, Any], None] = None,
+    ):
 
         if parameter_type is None:
             raise TypeError("Parameter type must be specified")
@@ -78,14 +81,22 @@ class ExpectedParameter(Generic[ParameterType]):
         if "typing" == parameter_type.__module__:
             raise TypeError(f"Type description not allowed: {parameter_type}")
 
-        self.parameter_type: Type[ParameterType] = parameter_type \
-            if not isinstance(parameter_type, GenericAlias) else parameter_type.__origin__  # type: ignore
+        self.parameter_type: Type[ParameterType] = (
+            parameter_type
+            if not isinstance(parameter_type, GenericAlias)
+            else parameter_type.__origin__  # type: ignore
+        )
 
-        self.generic_types: list[type] = None \
-            if not isinstance(parameter_type, GenericAlias) else parameter_type.__args__  # type: ignore
+        self.generic_types: list[type] = (
+            None
+            if not isinstance(parameter_type, GenericAlias)
+            else parameter_type.__args__  # type: ignore
+        )
 
         if not issubclass(self.parameter_type, allowed_param_types):
-            raise TypeError(f"Invalid parameter type: {self.parameter_type}. Allowed types are: {allowed_param_types}")
+            raise TypeError(
+                f"Invalid parameter type: {self.parameter_type}. Allowed types are: {allowed_param_types}"
+            )
 
         self.required: bool = required
 
@@ -122,77 +133,106 @@ class ExpectedParameter(Generic[ParameterType]):
 
     def __set__(self, instance, value):
         if not is_type_allowed(value, allowed_param_types):
-            raise TypeError(f"Invalid parameter value type for '{self.name}': {type(value)}. "
-                            f"Allowed types: {allowed_param_types}")
+            raise TypeError(
+                f"Invalid parameter value type for '{self.name}': {type(value)}. "
+                f"Allowed types: {allowed_param_types}"
+            )
 
-        if (value is not None) and \
-                (self.parameter_type is not None) and \
-                (not isinstance(value, self.parameter_type)):
-            raise TypeError(f"Invalid parameter value type for '{self.name}': {type(value)}. "
-                            f"Expected: {self.parameter_type}")
+        if (
+            (value is not None)
+            and (self.parameter_type is not None)
+            and (not isinstance(value, self.parameter_type))
+        ):
+            raise TypeError(
+                f"Invalid parameter value type for '{self.name}': {type(value)}. "
+                f"Expected: {self.parameter_type}"
+            )
 
         # TODO - evtl. checking against generic parameters
 
-        if (not hasattr(instance, self.internal_name)) and (self.name not in instance.get_protected().get_parameters()):
-            """ This is the normal init path, where an object has just been constructed and
-                the parameters' initial value is set """
+        if (not hasattr(instance, self.internal_name)) and (
+            self.name not in instance.get_protected().get_parameters()
+        ):
+            """This is the normal init path, where an object has just been constructed and
+            the parameters' initial value is set"""
 
             setattr(instance, self.internal_name, value)
             instance.get_protected().get_parameters()[self.name] = value
             if self.on_update is not None:
                 self.on_update(instance, value)
-        elif (not hasattr(instance, self.internal_name)) and (self.name in instance.get_protected().get_parameters()):
-            """ This path usually represents the case, where a replica is created. The parameter in the dict is
-                already set through the original, but the actual parameter attribute is not yet set in the replica.
-                In this case it does not matter, what the value is, since the one in the param dict has precedence. """
+        elif (not hasattr(instance, self.internal_name)) and (
+            self.name in instance.get_protected().get_parameters()
+        ):
+            """This path usually represents the case, where a replica is created. The parameter in the dict is
+            already set through the original, but the actual parameter attribute is not yet set in the replica.
+            In this case it does not matter, what the value is, since the one in the param dict has precedence.
+            """
 
-            setattr(instance, self.internal_name, instance.get_protected().get_parameters()[self.name])
+            setattr(
+                instance,
+                self.internal_name,
+                instance.get_protected().get_parameters()[self.name],
+            )
             if self.on_update is not None:
                 self.on_update(instance, value)
-        elif (hasattr(instance, self.internal_name)) and (self.name in instance.get_protected().get_parameters()):
-            """ This is the normal update path for both the normal and the replicated case. Logic shall be
-                executed only, if there is value difference. """
+        elif (hasattr(instance, self.internal_name)) and (
+            self.name in instance.get_protected().get_parameters()
+        ):
+            """This is the normal update path for both the normal and the replicated case. Logic shall be
+            executed only, if there is value difference."""
 
             if getattr(instance, self.internal_name) != value:
                 setattr(instance, self.internal_name, value)
                 if self.on_update is not None:
                     self.on_update(instance, value)
             if instance.get_protected().get_parameters()[self.name] != value:
-                """ Note that if parameter has been set directly on the attribute, then
-                    we need to update it in the parameters as well. Notice that
-                    we cause recurrence, since this __set__ will be called again. This
-                    will not cause any trouble however, since this path is not executed
-                    if the new value equals old value, which it does, since we set the
-                    value in the just before. Recursion is not nice, but still it is
-                    the least complex solution to ensure consistency between parameters
-                    and ExpectedParameter attributes. """
+                """Note that if parameter has been set directly on the attribute, then
+                we need to update it in the parameters as well. Notice that
+                we cause recurrence, since this __set__ will be called again. This
+                will not cause any trouble however, since this path is not executed
+                if the new value equals old value, which it does, since we set the
+                value in the just before. Recursion is not nice, but still it is
+                the least complex solution to ensure consistency between parameters
+                and ExpectedParameter attributes."""
                 instance.get_protected().get_parameters()[self.name] = value
         else:
-            """ This path shall actually never be executed, since there is no case, where the value is set, but
-                the parameter dict is not updated. This is ensured by the first path. """
-            raise AttributeError("Parameter value is missing from the parameter dict. This should not happen."
-                                 "Please contact the devs.")
+            """This path shall actually never be executed, since there is no case, where the value is set, but
+            the parameter dict is not updated. This is ensured by the first path."""
+            raise AttributeError(
+                "Parameter value is missing from the parameter dict. This should not happen."
+                "Please contact the devs."
+            )
 
     def __eq__(self, other: object) -> bool:
         if self is other:
             return True
 
-        return isinstance(other, type(self)) and \
-            (self.required == other.required) and \
-            (self.parameter_type == other.parameter_type) and \
-            (self.name == other.name) and \
-            (self.description == other.description) and \
-            (self.generic_types == other.generic_types)
+        return (
+            isinstance(other, type(self))
+            and (self.required == other.required)
+            and (self.parameter_type == other.parameter_type)
+            and (self.name == other.name)
+            and (self.description == other.description)
+            and (self.generic_types == other.generic_types)
+        )
 
     def to_dict(self, instance=None) -> dict:
         return {
             self.name: {
-                'type': None if self.parameter_type is None else
-                self.parameter_type.__origin__ if isinstance(self.parameter_type, GenericAlias)  # type: ignore
-                else self.parameter_type.__name__,
-                'required': self.required,
-                'description': self.description,
-                'currentValue': None if instance is None else self.__get__(instance, None)
+                "type": (
+                    None
+                    if self.parameter_type is None
+                    else (
+                        self.parameter_type.__origin__  # type: ignore
+                        if isinstance(self.parameter_type, GenericAlias)
+                        else self.parameter_type.__name__
+                    )
+                ),
+                "required": self.required,
+                "description": self.description,
+                "currentValue": (
+                    None if instance is None else self.__get__(instance, None)
+                ),
             }
         }
 
@@ -216,11 +256,13 @@ class RequiredParameter(ExpectedParameter[ParameterType]):
     :param on_update: callback to react on value update
     """
 
-    def __init__(self,
-                 parameter_type: Type[ParameterType] = None,
-                 alt_name: str = None,
-                 description: Optional[str] = None,
-                 on_update: Callable[[Any, Any], None] = None):
+    def __init__(
+        self,
+        parameter_type: Type[ParameterType] = None,
+        alt_name: str = None,
+        description: Optional[str] = None,
+        on_update: Callable[[Any, Any], None] = None,
+    ):
         super().__init__(True, parameter_type, alt_name, description, on_update)
 
 
@@ -243,15 +285,19 @@ class OptionalParameter(ExpectedParameter[ParameterType]):
     :param on_update: callback to react on value update
     """
 
-    def __init__(self,
-                 parameter_type: Type[ParameterType] = None,
-                 alt_name: str = None,
-                 description: Optional[str] = None,
-                 on_update: Callable[[Any, Any], None] = None):
+    def __init__(
+        self,
+        parameter_type: Type[ParameterType] = None,
+        alt_name: str = None,
+        description: Optional[str] = None,
+        on_update: Callable[[Any, Any], None] = None,
+    ):
         super().__init__(False, parameter_type, alt_name, description, on_update)
 
 
-def retrieve_parameters(input_val, parameter_type: Type[ExpectedParameter]) -> dict[str, ExpectedParameter]:
+def retrieve_parameters(
+    input_val, parameter_type: Type[ExpectedParameter]
+) -> dict[str, ExpectedParameter]:
     """
     This method attempts to retrieve all described parameters with
     either public or protected scope. Private scoped parameters are
@@ -264,15 +310,18 @@ def retrieve_parameters(input_val, parameter_type: Type[ExpectedParameter]) -> d
 
     object_class = input_val.__class__ if not isinstance(input_val, type) else input_val
 
-    result: dict[str, ExpectedParameter] = dict()
+    result: dict[str, ExpectedParameter] = {}
 
     for implemented_class in object_class.__mro__:
         for param_name, param in implemented_class.__dict__.items():
-            if isinstance(param, parameter_type) and \
-                    (not param_name.startswith(f"_{implemented_class.__name__}__")):  # privates ignored
+            if isinstance(param, parameter_type) and (
+                not param_name.startswith(f"_{implemented_class.__name__}__")
+            ):  # privates ignored
                 if param.name in result:
-                    raise AttributeError(f"Parameter '{param.name}' is already "
-                                         f"declared in '{implemented_class}'")
+                    raise AttributeError(
+                        f"Parameter '{param.name}' is already "
+                        f"declared in '{implemented_class}'"
+                    )
 
                 result[param.name] = param
 

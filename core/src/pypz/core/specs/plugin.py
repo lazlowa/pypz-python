@@ -15,13 +15,16 @@
 # =============================================================================
 import logging
 from abc import ABC, abstractmethod
-from typing import Any, TYPE_CHECKING, cast, Optional
+from typing import TYPE_CHECKING, Any, Optional, cast
 
 import yaml
-
-from pypz.core.commons.loggers import ContextLoggerInterface, DefaultContextLogger, ContextLogger
+from pypz.core.commons.loggers import (
+    ContextLogger,
+    ContextLoggerInterface,
+    DefaultContextLogger,
+)
 from pypz.core.specs.dtos import PluginInstanceDTO, PluginSpecDTO
-from pypz.core.specs.instance import RegisteredInterface, Instance, InstanceGroup
+from pypz.core.specs.instance import Instance, InstanceGroup, RegisteredInterface
 
 if TYPE_CHECKING:
     from pypz.core.specs.operator import Operator
@@ -40,10 +43,11 @@ class Plugin(Instance[None], InstanceGroup, RegisteredInterface, ABC):
     def __init__(self, name: str = None, *args, **kwargs):
         super().__init__(name, None, *args, **kwargs)
 
-        self.__logger: Optional[ContextLogger] = \
-            ContextLogger(self.get_context().get_logger(), self.get_full_name()) \
-            if self.get_context() is not None else \
-            ContextLogger(DefaultContextLogger(self.get_full_name()))
+        self.__logger: Optional[ContextLogger] = (
+            ContextLogger(self.get_context().get_logger(), self.get_full_name())
+            if self.get_context() is not None
+            else ContextLogger(DefaultContextLogger(self.get_full_name()))
+        )
         """
         Context logger, which is the Operator's logger if Operator context existing, otherwise
         it defaults back to the DefaultContextLogger. Note that Plugin without Operator
@@ -54,8 +58,8 @@ class Plugin(Instance[None], InstanceGroup, RegisteredInterface, ABC):
 
     # ==================== public methods =======================
 
-    def get_context(self) -> 'Operator':
-        return cast('Operator', super().get_context())
+    def get_context(self) -> "Operator":
+        return cast("Operator", super().get_context())
 
     def get_logger(self) -> ContextLogger:
         return self.__logger
@@ -67,12 +71,23 @@ class Plugin(Instance[None], InstanceGroup, RegisteredInterface, ABC):
         return 0 if self.get_context() is None else self.get_context().get_group_index()
 
     def get_group_name(self) -> Optional[str]:
-        return None if self.get_group_principal() is None else self.get_group_principal().get_full_name()
+        return (
+            None
+            if self.get_group_principal() is None
+            else self.get_group_principal().get_full_name()
+        )
 
     def get_group_principal(self) -> Optional[Instance]:
-        if (self.get_context() is None) or (self.get_context().get_group_principal() is None):
+        if (self.get_context() is None) or (
+            self.get_context().get_group_principal() is None
+        ):
             return None
-        return self.get_context().get_group_principal().get_protected().get_nested_instance(self.get_simple_name())
+        return (
+            self.get_context()
+            .get_group_principal()
+            .get_protected()
+            .get_nested_instance(self.get_simple_name())
+        )
 
     def is_principal(self) -> bool:
         return True if self.get_context() is None else self.get_context().is_principal()
@@ -80,17 +95,21 @@ class Plugin(Instance[None], InstanceGroup, RegisteredInterface, ABC):
     def get_dto(self) -> PluginInstanceDTO:
         instance_dto = super().get_dto()
 
-        return PluginInstanceDTO(name=instance_dto.name,
-                                 parameters=instance_dto.parameters,
-                                 dependsOn=instance_dto.dependsOn,
-                                 spec=PluginSpecDTO(**instance_dto.spec.__dict__))
+        return PluginInstanceDTO(
+            name=instance_dto.name,
+            parameters=instance_dto.parameters,
+            dependsOn=instance_dto.dependsOn,
+            spec=PluginSpecDTO(**instance_dto.spec.__dict__),
+        )
 
     @staticmethod
-    def create_from_string(source, *args, **kwargs) -> 'Plugin':
-        return Plugin.create_from_dto(PluginInstanceDTO(**yaml.safe_load(source)), *args, **kwargs)
+    def create_from_string(source, *args, **kwargs) -> "Plugin":
+        return Plugin.create_from_dto(
+            PluginInstanceDTO(**yaml.safe_load(source)), *args, **kwargs
+        )
 
     @staticmethod
-    def create_from_dto(instance_dto: 'PluginInstanceDTO', *args, **kwargs) -> 'Plugin':
+    def create_from_dto(instance_dto: "PluginInstanceDTO", *args, **kwargs) -> "Plugin":
         return cast(Plugin, Instance.create_from_dto(instance_dto, *args, **kwargs))
 
 
@@ -138,13 +157,14 @@ class PortPlugin(Plugin, RegisteredInterface, ABC):
     :param schema: the schema of the port plugin, which will be used to send/retrieve data
     """
 
-    def __init__(self, name: Optional[str] = None,
-                 schema: Any = None,
-                 *args, **kwargs):
+    def __init__(self, name: Optional[str] = None, schema: Any = None, *args, **kwargs):
         super().__init__(name, *args, **kwargs)
 
-        self.__connected_ports: set[PortPlugin] = self.get_protected().get_reference().__connected_ports \
-            if self.get_protected().get_reference() is not None else set()
+        self.__connected_ports: set[PortPlugin] = (
+            self.get_protected().get_reference().__connected_ports
+            if self.get_protected().get_reference() is not None
+            else set()
+        )
         """
         This member holds the information about the connected ports, where
         the key is the replication group names and the value is a list of
@@ -165,35 +185,56 @@ class PortPlugin(Plugin, RegisteredInterface, ABC):
     def get_schema(self) -> Any:
         return self.__schema
 
-    def get_connected_ports(self) -> set['PortPlugin']:
+    def get_connected_ports(self) -> set["PortPlugin"]:
         return self.__connected_ports
 
-    def connect(self, other_port: 'PortPlugin') -> None:
+    def connect(self, other_port: "PortPlugin") -> None:
         # Sanity checks
         # =============
 
         if isinstance(other_port, type(self)):
-            raise TypeError("Invalid connection attempt: ports of same type cannot be connected")
+            raise TypeError(
+                "Invalid connection attempt: ports of same type cannot be connected"
+            )
 
         # Plugins shall have an operator context
         if (self.get_context() is None) or (other_port.get_context() is None):
-            raise AttributeError("Invalid port connection attempt: no operator context available")
+            raise AttributeError(
+                "Invalid port connection attempt: no operator context available"
+            )
 
         # Plugins in the same operator shall not be connected
         if self.get_context() is other_port.get_context():
-            raise AttributeError("Invalid port connection attempt. Ports shall have different operator context.")
+            raise AttributeError(
+                "Invalid port connection attempt. Ports shall have different operator context."
+            )
 
         # Operators shall have a pipeline context
-        if (self.get_context().get_context() is None) or (other_port.get_context().get_context() is None):
-            raise AttributeError("Invalid port connection attempt. No pipeline context available.")
+        if (self.get_context().get_context() is None) or (
+            other_port.get_context().get_context() is None
+        ):
+            raise AttributeError(
+                "Invalid port connection attempt. No pipeline context available."
+            )
 
         # Operators shall be in the same pipeline context
-        if self.get_context().get_context() is not other_port.get_context().get_context():
-            raise AttributeError("Invalid port connection attempt. Operators shall be in the same pipeline context.")
+        if (
+            self.get_context().get_context()
+            is not other_port.get_context().get_context()
+        ):
+            raise AttributeError(
+                "Invalid port connection attempt. Operators shall be in the same pipeline context."
+            )
 
-        if (self.__schema is not None) and (other_port.__schema is not None) and (self.__schema != other_port.__schema):
-            self.get_logger().warning(f"Mismatching schemas. Expected: {self.__schema}; "
-                                      f"Provided: {other_port.__schema}")
+        if (
+            (self.__schema is not None)
+            and (other_port.__schema is not None)
+            and (self.__schema != other_port.__schema)
+        ):
+            self.get_logger().warning(
+                f"Mismatching schemas. Expected: {self.__schema}; "
+                f"Provided: {other_port.__schema}"
+            )
 
         self.__connected_ports.add(other_port)
         other_port.__connected_ports.add(self)
@@ -229,10 +270,9 @@ class OutputPortPlugin(PortPlugin, RegisteredInterface, ABC):
     :param schema: the schema of the port plugin, which will be used to send/retrieve data
     """
 
-    def __init__(self,
-                 name: Optional[str] = None,
-                 schema: Optional[Any] = None,
-                 *args, **kwargs):
+    def __init__(
+        self, name: Optional[str] = None, schema: Optional[Any] = None, *args, **kwargs
+    ):
         super().__init__(name, schema, *args, **kwargs)
 
     @abstractmethod
@@ -258,11 +298,14 @@ class InputPortPlugin(PortPlugin, RegisteredInterface, ABC):
     :param group_mode: if set to True, the all the input ports in the group shall receive all messages
     """
 
-    def __init__(self,
-                 name: Optional[str] = None,
-                 schema: Optional[Any] = None,
-                 group_mode: bool = False,
-                 *args, **kwargs):
+    def __init__(
+        self,
+        name: Optional[str] = None,
+        schema: Optional[Any] = None,
+        group_mode: bool = False,
+        *args,
+        **kwargs,
+    ):
         super().__init__(name, schema, *args, **kwargs)
 
         self._group_mode: bool = group_mode
@@ -300,6 +343,7 @@ class InputPortPlugin(PortPlugin, RegisteredInterface, ABC):
         read offset based on the technology used.
         """
         pass
+
 
 # ====================================== Service Plugins ======================================
 

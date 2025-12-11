@@ -24,12 +24,12 @@ from pypz.executors.commons import ExecutionMode
 
 
 class DeploymentState(enum.Enum):
-    Open = "Open",
-    Running = "Running",
-    Completed = "Completed",
-    Failed = "Failed",
-    Unhealthy = "Unhealthy",
-    Unknown = "Unknown",
+    Open = ("Open",)
+    Running = ("Running",)
+    Completed = ("Completed",)
+    Failed = ("Failed",)
+    Unhealthy = ("Unhealthy",)
+    Unknown = ("Unknown",)
     NotExisting = "NotExisting"
 
 
@@ -43,10 +43,13 @@ class Deployer(ABC):
     # ================== abstract methods ====================
 
     @abstractmethod
-    def deploy(self, pipeline: Pipeline,
-               execution_mode: ExecutionMode = ExecutionMode.Standard,
-               ignore_operators: list[Operator] = None,
-               wait: bool = True) -> None:
+    def deploy(
+        self,
+        pipeline: Pipeline,
+        execution_mode: ExecutionMode = ExecutionMode.Standard,
+        ignore_operators: list[Operator] = None,
+        wait: bool = True,
+    ) -> None:
         """
         Shall implement the logic to deploy a pipeline by its instance.
 
@@ -59,7 +62,9 @@ class Deployer(ABC):
         pass
 
     @abstractmethod
-    def destroy(self, pipeline_name: str, force: bool = False, wait: bool = True) -> None:
+    def destroy(
+        self, pipeline_name: str, force: bool = False, wait: bool = True
+    ) -> None:
         """
         Shall implement the logic to destroy a pipeline by its name.
 
@@ -71,7 +76,9 @@ class Deployer(ABC):
         pass
 
     @abstractmethod
-    def restart_operator(self, operator_full_name: str, force: bool = False, wait: bool = True) -> None:
+    def restart_operator(
+        self, operator_full_name: str, force: bool = False, wait: bool = True
+    ) -> None:
         """
         Shall implement the logic to restart a single operator in a pipeline by its name.
         If the operator does not exist, it shall rather create it without throwing an exception.
@@ -84,7 +91,9 @@ class Deployer(ABC):
         pass
 
     @abstractmethod
-    def destroy_operator(self, operator_full_name: str, force: bool = False, wait: bool = True) -> None:
+    def destroy_operator(
+        self, operator_full_name: str, force: bool = False, wait: bool = True
+    ) -> None:
         """
         Shall implement the logic to destroy a single operator by its name.
 
@@ -157,9 +166,11 @@ class Deployer(ABC):
 
         pipeline: Pipeline = self.retrieve_deployed_pipeline(pipeline_name)
 
-        operator_states = dict()
+        operator_states = {}
         for operator in pipeline.get_protected().get_nested_instances().values():
-            operator_states[operator.get_full_name()] = self.retrieve_operator_state(operator.get_full_name())
+            operator_states[operator.get_full_name()] = self.retrieve_operator_state(
+                operator.get_full_name()
+            )
 
         return operator_states
 
@@ -195,8 +206,11 @@ class Deployer(ABC):
                 return False
         return True
 
-    def attach(self, pipeline_name: str,
-               on_operator_state_change: Callable[[Operator, DeploymentState], None] = None) -> None:
+    def attach(
+        self,
+        pipeline_name: str,
+        on_operator_state_change: Callable[[Operator, DeploymentState], None] = None,
+    ) -> None:
         """
         This method attaches itself to a deployed pipeline and remains attached until the pipeline is
         not finished. It is possible to specify callback functions to hook into certain state
@@ -208,8 +222,10 @@ class Deployer(ABC):
         """
         pipeline: Pipeline = self.retrieve_deployed_pipeline(pipeline_name)
 
-        operator_states: dict[Operator, DeploymentState] = \
-            {operator: DeploymentState.Unknown for operator in pipeline.get_protected().get_nested_instances().values()}
+        operator_states: dict[Operator, DeploymentState] = {
+            operator: DeploymentState.Unknown
+            for operator in pipeline.get_protected().get_nested_instances().values()
+        }
 
         finished: bool = False
 
@@ -222,8 +238,10 @@ class Deployer(ABC):
                     if on_operator_state_change is not None:
                         on_operator_state_change(operator, operator_state)
 
-            if any((DeploymentState.Open == state) or
-                   (DeploymentState.Running == state) for state in operator_states.values()):
+            if any(
+                (DeploymentState.Open == state) or (DeploymentState.Running == state)
+                for state in operator_states.values()
+            ):
                 time.sleep(2)
             else:
                 finished = True

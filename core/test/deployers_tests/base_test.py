@@ -17,7 +17,8 @@ import unittest
 
 from pypz.core.specs.operator import Operator
 from pypz.deployers.base import DeploymentState
-from core.test.deployers_tests.resources import TestPipeline, TestDeployer
+
+from core.test.deployers_tests.resources import TestDeployer, TestPipeline
 
 
 class DeployerTest(unittest.TestCase):
@@ -28,17 +29,41 @@ class DeployerTest(unittest.TestCase):
 
         deployer.deploy(pipeline)
 
-        self.assertTrue(deployer.is_all_operator_in_state(pipeline.get_full_name(), DeploymentState.Running))
-        self.assertTrue(deployer.is_all_operator_in_state(pipeline.get_full_name(), DeploymentState.Running,
-                                                          DeploymentState.Open))
-        self.assertFalse(deployer.is_all_operator_in_state(pipeline.get_full_name(), DeploymentState.Open))
+        self.assertTrue(
+            deployer.is_all_operator_in_state(
+                pipeline.get_full_name(), DeploymentState.Running
+            )
+        )
+        self.assertTrue(
+            deployer.is_all_operator_in_state(
+                pipeline.get_full_name(), DeploymentState.Running, DeploymentState.Open
+            )
+        )
+        self.assertFalse(
+            deployer.is_all_operator_in_state(
+                pipeline.get_full_name(), DeploymentState.Open
+            )
+        )
 
-        deployer.deployed_operators[pipeline.operator_a.get_full_name()] = DeploymentState.Unknown
+        deployer.deployed_operators[pipeline.operator_a.get_full_name()] = (
+            DeploymentState.Unknown
+        )
 
-        self.assertFalse(deployer.is_all_operator_in_state(pipeline.get_full_name(), DeploymentState.Running))
-        self.assertFalse(deployer.is_all_operator_in_state(pipeline.get_full_name(), DeploymentState.Running,
-                                                           DeploymentState.Open))
-        self.assertFalse(deployer.is_all_operator_in_state(pipeline.get_full_name(), DeploymentState.Open))
+        self.assertFalse(
+            deployer.is_all_operator_in_state(
+                pipeline.get_full_name(), DeploymentState.Running
+            )
+        )
+        self.assertFalse(
+            deployer.is_all_operator_in_state(
+                pipeline.get_full_name(), DeploymentState.Running, DeploymentState.Open
+            )
+        )
+        self.assertFalse(
+            deployer.is_all_operator_in_state(
+                pipeline.get_full_name(), DeploymentState.Open
+            )
+        )
 
     def test_deployer_is_any_operator_in_state(self):
         pipeline = TestPipeline("pipeline")
@@ -46,14 +71,31 @@ class DeployerTest(unittest.TestCase):
 
         deployer.deploy(pipeline)
 
-        self.assertTrue(deployer.is_any_operator_in_state(pipeline.get_full_name(), DeploymentState.Running))
-        self.assertTrue(deployer.is_any_operator_in_state(pipeline.get_full_name(),
-                                                          DeploymentState.Running, DeploymentState.Open))
-        self.assertFalse(deployer.is_any_operator_in_state(pipeline.get_full_name(), DeploymentState.Open))
+        self.assertTrue(
+            deployer.is_any_operator_in_state(
+                pipeline.get_full_name(), DeploymentState.Running
+            )
+        )
+        self.assertTrue(
+            deployer.is_any_operator_in_state(
+                pipeline.get_full_name(), DeploymentState.Running, DeploymentState.Open
+            )
+        )
+        self.assertFalse(
+            deployer.is_any_operator_in_state(
+                pipeline.get_full_name(), DeploymentState.Open
+            )
+        )
 
-        deployer.deployed_operators[pipeline.operator_a.get_full_name()] = DeploymentState.Open
+        deployer.deployed_operators[pipeline.operator_a.get_full_name()] = (
+            DeploymentState.Open
+        )
 
-        self.assertTrue(deployer.is_any_operator_in_state(pipeline.get_full_name(), DeploymentState.Open))
+        self.assertTrue(
+            deployer.is_any_operator_in_state(
+                pipeline.get_full_name(), DeploymentState.Open
+            )
+        )
 
     def test_deployer_attach_with_all_running(self):
         pipeline = TestPipeline("pipeline")
@@ -61,10 +103,16 @@ class DeployerTest(unittest.TestCase):
 
         def on_operator_state_change(operator: Operator, state: DeploymentState):
             if DeploymentState.Running == state:
-                deployer.deployed_operators[operator.get_full_name()] = DeploymentState.Completed
+                deployer.deployed_operators[operator.get_full_name()] = (
+                    DeploymentState.Completed
+                )
 
         deployer.deploy(pipeline)
 
         deployer.attach(pipeline.get_full_name(), on_operator_state_change)
 
-        self.assertTrue(deployer.is_all_operator_in_state(pipeline.get_full_name(), DeploymentState.Completed))
+        self.assertTrue(
+            deployer.is_all_operator_in_state(
+                pipeline.get_full_name(), DeploymentState.Completed
+            )
+        )

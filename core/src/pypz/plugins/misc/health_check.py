@@ -14,8 +14,8 @@
 # limitations under the License.
 # =============================================================================
 import threading
-from http.server import HTTPServer, BaseHTTPRequestHandler, ThreadingHTTPServer
-from typing import Optional, Any
+from http.server import BaseHTTPRequestHandler, HTTPServer, ThreadingHTTPServer
+from typing import Any, Optional
 
 from pypz.core.commons.parameters import OptionalParameter
 from pypz.core.specs.plugin import ServicePlugin
@@ -67,7 +67,9 @@ class HttpHealthCheckPlugin(ServicePlugin):
         )
         self._server_thread.start()
 
-        self.get_logger().debug(f"HTTP server started and listening on port: {self.port}")
+        self.get_logger().debug(
+            f"HTTP server started and listening on port: {self.port}"
+        )
 
     def _stop_http_server(self) -> None:
         if self._server:

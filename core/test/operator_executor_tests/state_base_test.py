@@ -13,26 +13,36 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # =============================================================================
-from pypz.executors.commons import ExecutionMode
-from pypz.executors.operator.context import ExecutionContext
-from pypz.executors.operator.signals import SignalOperationStart, SignalOperationStop, SignalServicesStop, \
-    SignalServicesStart, SignalResourcesCreation, SignalResourcesDeletion, SignalOperationInit, SignalError, \
-    SignalKill, SignalNoOp, SignalShutdown, SignalTerminate
-from pypz.executors.operator.states import State
-from pypz.core.specs.operator import Operator
-import pypz.core.commons.utils
 import unittest
 
-from core.test.operator_executor_tests.resources import TestPipeline
+import pypz.core.commons.utils
+from pypz.core.specs.operator import Operator
+from pypz.executors.commons import ExecutionMode
+from pypz.executors.operator.context import ExecutionContext
+from pypz.executors.operator.signals import (
+    SignalError,
+    SignalKill,
+    SignalNoOp,
+    SignalOperationInit,
+    SignalOperationStart,
+    SignalOperationStop,
+    SignalResourcesCreation,
+    SignalResourcesDeletion,
+    SignalServicesStart,
+    SignalServicesStop,
+    SignalShutdown,
+    SignalTerminate,
+)
+from pypz.executors.operator.states import State
 
+from core.test.operator_executor_tests.resources import TestPipeline
 
 # ============= Resources =============
 
 
 class TestState1(State):
 
-    def __init__(self, context: ExecutionContext,
-                 executor_pool_size: int = None):
+    def __init__(self, context: ExecutionContext, executor_pool_size: int = None):
         super().__init__(context, executor_pool_size)
 
     def on_entry(self) -> None:
@@ -47,8 +57,7 @@ class TestState1(State):
 
 class TestState2(State):
 
-    def __init__(self, context: ExecutionContext,
-                 executor_pool_size: int = None):
+    def __init__(self, context: ExecutionContext, executor_pool_size: int = None):
         super().__init__(context, executor_pool_size)
 
     def on_entry(self) -> None:
@@ -60,6 +69,7 @@ class TestState2(State):
     def on_execute(self) -> None:
         pass
 
+
 # ============= Tests =============
 
 
@@ -67,23 +77,29 @@ class BaseStateTest(unittest.TestCase):
 
     def test_state_action_callable_with_service_plugin_expect_success(self):
         pipeline = TestPipeline("pipeline")
-        action_callable = State.MethodWrapper(TestState1(ExecutionContext(pipeline.operator_a,
-                                                                          ExecutionMode.Standard)),
-                                              pipeline.operator_a.service_plugin,
-                                              pipeline.operator_a.service_plugin._on_service_start)
+        action_callable = State.MethodWrapper(
+            TestState1(ExecutionContext(pipeline.operator_a, ExecutionMode.Standard)),
+            pipeline.operator_a.service_plugin,
+            pipeline.operator_a.service_plugin._on_service_start,
+        )
 
         self.assertTrue(action_callable())
         self.assertEqual(0, pipeline.operator_a.service_plugin.call_counter_interrupt)
         self.assertEqual(0, pipeline.operator_a.service_plugin.call_counter_error)
-        self.assertEqual(1, pipeline.operator_a.service_plugin.call_counter_service_start)
-        self.assertEqual(0, pipeline.operator_a.service_plugin.call_counter_service_shutdown)
+        self.assertEqual(
+            1, pipeline.operator_a.service_plugin.call_counter_service_start
+        )
+        self.assertEqual(
+            0, pipeline.operator_a.service_plugin.call_counter_service_shutdown
+        )
 
     def test_state_action_callable_with_operator_expect_success(self):
         pipeline = TestPipeline("pipeline")
-        action_callable = State.MethodWrapper(TestState1(ExecutionContext(pipeline.operator_a,
-                                                                          ExecutionMode.Standard)),
-                                              pipeline.operator_a,
-                                              pipeline.operator_a._on_running)
+        action_callable = State.MethodWrapper(
+            TestState1(ExecutionContext(pipeline.operator_a, ExecutionMode.Standard)),
+            pipeline.operator_a,
+            pipeline.operator_a._on_running,
+        )
 
         self.assertTrue(action_callable())
         self.assertEqual(0, pipeline.operator_a.call_counter_interrupt)
@@ -95,10 +111,11 @@ class BaseStateTest(unittest.TestCase):
     def test_state_action_callable_with_operator_with_error_raised_expect_error(self):
         pipeline = TestPipeline("pipeline")
         pipeline.operator_a.set_parameter("raise__on_running", "Test Error")
-        action_callable = State.MethodWrapper(TestState1(ExecutionContext(pipeline.operator_a,
-                                                                          ExecutionMode.Standard)),
-                                              pipeline.operator_a,
-                                              pipeline.operator_a._on_running)
+        action_callable = State.MethodWrapper(
+            TestState1(ExecutionContext(pipeline.operator_a, ExecutionMode.Standard)),
+            pipeline.operator_a,
+            pipeline.operator_a._on_running,
+        )
 
         with self.assertRaises(AttributeError):
             action_callable()
@@ -198,8 +215,12 @@ class BaseStateTest(unittest.TestCase):
         state = TestState1(context)
 
         start_time = pypz.core.commons.utils.current_time_millis()
-        self.assertTrue(state._schedule(State.Execution(Operator._on_init, {pipeline.operator_a})))
-        self.assertTrue(1100 > (pypz.core.commons.utils.current_time_millis() - start_time))
+        self.assertTrue(
+            state._schedule(State.Execution(Operator._on_init, {pipeline.operator_a}))
+        )
+        self.assertTrue(
+            1100 > (pypz.core.commons.utils.current_time_millis() - start_time)
+        )
 
         state.shutdown()
 
@@ -212,8 +233,12 @@ class BaseStateTest(unittest.TestCase):
         pipeline.operator_a.set_parameter("return__on_init", False)
 
         start_time = pypz.core.commons.utils.current_time_millis()
-        self.assertFalse(state._schedule(State.Execution(Operator._on_init, {pipeline.operator_a})))
-        self.assertTrue(1100 > (pypz.core.commons.utils.current_time_millis() - start_time))
+        self.assertFalse(
+            state._schedule(State.Execution(Operator._on_init, {pipeline.operator_a}))
+        )
+        self.assertTrue(
+            1100 > (pypz.core.commons.utils.current_time_millis() - start_time)
+        )
 
         state.shutdown()
 
@@ -223,9 +248,15 @@ class BaseStateTest(unittest.TestCase):
 
         state = TestState1(context)
 
-        self.assertTrue(state._schedule(State.Execution(Operator._on_init, {pipeline.operator_a})))
-        self.assertTrue(state._schedule(State.Execution(Operator._on_init, {pipeline.operator_a})))
-        self.assertTrue(state._schedule(State.Execution(Operator._on_init, {pipeline.operator_a})))
+        self.assertTrue(
+            state._schedule(State.Execution(Operator._on_init, {pipeline.operator_a}))
+        )
+        self.assertTrue(
+            state._schedule(State.Execution(Operator._on_init, {pipeline.operator_a}))
+        )
+        self.assertTrue(
+            state._schedule(State.Execution(Operator._on_init, {pipeline.operator_a}))
+        )
 
         state.shutdown()
 

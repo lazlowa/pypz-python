@@ -16,7 +16,8 @@
 import unittest
 
 from pypz.executors.operator.executor import OperatorExecutor
-from pypz.executors.operator.signals import SignalNoOp, SignalError, SignalOperationStop
+from pypz.executors.operator.signals import SignalError, SignalNoOp, SignalOperationStop
+
 from core.test.operator_executor_tests.resources import TestPipeline
 
 
@@ -27,7 +28,9 @@ class StateOperationProcessingTest(unittest.TestCase):
         ex = OperatorExecutor(pipeline.operator_a)
         ex._OperatorExecutor__initialize()
 
-        ex._OperatorExecutor__current_state = ex._OperatorExecutor__state_operation_running
+        ex._OperatorExecutor__current_state = (
+            ex._OperatorExecutor__state_operation_running
+        )
 
         self.assertIsInstance(ex.get_current_state().on_execute(), SignalOperationStop)
 
@@ -37,7 +40,9 @@ class StateOperationProcessingTest(unittest.TestCase):
         ex = OperatorExecutor(pipeline.operator_a)
         ex._OperatorExecutor__initialize()
 
-        ex._OperatorExecutor__current_state = ex._OperatorExecutor__state_operation_running
+        ex._OperatorExecutor__current_state = (
+            ex._OperatorExecutor__state_operation_running
+        )
 
         self.assertIsInstance(ex.get_current_state().on_execute(), SignalNoOp)
 
@@ -47,6 +52,8 @@ class StateOperationProcessingTest(unittest.TestCase):
         ex = OperatorExecutor(pipeline.operator_a)
         ex._OperatorExecutor__initialize()
 
-        ex._OperatorExecutor__current_state = ex._OperatorExecutor__state_operation_running
+        ex._OperatorExecutor__current_state = (
+            ex._OperatorExecutor__state_operation_running
+        )
 
         self.assertIsInstance(ex.get_current_state().on_execute(), SignalError)

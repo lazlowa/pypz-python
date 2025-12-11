@@ -59,7 +59,9 @@ class HealthCheckPluginTest(unittest.TestCase):
             daemon=True,
         )
         executor_thread.start()
-        conn = HTTPConnection("localhost", operator.health_check.get_parameter("port"), timeout=5)
+        conn = HTTPConnection(
+            "localhost", operator.health_check.get_parameter("port"), timeout=5
+        )
 
         # During execution, the server must be responsive
         conn.request("GET", "/check")

@@ -17,7 +17,13 @@ import unittest
 
 from pypz.executors.commons import ExecutionMode
 from pypz.executors.operator.executor import OperatorExecutor
-from pypz.executors.operator.signals import SignalResourcesCreation, SignalNoOp, SignalError, SignalResourcesDeletion
+from pypz.executors.operator.signals import (
+    SignalError,
+    SignalNoOp,
+    SignalResourcesCreation,
+    SignalResourcesDeletion,
+)
+
 from core.test.operator_executor_tests.resources import TestPipeline
 
 
@@ -30,11 +36,15 @@ class StateServiceStartTest(unittest.TestCase):
 
         ex._OperatorExecutor__current_state = ex._OperatorExecutor__state_service_start
 
-        self.assertIsInstance(ex.get_current_state().on_execute(), SignalResourcesCreation)
+        self.assertIsInstance(
+            ex.get_current_state().on_execute(), SignalResourcesCreation
+        )
 
     def test_state_execution_results_with_unfinished_plugin(self):
         pipeline = TestPipeline("pipeline")
-        pipeline.operator_a.service_plugin.set_parameter("return__on_service_start", False)
+        pipeline.operator_a.service_plugin.set_parameter(
+            "return__on_service_start", False
+        )
         ex = OperatorExecutor(pipeline.operator_a)
         ex._OperatorExecutor__initialize()
 
@@ -44,7 +54,9 @@ class StateServiceStartTest(unittest.TestCase):
 
     def test_state_execution_results_with_error_raised_from_plugin(self):
         pipeline = TestPipeline("pipeline")
-        pipeline.operator_a.service_plugin.set_parameter("raise__on_service_start", "Test Error")
+        pipeline.operator_a.service_plugin.set_parameter(
+            "raise__on_service_start", "Test Error"
+        )
         ex = OperatorExecutor(pipeline.operator_a)
         ex._OperatorExecutor__initialize()
 
@@ -59,4 +71,6 @@ class StateServiceStartTest(unittest.TestCase):
 
         ex._OperatorExecutor__current_state = ex._OperatorExecutor__state_service_start
 
-        self.assertIsInstance(ex.get_current_state().on_execute(), SignalResourcesDeletion)
+        self.assertIsInstance(
+            ex.get_current_state().on_execute(), SignalResourcesDeletion
+        )

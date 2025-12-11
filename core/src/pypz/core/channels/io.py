@@ -14,9 +14,9 @@
 # limitations under the License.
 # =============================================================================
 import concurrent.futures
-from typing import Any, TYPE_CHECKING, Optional
-from abc import abstractmethod
 import threading
+from abc import abstractmethod
+from typing import TYPE_CHECKING, Any, Optional
 
 from pypz.core.channels.base import ChannelBase, ChannelMetric
 from pypz.core.channels.status import ChannelStatus
@@ -52,10 +52,13 @@ class ChannelReader(ChannelBase):
 
     # ======================= Ctor =======================
 
-    def __init__(self, channel_name: str,
-                 context: 'InputPortPlugin',
-                 executor: Optional[concurrent.futures.ThreadPoolExecutor] = None,
-                 **kwargs):
+    def __init__(
+        self,
+        channel_name: str,
+        context: "InputPortPlugin",
+        executor: Optional[concurrent.futures.ThreadPoolExecutor] = None,
+        **kwargs,
+    ):
         super().__init__(channel_name, context, executor, **kwargs)
 
         self._read_record_count: int = 0
@@ -83,7 +86,7 @@ class ChannelReader(ChannelBase):
         if the new offset equals the last committed.
         """
 
-        self._metrics_buffer: list[ChannelMetric] = list()
+        self._metrics_buffer: list[ChannelMetric] = []
         """
         This list holds metric elements, however the only purpose is to be aware of the first
         element to discard like in a circular buffer
@@ -208,17 +211,23 @@ class ChannelReader(ChannelBase):
         if self._metrics_enabled:
             with self._status_sender_lock:
                 if 0 < self._current_read_timestamp:
-                    new_metric = ChannelMetric(current_time_millis() - self._current_read_timestamp,
-                                               self._current_read_record_count)
+                    new_metric = ChannelMetric(
+                        current_time_millis() - self._current_read_timestamp,
+                        self._current_read_record_count,
+                    )
 
-                    self._aggregated_time_between_reads += new_metric.elapsedTimeSinceLastIO
+                    self._aggregated_time_between_reads += (
+                        new_metric.elapsedTimeSinceLastIO
+                    )
                     self._aggregated_record_count += new_metric.recordCountInLastIO
 
                     self._metrics_buffer.append(new_metric)
 
                     if ChannelReader.MetricsBufferLength == len(self._metrics_buffer):
                         old_metric = self._metrics_buffer.pop(0)
-                        self._aggregated_time_between_reads -= old_metric.elapsedTimeSinceLastIO
+                        self._aggregated_time_between_reads -= (
+                            old_metric.elapsedTimeSinceLastIO
+                        )
                         self._aggregated_record_count -= old_metric.recordCountInLastIO
 
                 self._current_read_timestamp = current_time_millis()
@@ -229,17 +238,31 @@ class ChannelReader(ChannelBase):
     def on_status_message_send(self) -> None:
         if self._metrics_enabled:
             with self._status_sender_lock:
-                self._health_check_payload["elapsedTimeSinceLastReadCycleMs"] = 0 if \
-                    0 == self._current_read_timestamp else current_time_millis() - self._current_read_timestamp
-                self._health_check_payload["averageTimePerReadCycleMs"] = 0 if 0 == len(self._metrics_buffer) else \
-                    self._aggregated_time_between_reads / len(self._metrics_buffer)
-                self._health_check_payload["averageTimePerReadRecordMs"] = 0 \
-                    if 0 == self._aggregated_record_count else \
-                    self._aggregated_time_between_reads / self._aggregated_record_count
-                self._health_check_payload["averageRecordPerReadCycle"] = 0 if 0 == len(self._metrics_buffer) else \
-                    self._aggregated_record_count / len(self._metrics_buffer)
+                self._health_check_payload["elapsedTimeSinceLastReadCycleMs"] = (
+                    0
+                    if 0 == self._current_read_timestamp
+                    else current_time_millis() - self._current_read_timestamp
+                )
+                self._health_check_payload["averageTimePerReadCycleMs"] = (
+                    0
+                    if 0 == len(self._metrics_buffer)
+                    else self._aggregated_time_between_reads / len(self._metrics_buffer)
+                )
+                self._health_check_payload["averageTimePerReadRecordMs"] = (
+                    0
+                    if 0 == self._aggregated_record_count
+                    else self._aggregated_time_between_reads
+                    / self._aggregated_record_count
+                )
+                self._health_check_payload["averageRecordPerReadCycle"] = (
+                    0
+                    if 0 == len(self._metrics_buffer)
+                    else self._aggregated_record_count / len(self._metrics_buffer)
+                )
 
-    def invoke_commit_offset(self, offset: int, compensate_with_initial_offset: bool = True) -> None:
+    def invoke_commit_offset(
+        self, offset: int, compensate_with_initial_offset: bool = True
+    ) -> None:
         """
         This method is used to invoke the implementation of the abstract method. This is necessary to perform some
         additional actions like compensating the calculated offset with the initial to make sure that the proper
@@ -257,8 +280,10 @@ class ChannelReader(ChannelBase):
             offset_to_commit += self._initial_input_record_offset
 
             if offset_to_commit > self._read_record_offset:
-                raise ValueError(f"Offset is out of range: {offset_to_commit}; "
-                                 f"Current read offset? {self._read_record_offset}")
+                raise ValueError(
+                    f"Offset is out of range: {offset_to_commit}; "
+                    f"Current read offset? {self._read_record_offset}"
+                )
 
         # TODO - shall it be rather 'offset_to_commit > self._last_offset_committed' ?
         if offset_to_commit != self._last_offset_committed:
@@ -267,9 +292,11 @@ class ChannelReader(ChannelBase):
             self._last_offset_committed = offset_to_commit
 
         if offset_to_commit < self._last_offset_committed:
-            self._logger.warning(f"!WARNING! Offset to commit ({offset_to_commit}) "
-                                 f"is lower than the last committed offset ({self._last_offset_committed}). "
-                                 f"Commit ignored.")
+            self._logger.warning(
+                f"!WARNING! Offset to commit ({offset_to_commit}) "
+                f"is lower than the last committed offset ({self._last_offset_committed}). "
+                f"Commit ignored."
+            )
 
     def invoke_commit_current_read_offset(self) -> None:
         """
@@ -298,10 +325,13 @@ class ChannelWriter(ChannelBase):
 
     # ======================= Ctor =======================
 
-    def __init__(self, channel_name: str,
-                 context: 'OutputPortPlugin',
-                 executor: Optional[concurrent.futures.ThreadPoolExecutor] = None,
-                 **kwargs):
+    def __init__(
+        self,
+        channel_name: str,
+        context: "OutputPortPlugin",
+        executor: Optional[concurrent.futures.ThreadPoolExecutor] = None,
+        **kwargs,
+    ):
         super().__init__(channel_name, context, executor, **kwargs)
 
         self._written_record_count: int = 0
@@ -309,7 +339,7 @@ class ChannelWriter(ChannelBase):
         Number of outputted records.
         """
 
-        self._metrics_buffer: list[ChannelMetric] = list()
+        self._metrics_buffer: list[ChannelMetric] = []
         """
         This list holds metric elements, however the only purpose is to be aware of the first
         element to discard like in a circular buffer
@@ -370,8 +400,9 @@ class ChannelWriter(ChannelBase):
         """
 
         for status_monitor in list(self._status_map.values()):
-            if status_monitor.is_channel_healthy() and \
-                    (ChannelStatus.Acknowledged not in status_monitor.status_update_map):
+            if status_monitor.is_channel_healthy() and (
+                ChannelStatus.Acknowledged not in status_monitor.status_update_map
+            ):
                 return False
         return True
 
@@ -399,17 +430,23 @@ class ChannelWriter(ChannelBase):
         if self._metrics_enabled:
             with self._status_sender_lock:
                 if 0 < self._current_output_timestamp:
-                    new_metric = ChannelMetric(current_time_millis() - self._current_output_timestamp,
-                                               self._current_output_record_count)
+                    new_metric = ChannelMetric(
+                        current_time_millis() - self._current_output_timestamp,
+                        self._current_output_record_count,
+                    )
 
-                    self._aggregated_time_between_outputs += new_metric.elapsedTimeSinceLastIO
+                    self._aggregated_time_between_outputs += (
+                        new_metric.elapsedTimeSinceLastIO
+                    )
                     self._aggregated_record_count += new_metric.recordCountInLastIO
 
                     self._metrics_buffer.append(new_metric)
 
                     if ChannelWriter.MetricsBufferLength == len(self._metrics_buffer):
                         old_metric = self._metrics_buffer.pop(0)
-                        self._aggregated_time_between_outputs -= old_metric.elapsedTimeSinceLastIO
+                        self._aggregated_time_between_outputs -= (
+                            old_metric.elapsedTimeSinceLastIO
+                        )
                         self._aggregated_record_count -= old_metric.recordCountInLastIO
 
                 self._current_output_timestamp = current_time_millis()
@@ -418,12 +455,25 @@ class ChannelWriter(ChannelBase):
     def on_status_message_send(self):
         if self._metrics_enabled:
             with self._status_sender_lock:
-                self._health_check_payload["elapsedTimeSinceLastOutputCycleMs"] = 0 \
-                    if 0 == self._current_output_timestamp else current_time_millis() - self._current_output_timestamp
-                self._health_check_payload["averageTimePerOutputCycleMs"] = 0 if 0 == len(self._metrics_buffer) else \
-                    self._aggregated_time_between_outputs / len(self._metrics_buffer)
-                self._health_check_payload["averageTimePerOutputRecordMs"] = 0 \
-                    if 0 == self._aggregated_record_count else \
-                    self._aggregated_time_between_outputs / self._aggregated_record_count
-                self._health_check_payload["averageRecordPerOutputCycle"] = 0 if 0 == len(self._metrics_buffer) else \
-                    self._aggregated_record_count / len(self._metrics_buffer)
+                self._health_check_payload["elapsedTimeSinceLastOutputCycleMs"] = (
+                    0
+                    if 0 == self._current_output_timestamp
+                    else current_time_millis() - self._current_output_timestamp
+                )
+                self._health_check_payload["averageTimePerOutputCycleMs"] = (
+                    0
+                    if 0 == len(self._metrics_buffer)
+                    else self._aggregated_time_between_outputs
+                    / len(self._metrics_buffer)
+                )
+                self._health_check_payload["averageTimePerOutputRecordMs"] = (
+                    0
+                    if 0 == self._aggregated_record_count
+                    else self._aggregated_time_between_outputs
+                    / self._aggregated_record_count
+                )
+                self._health_check_payload["averageRecordPerOutputCycle"] = (
+                    0
+                    if 0 == len(self._metrics_buffer)
+                    else self._aggregated_record_count / len(self._metrics_buffer)
+                )

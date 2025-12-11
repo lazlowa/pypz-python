@@ -18,16 +18,25 @@ import re
 import sys
 import types
 import typing
-from abc import ABCMeta, ABC, abstractmethod
-from typing import Type, Any, TypeVar, Generic, Optional
+from abc import ABC, ABCMeta, abstractmethod
+from typing import Any, Generic, Optional, Type, TypeVar
 
 import yaml
-
-from pypz.core.commons.utils import TemplateResolver, is_type_allowed, convert_to_dict
-from pypz.core.commons.parameters import retrieve_parameters, ExpectedParameter, allowed_param_types
+from pypz.core.commons.parameters import (
+    ExpectedParameter,
+    allowed_param_types,
+    retrieve_parameters,
+)
+from pypz.core.commons.utils import TemplateResolver, convert_to_dict, is_type_allowed
 from pypz.core.specs.dtos import InstanceDTO, SpecDTO
-from pypz.core.specs.utils import InstanceParameters, AccessWrapper, load_class_by_name, remove_super_classes, \
-    IncludedCascadingParameterPrefix, ExcludedCascadingParameterPrefix
+from pypz.core.specs.utils import (
+    AccessWrapper,
+    ExcludedCascadingParameterPrefix,
+    IncludedCascadingParameterPrefix,
+    InstanceParameters,
+    load_class_by_name,
+    remove_super_classes,
+)
 
 
 class RegisteredInterface:
@@ -36,6 +45,7 @@ class RegisteredInterface:
     It is necessary to separate the implemented and multiple inherited classes from the
     actual plugin interfaces.
     """
+
     pass
 
 
@@ -54,14 +64,16 @@ class InterceptedInstance:
     performed with already available name and context.
     """
 
-    def __init__(self, instance_name: str, context_class: Type['Instance'], *args, **kwargs):
+    def __init__(
+        self, instance_name: str, context_class: Type["Instance"], *args, **kwargs
+    ):
         self.instance_name = instance_name
         self.context_class = context_class
         self.args: tuple = args
         self.kwargs: dict = kwargs
 
 
-InterceptedInstanceType = TypeVar('InterceptedInstanceType')
+InterceptedInstanceType = TypeVar("InterceptedInstanceType")
 """
 This type definition is necessary to allow proper typehints
 of the objects created by the Instance class with the custom
@@ -77,7 +89,9 @@ class InstanceInitInterceptor(ABCMeta):
     """
 
     @typing.no_type_check
-    def __call__(cls: Type[InterceptedInstanceType], name: str = None, *args, **kwargs) -> InterceptedInstanceType:
+    def __call__(
+        cls: Type[InterceptedInstanceType], name: str = None, *args, **kwargs
+    ) -> InterceptedInstanceType:
         """
         This method is called, if a class object is being created, hence we can intercept
         the __init__ call. The following rules are considered for interception:
@@ -92,24 +106,33 @@ class InstanceInitInterceptor(ABCMeta):
         :return: either InterceptedInstance or normal object
         """
 
-        if ("self" in inspect.currentframe().f_back.f_locals) and \
-                isinstance(inspect.currentframe().f_back.f_locals["self"], Instance) and \
-                ((name is None) or ("context" not in kwargs)):
+        if (
+            ("self" in inspect.currentframe().f_back.f_locals)
+            and isinstance(inspect.currentframe().f_back.f_locals["self"], Instance)
+            and ((name is None) or ("context" not in kwargs))
+        ):
             return type.__call__(InterceptedInstance, name, cls, *args, **kwargs)
 
         if (name is None) or not re.match(r"^[a-zA-Z_]+[a-zA-Z0-9_-]*$", name):
-            raise AttributeError(f"Invalid instance name: {name}; "
-                                 f"Name must match pattern: ^[a-zA-Z0-9_]+[a-zA-Z0-9_-]*$")
+            raise AttributeError(
+                f"Invalid instance name: {name}; "
+                f"Name must match pattern: ^[a-zA-Z0-9_]+[a-zA-Z0-9_-]*$"
+            )
 
         instance = type.__call__(cls, name, *args, **kwargs)
         instance.__on_init_finished__(*args, **kwargs)
         return instance
 
 
-NestedInstanceType = TypeVar('NestedInstanceType', bound='Instance')
+NestedInstanceType = TypeVar("NestedInstanceType", bound="Instance")
 
 
-class Instance(Generic[NestedInstanceType], RegisteredInterface, ABC, metaclass=InstanceInitInterceptor):
+class Instance(
+    Generic[NestedInstanceType],
+    RegisteredInterface,
+    ABC,
+    metaclass=InstanceInitInterceptor,
+):
     """
     This class represents the instance specs that serves as base for
     all the other models. It abstracts all common features and functionalities
@@ -122,9 +145,13 @@ class Instance(Generic[NestedInstanceType], RegisteredInterface, ABC, metaclass=
 
     # ========= ctor ==========
 
-    def __init__(self, name: str = None,
-                 nested_instance_type: Type[NestedInstanceType] = None,
-                 *args, **kwargs):
+    def __init__(
+        self,
+        name: str = None,
+        nested_instance_type: Type[NestedInstanceType] = None,
+        *args,
+        **kwargs,
+    ):
 
         # Sanity checks
         # =============
@@ -132,14 +159,20 @@ class Instance(Generic[NestedInstanceType], RegisteredInterface, ABC, metaclass=
         if name is not None and not isinstance(name, str):
             raise TypeError(f"Invalid instance name: {name} {type(name)}")
 
-        if nested_instance_type is not None and not issubclass(nested_instance_type, Instance):
-            raise TypeError(f"Invalid nested instance type: {nested_instance_type}. "
-                            f"Must be an extension of {Instance}")
+        if nested_instance_type is not None and not issubclass(
+            nested_instance_type, Instance
+        ):
+            raise TypeError(
+                f"Invalid nested instance type: {nested_instance_type}. "
+                f"Must be an extension of {Instance}"
+            )
 
         # Member declarations
         # ===================
 
-        self.__nested_instance_type: Optional[Type[NestedInstanceType]] = nested_instance_type
+        self.__nested_instance_type: Optional[Type[NestedInstanceType]] = (
+            nested_instance_type
+        )
         """
         Stores the specified type of the nested instances. This is required to
         be able to discover those instances
@@ -157,7 +190,7 @@ class Instance(Generic[NestedInstanceType], RegisteredInterface, ABC, metaclass=
         in the override implementation of __setattr__.
         """
 
-        self.__nested_instances: dict[str, NestedInstanceType] = dict()
+        self.__nested_instances: dict[str, NestedInstanceType] = {}
         """
         This dictionary holds all the instances that are nested in the context
         of this instance object
@@ -170,8 +203,11 @@ class Instance(Generic[NestedInstanceType], RegisteredInterface, ABC, metaclass=
         the parent context will use the name of the variable.
         """
 
-        self.__full_name: str = self.__simple_name \
-            if self.__context is None else self.__context.get_full_name() + "." + self.__simple_name
+        self.__full_name: str = (
+            self.__simple_name
+            if self.__context is None
+            else self.__context.get_full_name() + "." + self.__simple_name
+        )
         """
         Full name of the instance which uniquely identifies it up to its topmost context.
         For example, if an instance A has a parent context B, which has a parent context C,
@@ -179,35 +215,48 @@ class Instance(Generic[NestedInstanceType], RegisteredInterface, ABC, metaclass=
         stored after the first calculation to avoid recalculation every time.
         """
 
-        self.__spec_name: str = ":".join([self.__class__.__module__, self.__class__.__qualname__])
+        self.__spec_name: str = ":".join(
+            [self.__class__.__module__, self.__class__.__qualname__]
+        )
         """
         The name of the spec constructed of module and qualified class name. Notice that we separate
         the module name and the class name so that we can identify them at loading by name.
         """
 
-        self.__spec_classes: set = set([
-            spec_class for spec_class in self.__class__.__mro__
-            if issubclass(spec_class, Instance) and (RegisteredInterface in spec_class.__bases__)
-        ])
+        self.__spec_classes: set = set(
+            [
+                spec_class
+                for spec_class in self.__class__.__mro__
+                if issubclass(spec_class, Instance)
+                and (RegisteredInterface in spec_class.__bases__)
+            ]
+        )
         """
         Set of specs classes that are in the class hierarchy i.e., which specs classes are
         contributing to the implementation of this class
         """
 
-        self.__expected_parameters: dict[str, ExpectedParameter] = retrieve_parameters(self, ExpectedParameter)
+        self.__expected_parameters: dict[str, ExpectedParameter] = retrieve_parameters(
+            self, ExpectedParameter
+        )
         """
         Map of expected parameters defined as descriptor of the class. Key is the name of the parameter,
         value is the parameter descriptor. Used to check, if an expected (described) parameter value
         shall be set upon instance parameter setting.
         """
 
-        self.__parameters: InstanceParameters = self.__reference.__parameters \
-            if self.__reference is not None else InstanceParameters()
+        self.__parameters: InstanceParameters = (
+            self.__reference.__parameters
+            if self.__reference is not None
+            else InstanceParameters()
+        )
         """
         The interpreted instance parameters i.e., cascading and templates are interpreted
         """
 
-        self.__depends_on: set = self.__reference.__depends_on if self.__reference is not None else set()
+        self.__depends_on: set = (
+            self.__reference.__depends_on if self.__reference is not None else set()
+        )
         """
         Set of other instances that is this instance depending on. Note however that
         the type of the dependencies are checked dynamically in runtime, since dependencies
@@ -218,8 +267,10 @@ class Instance(Generic[NestedInstanceType], RegisteredInterface, ABC, metaclass=
         the set_parameter() method, we need to make sure that the corresponding parameter object
         is updated as well. """
         for param in self.__expected_parameters.values():
-            self.__parameters.on_parameter_update(param.name,
-                                                  lambda value, p=param, instance=self: p.__set__(instance, value))
+            self.__parameters.on_parameter_update(
+                param.name,
+                lambda value, p=param, instance=self: p.__set__(instance, value),
+            )
 
         """ It is clear that in python anything can be accessed, however methods and attributes that
             should not be used are hidden (at least from autocompletion) from the user, still with
@@ -278,24 +329,26 @@ class Instance(Generic[NestedInstanceType], RegisteredInterface, ABC, metaclass=
         resolved_value = TemplateResolver("${", "}").resolve(value)
 
         if not is_type_allowed(resolved_value, allowed_param_types):
-            raise TypeError(f"Invalid parameter value type for '{name}': {type(resolved_value)}. "
-                            f"Allowed types: {allowed_param_types}")
+            raise TypeError(
+                f"Invalid parameter value type for '{name}': {type(resolved_value)}. "
+                f"Allowed types: {allowed_param_types}"
+            )
 
         if name.startswith(ExcludedCascadingParameterPrefix):
-            """ Cascade the parameter further. Notice that the first leading
-                cascaded specifier has been removed in the parameter name
-                Notice that we copy the instances into a list, since there can be
-                situations, where the list is modified during iteration via
-                replication (e.g., replicationFactor cascaded from pipeline) """
+            """Cascade the parameter further. Notice that the first leading
+            cascaded specifier has been removed in the parameter name
+            Notice that we copy the instances into a list, since there can be
+            situations, where the list is modified during iteration via
+            replication (e.g., replicationFactor cascaded from pipeline)"""
             for nested_instance in list(self.__nested_instances.values()):
                 nested_instance.set_parameter(name[1:], resolved_value)
         else:
             param_name = name
             if name.startswith(IncludedCascadingParameterPrefix):
-                """ Remove all the cascading specifier from the parameter name """
-                param_name = name \
-                    .replace(IncludedCascadingParameterPrefix, "") \
-                    .replace(ExcludedCascadingParameterPrefix, "")
+                """Remove all the cascading specifier from the parameter name"""
+                param_name = name.replace(IncludedCascadingParameterPrefix, "").replace(
+                    ExcludedCascadingParameterPrefix, ""
+                )
 
                 """ Cascade the parameter further. Notice that the first leading
                     cascaded specifier has been removed in the parameter name """
@@ -331,9 +384,11 @@ class Instance(Generic[NestedInstanceType], RegisteredInterface, ABC, metaclass=
            }
         """
 
-        expected_parameters = dict()
-        [expected_parameters.update(param.to_dict(self))
-         for param in self.__expected_parameters.values()]
+        expected_parameters = {}
+        [
+            expected_parameters.update(param.to_dict(self))
+            for param in self.__expected_parameters.values()
+        ]
 
         return expected_parameters
 
@@ -348,22 +403,28 @@ class Instance(Generic[NestedInstanceType], RegisteredInterface, ABC, metaclass=
                  required parameters, then an empty dict will be returned
         """
 
-        missing_required_parameters = dict()
+        missing_required_parameters = {}
 
         # Calling for nested instances recursively
         for instance in self.__nested_instances.values():
-            missing_required_parameters.update(instance.get_missing_required_parameters())
+            missing_required_parameters.update(
+                instance.get_missing_required_parameters()
+            )
 
         for expected_param in self.__expected_parameters.values():
             if expected_param.required:
-                if (expected_param.name not in self.__parameters) or (self.__parameters[expected_param.name] is None):
+                if (expected_param.name not in self.__parameters) or (
+                    self.__parameters[expected_param.name] is None
+                ):
                     if self.__full_name not in missing_required_parameters:
                         missing_required_parameters[self.__full_name] = set()
-                    missing_required_parameters[self.__full_name].add(expected_param.name)
+                    missing_required_parameters[self.__full_name].add(
+                        expected_param.name
+                    )
 
         return missing_required_parameters
 
-    def depends_on(self, instance: 'Instance') -> None:
+    def depends_on(self, instance: "Instance") -> None:
         """
         Specify dependency instances of the actual instance. The following
         prerequisites shall be considered:
@@ -377,22 +438,33 @@ class Instance(Generic[NestedInstanceType], RegisteredInterface, ABC, metaclass=
         """
 
         if not isinstance(instance, Instance):
-            raise TypeError(f"[{self.__full_name}] Invalid dependency type: {type(instance)}")
+            raise TypeError(
+                f"[{self.__full_name}] Invalid dependency type: {type(instance)}"
+            )
 
         # Instance cannot depend on self
         if self is instance:
-            raise AttributeError(f"[{self.__full_name}] Invalid dependency. Instance cannot depend on itself. ")
+            raise AttributeError(
+                f"[{self.__full_name}] Invalid dependency. Instance cannot depend on itself. "
+            )
 
         # Makes no sense to express dependency between instances in different context
-        if (self.__context is None) or (instance.__context is None) or \
-                (self.__context is not instance.__context):
-            raise AttributeError(f"[{self.__full_name}] Invalid dependency. "
-                                 f"Dependencies must have identical parent context.")
+        if (
+            (self.__context is None)
+            or (instance.__context is None)
+            or (self.__context is not instance.__context)
+        ):
+            raise AttributeError(
+                f"[{self.__full_name}] Invalid dependency. "
+                f"Dependencies must have identical parent context."
+            )
 
         # Check circular dependency
         if self in instance.__depends_on:
-            raise RecursionError(f"Circular dependency between detected: "
-                                 f"{self.__full_name} <-> {instance.__full_name} ")
+            raise RecursionError(
+                f"Circular dependency between detected: "
+                f"{self.__full_name} <-> {instance.__full_name} "
+            )
 
         self.__depends_on.add(instance)
 
@@ -405,20 +477,30 @@ class Instance(Generic[NestedInstanceType], RegisteredInterface, ABC, metaclass=
 
         """ This is necessary to avoid the serialization of the extended dict's state and
             to prevent issues, if the parameters on the DTO are altered """
-        raw_parameters = dict()
+        raw_parameters = {}
         raw_parameters.update(self.__parameters)
 
-        return InstanceDTO(name=self.__simple_name,
-                           parameters=raw_parameters,
-                           dependsOn=[instance.get_simple_name() for instance in self.__depends_on],
-                           spec=SpecDTO(name=self.__spec_name,
-                                        types=[str(spec_class) for spec_class in
-                                               remove_super_classes(self.__spec_classes)],
-                                        nestedInstanceType=None if self.__nested_instance_type is None
-                                        else str(self.__nested_instance_type),
-                                        expectedParameters=self.get_expected_parameters(),
-                                        nestedInstances=[instance.get_dto() for instance in
-                                                         self.__nested_instances.values()]))
+        return InstanceDTO(
+            name=self.__simple_name,
+            parameters=raw_parameters,
+            dependsOn=[instance.get_simple_name() for instance in self.__depends_on],
+            spec=SpecDTO(
+                name=self.__spec_name,
+                types=[
+                    str(spec_class)
+                    for spec_class in remove_super_classes(self.__spec_classes)
+                ],
+                nestedInstanceType=(
+                    None
+                    if self.__nested_instance_type is None
+                    else str(self.__nested_instance_type)
+                ),
+                expectedParameters=self.get_expected_parameters(),
+                nestedInstances=[
+                    instance.get_dto() for instance in self.__nested_instances.values()
+                ],
+            ),
+        )
 
     def update(self, source: InstanceDTO | dict | str) -> None:
         """
@@ -438,40 +520,58 @@ class Instance(Generic[NestedInstanceType], RegisteredInterface, ABC, metaclass=
         else:
             raise TypeError(f"Invalid update source type: {type(source)}")
 
-        if (instance_dto.name is not None) and (instance_dto.name != self.__simple_name):
-            raise ValueError(f"Mismatching instance name provided ({instance_dto.name}) and actual "
-                             f"({self.__simple_name}) instance name. ")
+        if (instance_dto.name is not None) and (
+            instance_dto.name != self.__simple_name
+        ):
+            raise ValueError(
+                f"Mismatching instance name provided ({instance_dto.name}) and actual "
+                f"({self.__simple_name}) instance name. "
+            )
 
         if instance_dto.parameters is not None:
-            """ Note that at this point all the nested instances had to be created, hence we update
-                the parameters of this instance before the nested instances' so the concept of
-                proximity based precedence of parameter setting is honored. """
+            """Note that at this point all the nested instances had to be created, hence we update
+            the parameters of this instance before the nested instances' so the concept of
+            proximity based precedence of parameter setting is honored."""
             self.set_parameters(instance_dto.parameters)
 
         if instance_dto.spec is not None:
-            if (instance_dto.spec.name is not None) and (instance_dto.spec.name != self.__spec_name):
-                raise AttributeError(f"[{self.__full_name}] Mismatching specs name. Loaded: {self.__spec_name}; "
-                                     f"Provided: {instance_dto.spec.name}")
+            if (instance_dto.spec.name is not None) and (
+                instance_dto.spec.name != self.__spec_name
+            ):
+                raise AttributeError(
+                    f"[{self.__full_name}] Mismatching specs name. Loaded: {self.__spec_name}; "
+                    f"Provided: {instance_dto.spec.name}"
+                )
 
-            if (instance_dto.spec.nestedInstances is not None) and (0 < len(instance_dto.spec.nestedInstances)):
+            if (instance_dto.spec.nestedInstances is not None) and (
+                0 < len(instance_dto.spec.nestedInstances)
+            ):
                 if self.__nested_instance_type is None:
-                    raise AttributeError(f"[{self.get_full_name()}] No nested instance is expected for {type(self)}")
+                    raise AttributeError(
+                        f"[{self.get_full_name()}] No nested instance is expected for {type(self)}"
+                    )
 
                 for nested_instance_dto in instance_dto.spec.nestedInstances:
                     if nested_instance_dto.name is None:
                         raise ValueError("Missing instance name")
 
                     if nested_instance_dto.name not in self.__nested_instances:
-                        raise AttributeError(f"[{self.get_full_name()}] Instance not found with name: "
-                                             f"{nested_instance_dto.name}")
+                        raise AttributeError(
+                            f"[{self.get_full_name()}] Instance not found with name: "
+                            f"{nested_instance_dto.name}"
+                        )
 
-                    self.__nested_instances[nested_instance_dto.name].update(nested_instance_dto)
+                    self.__nested_instances[nested_instance_dto.name].update(
+                        nested_instance_dto
+                    )
 
         if instance_dto.dependsOn is not None:
             for instance_name in instance_dto.dependsOn:
                 if instance_name not in self.__context.__nested_instances:
-                    raise AttributeError(f"[{self.__full_name}] Instance not found in context "
-                                         f"'{self.__context.__full_name}': {instance_name}")
+                    raise AttributeError(
+                        f"[{self.__full_name}] Instance not found in context "
+                        f"'{self.__context.__full_name}': {instance_name}"
+                    )
 
                 self.depends_on(self.__context.__nested_instances[instance_name])
 
@@ -488,14 +588,22 @@ class Instance(Generic[NestedInstanceType], RegisteredInterface, ABC, metaclass=
         if instance_dto is not None:
             # Creating not existing nested instances
             if instance_dto.spec is not None:
-                if (instance_dto.spec.name is not None) and (instance_dto.spec.name != self.__spec_name):
-                    raise AttributeError(f"[{self.__full_name}] Mismatching specs name: {self.__spec_name}; "
-                                         f"Expected: {instance_dto.spec.name}")
+                if (instance_dto.spec.name is not None) and (
+                    instance_dto.spec.name != self.__spec_name
+                ):
+                    raise AttributeError(
+                        f"[{self.__full_name}] Mismatching specs name: {self.__spec_name}; "
+                        f"Expected: {instance_dto.spec.name}"
+                    )
 
-                if (instance_dto.spec.nestedInstances is not None) and (0 < len(instance_dto.spec.nestedInstances)):
+                if (instance_dto.spec.nestedInstances is not None) and (
+                    0 < len(instance_dto.spec.nestedInstances)
+                ):
                     if self.__nested_instance_type is None:
-                        raise AttributeError(f"[{self.__full_name}] "
-                                             f"No nested instance is expected for {type(self)}")
+                        raise AttributeError(
+                            f"[{self.__full_name}] "
+                            f"No nested instance is expected for {type(self)}"
+                        )
 
                     for nested_instance_dto in instance_dto.spec.nestedInstances:
                         if nested_instance_dto.name is None:
@@ -506,17 +614,34 @@ class Instance(Generic[NestedInstanceType], RegisteredInterface, ABC, metaclass=
                         # an already existing instance refers to a not yet existing
                         # then error will arise.
                         if nested_instance_dto.name not in self.__nested_instances:
-                            nested_instance_reference = self.__reference.__nested_instances[nested_instance_dto.name] \
-                                if self.__reference is not None else None
-                            new_nested_instance = self.__nested_instance_type.create_from_dto(
-                                nested_instance_dto, context=self, reference=nested_instance_reference,
-                                mock_nonexistent=True, disable_auto_update=True)
+                            nested_instance_reference = (
+                                self.__reference.__nested_instances[
+                                    nested_instance_dto.name
+                                ]
+                                if self.__reference is not None
+                                else None
+                            )
+                            new_nested_instance = (
+                                self.__nested_instance_type.create_from_dto(
+                                    nested_instance_dto,
+                                    context=self,
+                                    reference=nested_instance_reference,
+                                    mock_nonexistent=True,
+                                    disable_auto_update=True,
+                                )
+                            )
 
-                            if not isinstance(new_nested_instance, self.__nested_instance_type):
-                                raise AttributeError(f"[{new_nested_instance.get_full_name()}] "
-                                                     f"Mismatching nested instance type. Expected: "
-                                                     f"{self.__nested_instance_type}")
-                            self.__setattr__(new_nested_instance.__simple_name, new_nested_instance)
+                            if not isinstance(
+                                new_nested_instance, self.__nested_instance_type
+                            ):
+                                raise AttributeError(
+                                    f"[{new_nested_instance.get_full_name()}] "
+                                    f"Mismatching nested instance type. Expected: "
+                                    f"{self.__nested_instance_type}"
+                                )
+                            self.__setattr__(
+                                new_nested_instance.__simple_name, new_nested_instance
+                            )
 
     # ========= internal methods ==========
 
@@ -533,29 +658,47 @@ class Instance(Generic[NestedInstanceType], RegisteredInterface, ABC, metaclass=
         """
 
         if isinstance(value, InterceptedInstance):
-            final_instance_name = value.instance_name if value.instance_name is not None else name
-            nested_instance_reference = self.__reference.__nested_instances[final_instance_name] \
-                if self.__reference is not None else None
-            if (self.__nested_instance_type is not None) and \
-                    (issubclass(value.context_class, self.__nested_instance_type)):
-                instance: Instance[Any] = value.context_class(final_instance_name, context=self,
-                                                              reference=nested_instance_reference,
-                                                              *value.args, **value.kwargs)
+            final_instance_name = (
+                value.instance_name if value.instance_name is not None else name
+            )
+            nested_instance_reference = (
+                self.__reference.__nested_instances[final_instance_name]
+                if self.__reference is not None
+                else None
+            )
+            if (self.__nested_instance_type is not None) and (
+                issubclass(value.context_class, self.__nested_instance_type)
+            ):
+                instance: Instance[Any] = value.context_class(
+                    final_instance_name,
+                    context=self,
+                    reference=nested_instance_reference,
+                    *value.args,
+                    **value.kwargs,
+                )
             else:
-                instance: Instance[Any] = value.context_class(final_instance_name, context=None,
-                                                              reference=nested_instance_reference,
-                                                              *value.args, **value.kwargs)
+                instance: Instance[Any] = value.context_class(
+                    final_instance_name,
+                    context=None,
+                    reference=nested_instance_reference,
+                    *value.args,
+                    **value.kwargs,
+                )
         else:
             instance: Instance[Any] = value
 
         object.__setattr__(self, name, instance)
 
-        if hasattr(self, f"_{Instance.__name__}__nested_instance_type") and \
-                (self.__nested_instance_type is not None) and \
-                isinstance(instance, self.__nested_instance_type) and \
-                (instance is not self.__context):
+        if (
+            hasattr(self, f"_{Instance.__name__}__nested_instance_type")
+            and (self.__nested_instance_type is not None)
+            and isinstance(instance, self.__nested_instance_type)
+            and (instance is not self.__context)
+        ):
             if instance.get_simple_name() in self.__nested_instances:
-                raise AttributeError(f"Instance with name already declared: {instance.get_simple_name()}")
+                raise AttributeError(
+                    f"Instance with name already declared: {instance.get_simple_name()}"
+                )
 
             self.__nested_instances[instance.get_simple_name()] = instance
 
@@ -563,13 +706,15 @@ class Instance(Generic[NestedInstanceType], RegisteredInterface, ABC, metaclass=
         if self is other:
             return True
 
-        return isinstance(other, type(self)) and \
-            (self.__simple_name == other.__simple_name) and \
-            (self.__parameters == other.__parameters) and \
-            (self.__depends_on == other.__depends_on) and \
-            (self.__nested_instances == other.__nested_instances) and \
-            (self.__expected_parameters == other.__expected_parameters) and \
-            (self.__spec_name == other.__spec_name)
+        return (
+            isinstance(other, type(self))
+            and (self.__simple_name == other.__simple_name)
+            and (self.__parameters == other.__parameters)
+            and (self.__depends_on == other.__depends_on)
+            and (self.__nested_instances == other.__nested_instances)
+            and (self.__expected_parameters == other.__expected_parameters)
+            and (self.__spec_name == other.__spec_name)
+        )
 
     def __str__(self):
         return yaml.safe_dump(convert_to_dict(self.get_dto()), default_flow_style=False)
@@ -583,7 +728,7 @@ class Instance(Generic[NestedInstanceType], RegisteredInterface, ABC, metaclass=
     # ================= static methods =====================
 
     @staticmethod
-    def create_from_dto(instance_dto: InstanceDTO, *args, **kwargs) -> 'Instance':
+    def create_from_dto(instance_dto: InstanceDTO, *args, **kwargs) -> "Instance":
         """
         Creates an instance object from the DTO representation. It is capable
         to retrieve and load specified classes and to update created instances
@@ -603,24 +748,31 @@ class Instance(Generic[NestedInstanceType], RegisteredInterface, ABC, metaclass=
             raise AttributeError("Invalid or missing 'specs' definition")
 
         if 0 > instance_dto.spec.name.find(":"):
-            raise ValueError(f"Class loading error. Invalid class specifier: {instance_dto.spec.name}; "
-                             f"Class specifier must be composed of [PACKAGE_NAME.]MODULE_NAME:CLASS_NAME[.CLASS_NAME+]")
+            raise ValueError(
+                f"Class loading error. Invalid class specifier: {instance_dto.spec.name}; "
+                f"Class specifier must be composed of [PACKAGE_NAME.]MODULE_NAME:CLASS_NAME[.CLASS_NAME+]"
+            )
 
         if instance_dto.spec.location is not None:
             # TODO - remote retrieval shall be implemented here
             raise NotImplementedError("Location based retrieval not yet implemented")
 
-        mock_nonexistent = ("mock_nonexistent" in kwargs) and (kwargs["mock_nonexistent"])
+        mock_nonexistent = ("mock_nonexistent" in kwargs) and (
+            kwargs["mock_nonexistent"]
+        )
 
         try:
-            instance: Instance = \
-                load_class_by_name(instance_dto.spec.name.replace(":", "."))(instance_dto.name,
-                                                                             from_dto=instance_dto,
-                                                                             *args, **kwargs)
+            instance: Instance = load_class_by_name(
+                instance_dto.spec.name.replace(":", ".")
+            )(instance_dto.name, from_dto=instance_dto, *args, **kwargs)
         except (ModuleNotFoundError, AttributeError) as e:
             if mock_nonexistent:
-                if (instance_dto.spec.types is None) or (0 == len(instance_dto.spec.types)):
-                    raise AttributeError("Missing type specification: instance.spec.types: List[Str]")
+                if (instance_dto.spec.types is None) or (
+                    0 == len(instance_dto.spec.types)
+                ):
+                    raise AttributeError(
+                        "Missing type specification: instance.spec.types: List[Str]"
+                    )
 
                 base_classes = set()
                 abstract_methods = set()
@@ -629,34 +781,54 @@ class Instance(Generic[NestedInstanceType], RegisteredInterface, ABC, metaclass=
                 for class_name in instance_dto.spec.types:
                     loaded_class = load_class_by_name(class_name)
                     if not issubclass(loaded_class, (Instance, RegisteredInterface)):
-                        raise TypeError(f"Invalid spec type: {loaded_class}. Expected subclass of {Instance}")
+                        raise TypeError(
+                            f"Invalid spec type: {loaded_class}. Expected subclass of {Instance}"
+                        )
                     base_classes.add(loaded_class)
                     abstract_methods.update(loaded_class.__abstractmethods__)
 
-                nested_instance_type = None if instance_dto.spec.nestedInstanceType is None \
+                nested_instance_type = (
+                    None
+                    if instance_dto.spec.nestedInstanceType is None
                     else load_class_by_name(instance_dto.spec.nestedInstanceType)
+                )
 
                 # Creating dummy implementation of abstract methods
-                class_body: dict[str, Any] = {abstract_method: lambda: None for abstract_method in abstract_methods}
+                class_body: dict[str, Any] = {
+                    abstract_method: lambda: None
+                    for abstract_method in abstract_methods
+                }
 
                 module_and_name = instance_dto.spec.name.split(":")
                 class_body["__module__"] = module_and_name[0]
                 class_body["mocked"] = True
 
                 # Create new type with name and bases
-                instance_type = types.new_class(module_and_name[1],
-                                                tuple(remove_super_classes(base_classes)),
-                                                {}, lambda ns: ns.update(class_body))
+                instance_type = types.new_class(
+                    module_and_name[1],
+                    tuple(remove_super_classes(base_classes)),
+                    {},
+                    lambda ns: ns.update(class_body),
+                )
 
                 if "nested_instance_type" in inspect.signature(instance_type.__init__).parameters:  # type: ignore
-                    instance = instance_type(instance_dto.name,
-                                             nested_instance_type=nested_instance_type,
-                                             from_dto=instance_dto, *args, **kwargs)
+                    instance = instance_type(
+                        instance_dto.name,
+                        nested_instance_type=nested_instance_type,
+                        from_dto=instance_dto,
+                        *args,
+                        **kwargs,
+                    )
                 else:
-                    instance = instance_type(instance_dto.name, from_dto=instance_dto, *args, **kwargs)
+                    instance = instance_type(
+                        instance_dto.name, from_dto=instance_dto, *args, **kwargs
+                    )
 
-                print(f"[WARNING] Mock instance created of spec '{instance_dto.spec.name}' for "
-                      f"[{instance.get_full_name()}]. Reason: {e}", file=sys.stderr)
+                print(
+                    f"[WARNING] Mock instance created of spec '{instance_dto.spec.name}' for "
+                    f"[{instance.get_full_name()}]. Reason: {e}",
+                    file=sys.stderr,
+                )
             else:
                 raise
 
@@ -666,7 +838,7 @@ class Instance(Generic[NestedInstanceType], RegisteredInterface, ABC, metaclass=
         return instance
 
     @staticmethod
-    def create_from_string(source, *args, **kwargs) -> 'Instance':
+    def create_from_string(source, *args, **kwargs) -> "Instance":
         """
         Helper method to provide the functionality to create an instance from
         a json model specified either as string or as dict.
@@ -674,7 +846,9 @@ class Instance(Generic[NestedInstanceType], RegisteredInterface, ABC, metaclass=
         :param source: model as string
         :return: instance object specified by the DTO
         """
-        return Instance.create_from_dto(InstanceDTO(**yaml.safe_load(source)), *args, **kwargs)
+        return Instance.create_from_dto(
+            InstanceDTO(**yaml.safe_load(source)), *args, **kwargs
+        )
 
 
 class InstanceGroup(ABC):
@@ -697,7 +871,7 @@ class InstanceGroup(ABC):
         pass
 
     @abstractmethod
-    def get_group_principal(self) -> Optional['Instance']:
+    def get_group_principal(self) -> Optional["Instance"]:
         pass
 
     @abstractmethod

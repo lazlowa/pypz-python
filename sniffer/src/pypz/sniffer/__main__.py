@@ -15,12 +15,15 @@
 # =============================================================================
 import sys
 
-from .viewer import PipelineSnifferViewer
 from pypz.core.specs.pipeline import Pipeline
+
+from .viewer import PipelineSnifferViewer
 
 if __name__ == "__main__":
     if 1 == len(sys.argv):
-        raise AttributeError("You must provide a valid pipeline instance json configuration.")
+        raise AttributeError(
+            "You must provide a valid pipeline instance json configuration."
+        )
 
     pipeline = Pipeline.create_from_string(sys.argv[0])
     pipeline_sniffer_viewer = PipelineSnifferViewer(pipeline)

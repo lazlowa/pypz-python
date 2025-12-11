@@ -15,8 +15,13 @@
 # =============================================================================
 from typing import Any, Optional
 
-from pypz.core.commons.parameters import RequiredParameter, OptionalParameter
-from pypz.core.specs.misc import BlankOutputPortPlugin, BlankOperator, BlankInputPortPlugin, BlankPlugin
+from pypz.core.commons.parameters import OptionalParameter, RequiredParameter
+from pypz.core.specs.misc import (
+    BlankInputPortPlugin,
+    BlankOperator,
+    BlankOutputPortPlugin,
+    BlankPlugin,
+)
 from pypz.core.specs.pipeline import Pipeline
 from pypz.core.specs.plugin import LoggerPlugin
 

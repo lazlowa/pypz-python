@@ -15,11 +15,21 @@
 # =============================================================================
 import unittest
 
-from pypz.sniffer.utils import retrieve_operator_paths, is_sublist, order_operators_by_connections
-from sniffer.test.resources import TestPipelineWithSimpleConnections, TestPipelineWithBranchingConnections, \
-    TestPipelineWithCircularDependentOperators, TestPipelineWithMergingConnections, \
-    TestPipelineWithBranchingAndMergingConnections, TestPipelineWithBranchingAndMergingConnectionsWithMultipleOutputs, \
-    TestPipelineWithBranchingAndMergingConnectionsWithAdditionalOutputs
+from pypz.sniffer.utils import (
+    is_sublist,
+    order_operators_by_connections,
+    retrieve_operator_paths,
+)
+
+from sniffer.test.resources import (
+    TestPipelineWithBranchingAndMergingConnections,
+    TestPipelineWithBranchingAndMergingConnectionsWithAdditionalOutputs,
+    TestPipelineWithBranchingAndMergingConnectionsWithMultipleOutputs,
+    TestPipelineWithBranchingConnections,
+    TestPipelineWithCircularDependentOperators,
+    TestPipelineWithMergingConnections,
+    TestPipelineWithSimpleConnections,
+)
 
 
 class GraphResolutionTest(unittest.TestCase):
@@ -53,7 +63,9 @@ class GraphResolutionTest(unittest.TestCase):
 
         self.assertEqual(1, len(path))
         self.assertEqual(4, len(path[0]))
-        self.assertEqual([pipeline.op_a, pipeline.op_b, pipeline.op_c, pipeline.op_d], path[0])
+        self.assertEqual(
+            [pipeline.op_a, pipeline.op_b, pipeline.op_c, pipeline.op_d], path[0]
+        )
 
         path = retrieve_operator_paths(pipeline.op_b)
 
@@ -141,25 +153,33 @@ class GraphResolutionTest(unittest.TestCase):
 
         self.assertEqual(1, len(path))
         self.assertEqual(4, len(path[0]))
-        self.assertEqual([pipeline.op_a, pipeline.op_b, pipeline.op_c, pipeline.op_d], path[0])
+        self.assertEqual(
+            [pipeline.op_a, pipeline.op_b, pipeline.op_c, pipeline.op_d], path[0]
+        )
 
         path = retrieve_operator_paths(pipeline.op_b)
 
         self.assertEqual(1, len(path))
         self.assertEqual(4, len(path[0]))
-        self.assertEqual([pipeline.op_b, pipeline.op_c, pipeline.op_d, pipeline.op_a], path[0])
+        self.assertEqual(
+            [pipeline.op_b, pipeline.op_c, pipeline.op_d, pipeline.op_a], path[0]
+        )
 
         path = retrieve_operator_paths(pipeline.op_c)
 
         self.assertEqual(1, len(path))
         self.assertEqual(4, len(path[0]))
-        self.assertEqual([pipeline.op_c, pipeline.op_d, pipeline.op_a, pipeline.op_b], path[0])
+        self.assertEqual(
+            [pipeline.op_c, pipeline.op_d, pipeline.op_a, pipeline.op_b], path[0]
+        )
 
         path = retrieve_operator_paths(pipeline.op_d)
 
         self.assertEqual(1, len(path))
         self.assertEqual(4, len(path[0]))
-        self.assertEqual([pipeline.op_d, pipeline.op_a, pipeline.op_b, pipeline.op_c], path[0])
+        self.assertEqual(
+            [pipeline.op_d, pipeline.op_a, pipeline.op_b, pipeline.op_c], path[0]
+        )
 
     def test_order_operators_by_connections_with_normal_pipeline(self):
         pipeline = TestPipelineWithSimpleConnections("pipeline")
@@ -179,7 +199,9 @@ class GraphResolutionTest(unittest.TestCase):
         self.assertEqual(1, len(dependency_levels[3]))
         self.assertIn(pipeline.op_d, dependency_levels[3])
 
-    def test_order_operators_by_connections_pipeline_with_circular_dependent_operators(self):
+    def test_order_operators_by_connections_pipeline_with_circular_dependent_operators(
+        self,
+    ):
         pipeline = TestPipelineWithCircularDependentOperators("pipeline")
 
         dependency_levels = order_operators_by_connections(pipeline)
@@ -260,8 +282,12 @@ class GraphResolutionTest(unittest.TestCase):
         self.assertIn(pipeline.op_g, dependency_levels[4])
         self.assertIn(pipeline.op_h, dependency_levels[4])
 
-    def test_order_operators_by_connections_with_branching_and_merging_pipeline_with_multiple_outputs(self):
-        pipeline = TestPipelineWithBranchingAndMergingConnectionsWithMultipleOutputs("pipeline")
+    def test_order_operators_by_connections_with_branching_and_merging_pipeline_with_multiple_outputs(
+        self,
+    ):
+        pipeline = TestPipelineWithBranchingAndMergingConnectionsWithMultipleOutputs(
+            "pipeline"
+        )
 
         dependency_levels = order_operators_by_connections(pipeline)
 
@@ -285,8 +311,12 @@ class GraphResolutionTest(unittest.TestCase):
         self.assertIn(pipeline.op_g, dependency_levels[4])
         self.assertIn(pipeline.op_h, dependency_levels[4])
 
-    def test_order_operators_by_connections_with_branching_and_merging_pipeline_with_additional_outputs(self):
-        pipeline = TestPipelineWithBranchingAndMergingConnectionsWithAdditionalOutputs("pipeline")
+    def test_order_operators_by_connections_with_branching_and_merging_pipeline_with_additional_outputs(
+        self,
+    ):
+        pipeline = TestPipelineWithBranchingAndMergingConnectionsWithAdditionalOutputs(
+            "pipeline"
+        )
 
         dependency_levels = order_operators_by_connections(pipeline)
 

@@ -14,9 +14,9 @@
 # limitations under the License.
 # =============================================================================
 from queue import Queue
-from typing import Optional, Any
+from typing import Any, Optional
 
-from amqp import Connection, Channel, Message, NotFound
+from amqp import Channel, Connection, Message, NotFound
 
 WriterStatusQueueNameExtension = ".writer.status"
 ReaderStatusQueueNameExtension = ".reader.status"
@@ -33,17 +33,19 @@ def is_queue_existing(queue_name: str, channel: Channel):
 
 def is_exchange_existing(exchange_name: str, exchange_type: str, channel: Channel):
     try:
-        channel.exchange_declare(exchange=exchange_name, type=exchange_type, passive=True)
+        channel.exchange_declare(
+            exchange=exchange_name, type=exchange_type, passive=True
+        )
         return True
     except NotFound:
         return False
 
 
 class _MessagingBase:
-    def __init__(self,
-                 connection: Optional[Connection] = None,
-                 *args, **kwargs):
-        self._connection: Connection = Connection(*args, **kwargs) if connection is None else connection
+    def __init__(self, connection: Optional[Connection] = None, *args, **kwargs):
+        self._connection: Connection = (
+            Connection(*args, **kwargs) if connection is None else connection
+        )
         self._connection.connect()
 
         self._channel: Channel = self._connection.channel()
@@ -56,8 +58,14 @@ class _MessagingBase:
 
 
 class MessageConsumer(_MessagingBase):
-    def __init__(self, consumer_name: str, max_poll_record: Optional[int] = 1,
-                 connection: Optional[Connection] = None, *args, **kwargs):
+    def __init__(
+        self,
+        consumer_name: str,
+        max_poll_record: Optional[int] = 1,
+        connection: Optional[Connection] = None,
+        *args,
+        **kwargs,
+    ):
         super().__init__(connection, *args, **kwargs)
 
         self._channel.basic_qos(0, max_poll_record, False)
@@ -87,9 +95,10 @@ class MessageConsumer(_MessagingBase):
             raise AttributeError(f"Queue already subscribed: {queue_name}")
 
         self._channel.basic_consume(
-            queue_name, consumer_tag=f"{self._consumer_name}-{queue_name}",
+            queue_name,
+            consumer_tag=f"{self._consumer_name}-{queue_name}",
             callback=self._on_message_received,
-            arguments=arguments
+            arguments=arguments,
         )
         self._subscriptions.add(queue_name)
 
@@ -102,7 +111,9 @@ class MessageConsumer(_MessagingBase):
         if 0 == len(self._subscriptions):
             raise AttributeError("Missing queue subscription, call subscribe() first")
 
-        return (0 < self.get_available_record_count()) or (0 < self._retrieved_data_messages.qsize())
+        return (0 < self.get_available_record_count()) or (
+            0 < self._retrieved_data_messages.qsize()
+        )
 
     def get_available_record_count(self) -> int:
         if 0 == len(self._subscriptions):
@@ -120,15 +131,15 @@ class MessageConsumer(_MessagingBase):
             raise AttributeError("Missing queue subscription, call subscribe() first")
 
         try:
-            """ We need to acquire either the max number of messages or, if there
-                are no more messages, then the timeout will make sure to terminate
-                the loop. Notice that drain_events() will retrieve arbitrary number
-                of messages in one go instead of all available. """
+            """We need to acquire either the max number of messages or, if there
+            are no more messages, then the timeout will make sure to terminate
+            the loop. Notice that drain_events() will retrieve arbitrary number
+            of messages in one go instead of all available."""
             while self._max_poll_record > self._retrieved_data_messages.qsize():
                 self._connection.drain_events(timeout=timeout)
         except TimeoutError:
-            """ After timeout expires, a TimeoutError is raised, which
-                is in our case a normal condition, therefor we ignore it. """
+            """After timeout expires, a TimeoutError is raised, which
+            is in our case a normal condition, therefor we ignore it."""
             pass
 
         retrieved_messages = []
@@ -148,7 +159,12 @@ class MessageProducer(_MessagingBase):
     def __init__(self, connection: Optional[Connection] = None, *args, **kwargs):
         super().__init__(connection, *args, **kwargs)
 
-    def publish(self, message: str | bytes, queue_name: str = "", exchange_name: str = ""):
+    def publish(
+        self, message: str | bytes, queue_name: str = "", exchange_name: str = ""
+    ):
         self._channel.basic_publish(
-            Message(message), mandatory=True, exchange=exchange_name, routing_key=queue_name
+            Message(message),
+            mandatory=True,
+            exchange=exchange_name,
+            routing_key=queue_name,
         )
