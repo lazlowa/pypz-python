@@ -578,9 +578,9 @@ class KubernetesDeployerTest(unittest.TestCase):
         KubernetesDeployerTest.kubernetes_deployer.deploy(pipeline)
 
         # 0 seconds in the test duration
-        while KubernetesDeployerTest.kubernetes_deployer.is_all_operator_in_state(
+        while not KubernetesDeployerTest.kubernetes_deployer.is_all_operator_in_state(
                 pipeline.get_full_name(),
-                DeploymentState.Open
+                DeploymentState.Running
         ):
             time.sleep(1)
 
