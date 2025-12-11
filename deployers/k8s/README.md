@@ -38,13 +38,13 @@ pip install -e ./deployers/k8s
 ```shell
 kind create cluster
 ```
-4. Build the test images (test/resources)
+4. Build the test image from the project root
 ```shell
-docker build -t pypz-test-image .
+docker build -t pypz-test-base -f deployers/k8s/test/resources/docker/Dockerfile .
 ```
 5. Load the test image onto the Kind node
 ```shell
-kind load docker-image pypz-test-image
+kind load docker-image pypz-test-base
 ```
 6. To run the tests locally, you need to execute the following command:
 ```shell

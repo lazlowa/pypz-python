@@ -1,3 +1,4 @@
+#!/bin/bash
 # =============================================================================
 # Copyright (c) 2024 by Laszlo Anka. All rights reserved.
 #
@@ -13,9 +14,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # =============================================================================
-FROM alpine:3.17
 
-COPY ./startup.sh .
+set -x
 
-ENTRYPOINT ["/bin/sh"]
-CMD ["startup.sh"]
+if [ -n "$PYPZ_TEST_DELAY_START_SEC" ]
+then
+  echo "Waiting $PYPZ_TEST_DELAY_START_SEC seconds ..."
+  sleep "$PYPZ_TEST_DELAY_START_SEC"
+fi
+
+python -m pypz.runnables.operator  "/operator/config/config.json" "$PYPZ_OPERATOR_INSTANCE_NAME" "$PYPZ_OPERATOR_EXEC_MODE"
+exit_code=$?
+
+if [ -n "$PYPZ_TEST_DELAY_END_SEC" ]
+then
+  echo "Waiting $PYPZ_TEST_DELAY_END_SEC seconds ..."
+  sleep "$PYPZ_TEST_DELAY_END_SEC"
+fi
+
+exit $exit_code

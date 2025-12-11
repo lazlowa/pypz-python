@@ -64,7 +64,10 @@ class KubernetesParameter:
                  nodeAffinity: Optional[dict] = None,
                  nodeSelector: Optional[dict] = None,
                  tolerations: Optional[list] = None,
-                 nodeAntiAffinity: Optional[dict] = None):
+                 nodeAntiAffinity: Optional[dict] = None,
+                 startupProbe: Optional[dict] = None,
+                 livenessProbe: Optional[dict] = None,
+                 readinessProbe: Optional[dict] = None):
         self.imagePullPolicy: Optional[str] = imagePullPolicy
         self.restartPolicy: Optional[str] = restartPolicy
         self.env: Optional[list[dict]] = env
@@ -83,6 +86,9 @@ class KubernetesParameter:
         self.tolerations: Optional[list] = tolerations
         self.nodeAffinity: Optional[dict] = nodeAffinity
         self.nodeAntiAffinity: Optional[dict] = nodeAntiAffinity
+        self.startupProbe: Optional[dict] = startupProbe
+        self.livenessProbe: Optional[dict] = livenessProbe
+        self.readinessProbe: Optional[dict] = readinessProbe
 
 
 class KubernetesDeployer(Deployer):
@@ -111,11 +117,14 @@ class KubernetesDeployer(Deployer):
     def __init__(self,
                  namespace: str = "default",
                  configuration: Configuration = None,
-                 config_file: Any = None):
+                 config_file: Any = None,
+                 verify_ssl: bool = True):
         if configuration is None:
             config.load_kube_config(config_file=config_file)
             configuration = Configuration.get_default_copy()
             configuration.ssl_ca_cert = certifi.where()
+
+        configuration.verify_ssl = verify_ssl
 
         self._core_v1_api: CoreV1Api = CoreV1Api(api_client=ApiClient(configuration=configuration))
 
@@ -295,20 +304,58 @@ class KubernetesDeployer(Deployer):
         if pod is None:
             return DeploymentState.NotExisting
 
-        if (pod.status is None) or (pod.status.phase is None):
+        if (pod.status is None) or (pod.status.phase is None) or (pod.status.container_statuses is None):
             return DeploymentState.Unknown
 
-        match pod.status.phase:
-            case "Pending":
-                return DeploymentState.Open
-            case "Running":
-                return DeploymentState.Running
-            case "Succeeded":
-                return DeploymentState.Completed
-            case "Failed":
-                return DeploymentState.Failed
-            case _:
-                return DeploymentState.Unknown
+        # Interpreting the statuses
+        # -------------------------
+        # Notice that if the pod's phase is not running, we don't care about the
+        # readiness and startup, since we have enough information. However, if
+        # there are multiple containers in the Pod (e.g., Istio), then we need
+        # to check the main container's state below.
+
+        if "Succeeded" == pod.status.phase:
+            return DeploymentState.Completed
+
+        if "Failed" == pod.status.phase:
+            return DeploymentState.Failed
+
+        if "Pending" == pod.status.phase:
+            return DeploymentState.Open
+
+        # If the pod is in Running state:
+        # We cannot rely only on statuses as we may miss runtime issues outside
+        # of the process like D state on unmounting etc. For this reason, we need
+        # to check, if the container has already been started and is ready. Note
+        # that we use readiness probe instead of liveness, since it is easier to
+        # catch.
+
+        # Check, if the necessary probes are set, since if not, we need to fall
+        # back to check the pod state.
+        ready_probe_set = False
+        start_probe_set = False
+        for container_spec in pod.spec.containers:
+            if container_spec.name == pod.metadata.name:
+                ready_probe_set = container_spec.readiness_probe is not None
+                start_probe_set = container_spec.startup_probe is not None
+                break
+
+        container_started = False
+        container_ready = False
+        for container_status in pod.status.container_statuses:
+            if container_status.name == pod.metadata.name:
+                container_started = container_status.started
+                container_ready = container_status.ready
+                break
+
+        if "Running" == pod.status.phase:
+            # We can identify unhealthy situation only, if the startup and
+            # readiness probes are set, otherwise fall back to pod state.
+            if ready_probe_set and start_probe_set and container_started and not container_ready:
+                return DeploymentState.Unhealthy
+            return DeploymentState.Running
+
+        return DeploymentState.Unknown
 
     def retrieve_operator_logs(self, operator_full_name: str, **kwargs) -> Optional[str]:
         try:
@@ -415,7 +462,12 @@ class KubernetesDeployer(Deployer):
                 if kubernetes_parameters.imagePullPolicy is None else kubernetes_parameters.imagePullPolicy,
                 'name': operator_pod_name,
                 'volumeMounts': volume_mounts,
-                'securityContext': security_context
+                'securityContext': security_context,
+                'livenessProbe': kubernetes_parameters.livenessProbe,
+                'readinessProbe': operator.get_parameter("readinessProbe")
+                if operator.has_parameter("readinessProbe") else kubernetes_parameters.readinessProbe,
+                'startupProbe': operator.get_parameter("startupProbe")
+                if operator.has_parameter("startupProbe") else kubernetes_parameters.startupProbe
             }
         ]
 
