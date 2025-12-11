@@ -59,5 +59,3 @@ class KubernetesOperator(Operator, ABC):
                 "failureThreshold": 20,
             }
         )
-
-
