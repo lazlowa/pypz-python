@@ -620,3 +620,8 @@ class KubernetesDeployerTest(unittest.TestCase):
         # operator has stopped
         self.assertTrue(pod.status.container_statuses[0].started)
         self.assertFalse(pod.status.container_statuses[0].ready)
+
+        self.assertEqual(
+            DeploymentState.Unhealthy,
+            KubernetesDeployerTest.kubernetes_deployer.retrieve_operator_state(pipeline.op.get_full_name())
+        )
