@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../">
 <head>
@@ -5,23 +7,19 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>How to create a pipeline &mdash; pypz  documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=eafc0fe6" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
 
   
-  <!--[if lt IE 9]>
-    <script src="../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../_static/documentation_options.js?v=5929fcd5"></script>
-        <script src="../_static/doctools.js?v=888ff710"></script>
-        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-        <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
-        <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=888ff710"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -40,9 +38,6 @@
           <a href="../index.html" class="icon icon-home">
             pypz
           </a>
-              <div class="version">
-                0.9.3
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
@@ -274,7 +269,7 @@ to transfer data to and from each other. Hence, we need to create the
 <span class="s2">}</span>
 <span class="s2">&quot;&quot;&quot;</span>
 
-<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="bp">self</span><span class="o">.</span><span class="n">output_port</span> <span class="o">=</span> <span class="n">KafkaChannelOutputPort</span><span class="p">(</span><span class="n">schema</span><span class="o">=</span><span class="n">DemoWriterOperator</span><span class="o">.</span><span class="n">AvroSchemaString</span><span class="p">)</span>
@@ -292,7 +287,7 @@ to transfer data to and from each other. Hence, we need to create the
 <p>This method will be called after services have been started, resources have been created and port plugins
 have been initialized.</p>
 <p>Since we are not implementing any logic here for this example, simply return True.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_on_init</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_on_init</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
     <span class="k">return</span> <span class="kc">True</span>
 </pre></div>
 </div>
@@ -308,7 +303,7 @@ an error due to the unexpected return value type.</p>
 <p>Check <a class="reference internal" href="../core/models.html#operator-methods"><span class="std std-ref">Methods</span></a> for the signature explanation.</p>
 <p>This method will be called before port plugin are stopped, resources deleted and services shut down.</p>
 <p>Since we are not implementing any logic here for this example, simply return True.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_on_shutdown</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_on_shutdown</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
     <span class="k">return</span> <span class="kc">True</span>
 </pre></div>
 </div>
@@ -342,7 +337,7 @@ we need to make sure that we have a termination condition i.e., at some point, w
 <li><p>We invoke the send method of the output_port</p></li>
 <li><p>If 30 records were sent, then we terminate</p></li>
 </ol>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_on_running</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_on_running</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
     <span class="n">record_to_send</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;HelloWorld_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_record_count</span><span class="p">)</span>
     <span class="p">}</span>
@@ -408,7 +403,7 @@ we need to make sure that we have a termination condition i.e., at some point, w
 <span class="s2">}</span>
 <span class="s2">&quot;&quot;&quot;</span>
 
-<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="bp">self</span><span class="o">.</span><span class="n">input_port</span> <span class="o">=</span> <span class="n">KafkaChannelInputPort</span><span class="p">(</span><span class="n">schema</span><span class="o">=</span><span class="n">DemoReaderOperator</span><span class="o">.</span><span class="n">AvroSchemaString</span><span class="p">)</span>
@@ -420,7 +415,7 @@ we need to make sure that we have a termination condition i.e., at some point, w
 <section id="id2">
 <h3><em>_on_running()</em><a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
 <p>In this method we are simply retrieving the records and printing them onto stdout.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_on_running</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_on_running</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
     <span class="n">records</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_port</span><span class="o">.</span><span class="n">retrieve</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">records</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Received record: &quot;</span><span class="p">,</span> <span class="n">record</span><span class="p">)</span>
@@ -451,13 +446,13 @@ records available on any input ports. In this example it is equivalent to:</p>
 <section id="id3">
 <h3><em>__init__()</em><a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
 <p>Since we are modelling the pipeline in the code, we need to define the operators and its connections:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pypz.core.specs.pipeline</span> <span class="kn">import</span> <span class="n">Pipeline</span>
-<span class="kn">from</span> <span class="nn">pypz.example.reader</span> <span class="kn">import</span> <span class="n">DemoReaderOperator</span>
-<span class="kn">from</span> <span class="nn">pypz.example.writer</span> <span class="kn">import</span> <span class="n">DemoWriterOperator</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pypz.core.specs.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypz.example.reader</span><span class="w"> </span><span class="kn">import</span> <span class="n">DemoReaderOperator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypz.example.writer</span><span class="w"> </span><span class="kn">import</span> <span class="n">DemoWriterOperator</span>
 
 
-<span class="k">class</span> <span class="nc">DemoPipeline</span><span class="p">(</span><span class="n">Pipeline</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DemoPipeline</span><span class="p">(</span><span class="n">Pipeline</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">reader</span> <span class="o">=</span> <span class="n">DemoReaderOperator</span><span class="p">()</span>
@@ -494,9 +489,9 @@ with the name <code class="docutils literal notranslate"><span class="pre">execu
 <li><p>Start the pipeline execution</p></li>
 <li><p>Shutdown the pipeline execution</p></li>
 </ol>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pypz.executors.pipeline.executor</span> <span class="kn">import</span> <span class="n">PipelineExecutor</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pypz.executors.pipeline.executor</span><span class="w"> </span><span class="kn">import</span> <span class="n">PipelineExecutor</span>
 
-<span class="kn">from</span> <span class="nn">pypz.example.pipeline</span> <span class="kn">import</span> <span class="n">DemoPipeline</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypz.example.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">DemoPipeline</span>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">pipeline</span> <span class="o">=</span> <span class="n">DemoPipeline</span><span class="p">(</span><span class="s2">&quot;pipeline&quot;</span><span class="p">)</span>
@@ -517,9 +512,9 @@ Check <a class="reference internal" href="../core/models.html#instance-metaclass
 <img alt="../_images/ht_cp_missing_req_param.png" src="../_images/ht_cp_missing_req_param.png" />
 <p>This is because the port plugins have not been configured with the Kafka broker location. To do this, we need
 to set the following instance parameters:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pypz.executors.pipeline.executor</span> <span class="kn">import</span> <span class="n">PipelineExecutor</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pypz.executors.pipeline.executor</span><span class="w"> </span><span class="kn">import</span> <span class="n">PipelineExecutor</span>
 
-<span class="kn">from</span> <span class="nn">pypz.example.pipeline</span> <span class="kn">import</span> <span class="n">DemoPipeline</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypz.example.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">DemoPipeline</span>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">pipeline</span> <span class="o">=</span> <span class="n">DemoPipeline</span><span class="p">(</span><span class="s2">&quot;pipeline&quot;</span><span class="p">)</span>
@@ -546,11 +541,11 @@ to each operators and we will modify the code to use the
 new logger. The <a class="reference internal" href="../indexes/core/pypz.plugins.loggers.default.html#pypz.plugins.loggers.default.DefaultLoggerPlugin" title="pypz.plugins.loggers.default.DefaultLoggerPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">DefaultLoggerPlugin</span></code></a> sends the logs to stdout.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
 
-<span class="k">class</span> <span class="nc">DemoWriterOperator</span><span class="p">(</span><span class="n">Operator</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DemoWriterOperator</span><span class="p">(</span><span class="n">Operator</span><span class="p">):</span>
 
 <span class="o">...</span>
 
-<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="bp">self</span><span class="o">.</span><span class="n">output_port</span> <span class="o">=</span> <span class="n">KafkaChannelOutputPort</span><span class="p">(</span><span class="n">schema</span><span class="o">=</span><span class="n">DemoWriterOperator</span><span class="o">.</span><span class="n">AvroSchemaString</span><span class="p">)</span>
@@ -561,7 +556,7 @@ new logger. The <a class="reference internal" href="../indexes/core/pypz.plugins
 </span>
 <span class="o">...</span>
 
-<span class="k">def</span> <span class="nf">_on_running</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_on_running</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
     <span class="n">record_to_send</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;HelloWorld_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_record_count</span><span class="p">)</span>
     <span class="p">}</span>
@@ -584,11 +579,11 @@ new logger. The <a class="reference internal" href="../indexes/core/pypz.plugins
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
 
-<span class="k">class</span> <span class="nc">DemoReaderOperator</span><span class="p">(</span><span class="n">Operator</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DemoReaderOperator</span><span class="p">(</span><span class="n">Operator</span><span class="p">):</span>
 
 <span class="o">...</span>
 
-<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="bp">self</span><span class="o">.</span><span class="n">input_port</span> <span class="o">=</span> <span class="n">KafkaChannelInputPort</span><span class="p">(</span><span class="n">schema</span><span class="o">=</span><span class="n">DemoReaderOperator</span><span class="o">.</span><span class="n">AvroSchemaString</span><span class="p">)</span>
@@ -597,7 +592,7 @@ new logger. The <a class="reference internal" href="../indexes/core/pypz.plugins
 </span>
 <span class="o">...</span>
 
-<span class="k">def</span> <span class="nf">_on_running</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_on_running</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
     <span class="n">records</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_port</span><span class="o">.</span><span class="n">retrieve</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">records</span><span class="p">:</span>
 <span class="hll">        <span class="bp">self</span><span class="o">.</span><span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Received record: </span><span class="si">{</span><span class="n">record</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -639,9 +634,9 @@ we need to change the log level via setting the corresponding parameter.</p>
 <li><p>Create the <a class="reference internal" href="../indexes/sniffer/pypz.sniffer.viewer.html#pypz.sniffer.viewer.PipelineSnifferViewer" title="pypz.sniffer.viewer.PipelineSnifferViewer"><code class="xref py py-class docutils literal notranslate"><span class="pre">sniffer</span> <span class="pre">object</span></code></a> and provide the pipeline as constructor argument</p></li>
 <li><p>Invoke the sniffer’s mainloop() method (based on TK)</p></li>
 </ol>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pypz.sniffer.viewer</span> <span class="kn">import</span> <span class="n">PipelineSnifferViewer</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pypz.sniffer.viewer</span><span class="w"> </span><span class="kn">import</span> <span class="n">PipelineSnifferViewer</span>
 
-<span class="kn">from</span> <span class="nn">pypz.example.pipeline</span> <span class="kn">import</span> <span class="n">DemoPipeline</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypz.example.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">DemoPipeline</span>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
 <span class="hll">    <span class="n">pipeline</span> <span class="o">=</span> <span class="n">DemoPipeline</span><span class="p">(</span><span class="s2">&quot;pipeline&quot;</span><span class="p">)</span>
@@ -710,13 +705,13 @@ configuration to it:</p>
 <li><p>(optional) If you have a Docker image registry, then you can push the built image</p></li>
 <li><p>Now you can set the <code class="docutils literal notranslate"><span class="pre">operatorImageName</span></code> parameter for both operators</p></li>
 </ol>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pypz.core.specs.pipeline</span> <span class="kn">import</span> <span class="n">Pipeline</span>
-<span class="kn">from</span> <span class="nn">pypz.example.reader</span> <span class="kn">import</span> <span class="n">DemoReaderOperator</span>
-<span class="kn">from</span> <span class="nn">pypz.example.writer</span> <span class="kn">import</span> <span class="n">DemoWriterOperator</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pypz.core.specs.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypz.example.reader</span><span class="w"> </span><span class="kn">import</span> <span class="n">DemoReaderOperator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypz.example.writer</span><span class="w"> </span><span class="kn">import</span> <span class="n">DemoWriterOperator</span>
 
 
-<span class="k">class</span> <span class="nc">DemoPipeline</span><span class="p">(</span><span class="n">Pipeline</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DemoPipeline</span><span class="p">(</span><span class="n">Pipeline</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">reader</span> <span class="o">=</span> <span class="n">DemoReaderOperator</span><span class="p">()</span>
@@ -787,9 +782,9 @@ the following:</p>
 <li><p>Attach to the deployed pipeline to block until it is finished</p></li>
 <li><p>Destroy the pipeline and its related resources</p></li>
 </ol>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pypz.deployers.k8s</span> <span class="kn">import</span> <span class="n">KubernetesDeployer</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pypz.deployers.k8s</span><span class="w"> </span><span class="kn">import</span> <span class="n">KubernetesDeployer</span>
 
-<span class="kn">from</span> <span class="nn">pypz.example.pipeline</span> <span class="kn">import</span> <span class="n">DemoPipeline</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypz.example.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">DemoPipeline</span>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">pipeline</span> <span class="o">=</span> <span class="n">DemoPipeline</span><span class="p">(</span><span class="s2">&quot;pipeline&quot;</span><span class="p">)</span>
@@ -813,9 +808,9 @@ the following:</p>
 <h2>Play with Replication<a class="headerlink" href="#play-with-replication" title="Link to this heading"></a></h2>
 <p>You can <a class="reference internal" href="../core/models.html#operator-replication"><span class="std std-ref">replicate</span></a> operators by setting the replication factor as parameter.
 Modify your <code class="docutils literal notranslate"><span class="pre">deploy.py</span></code> file:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pypz.deployers.k8s</span> <span class="kn">import</span> <span class="n">KubernetesDeployer</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pypz.deployers.k8s</span><span class="w"> </span><span class="kn">import</span> <span class="n">KubernetesDeployer</span>
 
-<span class="kn">from</span> <span class="nn">pypz.example.pipeline</span> <span class="kn">import</span> <span class="n">DemoPipeline</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypz.example.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">DemoPipeline</span>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">pipeline</span> <span class="o">=</span> <span class="n">DemoPipeline</span><span class="p">(</span><span class="s2">&quot;pipeline&quot;</span><span class="p">)</span>
@@ -845,9 +840,9 @@ the deployed pipeline, you need to replicate the change into your <code class="d
 <p>There is a more robust solution for that. Instead of creating the sniffed pipeline manually, we can use the
 KubernetesDeployer to retrieve the deployed pipeline for us, which then can be used to sniff.</p>
 <p>Adapt the <code class="docutils literal notranslate"><span class="pre">sniffer.py</span></code> accordingly.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pypz.sniffer.viewer</span> <span class="kn">import</span> <span class="n">PipelineSnifferViewer</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pypz.sniffer.viewer</span><span class="w"> </span><span class="kn">import</span> <span class="n">PipelineSnifferViewer</span>
 
-<span class="kn">from</span> <span class="nn">pypz.deployers.k8s</span> <span class="kn">import</span> <span class="n">KubernetesDeployer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypz.deployers.k8s</span><span class="w"> </span><span class="kn">import</span> <span class="n">KubernetesDeployer</span>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
@@ -880,16 +875,16 @@ These values should actually be parameters that the user can set from outside, s
 <li><p>message, which will be an optional parameter with the default value of “HelloWorld”</p></li>
 </ul>
 <p>Adapt the code in the <code class="docutils literal notranslate"><span class="pre">writer.py</span></code> file:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
 
-<span class="kn">from</span> <span class="nn">pypz.core.commons.parameters</span> <span class="kn">import</span> <span class="n">OptionalParameter</span><span class="p">,</span> <span class="n">RequiredParameter</span>
-<span class="kn">from</span> <span class="nn">pypz.core.specs.operator</span> <span class="kn">import</span> <span class="n">Operator</span>
-<span class="kn">from</span> <span class="nn">pypz.plugins.kafka_io.ports</span> <span class="kn">import</span> <span class="n">KafkaChannelOutputPort</span>
-<span class="kn">from</span> <span class="nn">pypz.plugins.loggers.default</span> <span class="kn">import</span> <span class="n">DefaultLoggerPlugin</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypz.core.commons.parameters</span><span class="w"> </span><span class="kn">import</span> <span class="n">OptionalParameter</span><span class="p">,</span> <span class="n">RequiredParameter</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypz.core.specs.operator</span><span class="w"> </span><span class="kn">import</span> <span class="n">Operator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypz.plugins.kafka_io.ports</span><span class="w"> </span><span class="kn">import</span> <span class="n">KafkaChannelOutputPort</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypz.plugins.loggers.default</span><span class="w"> </span><span class="kn">import</span> <span class="n">DefaultLoggerPlugin</span>
 
 
-<span class="k">class</span> <span class="nc">DemoWriterOperator</span><span class="p">(</span><span class="n">Operator</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DemoWriterOperator</span><span class="p">(</span><span class="n">Operator</span><span class="p">):</span>
 
     <span class="o">...</span>
 
@@ -897,7 +892,7 @@ These values should actually be parameters that the user can set from outside, s
 </span><span class="hll">                                     <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Specifies number of records to send&quot;</span><span class="p">)</span>
 </span><span class="hll">    <span class="n">message</span> <span class="o">=</span> <span class="n">OptionalParameter</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Specifies the message prefix for the record&quot;</span><span class="p">)</span>
 </span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">output_port</span> <span class="o">=</span> <span class="n">KafkaChannelOutputPort</span><span class="p">(</span><span class="n">schema</span><span class="o">=</span><span class="n">DemoWriterOperator</span><span class="o">.</span><span class="n">AvroSchemaString</span><span class="p">)</span>
@@ -918,7 +913,7 @@ These values should actually be parameters that the user can set from outside, s
 
     <span class="o">...</span>
 
-    <span class="k">def</span> <span class="nf">_on_running</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_on_running</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
         <span class="n">record_to_send</span> <span class="o">=</span> <span class="p">{</span>
 <span class="hll">            <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">message</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_record_count</span><span class="si">}</span><span class="s2">&quot;</span>
 </span>        <span class="p">}</span>

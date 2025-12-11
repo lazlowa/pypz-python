@@ -1,0 +1,8 @@
+pypz.operators.k8s module
+=========================
+
+.. automodule:: pypz.operators.k8s
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

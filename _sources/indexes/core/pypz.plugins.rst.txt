@@ -10,3 +10,4 @@ Subpackages
    :maxdepth: 4
 
    pypz.plugins.loggers
+   pypz.plugins.misc

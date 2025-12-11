@@ -1,0 +1,12 @@
+pypz.operators namespace
+========================
+
+.. py:module:: pypz.operators
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   pypz.operators.k8s

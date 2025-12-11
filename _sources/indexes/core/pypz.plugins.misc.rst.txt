@@ -1,0 +1,12 @@
+pypz.plugins.misc namespace
+===========================
+
+.. py:module:: pypz.plugins.misc
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   pypz.plugins.misc.health_check

@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../">
 <head>
@@ -5,23 +7,19 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Models &mdash; pypz  documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=eafc0fe6" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
 
   
-  <!--[if lt IE 9]>
-    <script src="../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../_static/documentation_options.js?v=5929fcd5"></script>
-        <script src="../_static/doctools.js?v=888ff710"></script>
-        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-        <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
-        <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=888ff710"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -40,9 +38,6 @@
           <a href="../index.html" class="icon icon-home">
             pypz
           </a>
-              <div class="version">
-                0.9.3
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
@@ -169,19 +164,19 @@ every other specs. It contains all the necessary logic and feature that is requi
 <figure class="align-default" id="id5">
 <span id="inheritance-diagram"></span><div class="graphviz"><img src="../_images/inheritance-6d6b9584ab6da2bc303c8cf46d2cfc39c67ad238.png" alt="Inheritance diagram of pypz.core.specs.pipeline.Pipeline, pypz.core.specs.operator.Operator, pypz.core.specs.plugin.LoggerPlugin, pypz.core.specs.plugin.ExtendedPlugin, pypz.core.specs.plugin.ServicePlugin, pypz.core.specs.plugin.InputPortPlugin, pypz.core.specs.plugin.OutputPortPlugin" usemap="#inheritance70fd585c5a" class="inheritance graphviz" /></div>
 <map id="inheritance70fd585c5a" name="inheritance70fd585c5a">
-<area shape="poly" id="node2" href="../indexes/core/pypz.core.commons.loggers.html#pypz.core.commons.loggers.ContextLoggerInterface" target="_top" title="This interface provides the necessary methods to be able to implement" alt="" coords="530,261,519,254,487,247,437,242,374,238,305,237,235,238,173,242,123,247,91,254,80,261,91,269,123,276,173,281,235,285,305,286,374,285,437,281,487,276,519,269"/>
-<area shape="poly" id="node3" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.ExtendedPlugin" target="_top" title="This interface extends the normal plugin&#39;s lifecycle. The methods" alt="" coords="1406,653,1399,646,1377,639,1344,634,1302,630,1255,629,1208,630,1166,634,1132,639,1111,646,1104,653,1111,661,1132,668,1166,673,1208,677,1255,678,1302,677,1344,673,1377,668,1399,661"/>
-<area shape="poly" id="node4" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.Plugin" target="_top" title="This interface has the only purpose to separate the plugin interfaces" alt="" coords="773,457,770,449,760,443,746,437,728,434,708,433,687,434,669,437,655,443,645,449,642,457,645,465,655,471,669,477,687,480,708,481,728,480,746,477,760,471,770,465"/>
-<area shape="poly" id="node7" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.InputPortPlugin" target="_top" title="This plugin interface allows to implement data transfer input port for an operator." alt="" coords="1021,849,1014,842,992,835,959,829,918,826,872,825,826,826,784,829,751,835,730,842,723,849,730,857,751,863,784,869,826,872,872,874,918,872,959,869,992,863,1014,857"/>
-<area shape="poly" id="node8" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.PortPlugin" target="_top" title="This plugin interface allows to implement common methods for" alt="" coords="809,653,804,646,790,639,767,634,739,630,708,629,676,630,648,634,625,639,611,646,606,653,611,661,625,668,648,673,676,677,708,678,739,677,767,673,790,668,804,661"/>
-<area shape="poly" id="node9" href="../indexes/core/pypz.core.specs.instance.html#pypz.core.specs.instance.Instance" target="_top" title="This class represents the instance specs that serves as base for" alt="" coords="1230,261,1226,254,1214,247,1195,242,1171,238,1144,237,1117,238,1093,242,1074,247,1062,254,1057,261,1062,269,1074,276,1093,281,1117,285,1144,286,1171,285,1195,281,1214,276,1226,269"/>
-<area shape="poly" id="node10" href="../indexes/core/pypz.core.specs.instance.html#pypz.core.specs.instance.InstanceGroup" target="_top" title="This class provides methods to access instance group related information. It can be" alt="" coords="982,261,975,254,955,247,923,242,884,238,840,237,796,238,756,242,724,247,704,254,697,261,704,269,724,276,756,281,796,285,840,286,884,285,923,281,955,276,975,269"/>
-<area shape="poly" id="node11" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.LoggerPlugin" target="_top" title="This addon interface allows to implement different logging technologies" alt="" coords="591,653,585,646,566,639,538,634,502,630,463,629,423,630,387,634,359,639,341,646,335,653,341,661,359,668,387,673,423,677,463,678,502,677,538,673,566,668,585,661"/>
-<area shape="poly" id="node12" href="../indexes/core/pypz.core.specs.operator.html#pypz.core.specs.operator.Operator" target="_top" title="This class represents the operator instance specs. This class shall be used" alt="" coords="1116,457,1111,449,1098,443,1078,437,1052,434,1024,433,996,434,970,437,950,443,937,449,932,457,937,465,950,471,970,477,996,480,1024,481,1052,480,1078,477,1098,471,1111,465"/>
-<area shape="poly" id="node13" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.OutputPortPlugin" target="_top" title="This plugin interface allows to implement data transfer output port for an operator." alt="" coords="708,849,700,842,677,835,640,829,594,826,543,825,492,826,446,829,410,835,386,842,378,849,386,857,410,863,446,869,492,872,543,874,594,872,640,869,677,863,700,857"/>
-<area shape="poly" id="node15" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.ServicePlugin" target="_top" title="This plugin interface allows to implement a service. Services are special entities" alt="" coords="1089,653,1082,646,1064,639,1034,634,997,630,956,629,915,630,878,634,849,639,830,646,824,653,830,661,849,668,878,673,915,677,956,678,997,677,1034,673,1064,668,1082,661"/>
-<area shape="poly" id="node5" href="../indexes/core/pypz.core.specs.instance.html#pypz.core.specs.instance.RegisteredInterface" target="_top" title="This is a marker interface with the sole purpose to identify the native specs interfaces." alt="" coords="1533,65,1524,57,1497,51,1455,45,1403,42,1344,40,1286,42,1234,45,1192,51,1165,57,1156,65,1165,72,1192,79,1234,85,1286,88,1344,89,1403,88,1455,85,1497,79,1524,72"/>
-<area shape="poly" id="node14" href="../indexes/core/pypz.core.specs.pipeline.html#pypz.core.specs.pipeline.Pipeline" target="_top" title="This class represents the pipeline instance specs. A pipeline is actually a" alt="" coords="1292,457,1288,449,1276,443,1258,437,1236,434,1211,433,1186,434,1163,437,1145,443,1134,449,1130,457,1134,465,1145,471,1163,477,1186,480,1211,481,1236,480,1258,477,1276,471,1288,465"/>
+<area shape="poly" id="node2" href="../indexes/core/pypz.core.commons.loggers.html#pypz.core.commons.loggers.ContextLoggerInterface" target="_top" title="This interface provides the necessary methods to be able to implement" alt="" coords="531,261,520,254,488,247,438,242,375,238,305,237,236,238,173,242,123,247,91,254,80,261,91,269,123,276,173,281,236,285,305,286,375,285,438,281,488,276,520,269"/>
+<area shape="poly" id="node3" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.ExtendedPlugin" target="_top" title="This interface extends the normal plugin&#39;s lifecycle. The methods" alt="" coords="1407,653,1399,645,1378,639,1344,633,1302,630,1255,629,1209,630,1166,633,1133,639,1111,645,1104,653,1111,661,1133,667,1166,673,1209,676,1255,677,1302,676,1344,673,1378,667,1399,661"/>
+<area shape="poly" id="node4" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.Plugin" target="_top" title="This interface has the only purpose to separate the plugin interfaces" alt="" coords="774,458,771,450,761,443,747,438,729,434,708,433,688,434,670,438,655,443,646,450,643,458,646,465,655,472,670,477,688,481,708,482,729,481,747,477,761,472,771,465"/>
+<area shape="poly" id="node7" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.InputPortPlugin" target="_top" title="This plugin interface allows to implement data transfer input port for an operator." alt="" coords="1021,849,1014,842,993,835,960,829,918,826,872,825,826,826,785,829,752,835,731,842,723,849,731,857,752,864,785,869,826,872,872,874,918,872,960,869,993,864,1014,857"/>
+<area shape="poly" id="node8" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.PortPlugin" target="_top" title="This plugin interface allows to implement common methods for" alt="" coords="810,653,805,645,791,639,768,633,740,630,708,629,677,630,649,633,626,639,612,645,607,653,612,661,626,667,649,673,677,676,708,677,740,676,768,673,791,667,805,661"/>
+<area shape="poly" id="node9" href="../indexes/core/pypz.core.specs.instance.html#pypz.core.specs.instance.Instance" target="_top" title="This class represents the instance specs that serves as base for" alt="" coords="1231,261,1227,254,1214,247,1195,242,1171,238,1144,237,1118,238,1093,242,1074,247,1062,254,1058,261,1062,269,1074,276,1093,281,1118,285,1144,286,1171,285,1195,281,1214,276,1227,269"/>
+<area shape="poly" id="node10" href="../indexes/core/pypz.core.specs.instance.html#pypz.core.specs.instance.InstanceGroup" target="_top" title="This class provides methods to access instance group related information. It can be" alt="" coords="982,261,975,254,955,247,924,242,884,238,840,237,796,238,757,242,725,247,705,254,698,261,705,269,725,276,757,281,796,285,840,286,884,285,924,281,955,276,975,269"/>
+<area shape="poly" id="node11" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.LoggerPlugin" target="_top" title="This addon interface allows to implement different logging technologies" alt="" coords="592,653,586,645,567,639,539,633,503,630,464,629,424,630,389,633,360,639,342,645,336,653,342,661,360,667,389,673,424,676,464,677,503,676,539,673,567,667,586,661"/>
+<area shape="poly" id="node12" href="../indexes/core/pypz.core.specs.operator.html#pypz.core.specs.operator.Operator" target="_top" title="This class represents the operator instance specs. This class shall be used" alt="" coords="1116,458,1112,450,1099,443,1078,438,1053,434,1024,433,996,434,971,438,950,443,937,450,933,458,937,465,950,472,971,477,996,481,1024,482,1053,481,1078,477,1099,472,1112,465"/>
+<area shape="poly" id="node13" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.OutputPortPlugin" target="_top" title="This plugin interface allows to implement data transfer output port for an operator." alt="" coords="709,849,701,842,678,835,641,829,595,826,544,825,493,826,447,829,411,835,387,842,379,849,387,857,411,864,447,869,493,872,544,874,595,872,641,869,678,864,701,857"/>
+<area shape="poly" id="node15" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.ServicePlugin" target="_top" title="This plugin interface allows to implement a service. Services are special entities" alt="" coords="1089,653,1083,645,1064,639,1035,633,998,630,957,629,916,630,879,633,850,639,831,645,824,653,831,661,850,667,879,673,916,676,957,677,998,676,1035,673,1064,667,1083,661"/>
+<area shape="poly" id="node5" href="../indexes/core/pypz.core.specs.instance.html#pypz.core.specs.instance.RegisteredInterface" target="_top" title="This is a marker interface with the sole purpose to identify the native specs interfaces." alt="" coords="1533,65,1524,57,1497,51,1455,45,1403,42,1345,41,1286,42,1234,45,1192,51,1166,57,1156,65,1166,73,1192,79,1234,85,1286,88,1345,90,1403,88,1455,85,1497,79,1524,73"/>
+<area shape="poly" id="node14" href="../indexes/core/pypz.core.specs.pipeline.html#pypz.core.specs.pipeline.Pipeline" target="_top" title="This class represents the pipeline instance specs. A pipeline is actually a" alt="" coords="1292,458,1288,450,1276,443,1259,438,1236,434,1211,433,1186,434,1164,438,1146,443,1134,450,1130,458,1134,465,1146,472,1164,477,1186,481,1211,482,1236,481,1259,477,1276,472,1288,465"/>
 </map><figcaption>
 <p><span class="caption-text">Inheritance diagram</span><a class="headerlink" href="#id5" title="Link to this image"></a></p>
 </figcaption>
@@ -309,18 +304,18 @@ container related deployers.</p>
 <a class="reference internal" href="../indexes/core/pypz.core.specs.plugin.html#pypz.core.specs.plugin.OutputPortPlugin" title="pypz.core.specs.plugin.OutputPortPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">OutputPortPlugin</span></code></a>).</p>
 <p>The connection can be defined on pipeline level, where you shall specify, which operator’s which port plugin
 shall be connected to which other operator’s which port plugin.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">WriterOperator</span><span class="p">(</span><span class="n">Operator</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">WriterOperator</span><span class="p">(</span><span class="n">Operator</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">output_port</span> <span class="o">=</span> <span class="n">OutputPortPlugin</span><span class="p">()</span>
 
-<span class="k">class</span> <span class="nc">ReaderOperator</span><span class="p">(</span><span class="n">Operator</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ReaderOperator</span><span class="p">(</span><span class="n">Operator</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">input_port</span> <span class="o">=</span> <span class="n">InputPortPlugin</span><span class="p">()</span>
 
-<span class="k">class</span> <span class="nc">CustomPipeline</span><span class="p">(</span><span class="n">Pipeline</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CustomPipeline</span><span class="p">(</span><span class="n">Pipeline</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">reader_operator</span> <span class="o">=</span> <span class="n">ReaderOperator</span><span class="p">()</span>
