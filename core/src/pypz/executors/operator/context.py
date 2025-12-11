@@ -13,14 +13,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # =============================================================================
-from typing import Type, Callable, TypeVar
+from typing import Callable, Type, TypeVar
 
-from pypz.executors.commons import ExecutionMode, ExitCodes
 from pypz.core.specs.operator import Operator
 from pypz.core.specs.plugin import Plugin
 from pypz.core.specs.utils import resolve_dependency_graph
+from pypz.executors.commons import ExecutionMode, ExitCodes
 
-PluginType = TypeVar('PluginType', bound=Plugin)
+PluginType = TypeVar("PluginType", bound=Plugin)
 
 
 class ExecutionContext:
@@ -48,19 +48,21 @@ class ExecutionContext:
         Exit code of the state machine, which can be modified among the states
         """
 
-        self.__plugin_type_registry: dict[Type[Plugin], set[Plugin]] = dict()
+        self.__plugin_type_registry: dict[Type[Plugin], set[Plugin]] = {}
         """
         This member holds all the context entities along their implemented interfaces. It allows
         simple type based iteration/execution.
         """
 
-        for nested_instance in self.__operator.get_protected().get_nested_instances().values():
+        for nested_instance in (
+            self.__operator.get_protected().get_nested_instances().values()
+        ):
             for spec_class in nested_instance.get_protected().get_spec_classes():
                 if spec_class not in self.__plugin_type_registry:
                     self.__plugin_type_registry[spec_class] = set()
                 self.__plugin_type_registry[spec_class].add(nested_instance)
 
-        self.__typed_dependency_graphs: dict[Type[Plugin], list[set[Plugin]]] = dict()
+        self.__typed_dependency_graphs: dict[Type[Plugin], list[set[Plugin]]] = {}
         """
         This member holds the nested instances ordered by their resolved dependency list along
         their types. The key holds the instance type, the value is a list of set, where each list
@@ -70,7 +72,9 @@ class ExecutionContext:
         """
 
         for instance_type, instances in self.__plugin_type_registry.items():
-            self.__typed_dependency_graphs[instance_type] = resolve_dependency_graph(instances)
+            self.__typed_dependency_graphs[instance_type] = resolve_dependency_graph(
+                instances
+            )
 
     def get_operator(self) -> Operator:
         return self.__operator
@@ -84,18 +88,33 @@ class ExecutionContext:
     def set_exit_code(self, exit_code: ExitCodes):
         self.__exit_code = exit_code
 
-    def get_plugin_instances_by_type(self, plugin_type: Type[PluginType]) -> set[PluginType]:
-        return self.__plugin_type_registry[plugin_type] if plugin_type in self.__plugin_type_registry else set()
+    def get_plugin_instances_by_type(
+        self, plugin_type: Type[PluginType]
+    ) -> set[PluginType]:
+        return (
+            self.__plugin_type_registry[plugin_type]
+            if plugin_type in self.__plugin_type_registry
+            else set()
+        )
 
-    def get_dependency_graph_by_type(self, plugin_type: Type[PluginType]) -> list[set[PluginType]]:
-        return self.__typed_dependency_graphs[plugin_type] if plugin_type in self.__plugin_type_registry else []
+    def get_dependency_graph_by_type(
+        self, plugin_type: Type[PluginType]
+    ) -> list[set[PluginType]]:
+        return (
+            self.__typed_dependency_graphs[plugin_type]
+            if plugin_type in self.__plugin_type_registry
+            else []
+        )
 
     def for_each_plugin_instances(self, consumer: Callable[[PluginType], None]) -> None:
-        for plugin_instance in self.__operator.get_protected().get_nested_instances().values():
+        for plugin_instance in (
+            self.__operator.get_protected().get_nested_instances().values()
+        ):
             consumer(plugin_instance)
 
-    def for_each_plugin_objects_with_type(self, plugin_type: Type[PluginType],
-                                          consumer: Callable[[PluginType], None]) -> None:
+    def for_each_plugin_objects_with_type(
+        self, plugin_type: Type[PluginType], consumer: Callable[[PluginType], None]
+    ) -> None:
         if plugin_type in self.__plugin_type_registry:
             for plugin_instance in self.__plugin_type_registry[plugin_type]:
                 consumer(plugin_instance)

@@ -17,13 +17,18 @@ import os
 import types
 from unittest import TestCase
 
-from pypz.core.specs.instance import Instance
 from pypz.core.specs.dtos import InstanceDTO, SpecDTO
+from pypz.core.specs.instance import Instance
 from pypz.core.specs.misc import BlankInstance
 from pypz.core.specs.plugin import InputPortPlugin, ResourceHandlerPlugin
 from pypz.core.specs.utils import resolve_dependency_graph
-from core.test.specs_tests.instance_test_resources import TestClassL0, TestClassWithDifferentNestedType, \
-    TestClassForDependencyResolution, TestClassL3
+
+from core.test.specs_tests.instance_test_resources import (
+    TestClassForDependencyResolution,
+    TestClassL0,
+    TestClassL3,
+    TestClassWithDifferentNestedType,
+)
 
 
 class InstanceTest(TestCase):
@@ -73,8 +78,12 @@ class InstanceTest(TestCase):
 
         self.assertEqual(1, len(l0.l10.l2.get_protected().get_nested_instances()))
         self.assertEqual(1, len(l0.l11.l2.get_protected().get_nested_instances()))
-        self.assertEqual(l0.l10.l2.l3, l0.l10.l2.get_protected().get_nested_instance("l3"))
-        self.assertEqual(l0.l11.l2.l3, l0.l11.l2.get_protected().get_nested_instance("l3"))
+        self.assertEqual(
+            l0.l10.l2.l3, l0.l10.l2.get_protected().get_nested_instance("l3")
+        )
+        self.assertEqual(
+            l0.l11.l2.l3, l0.l11.l2.get_protected().get_nested_instance("l3")
+        )
         self.assertEqual(l0.l10.l2, l0.l10.l2.l3.get_context())
         self.assertEqual(l0.l11.l2, l0.l11.l2.l3.get_context())
 
@@ -121,7 +130,9 @@ class InstanceTest(TestCase):
         instance.instance_3.depends_on(instance.instance_2)
         instance.instance_4.depends_on(instance.instance_3)
 
-        dependency_levels = resolve_dependency_graph(instance.get_protected().get_nested_instances().values())
+        dependency_levels = resolve_dependency_graph(
+            instance.get_protected().get_nested_instances().values()
+        )
 
         self.assertEqual(5, len(dependency_levels))
         self.assertEqual(1, len(dependency_levels[0]))
@@ -142,7 +153,9 @@ class InstanceTest(TestCase):
         instance.instance_2.depends_on(instance.instance_3)
         instance.instance_3.depends_on(instance.instance_4)
 
-        dependency_levels = resolve_dependency_graph(instance.get_protected().get_nested_instances().values())
+        dependency_levels = resolve_dependency_graph(
+            instance.get_protected().get_nested_instances().values()
+        )
 
         self.assertEqual(5, len(dependency_levels))
         self.assertEqual(1, len(dependency_levels[0]))
@@ -165,7 +178,9 @@ class InstanceTest(TestCase):
         instance.instance_3.depends_on(instance.instance_2)
         instance.instance_4.depends_on(instance.instance_0)
 
-        dependency_levels = resolve_dependency_graph(instance.get_protected().get_nested_instances().values())
+        dependency_levels = resolve_dependency_graph(
+            instance.get_protected().get_nested_instances().values()
+        )
 
         self.assertEqual(4, len(dependency_levels))
         self.assertEqual(1, len(dependency_levels[0]))
@@ -185,7 +200,9 @@ class InstanceTest(TestCase):
         instance.instance_3.depends_on(instance.instance_0)
         instance.instance_3.depends_on(instance.instance_2)
 
-        dependency_levels = resolve_dependency_graph(instance.get_protected().get_nested_instances().values())
+        dependency_levels = resolve_dependency_graph(
+            instance.get_protected().get_nested_instances().values()
+        )
 
         self.assertEqual(3, len(dependency_levels))
         self.assertEqual(2, len(dependency_levels[0]))
@@ -207,7 +224,9 @@ class InstanceTest(TestCase):
         instance.instance_0._Instance__depends_on.add(instance.instance_4)
 
         with self.assertRaises(RecursionError):
-            resolve_dependency_graph(instance.get_protected().get_nested_instances().values())
+            resolve_dependency_graph(
+                instance.get_protected().get_nested_instances().values()
+            )
 
     def test_dependency_order_resolution_with_extra_dependency(self):
         # The case shall be tested, where one instance has an extra dependency
@@ -225,7 +244,9 @@ class InstanceTest(TestCase):
 
         instance.instance_4._Instance__depends_on.add(BlankInstance("inst"))
 
-        dependency_levels = resolve_dependency_graph(instance.get_protected().get_nested_instances().values())
+        dependency_levels = resolve_dependency_graph(
+            instance.get_protected().get_nested_instances().values()
+        )
 
         self.assertEqual(5, len(dependency_levels))
         self.assertEqual(1, len(dependency_levels[0]))
@@ -469,7 +490,9 @@ class InstanceTest(TestCase):
         l0 = TestClassL0("l0")
 
         try:
-            l0.update(InstanceDTO(spec=SpecDTO(name=l0.get_protected().get_spec_name())))
+            l0.update(
+                InstanceDTO(spec=SpecDTO(name=l0.get_protected().get_spec_name()))
+            )
         except AttributeError:
             self.fail()
 
@@ -497,12 +520,14 @@ class InstanceTest(TestCase):
     def test_instance_update_parameters(self):
         l0 = TestClassL0("l0")
 
-        to_update = InstanceDTO(parameters={
+        to_update = InstanceDTO(
+            parameters={
                 "l0": "l0",
                 "#l01": "l01",
                 "##l012": "l012",
                 "###l0123": "l0123",
-            })
+            }
+        )
 
         l0.update(to_update)
 
@@ -536,10 +561,14 @@ class InstanceTest(TestCase):
     def test_instance_update_nested_instances_with_parameters_and_dependencies(self):
         l0 = TestClassWithDifferentNestedType("base")
 
-        to_update = InstanceDTO(spec=SpecDTO(nestedInstances=[
-            InstanceDTO(name="a", parameters={"updated_param": "value"}),
-            InstanceDTO(name="b", dependsOn=["c"])
-        ]))
+        to_update = InstanceDTO(
+            spec=SpecDTO(
+                nestedInstances=[
+                    InstanceDTO(name="a", parameters={"updated_param": "value"}),
+                    InstanceDTO(name="b", dependsOn=["c"]),
+                ]
+            )
+        )
 
         l0.update(to_update)
 
@@ -550,9 +579,9 @@ class InstanceTest(TestCase):
     def test_instance_update_with_missing_dependency_instance(self):
         l0 = TestClassWithDifferentNestedType("base")
 
-        to_update = InstanceDTO(spec=SpecDTO(nestedInstances=[
-            InstanceDTO(name="b", dependsOn=["missing"])
-        ]))
+        to_update = InstanceDTO(
+            spec=SpecDTO(nestedInstances=[InstanceDTO(name="b", dependsOn=["missing"])])
+        )
 
         with self.assertRaises(AttributeError):
             l0.update(to_update)
@@ -560,17 +589,31 @@ class InstanceTest(TestCase):
     def test_instance_update_with_multilevel_nesting(self):
         l0 = TestClassL0("l0")
 
-        to_update = InstanceDTO(spec=SpecDTO(nestedInstances=[
-            InstanceDTO(name="l10", parameters={"l10": "l10"},
-                        spec=SpecDTO(nestedInstances=[
-                            InstanceDTO(name="l2",
-                                        parameters={"l2": "l2"},
-                                        spec=SpecDTO(nestedInstances=[
-                                            InstanceDTO(name="l3",
-                                                        parameters={"l3": "l3"})
-                                        ]))
-                        ]))
-        ]))
+        to_update = InstanceDTO(
+            spec=SpecDTO(
+                nestedInstances=[
+                    InstanceDTO(
+                        name="l10",
+                        parameters={"l10": "l10"},
+                        spec=SpecDTO(
+                            nestedInstances=[
+                                InstanceDTO(
+                                    name="l2",
+                                    parameters={"l2": "l2"},
+                                    spec=SpecDTO(
+                                        nestedInstances=[
+                                            InstanceDTO(
+                                                name="l3", parameters={"l3": "l3"}
+                                            )
+                                        ]
+                                    ),
+                                )
+                            ]
+                        ),
+                    )
+                ]
+            )
+        )
 
         l0.update(to_update)
 
@@ -599,16 +642,17 @@ class InstanceTest(TestCase):
 
         l0 = TestClassL0("l0")
 
-        to_update = InstanceDTO(parameters={
-            "##param_1": "cascaded_l0",
-            "##param_2": "cascaded_l0"
-        }, spec=SpecDTO(nestedInstances=[
-            InstanceDTO(name="l10",
-                        parameters={
-                            "#param_1": "cascaded_l1",
-                            "param_2": "direct"
-                        })
-        ]))
+        to_update = InstanceDTO(
+            parameters={"##param_1": "cascaded_l0", "##param_2": "cascaded_l0"},
+            spec=SpecDTO(
+                nestedInstances=[
+                    InstanceDTO(
+                        name="l10",
+                        parameters={"#param_1": "cascaded_l1", "param_2": "direct"},
+                    )
+                ]
+            ),
+        )
 
         l0.update(to_update)
 
@@ -627,8 +671,9 @@ class InstanceTest(TestCase):
     def test_instance_retrieval_with_spec_name(self):
         l0 = TestClassL0("instance")
 
-        to_retrieve = InstanceDTO(name="instance",
-                                  spec=SpecDTO(name=l0.get_protected().get_spec_name()))
+        to_retrieve = InstanceDTO(
+            name="instance", spec=SpecDTO(name=l0.get_protected().get_spec_name())
+        )
 
         l0_retrieved = Instance.create_from_dto(to_retrieve)
 
@@ -643,8 +688,9 @@ class InstanceTest(TestCase):
             Instance.create_from_dto(to_retrieve)
 
     def test_instance_retrieval_with_invalid_spec_name_expect_error(self):
-        to_retrieve = InstanceDTO(name="instance",
-                                  spec=SpecDTO(name=f"{TestClassL0.__module__}:invalid_name"))
+        to_retrieve = InstanceDTO(
+            name="instance", spec=SpecDTO(name=f"{TestClassL0.__module__}:invalid_name")
+        )
 
         with self.assertRaises(AttributeError):
             Instance.create_from_dto(to_retrieve)
@@ -652,13 +698,18 @@ class InstanceTest(TestCase):
     def test_instance_retrieval_with_retrievable_nested_instance(self):
         l0 = TestClassL0("instance")
 
-        to_retrieve = \
-            InstanceDTO(name="instance",
-                        spec=SpecDTO(name=l0.l10.get_protected().get_spec_name(),
-                                     nestedInstances=[
-                                         InstanceDTO(name="instance",
-                                                     spec=SpecDTO(name=l0.get_protected().get_spec_name()))
-                                     ]))
+        to_retrieve = InstanceDTO(
+            name="instance",
+            spec=SpecDTO(
+                name=l0.l10.get_protected().get_spec_name(),
+                nestedInstances=[
+                    InstanceDTO(
+                        name="instance",
+                        spec=SpecDTO(name=l0.get_protected().get_spec_name()),
+                    )
+                ],
+            ),
+        )
 
         l0_retrieved = Instance.create_from_dto(to_retrieve)
         self.assertTrue(l0_retrieved.get_protected().has_nested_instance("instance"))
@@ -833,15 +884,23 @@ class InstanceTest(TestCase):
 
         instance = Instance.create_from_string(json_string, mock_nonexistent=True)
         self.assertEqual("instance", instance.get_simple_name())
-        self.assertEqual("dummy.module:NotExistingClass", instance.get_protected().get_spec_name())
+        self.assertEqual(
+            "dummy.module:NotExistingClass", instance.get_protected().get_spec_name()
+        )
         self.assertEqual("testValue", instance.get_parameter("env"))
         self.assertTrue(issubclass(instance.__class__, Instance))
         self.assertTrue(instance.__class__.__dict__["mocked"])
         self.assertEqual("dummy.module", instance.__class__.__dict__["__module__"])
-        self.assertTrue(isinstance(instance.__class__.__dict__["_on_interrupt"], types.FunctionType))
-        self.assertTrue(isinstance(instance.__class__.__dict__["_on_error"], types.FunctionType))
+        self.assertTrue(
+            isinstance(instance.__class__.__dict__["_on_interrupt"], types.FunctionType)
+        )
+        self.assertTrue(
+            isinstance(instance.__class__.__dict__["_on_error"], types.FunctionType)
+        )
 
-    def test_instance_creation_with_non_existing_spec_with_multiple_types_expect_mock(self):
+    def test_instance_creation_with_non_existing_spec_with_multiple_types_expect_mock(
+        self,
+    ):
         os.environ["PYPZ_TEST_ENV_VAR"] = "testValue"
 
         json_string = """
@@ -869,7 +928,9 @@ class InstanceTest(TestCase):
         self.assertTrue(issubclass(instance.__class__, InputPortPlugin))
         self.assertTrue(issubclass(instance.__class__, ResourceHandlerPlugin))
 
-    def test_instance_creation_with_non_existing_spec_with_existing_and_non_existing_nested_instances_expect_mock(self):
+    def test_instance_creation_with_non_existing_spec_with_existing_and_non_existing_nested_instances_expect_mock(
+        self,
+    ):
         os.environ["PYPZ_TEST_ENV_VAR"] = "testValue"
 
         json_string = """
@@ -1089,7 +1150,9 @@ class InstanceTest(TestCase):
         with self.assertRaises(AttributeError):
             Instance.create_from_string(json_string, mock_nonexistent=True)
 
-    def test_instance_creation_with_non_existing_spec_with_invalid_type_expect_error(self):
+    def test_instance_creation_with_non_existing_spec_with_invalid_type_expect_error(
+        self,
+    ):
         json_string = """
         {
           "name": "instance",
@@ -1140,7 +1203,9 @@ class InstanceTest(TestCase):
         with self.assertRaises(TypeError):
             Instance.create_from_string(json_string, mock_nonexistent=True)
 
-    def test_instance_creation_with_non_existing_spec_with_non_existing_type_expect_error(self):
+    def test_instance_creation_with_non_existing_spec_with_non_existing_type_expect_error(
+        self,
+    ):
         json_string = """
         {
           "name": "instance",

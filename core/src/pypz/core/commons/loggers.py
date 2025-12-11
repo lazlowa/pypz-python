@@ -27,19 +27,43 @@ class ContextLoggerInterface(ABC):
     """
 
     @abstractmethod
-    def _error(self, event: Optional[str] = None, context_stack: list[str] = None, *args: Any, **kw: Any) -> Any:
+    def _error(
+        self,
+        event: Optional[str] = None,
+        context_stack: list[str] = None,
+        *args: Any,
+        **kw: Any,
+    ) -> Any:
         pass
 
     @abstractmethod
-    def _warning(self, event: Optional[str] = None, context_stack: list[str] = None, *args: Any, **kw: Any) -> Any:
+    def _warning(
+        self,
+        event: Optional[str] = None,
+        context_stack: list[str] = None,
+        *args: Any,
+        **kw: Any,
+    ) -> Any:
         pass
 
     @abstractmethod
-    def _info(self, event: Optional[str] = None, context_stack: list[str] = None, *args: Any, **kw: Any) -> Any:
+    def _info(
+        self,
+        event: Optional[str] = None,
+        context_stack: list[str] = None,
+        *args: Any,
+        **kw: Any,
+    ) -> Any:
         pass
 
     @abstractmethod
-    def _debug(self, event: Optional[str] = None, context_stack: list[str] = None, *args: Any, **kw: Any) -> Any:
+    def _debug(
+        self,
+        event: Optional[str] = None,
+        context_stack: list[str] = None,
+        *args: Any,
+        **kw: Any,
+    ) -> Any:
         pass
 
     def set_log_level(self, log_level: Any) -> None:
@@ -78,16 +102,40 @@ class ContextLogger(ContextLoggerInterface):
     def get_context_stack(self) -> list[str]:
         return self._context_stack
 
-    def _error(self, event: Optional[str] = None, context_stack: list[str] = None, *args: Any, **kw: Any) -> Any:
+    def _error(
+        self,
+        event: Optional[str] = None,
+        context_stack: list[str] = None,
+        *args: Any,
+        **kw: Any,
+    ) -> Any:
         self._logger._error(event, context_stack, *args, **kw)
 
-    def _warning(self, event: Optional[str] = None, context_stack: list[str] = None, *args: Any, **kw: Any) -> Any:
+    def _warning(
+        self,
+        event: Optional[str] = None,
+        context_stack: list[str] = None,
+        *args: Any,
+        **kw: Any,
+    ) -> Any:
         self._logger._warning(event, context_stack, *args, **kw)
 
-    def _info(self, event: Optional[str] = None, context_stack: list[str] = None, *args: Any, **kw: Any) -> Any:
+    def _info(
+        self,
+        event: Optional[str] = None,
+        context_stack: list[str] = None,
+        *args: Any,
+        **kw: Any,
+    ) -> Any:
         self._logger._info(event, context_stack, *args, **kw)
 
-    def _debug(self, event: Optional[str] = None, context_stack: list[str] = None, *args: Any, **kw: Any) -> Any:
+    def _debug(
+        self,
+        event: Optional[str] = None,
+        context_stack: list[str] = None,
+        *args: Any,
+        **kw: Any,
+    ) -> Any:
         self._logger._debug(event, context_stack, *args, **kw)
 
     def set_log_level(self, log_level: str | int) -> None:
@@ -122,15 +170,15 @@ class DefaultContextLogger(ContextLoggerInterface):
         the log message.
         """
 
-        RESET = '\033[0m'
-        RED = '\033[31m'
-        GREEN = '\033[32m'
-        YELLOW = '\033[33m'
-        BLUE = '\033[34m'
-        PURPLE = '\033[35m'
-        CYAN = '\033[36m'
-        WHITE = '\033[37m'
-        LIGHT_GRAY = '\033[37m'
+        RESET = "\033[0m"
+        RED = "\033[31m"
+        GREEN = "\033[32m"
+        YELLOW = "\033[33m"
+        BLUE = "\033[34m"
+        PURPLE = "\033[35m"
+        CYAN = "\033[36m"
+        WHITE = "\033[37m"
+        LIGHT_GRAY = "\033[37m"
 
         def format(self, record):
             if record.levelno == logging.ERROR:
@@ -160,33 +208,77 @@ class DefaultContextLogger(ContextLoggerInterface):
             handler.setFormatter(formatter)
             self._logger.addHandler(handler)
 
-    def _error(self, event: Optional[str] = None, context_stack: list[str] = None, *args: Any, **kw: Any) -> Any:
-        self._logger.error(event,
-                           extra={
-                               "context": " | ".join(context_stack) if context_stack is not None else None
-                           },
-                           *args, **kw)
+    def _error(
+        self,
+        event: Optional[str] = None,
+        context_stack: list[str] = None,
+        *args: Any,
+        **kw: Any,
+    ) -> Any:
+        self._logger.error(
+            event,
+            extra={
+                "context": (
+                    " | ".join(context_stack) if context_stack is not None else None
+                )
+            },
+            *args,
+            **kw,
+        )
 
-    def _warning(self, event: Optional[str] = None, context_stack: list[str] = None, *args: Any, **kw: Any) -> Any:
-        self._logger.warning(event,
-                             extra={
-                                 "context": " | ".join(context_stack) if context_stack is not None else None
-                             },
-                             *args, **kw)
+    def _warning(
+        self,
+        event: Optional[str] = None,
+        context_stack: list[str] = None,
+        *args: Any,
+        **kw: Any,
+    ) -> Any:
+        self._logger.warning(
+            event,
+            extra={
+                "context": (
+                    " | ".join(context_stack) if context_stack is not None else None
+                )
+            },
+            *args,
+            **kw,
+        )
 
-    def _info(self, event: Optional[str] = None, context_stack: list[str] = None, *args: Any, **kw: Any) -> Any:
-        self._logger.info(event,
-                          extra={
-                              "context": " | ".join(context_stack) if context_stack is not None else None
-                          },
-                          *args, **kw)
+    def _info(
+        self,
+        event: Optional[str] = None,
+        context_stack: list[str] = None,
+        *args: Any,
+        **kw: Any,
+    ) -> Any:
+        self._logger.info(
+            event,
+            extra={
+                "context": (
+                    " | ".join(context_stack) if context_stack is not None else None
+                )
+            },
+            *args,
+            **kw,
+        )
 
-    def _debug(self, event: Optional[str] = None, context_stack: list[str] = None, *args: Any, **kw: Any) -> Any:
-        self._logger.debug(event,
-                           extra={
-                               "context": " | ".join(context_stack) if context_stack is not None else None
-                           },
-                           *args, **kw)
+    def _debug(
+        self,
+        event: Optional[str] = None,
+        context_stack: list[str] = None,
+        *args: Any,
+        **kw: Any,
+    ) -> Any:
+        self._logger.debug(
+            event,
+            extra={
+                "context": (
+                    " | ".join(context_stack) if context_stack is not None else None
+                )
+            },
+            *args,
+            **kw,
+        )
 
     def set_log_level(self, log_level: str | int) -> None:
         if isinstance(log_level, str):

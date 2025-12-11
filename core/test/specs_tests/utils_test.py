@@ -18,9 +18,15 @@ import unittest
 from pypz.core.commons.utils import is_type_allowed
 from pypz.core.specs.instance import Instance
 from pypz.core.specs.operator import Operator
-from pypz.core.specs.plugin import InputPortPlugin, OutputPortPlugin, ResourceHandlerPlugin, ServicePlugin, Plugin, \
-    PortPlugin
-from pypz.core.specs.utils import remove_super_classes, load_class_by_name
+from pypz.core.specs.plugin import (
+    InputPortPlugin,
+    OutputPortPlugin,
+    Plugin,
+    PortPlugin,
+    ResourceHandlerPlugin,
+    ServicePlugin,
+)
+from pypz.core.specs.utils import load_class_by_name, remove_super_classes
 
 
 class UtilsTest(unittest.TestCase):
@@ -49,33 +55,110 @@ class UtilsTest(unittest.TestCase):
             load_class_by_name("pypz.DummyClass")
 
     def test_remove_super_classes_cases(self):
-        self.assertEqual({InputPortPlugin, OutputPortPlugin, ResourceHandlerPlugin, ServicePlugin},
-                         remove_super_classes({Instance, Plugin, PortPlugin, InputPortPlugin, OutputPortPlugin,
-                                               ResourceHandlerPlugin, ServicePlugin}))
+        self.assertEqual(
+            {InputPortPlugin, OutputPortPlugin, ResourceHandlerPlugin, ServicePlugin},
+            remove_super_classes(
+                {
+                    Instance,
+                    Plugin,
+                    PortPlugin,
+                    InputPortPlugin,
+                    OutputPortPlugin,
+                    ResourceHandlerPlugin,
+                    ServicePlugin,
+                }
+            ),
+        )
 
-        self.assertEqual({InputPortPlugin, OutputPortPlugin, ResourceHandlerPlugin, ServicePlugin},
-                         remove_super_classes({Plugin, PortPlugin, InputPortPlugin, OutputPortPlugin,
-                                               ResourceHandlerPlugin, ServicePlugin, Instance}))
+        self.assertEqual(
+            {InputPortPlugin, OutputPortPlugin, ResourceHandlerPlugin, ServicePlugin},
+            remove_super_classes(
+                {
+                    Plugin,
+                    PortPlugin,
+                    InputPortPlugin,
+                    OutputPortPlugin,
+                    ResourceHandlerPlugin,
+                    ServicePlugin,
+                    Instance,
+                }
+            ),
+        )
 
-        self.assertEqual({InputPortPlugin, OutputPortPlugin, ResourceHandlerPlugin, ServicePlugin},
-                         remove_super_classes({PortPlugin, InputPortPlugin, OutputPortPlugin, ResourceHandlerPlugin,
-                                               ServicePlugin, Instance, Plugin}))
+        self.assertEqual(
+            {InputPortPlugin, OutputPortPlugin, ResourceHandlerPlugin, ServicePlugin},
+            remove_super_classes(
+                {
+                    PortPlugin,
+                    InputPortPlugin,
+                    OutputPortPlugin,
+                    ResourceHandlerPlugin,
+                    ServicePlugin,
+                    Instance,
+                    Plugin,
+                }
+            ),
+        )
 
-        self.assertEqual({InputPortPlugin, OutputPortPlugin, ResourceHandlerPlugin, ServicePlugin},
-                         remove_super_classes({InputPortPlugin, OutputPortPlugin, ResourceHandlerPlugin,
-                                               ServicePlugin, Instance, Plugin, PortPlugin}))
+        self.assertEqual(
+            {InputPortPlugin, OutputPortPlugin, ResourceHandlerPlugin, ServicePlugin},
+            remove_super_classes(
+                {
+                    InputPortPlugin,
+                    OutputPortPlugin,
+                    ResourceHandlerPlugin,
+                    ServicePlugin,
+                    Instance,
+                    Plugin,
+                    PortPlugin,
+                }
+            ),
+        )
 
-        self.assertEqual({InputPortPlugin, OutputPortPlugin, ResourceHandlerPlugin, ServicePlugin},
-                         remove_super_classes({OutputPortPlugin, ResourceHandlerPlugin, ServicePlugin, Instance,
-                                               Plugin, PortPlugin, InputPortPlugin}))
+        self.assertEqual(
+            {InputPortPlugin, OutputPortPlugin, ResourceHandlerPlugin, ServicePlugin},
+            remove_super_classes(
+                {
+                    OutputPortPlugin,
+                    ResourceHandlerPlugin,
+                    ServicePlugin,
+                    Instance,
+                    Plugin,
+                    PortPlugin,
+                    InputPortPlugin,
+                }
+            ),
+        )
 
-        self.assertEqual({InputPortPlugin, OutputPortPlugin, ResourceHandlerPlugin, ServicePlugin},
-                         remove_super_classes({ResourceHandlerPlugin, ServicePlugin, Instance, Plugin, PortPlugin,
-                                               InputPortPlugin, OutputPortPlugin}))
+        self.assertEqual(
+            {InputPortPlugin, OutputPortPlugin, ResourceHandlerPlugin, ServicePlugin},
+            remove_super_classes(
+                {
+                    ResourceHandlerPlugin,
+                    ServicePlugin,
+                    Instance,
+                    Plugin,
+                    PortPlugin,
+                    InputPortPlugin,
+                    OutputPortPlugin,
+                }
+            ),
+        )
 
-        self.assertEqual({InputPortPlugin, OutputPortPlugin, ResourceHandlerPlugin, ServicePlugin},
-                         remove_super_classes({ServicePlugin, Instance, Plugin, PortPlugin, InputPortPlugin,
-                                               OutputPortPlugin, ResourceHandlerPlugin}))
+        self.assertEqual(
+            {InputPortPlugin, OutputPortPlugin, ResourceHandlerPlugin, ServicePlugin},
+            remove_super_classes(
+                {
+                    ServicePlugin,
+                    Instance,
+                    Plugin,
+                    PortPlugin,
+                    InputPortPlugin,
+                    OutputPortPlugin,
+                    ResourceHandlerPlugin,
+                }
+            ),
+        )
 
     def test_is_type_allowed_with_simple_types(self):
         self.assertTrue(is_type_allowed("string", (str, int, float)))
@@ -86,8 +169,8 @@ class UtilsTest(unittest.TestCase):
         self.assertFalse(is_type_allowed(1, (type(None),)))
         self.assertFalse(is_type_allowed(1.0, (type(None),)))
 
-        self.assertFalse(is_type_allowed(dict(), (type(None),)))
-        self.assertFalse(is_type_allowed(list(), (type(None),)))
+        self.assertFalse(is_type_allowed({}, (type(None),)))
+        self.assertFalse(is_type_allowed([], (type(None),)))
         self.assertFalse(is_type_allowed(set(), (type(None),)))
 
     def test_is_type_allowed_with_complex_types_list(self):
@@ -116,12 +199,22 @@ class UtilsTest(unittest.TestCase):
         self.assertTrue(is_type_allowed({"0": [0.0, 1.0]}, (float, dict, list)))
         self.assertTrue(is_type_allowed({"0": {0.0, 1.0}}, (float, dict, set)))
         self.assertTrue(is_type_allowed({"0": {"0": 0.0, "1": 1.0}}, (float, dict)))
-        self.assertTrue(is_type_allowed({"0": {"0": [0.0], "1": {1.0}}}, (float, dict, list, set)))
+        self.assertTrue(
+            is_type_allowed({"0": {"0": [0.0], "1": {1.0}}}, (float, dict, list, set))
+        )
 
-        self.assertFalse(is_type_allowed({"0": {"0": [0.0], "1": {1.0}}}, (float, dict, list)))
-        self.assertFalse(is_type_allowed({"0": {"0": [0.0], "1": {1.0}}}, (float, dict, set)))
-        self.assertFalse(is_type_allowed({"0": {"0": [0.0], "1": {1}}}, (float, dict, list, set)))
-        self.assertFalse(is_type_allowed({"0": {"0": [0.0], "1": {"1"}}}, (float, dict, list, set)))
+        self.assertFalse(
+            is_type_allowed({"0": {"0": [0.0], "1": {1.0}}}, (float, dict, list))
+        )
+        self.assertFalse(
+            is_type_allowed({"0": {"0": [0.0], "1": {1.0}}}, (float, dict, set))
+        )
+        self.assertFalse(
+            is_type_allowed({"0": {"0": [0.0], "1": {1}}}, (float, dict, list, set))
+        )
+        self.assertFalse(
+            is_type_allowed({"0": {"0": [0.0], "1": {"1"}}}, (float, dict, list, set))
+        )
         self.assertFalse(is_type_allowed(0, (float, dict)))
         self.assertFalse(is_type_allowed({"0": 0}, (float, dict)))
         self.assertFalse(is_type_allowed({"0": [0.0, 0]}, (float, dict)))
@@ -131,24 +224,75 @@ class UtilsTest(unittest.TestCase):
         self.assertTrue(is_type_allowed(0.0, (str, int, float, set, list, dict)))
         self.assertTrue(is_type_allowed("0", (str, int, float, set, list, dict)))
 
-        self.assertTrue(is_type_allowed([0, 0.0, "0"], (str, int, float, set, list, dict)))
-        self.assertTrue(is_type_allowed({0, 0.0, "0"}, (str, int, float, set, list, dict)))
-        self.assertTrue(is_type_allowed({"a": 0, "b": 0.0, "c": "0"}, (str, int, float, set, list, dict)))
+        self.assertTrue(
+            is_type_allowed([0, 0.0, "0"], (str, int, float, set, list, dict))
+        )
+        self.assertTrue(
+            is_type_allowed({0, 0.0, "0"}, (str, int, float, set, list, dict))
+        )
+        self.assertTrue(
+            is_type_allowed(
+                {"a": 0, "b": 0.0, "c": "0"}, (str, int, float, set, list, dict)
+            )
+        )
 
-        self.assertTrue(is_type_allowed([{0, 0.0, "0"}], (str, int, float, set, list, dict)))
-        self.assertTrue(is_type_allowed({"a": [0, 0.0, "0"], "b": {0, 0.0, "0"}, "c": {"a": 0, "b": 0.0, "c": "0"}},
-                                        (str, int, float, set, list, dict)))
-        self.assertTrue(is_type_allowed({"c": {"a": {0, 0.0, "0"}, "b": [0, 0.0, "0"], "c": "0"}},
-                                        (str, int, float, set, list, dict)))
-        self.assertTrue(is_type_allowed([{"c": {"a": {0, 0.0, "0"}, "b": [0, 0.0, "0"], "c": "0"}}],
-                                        (str, int, float, set, list, dict)))
+        self.assertTrue(
+            is_type_allowed([{0, 0.0, "0"}], (str, int, float, set, list, dict))
+        )
+        self.assertTrue(
+            is_type_allowed(
+                {
+                    "a": [0, 0.0, "0"],
+                    "b": {0, 0.0, "0"},
+                    "c": {"a": 0, "b": 0.0, "c": "0"},
+                },
+                (str, int, float, set, list, dict),
+            )
+        )
+        self.assertTrue(
+            is_type_allowed(
+                {"c": {"a": {0, 0.0, "0"}, "b": [0, 0.0, "0"], "c": "0"}},
+                (str, int, float, set, list, dict),
+            )
+        )
+        self.assertTrue(
+            is_type_allowed(
+                [{"c": {"a": {0, 0.0, "0"}, "b": [0, 0.0, "0"], "c": "0"}}],
+                (str, int, float, set, list, dict),
+            )
+        )
 
-        self.assertFalse(is_type_allowed((0, 0.0, "0"), (str, int, float, set, list, dict)))
+        self.assertFalse(
+            is_type_allowed((0, 0.0, "0"), (str, int, float, set, list, dict))
+        )
 
-        self.assertFalse(is_type_allowed([(0, 0.0, "0"),], (str, int, float, set, list, dict)))
-        self.assertFalse(is_type_allowed({"a": [0, 0.0, "0"], "b": (0, 0.0, "0"), "c": {"a": 0, "b": 0.0, "c": "0"}},
-                                         (str, int, float, set, list, dict)))
-        self.assertFalse(is_type_allowed({"c": {"a": {0, 0.0, "0"}, "b": (0, 0.0, "0"), "c": "0"}},
-                                         (str, int, float, set, list, dict)))
-        self.assertFalse(is_type_allowed([{"c": {"a": {0, 0.0, "0"}, "b": (0, 0.0, "0"), "c": "0"}}],
-                                         (str, int, float, set, list, dict)))
+        self.assertFalse(
+            is_type_allowed(
+                [
+                    (0, 0.0, "0"),
+                ],
+                (str, int, float, set, list, dict),
+            )
+        )
+        self.assertFalse(
+            is_type_allowed(
+                {
+                    "a": [0, 0.0, "0"],
+                    "b": (0, 0.0, "0"),
+                    "c": {"a": 0, "b": 0.0, "c": "0"},
+                },
+                (str, int, float, set, list, dict),
+            )
+        )
+        self.assertFalse(
+            is_type_allowed(
+                {"c": {"a": {0, 0.0, "0"}, "b": (0, 0.0, "0"), "c": "0"}},
+                (str, int, float, set, list, dict),
+            )
+        )
+        self.assertFalse(
+            is_type_allowed(
+                [{"c": {"a": {0, 0.0, "0"}, "b": (0, 0.0, "0"), "c": "0"}}],
+                (str, int, float, set, list, dict),
+            )
+        )

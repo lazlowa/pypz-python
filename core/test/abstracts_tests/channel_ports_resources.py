@@ -15,16 +15,24 @@
 # =============================================================================
 from typing import Any, Optional
 
-from pypz.plugins.loggers.default import DefaultLoggerPlugin
 from pypz.abstracts.channel_ports import ChannelInputPort, ChannelOutputPort
 from pypz.core.specs.misc import BlankOperator
 from pypz.core.specs.pipeline import Pipeline
+from pypz.plugins.loggers.default import DefaultLoggerPlugin
+
 from core.test.channels_tests.resources import TestChannelReader, TestChannelWriter
 
 
 class TestChannelInputPort(ChannelInputPort):
 
-    def __init__(self, name: str = None, schema: Any = None, group_mode: bool = False, *args, **kwargs):
+    def __init__(
+        self,
+        name: str = None,
+        schema: Any = None,
+        group_mode: bool = False,
+        *args,
+        **kwargs,
+    ):
         super().__init__(name, schema, group_mode, TestChannelReader, *args, **kwargs)
 
 

@@ -15,7 +15,7 @@
 # =============================================================================
 import unittest
 
-from pypz.core.commons.utils import current_time_millis, InterruptableTimer
+from pypz.core.commons.utils import InterruptableTimer, current_time_millis
 
 
 class TimerTest(unittest.TestCase):

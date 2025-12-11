@@ -29,22 +29,29 @@ def is_sublist(subset: list, target_list: list) -> bool:
         return False
 
     for i in range(target_len - subset_len + 1):
-        if target_list[i:i + subset_len] == subset:
+        if target_list[i : i + subset_len] == subset:
             return True
 
     return False
 
 
-def retrieve_operator_paths(operator: Operator, visited: set[Operator] = None) -> list[list[Operator]]:
+def retrieve_operator_paths(
+    operator: Operator, visited: set[Operator] = None
+) -> list[list[Operator]]:
     result_paths = []
     visited = {operator} if visited is None else visited
     for plugin in operator.get_protected().get_nested_instances().values():
         if isinstance(plugin, OutputPortPlugin):
             for input_port in plugin.get_connected_ports():
                 if input_port.get_context() not in visited:
-                    result_paths.extend([[operator] + retrieved_path
-                                         for retrieved_path in
-                                         retrieve_operator_paths(input_port.get_context(), visited)])
+                    result_paths.extend(
+                        [
+                            [operator] + retrieved_path
+                            for retrieved_path in retrieve_operator_paths(
+                                input_port.get_context(), visited
+                            )
+                        ]
+                    )
     return result_paths if 0 < len(result_paths) else [[operator]]
 
 
@@ -82,7 +89,7 @@ def order_operators_by_connections(pipeline: Pipeline) -> list[set[Operator]]:
     Note that this method is capable to handle circular dependencies.
     """
 
-    paths: list = list()
+    paths: list = []
     # Step 1)
     # Extracting the paths. Using the example in the docs, the expected result:
     # [0] - [A, C, D, F, G]
@@ -104,8 +111,16 @@ def order_operators_by_connections(pipeline: Pipeline) -> list[set[Operator]]:
     # [2] - [A, C, E, G]
     # The first 2 is sub-path of the 3. therefore shall be removed.
     # ============================================================================
-    cleaned_paths = [path for path in paths
-                     if not any([is_sublist(path, target_path) and (path != target_path) for target_path in paths])]
+    cleaned_paths = [
+        path
+        for path in paths
+        if not any(
+            [
+                is_sublist(path, target_path) and (path != target_path)
+                for target_path in paths
+            ]
+        )
+    ]
 
     # Step 3)
     # Converting path into list of sets. Using the example in the docs, the expected result:

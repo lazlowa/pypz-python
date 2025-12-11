@@ -26,19 +26,24 @@ class TestDeployer(Deployer):
 
     def __init__(self):
         super().__init__()
-        self.deployed_pipelines: dict[str, Pipeline] = dict()
-        self.deployed_operators: dict[str, DeploymentState] = dict()
+        self.deployed_pipelines: dict[str, Pipeline] = {}
+        self.deployed_operators: dict[str, DeploymentState] = {}
 
-    def deploy(self, pipeline: Pipeline,
-               execution_mode: ExecutionMode = ExecutionMode.Standard,
-               ignore_operators: list[Operator] = None,
-               wait: bool = True) -> None:
+    def deploy(
+        self,
+        pipeline: Pipeline,
+        execution_mode: ExecutionMode = ExecutionMode.Standard,
+        ignore_operators: list[Operator] = None,
+        wait: bool = True,
+    ) -> None:
         self.deployed_pipelines[pipeline.get_full_name()] = pipeline
 
         for operator in pipeline.get_protected().get_nested_instances().values():
             self.deployed_operators[operator.get_full_name()] = DeploymentState.Running
 
-    def destroy(self, pipeline_name: str, force: bool = False, wait: bool = True) -> None:
+    def destroy(
+        self, pipeline_name: str, force: bool = False, wait: bool = True
+    ) -> None:
         pipeline = self.deployed_pipelines[pipeline_name]
 
         for operator in pipeline.get_protected().get_nested_instances().values():
@@ -46,10 +51,14 @@ class TestDeployer(Deployer):
 
         del self.deployed_pipelines[pipeline_name]
 
-    def restart_operator(self, operator_full_name: str, force: bool = False, wait: bool = True):
+    def restart_operator(
+        self, operator_full_name: str, force: bool = False, wait: bool = True
+    ):
         pass
 
-    def destroy_operator(self, operator_full_name: str, force: bool = False, wait: bool = True) -> None:
+    def destroy_operator(
+        self, operator_full_name: str, force: bool = False, wait: bool = True
+    ) -> None:
         del self.deployed_operators[operator_full_name]
 
     def is_deployed(self, pipeline_name: str) -> bool:

@@ -15,7 +15,7 @@
 # =============================================================================
 from typing import Optional, Type, TypeVar, Union
 
-NestedInstanceDTOType = TypeVar("NestedInstanceDTOType", bound='InstanceDTO')
+NestedInstanceDTOType = TypeVar("NestedInstanceDTOType", bound="InstanceDTO")
 
 
 class SpecDTO:
@@ -39,14 +39,18 @@ class SpecDTO:
     :param nested_instance_dto_type: helper to specify the nested DTO type
     """
 
-    def __init__(self,
-                 name: str = None,
-                 location: str = None,
-                 expectedParameters: dict = None,
-                 types: list = None,
-                 nestedInstanceType: str = None,
-                 nestedInstances: list[NestedInstanceDTOType] = None,
-                 nested_instance_dto_type: Optional[Union[Type[NestedInstanceDTOType], str]] = 'default'):
+    def __init__(
+        self,
+        name: str = None,
+        location: str = None,
+        expectedParameters: dict = None,
+        types: list = None,
+        nestedInstanceType: str = None,
+        nestedInstances: list[NestedInstanceDTOType] = None,
+        nested_instance_dto_type: Optional[
+            Union[Type[NestedInstanceDTOType], str]
+        ] = "default",
+    ):
         self.name: str = name
         self.location: str = location
         self.expectedParameters: dict = expectedParameters
@@ -54,7 +58,7 @@ class SpecDTO:
         self.nestedInstanceType: str = nestedInstanceType
         self.nestedInstances: Optional[list[NestedInstanceDTOType]] = None
 
-        if nested_instance_dto_type == 'default':
+        if nested_instance_dto_type == "default":
             nested_instance_dto_type = InstanceDTO  # type: ignore
 
         if (nestedInstances is not None) and (nested_instance_dto_type is not None):
@@ -64,23 +68,31 @@ class SpecDTO:
                     if isinstance(nestedInstance, InstanceDTO):
                         self.nestedInstances.append(nestedInstance)
                     elif isinstance(nestedInstance, dict):
-                        self.nestedInstances.append(nested_instance_dto_type(**nestedInstance))
+                        self.nestedInstances.append(
+                            nested_instance_dto_type(**nestedInstance)
+                        )
                     else:
-                        raise TypeError(f"Invalid nestedInstance type: {type(nestedInstance)}")
+                        raise TypeError(
+                            f"Invalid nestedInstance type: {type(nestedInstance)}"
+                        )
             else:
-                raise TypeError(f"Invalid nestedInstances type: {type(nestedInstances)}")
+                raise TypeError(
+                    f"Invalid nestedInstances type: {type(nestedInstances)}"
+                )
 
     def __eq__(self, other):
         if self is other:
             return True
 
-        return isinstance(other, type(self)) and \
-            (self.name == other.name) and \
-            (self.location == other.location) and \
-            (self.expectedParameters == other.expectedParameters) and \
-            (self.types == other.types) and \
-            (self.nestedInstanceType == other.nestedInstanceType) and \
-            (self.nestedInstances == other.nestedInstances)
+        return (
+            isinstance(other, type(self))
+            and (self.name == other.name)
+            and (self.location == other.location)
+            and (self.expectedParameters == other.expectedParameters)
+            and (self.types == other.types)
+            and (self.nestedInstanceType == other.nestedInstanceType)
+            and (self.nestedInstances == other.nestedInstances)
+        )
 
     def __hash__(self):
         return hash(self.name)
@@ -103,8 +115,13 @@ class InstanceDTO:
     :param dependsOn: list of instances that this instance depends on
     """
 
-    def __init__(self, name: str = None, parameters: dict = None, dependsOn: list[str] = None,
-                 spec: SpecDTO = None):
+    def __init__(
+        self,
+        name: str = None,
+        parameters: dict = None,
+        dependsOn: list[str] = None,
+        spec: SpecDTO = None,
+    ):
         self.name: str = name
         self.parameters: dict = parameters
         self.dependsOn: list[str] = dependsOn
@@ -120,11 +137,13 @@ class InstanceDTO:
         if self is other:
             return True
 
-        return isinstance(other, type(self)) and \
-            (self.name == other.name) and \
-            (self.parameters == other.parameters) and \
-            (self.dependsOn == other.dependsOn) and \
-            (self.spec == other.spec)
+        return (
+            isinstance(other, type(self))
+            and (self.name == other.name)
+            and (self.parameters == other.parameters)
+            and (self.dependsOn == other.dependsOn)
+            and (self.spec == other.spec)
+        )
 
     def __hash__(self):
         return hash((self.name, self.spec.__hash__()))
@@ -150,14 +169,18 @@ class PluginSpecDTO(SpecDTO):
     :param nestedInstances: the list of the actual nested instances
     """
 
-    def __init__(self,
-                 name: str = None,
-                 location: str = None,
-                 expectedParameters: dict = None,
-                 types: list = None,
-                 nestedInstanceType: str = None,
-                 nestedInstances: list = None):
-        super().__init__(name, location, expectedParameters, types, nestedInstanceType, None, None)
+    def __init__(
+        self,
+        name: str = None,
+        location: str = None,
+        expectedParameters: dict = None,
+        types: list = None,
+        nestedInstanceType: str = None,
+        nestedInstances: list = None,
+    ):
+        super().__init__(
+            name, location, expectedParameters, types, nestedInstanceType, None, None
+        )
 
 
 class PluginInstanceDTO(InstanceDTO):
@@ -177,11 +200,13 @@ class PluginInstanceDTO(InstanceDTO):
     :param dependsOn: list of instances that this instance depends on
     """
 
-    def __init__(self,
-                 name: str = None,
-                 parameters: dict = None,
-                 dependsOn: list[str] = None,
-                 spec: PluginSpecDTO = None):
+    def __init__(
+        self,
+        name: str = None,
+        parameters: dict = None,
+        dependsOn: list[str] = None,
+        spec: PluginSpecDTO = None,
+    ):
         super().__init__(name, parameters, dependsOn, None)
 
         if (spec is None) or isinstance(spec, PluginSpecDTO):
@@ -212,20 +237,24 @@ class OperatorSpecDTO(SpecDTO):
     :param nestedInstances: the list of the actual nested instances
     """
 
-    def __init__(self,
-                 name: str = None,
-                 location: str = None,
-                 expectedParameters: dict = None,
-                 types: list = None,
-                 nestedInstanceType: str = None,
-                 nestedInstances: list[PluginInstanceDTO] = None):
-        super().__init__(name,
-                         location,
-                         expectedParameters,
-                         types,
-                         nestedInstanceType,
-                         nestedInstances,
-                         PluginInstanceDTO)
+    def __init__(
+        self,
+        name: str = None,
+        location: str = None,
+        expectedParameters: dict = None,
+        types: list = None,
+        nestedInstanceType: str = None,
+        nestedInstances: list[PluginInstanceDTO] = None,
+    ):
+        super().__init__(
+            name,
+            location,
+            expectedParameters,
+            types,
+            nestedInstanceType,
+            nestedInstances,
+            PluginInstanceDTO,
+        )
 
 
 class OperatorConnectionSource:
@@ -245,9 +274,7 @@ class OperatorConnectionSource:
     :param outputPortName: name of the output port in the source instance
     """
 
-    def __init__(self,
-                 instanceName: str = None,
-                 outputPortName: str = None):
+    def __init__(self, instanceName: str = None, outputPortName: str = None):
         self.instanceName: str = instanceName
         self.outputPortName: str = outputPortName
 
@@ -255,9 +282,11 @@ class OperatorConnectionSource:
         if self is other:
             return True
 
-        return isinstance(other, type(self)) and \
-            (self.instanceName == other.instanceName) and \
-            (self.outputPortName == other.outputPortName)
+        return (
+            isinstance(other, type(self))
+            and (self.instanceName == other.instanceName)
+            and (self.outputPortName == other.outputPortName)
+        )
 
     def __hash__(self):
         return hash((self.instanceName, self.outputPortName))
@@ -279,21 +308,25 @@ class OperatorConnection:
     :param source: source DTO of the connection
     """
 
-    def __init__(self,
-                 inputPortName: str = None,
-                 source: dict | OperatorConnectionSource = None):
+    def __init__(
+        self, inputPortName: str = None, source: dict | OperatorConnectionSource = None
+    ):
         self.inputPortName: str = inputPortName
-        self.source: OperatorConnectionSource = source \
-            if isinstance(source, OperatorConnectionSource) \
+        self.source: OperatorConnectionSource = (
+            source
+            if isinstance(source, OperatorConnectionSource)
             else OperatorConnectionSource(**source)
+        )
 
     def __eq__(self, other):
         if self is other:
             return True
 
-        return isinstance(other, type(self)) and \
-            (self.inputPortName == other.inputPortName) and \
-            (self.source == other.source)
+        return (
+            isinstance(other, type(self))
+            and (self.inputPortName == other.inputPortName)
+            and (self.source == other.source)
+        )
 
     def __hash__(self):
         return hash((self.inputPortName, self.source.__hash__()))
@@ -321,16 +354,18 @@ class OperatorInstanceDTO(InstanceDTO):
     :param dependsOn: list of instances that this instance depends on
     """
 
-    def __init__(self,
-                 name: str = None,
-                 parameters: dict = None,
-                 dependsOn: list[str] = None,
-                 spec: OperatorSpecDTO = None,
-                 connections: list[OperatorConnection] = None):
+    def __init__(
+        self,
+        name: str = None,
+        parameters: dict = None,
+        dependsOn: list[str] = None,
+        spec: OperatorSpecDTO = None,
+        connections: list[OperatorConnection] = None,
+    ):
         super().__init__(name, parameters, dependsOn, None)
 
         if connections is not None:
-            self.connections: Optional[list[OperatorConnection]] = list()
+            self.connections: Optional[list[OperatorConnection]] = []
             if isinstance(connections, (set, list)):
                 for connection in connections:
                     if isinstance(connection, OperatorConnection):
@@ -338,7 +373,9 @@ class OperatorInstanceDTO(InstanceDTO):
                     elif isinstance(connection, dict):
                         self.connections.append(OperatorConnection(**connection))
                     else:
-                        raise TypeError(f"Invalid nestedInstance type: {type(connection)}")
+                        raise TypeError(
+                            f"Invalid nestedInstance type: {type(connection)}"
+                        )
             else:
                 raise TypeError(f"Invalid nestedInstances type: {type(connections)}")
 
@@ -356,8 +393,7 @@ class OperatorInstanceDTO(InstanceDTO):
         if self is other:
             return True
 
-        return super().__eq__(other) and \
-            (self.connections == other.connections)
+        return super().__eq__(other) and (self.connections == other.connections)
 
     def __hash__(self):
         return super().__hash__()
@@ -383,19 +419,24 @@ class PipelineSpecDTO(SpecDTO):
     :param nestedInstances: the list of the actual nested instances
     """
 
-    def __init__(self,
-                 name: str = None,
-                 location: str = None,
-                 expectedParameters: dict = None,
-                 types: list = None,
-                 nestedInstanceType: str = None, nestedInstances: list[OperatorInstanceDTO] = None):
-        super().__init__(name,
-                         location,
-                         expectedParameters,
-                         types,
-                         nestedInstanceType,
-                         nestedInstances,
-                         OperatorInstanceDTO)
+    def __init__(
+        self,
+        name: str = None,
+        location: str = None,
+        expectedParameters: dict = None,
+        types: list = None,
+        nestedInstanceType: str = None,
+        nestedInstances: list[OperatorInstanceDTO] = None,
+    ):
+        super().__init__(
+            name,
+            location,
+            expectedParameters,
+            types,
+            nestedInstanceType,
+            nestedInstances,
+            OperatorInstanceDTO,
+        )
 
 
 class PipelineInstanceDTO(InstanceDTO):
@@ -415,11 +456,13 @@ class PipelineInstanceDTO(InstanceDTO):
     :param dependsOn: list of instances that this instance depends on
     """
 
-    def __init__(self,
-                 name: str = None,
-                 parameters: dict = None,
-                 dependsOn: list[str] = None,
-                 spec: PipelineSpecDTO = None):
+    def __init__(
+        self,
+        name: str = None,
+        parameters: dict = None,
+        dependsOn: list[str] = None,
+        spec: PipelineSpecDTO = None,
+    ):
         super().__init__(name, parameters, dependsOn, None)
 
         if (spec is None) or isinstance(spec, PipelineSpecDTO):

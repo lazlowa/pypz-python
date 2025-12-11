@@ -13,8 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # =============================================================================
-import unittest
 import os
+import unittest
 from typing import Any
 
 from pypz.core.commons.utils import TemplateResolver
@@ -48,11 +48,23 @@ class TemplateResolverTest(unittest.TestCase):
         self.assertEqual(os.getenv("PPFW_TEST"), resolved_simple1)
         self.assertEqual("test" + os.getenv("PPFW_TEST"), resolved_simple2)
         self.assertEqual(os.getenv("PPFW_TEST") + "test", resolved_simple3)
-        self.assertEqual("test" + os.getenv("PPFW_TEST") + "test" + os.getenv("PPFW_TEST") + "test", resolved_complex1)
-        self.assertEqual("test" + os.getenv("PPFW_TEST") + "test" + os.getenv("PPFW_TEST2") + "test", resolved_complex2)
+        self.assertEqual(
+            "test" + os.getenv("PPFW_TEST") + "test" + os.getenv("PPFW_TEST") + "test",
+            resolved_complex1,
+        )
+        self.assertEqual(
+            "test" + os.getenv("PPFW_TEST") + "test" + os.getenv("PPFW_TEST2") + "test",
+            resolved_complex2,
+        )
 
-        self.assertEqual("test" + os.getenv("PPFW_TEST") + "test" + os.getenv("PPFW_TEST") + "test", resolved_complex3)
-        self.assertEqual("test" + os.getenv("PPFW_TEST") + "test${env:PPFW_TEST}test", resolved_complex4)
+        self.assertEqual(
+            "test" + os.getenv("PPFW_TEST") + "test" + os.getenv("PPFW_TEST") + "test",
+            resolved_complex3,
+        )
+        self.assertEqual(
+            "test" + os.getenv("PPFW_TEST") + "test${env:PPFW_TEST}test",
+            resolved_complex4,
+        )
 
     def test_env_var_resolver_with_invalid_strings_expect_error(self):
         os.environ["PPFW_TEST"] = "testValue"
@@ -81,7 +93,7 @@ class TemplateResolverTest(unittest.TestCase):
     def test_env_var_resolver_with_map_expect_success(self):
         os.environ["PPFW_TEST"] = "testValue"
 
-        ref_map = dict()
+        ref_map = {}
         ref_map["key1"] = "${env:PPFW_TEST}"
         ref_map["key2"] = "env:PPFW_TEST"
 
@@ -96,7 +108,7 @@ class TemplateResolverTest(unittest.TestCase):
     def test_env_var_resolver_with_collections_expect_success(self):
         os.environ["PPFW_TEST"] = "testValue"
 
-        ref_list = list()
+        ref_list = []
         ref_list.append("${env:PPFW_TEST}")
         ref_list.append("env:PPFW_TEST")
 
@@ -128,12 +140,12 @@ class TemplateResolverTest(unittest.TestCase):
         ref_set.add("${env:PPFW_TEST}")
         ref_set.add("env:PPFW_TEST")
 
-        reference_map: dict[str, Any] = dict()
+        reference_map: dict[str, Any] = {}
         reference_map["key1"] = "${env:PPFW_TEST}"
         reference_map["key2"] = "env:PPFW_TEST"
         reference_map["key3"] = ref_set
 
-        ref_list = list()
+        ref_list = []
         ref_list.append(reference_map)
 
         template_resolver = TemplateResolver("${", "}")

@@ -15,12 +15,12 @@
 # =============================================================================
 from typing import Optional
 
-from pypz.plugins.loggers.default import DefaultLoggerPlugin
-from pypz.plugins.kafka_io.ports import KafkaChannelOutputPort, KafkaChannelInputPort
 from pypz.core.commons.parameters import OptionalParameter
+from pypz.core.specs.instance import Instance, InstanceGroup
 from pypz.core.specs.misc import BlankOperator
 from pypz.core.specs.pipeline import Pipeline
-from pypz.core.specs.instance import Instance, InstanceGroup
+from pypz.plugins.kafka_io.ports import KafkaChannelInputPort, KafkaChannelOutputPort
+from pypz.plugins.loggers.default import DefaultLoggerPlugin
 
 avro_schema_string = """
 {
@@ -72,10 +72,12 @@ class TestReaderOperator(BlankOperator):
         super().__init__(name, *args, **kwargs)
 
         self.input_port = KafkaChannelInputPort(schema=avro_schema_string)
-        self.group_input_port = KafkaChannelInputPort(schema=avro_schema_string, group_mode=True)
+        self.group_input_port = KafkaChannelInputPort(
+            schema=avro_schema_string, group_mode=True
+        )
         self.logger = DefaultLoggerPlugin()
         self.logger.set_parameter("logLevel", "DEBUG")
-        self.received_records: list = list()
+        self.received_records: list = []
 
     def _on_init(self) -> bool:
         return True
@@ -107,16 +109,21 @@ class TestPipeline(Pipeline):
 
 class TestGroupInfo(InstanceGroup):
 
-    def __init__(self, group_size: int = 1,
-                 group_index: int = 0,
-                 group_name: str = None,
-                 group_principal: Instance = None,
-                 is_principal: bool = None):
+    def __init__(
+        self,
+        group_size: int = 1,
+        group_index: int = 0,
+        group_name: str = None,
+        group_principal: Instance = None,
+        is_principal: bool = None,
+    ):
         self._group_size = group_size
         self._group_index = group_index
         self._group_name = group_name
         self._group_principal = group_principal
-        self._is_principal = is_principal if is_principal is not None else (group_index == 0)
+        self._is_principal = (
+            is_principal if is_principal is not None else (group_index == 0)
+        )
 
     def get_group_size(self) -> int:
         return self._group_size

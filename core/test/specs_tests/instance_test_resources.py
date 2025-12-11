@@ -13,8 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # =============================================================================
+from pypz.core.commons.parameters import OptionalParameter, RequiredParameter
 from pypz.core.specs.instance import Instance
-from pypz.core.commons.parameters import RequiredParameter, OptionalParameter
 from pypz.core.specs.misc import BlankInstance
 
 

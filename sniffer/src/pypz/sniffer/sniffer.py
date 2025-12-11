@@ -17,60 +17,81 @@ import uuid
 from threading import Thread
 from typing import Callable, Optional
 
-from pypz.core.commons.utils import SynchronizedReference
-
 from pypz.abstracts.channel_ports import ChannelInputPort, ChannelOutputPort
 from pypz.core.channels.status import ChannelStatusMessage
-from pypz.core.specs.misc import BlankOutputPortPlugin, BlankInputPortPlugin
+from pypz.core.commons.utils import SynchronizedReference
+from pypz.core.specs.misc import BlankInputPortPlugin, BlankOutputPortPlugin
 from pypz.core.specs.pipeline import Pipeline
 
 
 class ChannelSniffer:
     def __init__(self, input_port: ChannelInputPort, output_port: ChannelOutputPort):
-        self.channel_name = input_port.get_full_name() \
-            if input_port.get_group_principal() is None \
+        self.channel_name = (
+            input_port.get_full_name()
+            if input_port.get_group_principal() is None
             else input_port.get_group_principal().get_full_name()
+        )
 
         context_uuid = uuid.uuid4()
 
-        self.reader_sniffer = output_port.channel_writer_type(self.channel_name,
-                                                              BlankOutputPortPlugin(f"reader_{context_uuid}"),
-                                                              silent_mode=True)
+        self.reader_sniffer = output_port.channel_writer_type(
+            self.channel_name,
+            BlankOutputPortPlugin(f"reader_{context_uuid}"),
+            silent_mode=True,
+        )
         self.reader_sniffer.set_location(input_port.get_parameter("channelLocation"))
         self.reader_sniffer.on_status_message_received(self.on_status_message)
 
-        self.writer_sniffer = input_port.channel_reader_type(self.channel_name,
-                                                             BlankInputPortPlugin(f"writer_{context_uuid}"),
-                                                             silent_mode=True)
+        self.writer_sniffer = input_port.channel_reader_type(
+            self.channel_name,
+            BlankInputPortPlugin(f"writer_{context_uuid}"),
+            silent_mode=True,
+        )
         self.writer_sniffer.set_location(input_port.get_parameter("channelLocation"))
         self.writer_sniffer.on_status_message_received(self.on_status_message)
 
-        self.on_status_update_callbacks: dict[str, Callable[[ChannelStatusMessage], None]] = dict()
+        self.on_status_update_callbacks: dict[
+            str, Callable[[ChannelStatusMessage], None]
+        ] = {}
 
     def open(self):
-        return ((self.reader_sniffer.is_channel_open() or self.reader_sniffer.invoke_open_channel()) and
-                (self.writer_sniffer.is_channel_open() or self.writer_sniffer.invoke_open_channel()))
+        return (
+            self.reader_sniffer.is_channel_open()
+            or self.reader_sniffer.invoke_open_channel()
+        ) and (
+            self.writer_sniffer.is_channel_open()
+            or self.writer_sniffer.invoke_open_channel()
+        )
 
     def close(self):
-        return ((not self.reader_sniffer.is_channel_open() or self.reader_sniffer.invoke_close_channel()) and
-                (not self.writer_sniffer.is_channel_open() or self.writer_sniffer.invoke_close_channel()))
+        return (
+            not self.reader_sniffer.is_channel_open()
+            or self.reader_sniffer.invoke_close_channel()
+        ) and (
+            not self.writer_sniffer.is_channel_open()
+            or self.writer_sniffer.invoke_close_channel()
+        )
 
     def sniff(self):
         self.writer_sniffer.invoke_sync_status_update()
         self.reader_sniffer.invoke_sync_status_update()
 
-    def subscribe(self, channel_context_name, callback: Callable[[ChannelStatusMessage], None]):
+    def subscribe(
+        self, channel_context_name, callback: Callable[[ChannelStatusMessage], None]
+    ):
         self.on_status_update_callbacks[channel_context_name] = callback
 
     def on_status_message(self, status_messages: list[ChannelStatusMessage]):
         for status_message in status_messages:
             if status_message.channel_context_name in self.on_status_update_callbacks:
-                self.on_status_update_callbacks[status_message.channel_context_name](status_message)
+                self.on_status_update_callbacks[status_message.channel_context_name](
+                    status_message
+                )
 
 
 class PipelineSniffer:
     def __init__(self, pipeline: Pipeline):
-        self.channel_sniffers: dict[str, ChannelSniffer] = dict()
+        self.channel_sniffers: dict[str, ChannelSniffer] = {}
 
         self.control_thread: Optional[Thread] = None
 
@@ -79,27 +100,47 @@ class PipelineSniffer:
 
         for operator in pipeline.get_protected().get_nested_instances().values():
             if operator.is_principal():
-                for input_port in operator.get_protected().get_nested_instances().values():
+                for input_port in (
+                    operator.get_protected().get_nested_instances().values()
+                ):
                     if isinstance(input_port, ChannelInputPort):
                         for output_port in input_port.get_connected_ports():
                             if isinstance(output_port, ChannelOutputPort):
-                                channel_id = PipelineSniffer.get_channel_id(input_port, output_port)
+                                channel_id = PipelineSniffer.get_channel_id(
+                                    input_port, output_port
+                                )
                                 if channel_id in self.channel_sniffers:
-                                    raise AttributeError(f"Channel id already existing: {channel_id}")
+                                    raise AttributeError(
+                                        f"Channel id already existing: {channel_id}"
+                                    )
 
-                                self.channel_sniffers[channel_id] = ChannelSniffer(input_port, output_port)
+                                self.channel_sniffers[channel_id] = ChannelSniffer(
+                                    input_port, output_port
+                                )
 
     @staticmethod
-    def get_channel_id(input_port: ChannelInputPort, output_port: ChannelOutputPort) -> str:
-        principal_input_port = input_port \
-            if input_port.get_group_principal() is None else input_port.get_group_principal()
-        principal_output_port = output_port \
-            if output_port.get_group_principal() is None else output_port.get_group_principal()
+    def get_channel_id(
+        input_port: ChannelInputPort, output_port: ChannelOutputPort
+    ) -> str:
+        principal_input_port = (
+            input_port
+            if input_port.get_group_principal() is None
+            else input_port.get_group_principal()
+        )
+        principal_output_port = (
+            output_port
+            if output_port.get_group_principal() is None
+            else output_port.get_group_principal()
+        )
 
         return f"{principal_input_port.get_full_name()}+{principal_output_port.get_full_name()}"
 
-    def get_channel_sniffer_by_port(self, input_port: ChannelInputPort, output_port: ChannelOutputPort):
-        return self.channel_sniffers[PipelineSniffer.get_channel_id(input_port, output_port)]
+    def get_channel_sniffer_by_port(
+        self, input_port: ChannelInputPort, output_port: ChannelOutputPort
+    ):
+        return self.channel_sniffers[
+            PipelineSniffer.get_channel_id(input_port, output_port)
+        ]
 
     def _start(self):
         all_opened = True

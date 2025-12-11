@@ -31,10 +31,13 @@ class DefaultLoggerPlugin(LoggerPlugin, DefaultContextLogger):
     :param name: name of the instance, if not provided, it will be attempted to deduce from the variable's name
     """
 
-    _log_level = OptionalParameter(str,
-                                   alt_name="logLevel",
-                                   on_update=lambda instance, val: None
-                                   if val is None else instance.set_log_level(val))
+    _log_level = OptionalParameter(
+        str,
+        alt_name="logLevel",
+        on_update=lambda instance, val: (
+            None if val is None else instance.set_log_level(val)
+        ),
+    )
 
     def __init__(self, name: str = None, *args, **kwargs):
         LoggerPlugin.__init__(self, name, *args, **kwargs)

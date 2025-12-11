@@ -19,17 +19,37 @@ import socket
 import sys
 import traceback
 
-from pypz.executors.commons import ExecutionMode
-from pypz.executors.commons import ExitCodes
 from pypz.core.commons.utils import SynchronizedReference, TemplateResolver
 from pypz.core.specs.operator import Operator
 from pypz.core.specs.plugin import ExtendedPlugin, Plugin
+from pypz.executors.commons import ExecutionMode, ExitCodes
 from pypz.executors.operator.context import ExecutionContext
-from pypz.executors.operator.signals import BaseSignal, SignalNoOp, SignalKill, SignalServicesStart, SignalShutdown, \
-    SignalResourcesCreation, SignalResourcesDeletion, SignalError, SignalOperationInit, SignalServicesStop, \
-    SignalOperationStart, SignalOperationStop
-from pypz.executors.operator.states import State, StateEntry, StateKilled, StateOperationInit, StateOperationShutdown, \
-    StateOperationRunning, StateResourceCreation, StateResourceDeletion, StateServiceStart, StateServiceShutdown
+from pypz.executors.operator.signals import (
+    BaseSignal,
+    SignalError,
+    SignalKill,
+    SignalNoOp,
+    SignalOperationInit,
+    SignalOperationStart,
+    SignalOperationStop,
+    SignalResourcesCreation,
+    SignalResourcesDeletion,
+    SignalServicesStart,
+    SignalServicesStop,
+    SignalShutdown,
+)
+from pypz.executors.operator.states import (
+    State,
+    StateEntry,
+    StateKilled,
+    StateOperationInit,
+    StateOperationRunning,
+    StateOperationShutdown,
+    StateResourceCreation,
+    StateResourceDeletion,
+    StateServiceShutdown,
+    StateServiceStart,
+)
 from pypz.version import PROJECT_VERSION
 
 
@@ -61,7 +81,9 @@ class OperatorExecutor:
         The stored execution context for this executor
         """
 
-        self.__priority_signal: SynchronizedReference[BaseSignal] = SynchronizedReference(SignalNoOp())
+        self.__priority_signal: SynchronizedReference[BaseSignal] = (
+            SynchronizedReference(SignalNoOp())
+        )
         """
         Reference to the priority signal.
         Note that this atomic variable was necessary, because there might be functionality that attempts
@@ -95,7 +117,9 @@ class OperatorExecutor:
 
         # Resolve runtime templates as well for plugins
         for name, value in self.__operator.get_protected().get_parameters().items():
-            self.__operator.set_parameter(name, TemplateResolver("$(", ")").resolve(value))
+            self.__operator.set_parameter(
+                name, TemplateResolver("$(", ")").resolve(value)
+            )
 
         for plugin in self.__operator.get_protected().get_nested_instances().values():
             for name, value in plugin.get_protected().get_parameters().items():
@@ -105,19 +129,25 @@ class OperatorExecutor:
         missing_required_parameters = self.__operator.get_missing_required_parameters()
 
         if 0 < len(missing_required_parameters):
-            raise LookupError(f"[{self.__operator.get_full_name()}] "
-                              f"Missing required parameters: {missing_required_parameters}")
+            raise LookupError(
+                f"[{self.__operator.get_full_name()}] "
+                f"Missing required parameters: {missing_required_parameters}"
+            )
 
         # Mock instance checking
         # ======================
         # Mocked operators cannot be executed
         if "mocked" in operator.__class__.__dict__:
-            raise PermissionError(f"[{operator.get_full_name()}] Mock operator cannot be executed")
+            raise PermissionError(
+                f"[{operator.get_full_name()}] Mock operator cannot be executed"
+            )
 
         # If a non-mock operator has a mock plugin, then something went wrong
         for plugin in self.__operator.get_protected().get_nested_instances().values():
             if "mocked" in plugin.__class__.__dict__:
-                raise PermissionError(f"[{plugin.get_full_name()}] Mock plugin in regular operator")
+                raise PermissionError(
+                    f"[{plugin.get_full_name()}] Mock plugin in regular operator"
+                )
 
     # ========= public methods ==========
 
@@ -151,7 +181,9 @@ class OperatorExecutor:
             # ========= Start the state machine =========
 
             try:
-                self.__operator.get_logger().debug(f"Host: {os.getenv('PYPZ_NODE_NAME', socket.gethostname())}")
+                self.__operator.get_logger().debug(
+                    f"Host: {os.getenv('PYPZ_NODE_NAME', socket.gethostname())}"
+                )
 
                 self.__operator.get_logger().debug(f"Version: {PROJECT_VERSION}")
 
@@ -165,12 +197,16 @@ class OperatorExecutor:
                     self.__current_signal = self.__current_state.on_execute()
 
                     if not isinstance(self.__priority_signal.get(), SignalNoOp):
-                        self.__operator.get_logger().debug("Priority signal caught: %s",
-                                                           self.__priority_signal.get().__class__.__name__)
+                        self.__operator.get_logger().debug(
+                            "Priority signal caught: %s",
+                            self.__priority_signal.get().__class__.__name__,
+                        )
                         self.__current_signal = self.__priority_signal.get()
                         self.__priority_signal.set(SignalNoOp())
 
-                    self.__current_state = self.__current_state.on_signal_handling(self.__current_signal)
+                    self.__current_state = self.__current_state.on_signal_handling(
+                        self.__current_signal
+                    )
 
             except:  # noqa: E722
                 self.__context.set_exit_code(ExitCodes.FatalError)
@@ -191,10 +227,15 @@ class OperatorExecutor:
 
                 try:
                     self.__context.for_each_plugin_objects_with_type(
-                        ExtendedPlugin, lambda plugin: plugin.get_protected().post_execution())
+                        ExtendedPlugin,
+                        lambda plugin: plugin.get_protected().post_execution(),
+                    )
                 except Exception as e:  # noqa: F841
                     self.__context.for_each_plugin_objects_with_type(
-                        ExtendedPlugin, lambda plugin: plugin.get_protected().on_error(self.__class__, e)  # noqa: F821
+                        ExtendedPlugin,
+                        lambda plugin: plugin.get_protected().on_error(
+                            self.__class__, e  # noqa: F821
+                        ),
                     )
                     raise
         except:  # noqa: E722
@@ -203,7 +244,10 @@ class OperatorExecutor:
             self.__context.set_exit_code(ExitCodes.FatalError)
 
         if ExitCodes.NoError != self.__context.get_exit_code():
-            print("[ERROR] Error occurred during the execution. Use logger plugin for details.", file=sys.stderr)
+            print(
+                "[ERROR] Error occurred during the execution. Use logger plugin for details.",
+                file=sys.stderr,
+            )
 
         return self.__context.get_exit_code().value
 
@@ -224,10 +268,14 @@ class OperatorExecutor:
             # Addons shall be initialized as early as possible to cover the most part
             # of the execution
             self.__context.for_each_plugin_objects_with_type(
-                ExtendedPlugin, lambda plugin: plugin.get_protected().pre_execution())
+                ExtendedPlugin, lambda plugin: plugin.get_protected().pre_execution()
+            )
         except Exception as e:  # noqa: F841
             self.__context.for_each_plugin_objects_with_type(
-                ExtendedPlugin, lambda plugin: plugin.get_protected().on_error(self.__class__, e)  # noqa: F821
+                ExtendedPlugin,
+                lambda plugin: plugin.get_protected().on_error(
+                    self.__class__, e  # noqa: F821
+                ),
             )
             raise
 
@@ -246,33 +294,73 @@ class OperatorExecutor:
         self.__state_service_start = StateServiceStart(self.__context)
         self.__state_service_shutdown = StateServiceShutdown(self.__context)
 
-        self.__state_entry.set_transition(SignalServicesStart, self.__state_service_start)
+        self.__state_entry.set_transition(
+            SignalServicesStart, self.__state_service_start
+        )
         self.__state_entry.set_transition(SignalShutdown, self.__state_killed)
 
-        self.__state_service_start.set_transition(SignalResourcesCreation, self.__state_resource_creation)
-        self.__state_service_start.set_transition(SignalResourcesDeletion, self.__state_resource_deletion)
-        self.__state_service_start.set_transition(SignalError, self.__state_service_shutdown)
-        self.__state_service_start.set_transition(SignalShutdown, self.__state_service_shutdown)
+        self.__state_service_start.set_transition(
+            SignalResourcesCreation, self.__state_resource_creation
+        )
+        self.__state_service_start.set_transition(
+            SignalResourcesDeletion, self.__state_resource_deletion
+        )
+        self.__state_service_start.set_transition(
+            SignalError, self.__state_service_shutdown
+        )
+        self.__state_service_start.set_transition(
+            SignalShutdown, self.__state_service_shutdown
+        )
 
-        self.__state_resource_creation.set_transition(SignalOperationInit, self.__state_operation_init)
-        self.__state_resource_creation.set_transition(SignalError, self.__state_resource_deletion)
-        self.__state_resource_creation.set_transition(SignalServicesStop, self.__state_service_shutdown)
-        self.__state_resource_creation.set_transition(SignalShutdown, self.__state_resource_deletion)
+        self.__state_resource_creation.set_transition(
+            SignalOperationInit, self.__state_operation_init
+        )
+        self.__state_resource_creation.set_transition(
+            SignalError, self.__state_resource_deletion
+        )
+        self.__state_resource_creation.set_transition(
+            SignalServicesStop, self.__state_service_shutdown
+        )
+        self.__state_resource_creation.set_transition(
+            SignalShutdown, self.__state_resource_deletion
+        )
 
-        self.__state_operation_init.set_transition(SignalOperationStart, self.__state_operation_running)
-        self.__state_operation_init.set_transition(SignalError, self.__state_operation_shutdown)
-        self.__state_operation_init.set_transition(SignalShutdown, self.__state_operation_shutdown)
+        self.__state_operation_init.set_transition(
+            SignalOperationStart, self.__state_operation_running
+        )
+        self.__state_operation_init.set_transition(
+            SignalError, self.__state_operation_shutdown
+        )
+        self.__state_operation_init.set_transition(
+            SignalShutdown, self.__state_operation_shutdown
+        )
 
-        self.__state_operation_running.set_transition(SignalOperationStop, self.__state_operation_shutdown)
-        self.__state_operation_running.set_transition(SignalError, self.__state_operation_shutdown)
-        self.__state_operation_running.set_transition(SignalShutdown, self.__state_operation_shutdown)
+        self.__state_operation_running.set_transition(
+            SignalOperationStop, self.__state_operation_shutdown
+        )
+        self.__state_operation_running.set_transition(
+            SignalError, self.__state_operation_shutdown
+        )
+        self.__state_operation_running.set_transition(
+            SignalShutdown, self.__state_operation_shutdown
+        )
 
-        self.__state_operation_shutdown.set_transition(SignalResourcesDeletion, self.__state_resource_deletion)
-        self.__state_operation_shutdown.set_transition(SignalServicesStop, self.__state_service_shutdown)
-        self.__state_operation_shutdown.set_transition(SignalError, self.__state_resource_deletion)
+        self.__state_operation_shutdown.set_transition(
+            SignalResourcesDeletion, self.__state_resource_deletion
+        )
+        self.__state_operation_shutdown.set_transition(
+            SignalServicesStop, self.__state_service_shutdown
+        )
+        self.__state_operation_shutdown.set_transition(
+            SignalError, self.__state_resource_deletion
+        )
 
-        self.__state_resource_deletion.set_transition(SignalServicesStop, self.__state_service_shutdown)
-        self.__state_resource_deletion.set_transition(SignalError, self.__state_service_shutdown)
+        self.__state_resource_deletion.set_transition(
+            SignalServicesStop, self.__state_service_shutdown
+        )
+        self.__state_resource_deletion.set_transition(
+            SignalError, self.__state_service_shutdown
+        )
 
         self.__state_service_shutdown.set_transition(SignalError, self.__state_killed)
         self.__state_service_shutdown.set_transition(SignalKill, self.__state_killed)
@@ -291,7 +379,9 @@ class OperatorExecutor:
             # Invoking plugins' on_interrupt() method
             try:
                 self.__context.for_each_plugin_objects_with_type(
-                    Plugin, lambda plugin: plugin.get_protected().on_interrupt(signal_number))
+                    Plugin,
+                    lambda plugin: plugin.get_protected().on_interrupt(signal_number),
+                )
             except:  # noqa: E722
                 # Ignore exception to be able to proceed with the shutdown
                 traceback.print_exc(file=sys.stderr)

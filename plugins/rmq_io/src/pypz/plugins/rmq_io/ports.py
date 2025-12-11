@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # =============================================================================
-from typing import Optional, Any
+from typing import Any, Optional
 
 from pypz.abstracts.channel_ports import ChannelInputPort, ChannelOutputPort
 from pypz.plugins.rmq_io.channels import RMQChannelReader, RMQChannelWriter
@@ -21,7 +21,14 @@ from pypz.plugins.rmq_io.channels import RMQChannelReader, RMQChannelWriter
 
 class RMQChannelInputPort(ChannelInputPort):
 
-    def __init__(self, name: str = None, schema: Any = None, group_mode: bool = False, *args, **kwargs):
+    def __init__(
+        self,
+        name: str = None,
+        schema: Any = None,
+        group_mode: bool = False,
+        *args,
+        **kwargs,
+    ):
         super().__init__(name, schema, group_mode, RMQChannelReader, *args, **kwargs)
 
 

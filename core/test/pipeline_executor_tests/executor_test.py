@@ -39,7 +39,9 @@ class TestOperator(BlankOperator):
 
     req = RequiredParameter(str, description="Test required parameter")
 
-    def __init__(self, name: str = None, replication_factor: int = None, *args, **kwargs):
+    def __init__(
+        self, name: str = None, replication_factor: int = None, *args, **kwargs
+    ):
         super().__init__(name, replication_factor, *args, **kwargs)
 
         self.logger = DefaultLoggerPlugin()
@@ -458,7 +460,9 @@ class PipelineExecutorTest(unittest.TestCase):
         with self.assertRaises(PermissionError):
             PipelineExecutor(pipeline)
 
-    def test_pipeline_execution_with_mocked_plugin_in_non_mocked_operator_expect_early_termination(self):
+    def test_pipeline_execution_with_mocked_plugin_in_non_mocked_operator_expect_early_termination(
+        self,
+    ):
         pipeline_json = """
         {
           "name": "pipeline",

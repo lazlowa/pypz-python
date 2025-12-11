@@ -35,27 +35,29 @@ class KubernetesOperator(Operator, ABC):
         # It is necessary to identify unhealthy scenario, if already
         # started, but not ready.
         self.set_parameter(
-            "startupProbe", {
+            "startupProbe",
+            {
                 "httpGet": {
                     "path": "/check",
-                    "port": self.health_check.get_parameter("port")
+                    "port": self.health_check.get_parameter("port"),
                 },
                 "periodSeconds": 1,
                 "failureThreshold": 300,
-            }
+            },
         )
 
         # Readiness probe to identify unhealthy scenarios. The reason for
         # using it instead of liveness is that it is simpler to detect.
         self.set_parameter(
-            "readinessProbe", {
+            "readinessProbe",
+            {
                 "httpGet": {
                     "path": "/check",
-                    "port": self.health_check.get_parameter("port")
+                    "port": self.health_check.get_parameter("port"),
                 },
                 "initialDelaySeconds": 0,
                 "periodSeconds": 30,
                 "timeoutSeconds": 5,
                 "failureThreshold": 20,
-            }
+            },
         )

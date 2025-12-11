@@ -17,7 +17,13 @@ import unittest
 
 from pypz.executors.commons import ExecutionMode
 from pypz.executors.operator.executor import OperatorExecutor
-from pypz.executors.operator.signals import SignalResourcesDeletion, SignalNoOp, SignalError, SignalServicesStop
+from pypz.executors.operator.signals import (
+    SignalError,
+    SignalNoOp,
+    SignalResourcesDeletion,
+    SignalServicesStop,
+)
+
 from core.test.operator_executor_tests.resources import TestPipeline
 
 
@@ -28,9 +34,13 @@ class StateOperationShutdownTest(unittest.TestCase):
         ex = OperatorExecutor(pipeline.operator_a)
         ex._OperatorExecutor__initialize()
 
-        ex._OperatorExecutor__current_state = ex._OperatorExecutor__state_operation_shutdown
+        ex._OperatorExecutor__current_state = (
+            ex._OperatorExecutor__state_operation_shutdown
+        )
 
-        self.assertIsInstance(ex.get_current_state().on_execute(), SignalResourcesDeletion)
+        self.assertIsInstance(
+            ex.get_current_state().on_execute(), SignalResourcesDeletion
+        )
 
     def test_state_execution_results_with_unfinished_plugin(self):
         pipeline = TestPipeline("pipeline")
@@ -38,7 +48,9 @@ class StateOperationShutdownTest(unittest.TestCase):
         ex = OperatorExecutor(pipeline.operator_a)
         ex._OperatorExecutor__initialize()
 
-        ex._OperatorExecutor__current_state = ex._OperatorExecutor__state_operation_shutdown
+        ex._OperatorExecutor__current_state = (
+            ex._OperatorExecutor__state_operation_shutdown
+        )
 
         self.assertIsInstance(ex.get_current_state().on_execute(), SignalNoOp)
 
@@ -48,7 +60,9 @@ class StateOperationShutdownTest(unittest.TestCase):
         ex = OperatorExecutor(pipeline.operator_a)
         ex._OperatorExecutor__initialize()
 
-        ex._OperatorExecutor__current_state = ex._OperatorExecutor__state_operation_shutdown
+        ex._OperatorExecutor__current_state = (
+            ex._OperatorExecutor__state_operation_shutdown
+        )
 
         self.assertIsInstance(ex.get_current_state().on_execute(), SignalNoOp)
 
@@ -58,7 +72,9 @@ class StateOperationShutdownTest(unittest.TestCase):
         ex = OperatorExecutor(pipeline.operator_a)
         ex._OperatorExecutor__initialize()
 
-        ex._OperatorExecutor__current_state = ex._OperatorExecutor__state_operation_shutdown
+        ex._OperatorExecutor__current_state = (
+            ex._OperatorExecutor__state_operation_shutdown
+        )
 
         self.assertIsInstance(ex.get_current_state().on_execute(), SignalError)
 
@@ -68,7 +84,9 @@ class StateOperationShutdownTest(unittest.TestCase):
         ex = OperatorExecutor(pipeline.operator_a)
         ex._OperatorExecutor__initialize()
 
-        ex._OperatorExecutor__current_state = ex._OperatorExecutor__state_operation_shutdown
+        ex._OperatorExecutor__current_state = (
+            ex._OperatorExecutor__state_operation_shutdown
+        )
 
         self.assertIsInstance(ex.get_current_state().on_execute(), SignalError)
 
@@ -77,6 +95,8 @@ class StateOperationShutdownTest(unittest.TestCase):
         ex = OperatorExecutor(pipeline.operator_a)
         ex._OperatorExecutor__initialize(ExecutionMode.WithoutResourceDeletion)
 
-        ex._OperatorExecutor__current_state = ex._OperatorExecutor__state_operation_shutdown
+        ex._OperatorExecutor__current_state = (
+            ex._OperatorExecutor__state_operation_shutdown
+        )
 
         self.assertIsInstance(ex.get_current_state().on_execute(), SignalServicesStop)

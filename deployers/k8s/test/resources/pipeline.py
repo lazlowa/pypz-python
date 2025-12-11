@@ -15,7 +15,7 @@
 # =============================================================================
 import os
 import time
-from typing import Optional, Any
+from typing import Any, Optional
 
 from pypz.core.commons.parameters import OptionalParameter
 from pypz.core.specs.operator import Operator
@@ -99,14 +99,15 @@ class TestKubernetesPipeline(Pipeline):
         super().__init__(name, *args, **kwargs)
         self.op = TestKubernetesOperator()
         self.op.set_parameter(
-            "readinessProbe", {
+            "readinessProbe",
+            {
                 "httpGet": {
                     "path": "/check",
-                    "port": self.op.health_check.get_parameter("port")
+                    "port": self.op.health_check.get_parameter("port"),
                 },
                 "initialDelaySeconds": 0,
                 "periodSeconds": 5,
                 "timeoutSeconds": 5,
                 "failureThreshold": 1,
-            }
+            },
         )

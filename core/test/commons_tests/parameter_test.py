@@ -15,9 +15,12 @@
 # =============================================================================
 import unittest
 
-from pypz.core.commons.parameters import retrieve_parameters, RequiredParameter, ExpectedParameter
+from pypz.core.commons.parameters import (
+    ExpectedParameter,
+    RequiredParameter,
+    retrieve_parameters,
+)
 from pypz.core.specs.misc import BlankInstance
-
 
 # Test resources
 # ==============
@@ -99,6 +102,7 @@ class TestClassWithOnChangeCallback(BlankInstance[None]):
         self.param = None
         self.value = 0
 
+
 # Tests
 # =====
 
@@ -134,7 +138,7 @@ class ParameterTest(unittest.TestCase):
         inh = InheritedTestClass("instance")
         inh_parameters = retrieve_parameters(inh, ExpectedParameter)
 
-        for param_name, param_type in inh_parameters.items():
+        for param_name, _param_type in inh_parameters.items():
             setattr(inh, param_name, 1234)
 
         self.assertEqual(1234, inh.req_int)
@@ -144,7 +148,7 @@ class ParameterTest(unittest.TestCase):
         inh = InheritedTestClass("instance")
         inh_parameters = retrieve_parameters(inh, ExpectedParameter)
 
-        for param_name, param_type in inh_parameters.items():
+        for param_name, _param_type in inh_parameters.items():
             with self.assertRaises(TypeError):
                 setattr(inh, param_name, "1234")
 

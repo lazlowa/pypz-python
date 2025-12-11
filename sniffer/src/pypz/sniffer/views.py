@@ -17,7 +17,7 @@ import tkinter as tk
 from typing import Optional
 
 from pypz.abstracts.channel_ports import ChannelInputPort, ChannelOutputPort
-from pypz.core.channels.status import ChannelStatusMessage, ChannelStatus
+from pypz.core.channels.status import ChannelStatus, ChannelStatusMessage
 from pypz.core.specs.operator import Operator
 
 
@@ -49,13 +49,15 @@ class ViewConfig:
 
 
 class ChannelView:
-    def __init__(self, canvas: tk.Canvas, channel_reader_idx: int, channel_writer_idx: int):
+    def __init__(
+        self, canvas: tk.Canvas, channel_reader_idx: int, channel_writer_idx: int
+    ):
         self.canvas = canvas
 
         self.channel_reader_idx: int = channel_reader_idx
         self.channel_writer_idx: int = channel_writer_idx
-        self.channel_reader_views: list[ChannelRWView] = list()
-        self.channel_writer_views: list[ChannelRWView] = list()
+        self.channel_reader_views: list[ChannelRWView] = []
+        self.channel_writer_views: list[ChannelRWView] = []
 
         self.x1: Optional[int] = None
         self.y1: Optional[int] = None
@@ -63,57 +65,97 @@ class ChannelView:
         self.y2: Optional[int] = None
 
     def draw(self, next_available_y_position: int):
-        first_channel_reader: ChannelRWView = min(self.channel_reader_views, key=lambda cr: cr.top)
-        last_channel_reader: ChannelRWView = max(self.channel_reader_views, key=lambda cr: cr.top)
-        first_channel_writer: ChannelRWView = min(self.channel_writer_views, key=lambda cr: cr.top)
-        last_channel_writer: ChannelRWView = max(self.channel_writer_views, key=lambda cr: cr.top)
+        first_channel_reader: ChannelRWView = min(
+            self.channel_reader_views, key=lambda cr: cr.top
+        )
+        last_channel_reader: ChannelRWView = max(
+            self.channel_reader_views, key=lambda cr: cr.top
+        )
+        first_channel_writer: ChannelRWView = min(
+            self.channel_writer_views, key=lambda cr: cr.top
+        )
+        last_channel_writer: ChannelRWView = max(
+            self.channel_writer_views, key=lambda cr: cr.top
+        )
 
         channel_reader_x_min: float = first_channel_reader.left
-        channel_reader_y_min: float = \
-            first_channel_reader.top + (first_channel_reader.bottom - first_channel_reader.top) / 2
-        channel_reader_y_max: float = \
-            last_channel_reader.top + (last_channel_reader.bottom - last_channel_reader.top) / 2
+        channel_reader_y_min: float = (
+            first_channel_reader.top
+            + (first_channel_reader.bottom - first_channel_reader.top) / 2
+        )
+        channel_reader_y_max: float = (
+            last_channel_reader.top
+            + (last_channel_reader.bottom - last_channel_reader.top) / 2
+        )
 
         channel_writer_x_max: float = first_channel_writer.right
-        channel_writer_y_min: float = \
-            first_channel_writer.top + (first_channel_writer.bottom - first_channel_writer.top) / 2
-        channel_writer_y_max: float = \
-            last_channel_writer.top + (last_channel_writer.bottom - last_channel_writer.top) / 2
+        channel_writer_y_min: float = (
+            first_channel_writer.top
+            + (first_channel_writer.bottom - first_channel_writer.top) / 2
+        )
+        channel_writer_y_max: float = (
+            last_channel_writer.top
+            + (last_channel_writer.bottom - last_channel_writer.top) / 2
+        )
 
         self.x1 = int(channel_reader_x_min - 50 - 20 * self.channel_reader_idx)
-        self.y1 = int(channel_reader_y_min + (channel_reader_y_max - channel_reader_y_min) / 2)
+        self.y1 = int(
+            channel_reader_y_min + (channel_reader_y_max - channel_reader_y_min) / 2
+        )
         self.x2 = int(channel_writer_x_max + 50 + 20 * self.channel_writer_idx)
-        self.y2 = int(channel_writer_y_min + (channel_writer_y_max - channel_writer_y_min) / 2)
+        self.y2 = int(
+            channel_writer_y_min + (channel_writer_y_max - channel_writer_y_min) / 2
+        )
 
-        for idx, channel_reader in enumerate(self.channel_reader_views):
-            self.canvas.create_line(self.x1,
-                                    channel_reader.top + (channel_reader.bottom - channel_reader.top) / 2,
-                                    channel_reader_x_min - 5,
-                                    channel_reader.top + (channel_reader.bottom - channel_reader.top) / 2,
-                                    arrow=tk.LAST)
+        for _idx, channel_reader in enumerate(self.channel_reader_views):
+            self.canvas.create_line(
+                self.x1,
+                channel_reader.top + (channel_reader.bottom - channel_reader.top) / 2,
+                channel_reader_x_min - 5,
+                channel_reader.top + (channel_reader.bottom - channel_reader.top) / 2,
+                arrow=tk.LAST,
+            )
 
-        for idx, channel_writer in enumerate(self.channel_writer_views):
-            self.canvas.create_line(channel_writer.right + 5,
-                                    channel_writer.top + (channel_writer.bottom - channel_writer.top) / 2,
-                                    self.x2,
-                                    channel_writer.top + (channel_writer.bottom - channel_writer.top) / 2)
+        for _idx, channel_writer in enumerate(self.channel_writer_views):
+            self.canvas.create_line(
+                channel_writer.right + 5,
+                channel_writer.top + (channel_writer.bottom - channel_writer.top) / 2,
+                self.x2,
+                channel_writer.top + (channel_writer.bottom - channel_writer.top) / 2,
+            )
 
-        self.canvas.create_oval(self.x1 - 3, self.y1 - 3, self.x1 + 3, self.y1 + 3, fill="black")
-        self.canvas.create_oval(self.x2 - 3, self.y2 - 3, self.x2 + 3, self.y2 + 3, fill="black")
+        self.canvas.create_oval(
+            self.x1 - 3, self.y1 - 3, self.x1 + 3, self.y1 + 3, fill="black"
+        )
+        self.canvas.create_oval(
+            self.x2 - 3, self.y2 - 3, self.x2 + 3, self.y2 + 3, fill="black"
+        )
 
         self.canvas.create_line(self.x1, self.y1, self.x1 - 10, self.y1)
         self.canvas.create_line(self.x2 + 10, self.y2, self.x2, self.y2)
-        self.canvas.create_line(self.x2, channel_writer_y_min, self.x2, channel_writer_y_max)
-        self.canvas.create_line(self.x1, channel_reader_y_min, self.x1, channel_reader_y_max)
+        self.canvas.create_line(
+            self.x2, channel_writer_y_min, self.x2, channel_writer_y_max
+        )
+        self.canvas.create_line(
+            self.x1, channel_reader_y_min, self.x1, channel_reader_y_max
+        )
 
         next_available_y_position += 20
 
         if self.x1 < self.x2:
-            self.canvas.create_line(self.x1 - 10, self.y1, self.x1 - 10, next_available_y_position)
-            self.canvas.create_line(self.x2 + 10, self.y2, self.x2 + 10, next_available_y_position)
+            self.canvas.create_line(
+                self.x1 - 10, self.y1, self.x1 - 10, next_available_y_position
+            )
+            self.canvas.create_line(
+                self.x2 + 10, self.y2, self.x2 + 10, next_available_y_position
+            )
 
-            self.canvas.create_line(self.x1 - 10, next_available_y_position,
-                                    self.x2 + 10, next_available_y_position)
+            self.canvas.create_line(
+                self.x1 - 10,
+                next_available_y_position,
+                self.x2 + 10,
+                next_available_y_position,
+            )
         else:
             self.canvas.create_line(self.x1 - 10, self.y1, self.x2 + 10, self.y2)
 
@@ -163,9 +205,14 @@ class ChannelRWView:
 
         if status_message.payload is not None:
             if "sentRecordCount" in status_message.payload:
-                self.canvas.itemconfig(self.channel_text, text=status_message.payload["sentRecordCount"])
+                self.canvas.itemconfig(
+                    self.channel_text, text=status_message.payload["sentRecordCount"]
+                )
             elif "receivedRecordCount" in status_message.payload:
-                self.canvas.itemconfig(self.channel_text, text=status_message.payload["receivedRecordCount"])
+                self.canvas.itemconfig(
+                    self.channel_text,
+                    text=status_message.payload["receivedRecordCount"],
+                )
 
     def draw(self, left: int, right: int):
         self.left = left
@@ -173,16 +220,23 @@ class ChannelRWView:
         self.right = left + ViewConfig.channel_width
         self.bottom = right + ViewConfig.channel_cell_height
 
-        self.channel_box = self.canvas.create_rectangle(self.left, self.top, self.right, self.bottom,
-                                                        outline="", fill="white")
-        self.channel_text = self.canvas.create_text(self.left + ViewConfig.channel_width / 2,
-                                                    self.top + ViewConfig.channel_cell_height / 2,
-                                                    text="0", fill="black", justify=tk.CENTER)
+        self.channel_box = self.canvas.create_rectangle(
+            self.left, self.top, self.right, self.bottom, outline="", fill="white"
+        )
+        self.channel_text = self.canvas.create_text(
+            self.left + ViewConfig.channel_width / 2,
+            self.top + ViewConfig.channel_cell_height / 2,
+            text="0",
+            fill="black",
+            justify=tk.CENTER,
+        )
 
-        self.status_display_l = self.canvas.create_rectangle(self.left, self.top, self.left + 10, self.bottom,
-                                                             outline="", fill="gray")
-        self.status_display_r = self.canvas.create_rectangle(self.right - 10, self.top, self.right, self.bottom,
-                                                             outline="", fill="gray")
+        self.status_display_l = self.canvas.create_rectangle(
+            self.left, self.top, self.left + 10, self.bottom, outline="", fill="gray"
+        )
+        self.status_display_r = self.canvas.create_rectangle(
+            self.right - 10, self.top, self.right, self.bottom, outline="", fill="gray"
+        )
 
 
 class PortView:
@@ -191,7 +245,7 @@ class PortView:
 
         self.port_name: str = port_name
 
-        self.channel_views: list[ChannelRWView] = list()
+        self.channel_views: list[ChannelRWView] = []
 
         self.port_name_text: Optional[int] = None
         self.port_box: Optional[int] = None
@@ -205,17 +259,26 @@ class PortView:
         self.left = left
         self.top = top
         self.right = left + ViewConfig.channel_width
-        self.bottom = top + 25 + len(self.channel_views) * ViewConfig.channel_cell_height
+        self.bottom = (
+            top + 25 + len(self.channel_views) * ViewConfig.channel_cell_height
+        )
 
-        self.port_box = self.canvas.create_rectangle(self.left, self.top, self.right, self.bottom,
-                                                     outline="", fill="black")
+        self.port_box = self.canvas.create_rectangle(
+            self.left, self.top, self.right, self.bottom, outline="", fill="black"
+        )
 
-        self.port_name_text = self.canvas.create_text(self.left + ViewConfig.channel_width / 2,
-                                                      self.top + 8,
-                                                      text=self.port_name, fill="white", justify=tk.CENTER)
+        self.port_name_text = self.canvas.create_text(
+            self.left + ViewConfig.channel_width / 2,
+            self.top + 8,
+            text=self.port_name,
+            fill="white",
+            justify=tk.CENTER,
+        )
 
         for idx, channel_view in enumerate(self.channel_views):
-            channel_view.draw(self.left, self.top + 20 + idx * (ViewConfig.channel_cell_height + 1))
+            channel_view.draw(
+                self.left, self.top + 20 + idx * (ViewConfig.channel_cell_height + 1)
+            )
 
 
 class OperatorView:
@@ -225,13 +288,15 @@ class OperatorView:
         self.name: str = operator.get_simple_name()
 
         self.input_port_views: dict[ChannelInputPort, PortView] = {
-            input_port: PortView(canvas, input_port.get_simple_name()) for input_port in
-            operator.get_protected().get_nested_instances().values() if isinstance(input_port, ChannelInputPort)
+            input_port: PortView(canvas, input_port.get_simple_name())
+            for input_port in operator.get_protected().get_nested_instances().values()
+            if isinstance(input_port, ChannelInputPort)
         }
 
         self.output_port_views: dict[ChannelOutputPort, PortView] = {
-            output_port: PortView(canvas, output_port.get_simple_name()) for output_port in
-            operator.get_protected().get_nested_instances().values() if isinstance(output_port, ChannelOutputPort)
+            output_port: PortView(canvas, output_port.get_simple_name())
+            for output_port in operator.get_protected().get_nested_instances().values()
+            if isinstance(output_port, ChannelOutputPort)
         }
 
         self.left: Optional[int] = None
@@ -244,10 +309,16 @@ class OperatorView:
         self.top = top
         self.right = left + ViewConfig.operator_width
 
-        operator_box = self.canvas.create_rectangle(self.left, self.top, self.right, self.top,
-                                                    outline="", fill="grey40")
-        self.canvas.create_text(self.left + ViewConfig.operator_width / 2, self.top + 10,
-                                text=self.name, width=ViewConfig.operator_width, fill="white")
+        operator_box = self.canvas.create_rectangle(
+            self.left, self.top, self.right, self.top, outline="", fill="grey40"
+        )
+        self.canvas.create_text(
+            self.left + ViewConfig.operator_width / 2,
+            self.top + 10,
+            text=self.name,
+            width=ViewConfig.operator_width,
+            fill="white",
+        )
 
         input_y_pos = self.top + 25
         for input_port_view in self.input_port_views.values():
@@ -256,8 +327,7 @@ class OperatorView:
 
         output_y_pos = self.top + 25
         for output_port_view in self.output_port_views.values():
-            output_port_view.draw(self.right - ViewConfig.channel_width,
-                                  output_y_pos)
+            output_port_view.draw(self.right - ViewConfig.channel_width, output_y_pos)
             output_y_pos = 5 + output_port_view.bottom
 
         self.bottom = max(input_y_pos, output_y_pos)

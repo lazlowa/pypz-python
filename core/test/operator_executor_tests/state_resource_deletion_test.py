@@ -16,7 +16,8 @@
 import unittest
 
 from pypz.executors.operator.executor import OperatorExecutor
-from pypz.executors.operator.signals import SignalServicesStop, SignalNoOp, SignalError
+from pypz.executors.operator.signals import SignalError, SignalNoOp, SignalServicesStop
+
 from core.test.operator_executor_tests.resources import TestPipeline
 
 
@@ -27,26 +28,36 @@ class StateResourceDeletionTest(unittest.TestCase):
         ex = OperatorExecutor(pipeline.operator_a)
         ex._OperatorExecutor__initialize()
 
-        ex._OperatorExecutor__current_state = ex._OperatorExecutor__state_resource_deletion
+        ex._OperatorExecutor__current_state = (
+            ex._OperatorExecutor__state_resource_deletion
+        )
 
         self.assertIsInstance(ex.get_current_state().on_execute(), SignalServicesStop)
 
     def test_state_execution_results_with_unfinished_plugin(self):
         pipeline = TestPipeline("pipeline")
-        pipeline.operator_a.resource_handler.set_parameter("return__on_resource_deletion", False)
+        pipeline.operator_a.resource_handler.set_parameter(
+            "return__on_resource_deletion", False
+        )
         ex = OperatorExecutor(pipeline.operator_a)
         ex._OperatorExecutor__initialize()
 
-        ex._OperatorExecutor__current_state = ex._OperatorExecutor__state_resource_deletion
+        ex._OperatorExecutor__current_state = (
+            ex._OperatorExecutor__state_resource_deletion
+        )
 
         self.assertIsInstance(ex.get_current_state().on_execute(), SignalNoOp)
 
     def test_state_execution_results_with_error_raised_from_plugin(self):
         pipeline = TestPipeline("pipeline")
-        pipeline.operator_a.resource_handler.set_parameter("raise__on_resource_deletion", "Test Error")
+        pipeline.operator_a.resource_handler.set_parameter(
+            "raise__on_resource_deletion", "Test Error"
+        )
         ex = OperatorExecutor(pipeline.operator_a)
         ex._OperatorExecutor__initialize()
 
-        ex._OperatorExecutor__current_state = ex._OperatorExecutor__state_resource_deletion
+        ex._OperatorExecutor__current_state = (
+            ex._OperatorExecutor__state_resource_deletion
+        )
 
         self.assertIsInstance(ex.get_current_state().on_execute(), SignalError)

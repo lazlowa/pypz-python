@@ -15,13 +15,20 @@
 # =============================================================================
 from typing import Any, Optional
 
-from pypz.plugins.kafka_io.channels import KafkaChannelWriter, KafkaChannelReader
 from pypz.abstracts.channel_ports import ChannelInputPort, ChannelOutputPort
+from pypz.plugins.kafka_io.channels import KafkaChannelReader, KafkaChannelWriter
 
 
 class KafkaChannelInputPort(ChannelInputPort):
 
-    def __init__(self, name: str = None, schema: Any = None, group_mode: bool = False, *args, **kwargs):
+    def __init__(
+        self,
+        name: str = None,
+        schema: Any = None,
+        group_mode: bool = False,
+        *args,
+        **kwargs,
+    ):
         super().__init__(name, schema, group_mode, KafkaChannelReader, *args, **kwargs)
 
 

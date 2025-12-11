@@ -18,7 +18,7 @@ import os
 import re
 import threading
 import time
-from typing import Generic, TypeVar, Any, Union
+from typing import Any, Generic, TypeVar, Union
 
 
 def ensure_type(value, expected_type: type):
@@ -40,7 +40,7 @@ def current_time_millis() -> int:
     return int(time.time() * 1000)
 
 
-ReferenceType = TypeVar('ReferenceType')
+ReferenceType = TypeVar("ReferenceType")
 
 
 class SynchronizedReference(Generic[ReferenceType]):
@@ -96,13 +96,19 @@ class TemplateResolver:
 
     def __init__(self, left_template_boundary: str, right_template_boundary: str):
 
-        self.m_templatePattern = re.escape(left_template_boundary) + r'.*?' + re.escape(right_template_boundary)
+        self.m_templatePattern = (
+            re.escape(left_template_boundary)
+            + r".*?"
+            + re.escape(right_template_boundary)
+        )
         """
         Regex to find the template pattern
         """
 
-        self.m_envVarPattern = r'(?<=' + re.escape(left_template_boundary) + r'env:)' \
-                               r'(.*?)(?=' + re.escape(right_template_boundary) + r')'
+        self.m_envVarPattern = (
+            r"(?<=" + re.escape(left_template_boundary) + r"env:)"
+            r"(.*?)(?=" + re.escape(right_template_boundary) + r")"
+        )
         """
         Regex to find the env var specifier pattern in the template pattern
         """
@@ -117,14 +123,14 @@ class TemplateResolver:
         """
 
         if isinstance(lookup_object, dict):
-            new_map = dict()
+            new_map = {}
 
             for key in lookup_object.keys():
                 new_map[key] = self.resolve(lookup_object[key])
 
             return new_map
         elif isinstance(lookup_object, list):
-            new_list = list()
+            new_list = []
 
             for element in lookup_object:
                 new_list.append(self.resolve(element))
@@ -151,7 +157,9 @@ class TemplateResolver:
                 if 0 < len(env_var_matches):
                     resolved = os.getenv(env_var_matches[0])
 
-                resolved_string = resolved_string.replace(templateMatch, "" if resolved is None else resolved)
+                resolved_string = resolved_string.replace(
+                    templateMatch, "" if resolved is None else resolved
+                )
 
             return resolved_string
         else:
@@ -174,8 +182,9 @@ class InterruptableTimer:
         millis = round(seconds * 1000.0)
         start_time = current_time_millis()
 
-        while ((not self.__interrupted.get()) and
-               (millis >= (current_time_millis() - start_time))):
+        while (not self.__interrupted.get()) and (
+            millis >= (current_time_millis() - start_time)
+        ):
             pass
 
 
@@ -195,7 +204,7 @@ def convert_to_dict(obj: Any) -> Any:
         return {convert_to_dict(item) for item in obj}
     elif isinstance(obj, dict):
         return {key: convert_to_dict(value) for key, value in obj.items()}
-    elif hasattr(obj, '__dict__'):
+    elif hasattr(obj, "__dict__"):
         return {key: convert_to_dict(value) for key, value in obj.__dict__.items()}
     else:
         return obj
@@ -223,7 +232,9 @@ def is_type_allowed(obj, allowed_types: tuple) -> bool:
         return all(is_type_allowed(item, allowed_types) for item in obj)
     elif isinstance(obj, dict):
         return all(is_type_allowed(value, allowed_types) for value in obj.values())
-    elif hasattr(obj, '__dict__'):
-        return all(is_type_allowed(value, allowed_types) for value in obj.__dict__.values())
+    elif hasattr(obj, "__dict__"):
+        return all(
+            is_type_allowed(value, allowed_types) for value in obj.__dict__.values()
+        )
 
     return True

@@ -13,15 +13,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # =============================================================================
-from typing import Optional, Any, TypeVar
+from typing import Any, Optional, TypeVar
 
 from pypz.core.specs.instance import Instance
 from pypz.core.specs.operator import Operator
-from pypz.core.specs.plugin import Plugin, PortPlugin, InputPortPlugin, OutputPortPlugin, ResourceHandlerPlugin, \
-    ServicePlugin
+from pypz.core.specs.plugin import (
+    InputPortPlugin,
+    OutputPortPlugin,
+    Plugin,
+    PortPlugin,
+    ResourceHandlerPlugin,
+    ServicePlugin,
+)
 
-
-BlankNestedInstanceType = TypeVar('BlankNestedInstanceType', bound='BlankInstance')
+BlankNestedInstanceType = TypeVar("BlankNestedInstanceType", bound="BlankInstance")
 
 
 class BlankInstance(Instance[BlankNestedInstanceType]):
@@ -84,7 +89,9 @@ class BlankServicePlugin(ServicePlugin, BlankPlugin):
 
 class BlankOperator(Operator, BlankInstance[Plugin]):
 
-    def __init__(self, name: str = None, replication_factor: int = None, *args, **kwargs):
+    def __init__(
+        self, name: str = None, replication_factor: int = None, *args, **kwargs
+    ):
         super().__init__(name, replication_factor, *args, **kwargs)
 
     def _on_init(self) -> bool:

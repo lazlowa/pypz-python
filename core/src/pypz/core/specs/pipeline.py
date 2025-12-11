@@ -13,10 +13,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # =============================================================================
-from typing import cast, Any
+from typing import Any, cast
 
 import yaml
-
 from pypz.core.specs.dtos import PipelineInstanceDTO, PipelineSpecDTO
 from pypz.core.specs.instance import Instance, RegisteredInterface
 from pypz.core.specs.operator import Operator
@@ -40,21 +39,28 @@ class Pipeline(Instance[Operator], RegisteredInterface):
 
         # Replicas must be excluded from the dto
         instance_dto.spec.nestedInstances = {
-            operator.get_dto() for operator in self.get_protected().get_nested_instances().values()
+            operator.get_dto()
+            for operator in self.get_protected().get_nested_instances().values()
             if operator.is_principal()
         }
 
-        return PipelineInstanceDTO(name=instance_dto.name,
-                                   parameters=instance_dto.parameters,
-                                   dependsOn=instance_dto.dependsOn,
-                                   spec=PipelineSpecDTO(**instance_dto.spec.__dict__))
+        return PipelineInstanceDTO(
+            name=instance_dto.name,
+            parameters=instance_dto.parameters,
+            dependsOn=instance_dto.dependsOn,
+            spec=PipelineSpecDTO(**instance_dto.spec.__dict__),
+        )
 
     @staticmethod
-    def create_from_string(source, *args, **kwargs) -> 'Pipeline':
-        return Pipeline.create_from_dto(PipelineInstanceDTO(**yaml.safe_load(source)), *args, **kwargs)
+    def create_from_string(source, *args, **kwargs) -> "Pipeline":
+        return Pipeline.create_from_dto(
+            PipelineInstanceDTO(**yaml.safe_load(source)), *args, **kwargs
+        )
 
     @staticmethod
-    def create_from_dto(instance_dto: 'PipelineInstanceDTO', *args, **kwargs) -> 'Pipeline':
+    def create_from_dto(
+        instance_dto: "PipelineInstanceDTO", *args, **kwargs
+    ) -> "Pipeline":
         return cast(Pipeline, Instance.create_from_dto(instance_dto, *args, **kwargs))
 
     def _on_interrupt(self, system_signal: int = None) -> None:

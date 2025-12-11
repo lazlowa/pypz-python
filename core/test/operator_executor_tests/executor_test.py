@@ -15,8 +15,9 @@
 # =============================================================================
 import unittest
 
-from pypz.executors.commons import ExitCodes, ExecutionMode
+from pypz.executors.commons import ExecutionMode, ExitCodes
 from pypz.executors.operator.executor import OperatorExecutor
+
 from core.test.operator_executor_tests.resources import TestPipeline
 
 
@@ -35,13 +36,21 @@ class OperatorExecutorTest(unittest.TestCase):
 
         self.assertEqual(0, pipeline.operator_a.service_plugin.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.service_plugin.call_counter_interrupt)
-        self.assertEqual(1, pipeline.operator_a.service_plugin.call_counter_service_start)
-        self.assertEqual(1, pipeline.operator_a.service_plugin.call_counter_service_shutdown)
+        self.assertEqual(
+            1, pipeline.operator_a.service_plugin.call_counter_service_start
+        )
+        self.assertEqual(
+            1, pipeline.operator_a.service_plugin.call_counter_service_shutdown
+        )
 
         self.assertEqual(0, pipeline.operator_a.resource_handler.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.resource_handler.call_counter_interrupt)
-        self.assertEqual(1, pipeline.operator_a.resource_handler.call_counter_resource_deletion)
-        self.assertEqual(1, pipeline.operator_a.resource_handler.call_counter_resource_creation)
+        self.assertEqual(
+            1, pipeline.operator_a.resource_handler.call_counter_resource_deletion
+        )
+        self.assertEqual(
+            1, pipeline.operator_a.resource_handler.call_counter_resource_creation
+        )
 
         self.assertEqual(0, pipeline.operator_a.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.call_counter_interrupt)
@@ -74,13 +83,21 @@ class OperatorExecutorTest(unittest.TestCase):
 
         self.assertEqual(0, pipeline.operator_a.service_plugin.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.service_plugin.call_counter_interrupt)
-        self.assertEqual(0, pipeline.operator_a.service_plugin.call_counter_service_start)
-        self.assertEqual(0, pipeline.operator_a.service_plugin.call_counter_service_shutdown)
+        self.assertEqual(
+            0, pipeline.operator_a.service_plugin.call_counter_service_start
+        )
+        self.assertEqual(
+            0, pipeline.operator_a.service_plugin.call_counter_service_shutdown
+        )
 
         self.assertEqual(0, pipeline.operator_a.resource_handler.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.resource_handler.call_counter_interrupt)
-        self.assertEqual(0, pipeline.operator_a.resource_handler.call_counter_resource_deletion)
-        self.assertEqual(0, pipeline.operator_a.resource_handler.call_counter_resource_creation)
+        self.assertEqual(
+            0, pipeline.operator_a.resource_handler.call_counter_resource_deletion
+        )
+        self.assertEqual(
+            0, pipeline.operator_a.resource_handler.call_counter_resource_creation
+        )
 
         self.assertEqual(0, pipeline.operator_a.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.call_counter_interrupt)
@@ -112,13 +129,21 @@ class OperatorExecutorTest(unittest.TestCase):
 
         self.assertEqual(0, pipeline.operator_a.service_plugin.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.service_plugin.call_counter_interrupt)
-        self.assertEqual(1, pipeline.operator_a.service_plugin.call_counter_service_start)
-        self.assertEqual(1, pipeline.operator_a.service_plugin.call_counter_service_shutdown)
+        self.assertEqual(
+            1, pipeline.operator_a.service_plugin.call_counter_service_start
+        )
+        self.assertEqual(
+            1, pipeline.operator_a.service_plugin.call_counter_service_shutdown
+        )
 
         self.assertEqual(0, pipeline.operator_a.resource_handler.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.resource_handler.call_counter_interrupt)
-        self.assertEqual(1, pipeline.operator_a.resource_handler.call_counter_resource_deletion)
-        self.assertEqual(1, pipeline.operator_a.resource_handler.call_counter_resource_creation)
+        self.assertEqual(
+            1, pipeline.operator_a.resource_handler.call_counter_resource_deletion
+        )
+        self.assertEqual(
+            1, pipeline.operator_a.resource_handler.call_counter_resource_creation
+        )
 
         self.assertEqual(0, pipeline.operator_a.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.call_counter_interrupt)
@@ -136,9 +161,13 @@ class OperatorExecutorTest(unittest.TestCase):
         self.assertEqual(1, pipeline.operator_a.output_port.call_counter_port_init)
         self.assertEqual(1, pipeline.operator_a.output_port.call_counter_port_shutdown)
 
-    def test_executor_with_error_in_plugin_service_start_expect_transition_to_error_state(self):
+    def test_executor_with_error_in_plugin_service_start_expect_transition_to_error_state(
+        self,
+    ):
         pipeline = TestPipeline("pipeline")
-        pipeline.operator_a.service_plugin.set_parameter("raise__on_service_start", "Test Error")
+        pipeline.operator_a.service_plugin.set_parameter(
+            "raise__on_service_start", "Test Error"
+        )
         executor = OperatorExecutor(pipeline.operator_a)
 
         self.assertEqual(ExitCodes.StateServiceStartError.value, executor.execute())
@@ -150,13 +179,21 @@ class OperatorExecutorTest(unittest.TestCase):
 
         self.assertEqual(1, pipeline.operator_a.service_plugin.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.service_plugin.call_counter_interrupt)
-        self.assertEqual(1, pipeline.operator_a.service_plugin.call_counter_service_start)
-        self.assertEqual(1, pipeline.operator_a.service_plugin.call_counter_service_shutdown)
+        self.assertEqual(
+            1, pipeline.operator_a.service_plugin.call_counter_service_start
+        )
+        self.assertEqual(
+            1, pipeline.operator_a.service_plugin.call_counter_service_shutdown
+        )
 
         self.assertEqual(0, pipeline.operator_a.resource_handler.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.resource_handler.call_counter_interrupt)
-        self.assertEqual(0, pipeline.operator_a.resource_handler.call_counter_resource_deletion)
-        self.assertEqual(0, pipeline.operator_a.resource_handler.call_counter_resource_creation)
+        self.assertEqual(
+            0, pipeline.operator_a.resource_handler.call_counter_resource_deletion
+        )
+        self.assertEqual(
+            0, pipeline.operator_a.resource_handler.call_counter_resource_creation
+        )
 
         self.assertEqual(0, pipeline.operator_a.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.call_counter_interrupt)
@@ -174,9 +211,13 @@ class OperatorExecutorTest(unittest.TestCase):
         self.assertEqual(0, pipeline.operator_a.output_port.call_counter_port_init)
         self.assertEqual(0, pipeline.operator_a.output_port.call_counter_port_shutdown)
 
-    def test_executor_with_error_in_plugin_service_shutdown_expect_transition_to_error_state(self):
+    def test_executor_with_error_in_plugin_service_shutdown_expect_transition_to_error_state(
+        self,
+    ):
         pipeline = TestPipeline("pipeline")
-        pipeline.operator_a.service_plugin.set_parameter("raise__on_service_shutdown", "Test Error")
+        pipeline.operator_a.service_plugin.set_parameter(
+            "raise__on_service_shutdown", "Test Error"
+        )
         executor = OperatorExecutor(pipeline.operator_a)
 
         self.assertEqual(ExitCodes.StateServiceShutdownError.value, executor.execute())
@@ -188,13 +229,21 @@ class OperatorExecutorTest(unittest.TestCase):
 
         self.assertEqual(1, pipeline.operator_a.service_plugin.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.service_plugin.call_counter_interrupt)
-        self.assertEqual(1, pipeline.operator_a.service_plugin.call_counter_service_start)
-        self.assertEqual(1, pipeline.operator_a.service_plugin.call_counter_service_shutdown)
+        self.assertEqual(
+            1, pipeline.operator_a.service_plugin.call_counter_service_start
+        )
+        self.assertEqual(
+            1, pipeline.operator_a.service_plugin.call_counter_service_shutdown
+        )
 
         self.assertEqual(0, pipeline.operator_a.resource_handler.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.resource_handler.call_counter_interrupt)
-        self.assertEqual(1, pipeline.operator_a.resource_handler.call_counter_resource_deletion)
-        self.assertEqual(1, pipeline.operator_a.resource_handler.call_counter_resource_creation)
+        self.assertEqual(
+            1, pipeline.operator_a.resource_handler.call_counter_resource_deletion
+        )
+        self.assertEqual(
+            1, pipeline.operator_a.resource_handler.call_counter_resource_creation
+        )
 
         self.assertEqual(0, pipeline.operator_a.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.call_counter_interrupt)
@@ -212,7 +261,9 @@ class OperatorExecutorTest(unittest.TestCase):
         self.assertEqual(1, pipeline.operator_a.output_port.call_counter_port_init)
         self.assertEqual(1, pipeline.operator_a.output_port.call_counter_port_shutdown)
 
-    def test_executor_with_error_in_operation_init_expect_transition_to_error_state(self):
+    def test_executor_with_error_in_operation_init_expect_transition_to_error_state(
+        self,
+    ):
         pipeline = TestPipeline("pipeline")
         pipeline.operator_a.set_parameter("raise__on_init", "Test Error")
         executor = OperatorExecutor(pipeline.operator_a)
@@ -226,13 +277,21 @@ class OperatorExecutorTest(unittest.TestCase):
 
         self.assertEqual(0, pipeline.operator_a.service_plugin.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.service_plugin.call_counter_interrupt)
-        self.assertEqual(1, pipeline.operator_a.service_plugin.call_counter_service_start)
-        self.assertEqual(1, pipeline.operator_a.service_plugin.call_counter_service_shutdown)
+        self.assertEqual(
+            1, pipeline.operator_a.service_plugin.call_counter_service_start
+        )
+        self.assertEqual(
+            1, pipeline.operator_a.service_plugin.call_counter_service_shutdown
+        )
 
         self.assertEqual(0, pipeline.operator_a.resource_handler.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.resource_handler.call_counter_interrupt)
-        self.assertEqual(1, pipeline.operator_a.resource_handler.call_counter_resource_deletion)
-        self.assertEqual(1, pipeline.operator_a.resource_handler.call_counter_resource_creation)
+        self.assertEqual(
+            1, pipeline.operator_a.resource_handler.call_counter_resource_deletion
+        )
+        self.assertEqual(
+            1, pipeline.operator_a.resource_handler.call_counter_resource_creation
+        )
 
         self.assertEqual(1, pipeline.operator_a.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.call_counter_interrupt)
@@ -250,7 +309,9 @@ class OperatorExecutorTest(unittest.TestCase):
         self.assertEqual(1, pipeline.operator_a.output_port.call_counter_port_init)
         self.assertEqual(1, pipeline.operator_a.output_port.call_counter_port_shutdown)
 
-    def test_executor_with_error_in_operation_running_expect_transition_to_error_state(self):
+    def test_executor_with_error_in_operation_running_expect_transition_to_error_state(
+        self,
+    ):
         pipeline = TestPipeline("pipeline")
         pipeline.operator_a.set_parameter("raise__on_running", "Test Error")
         executor = OperatorExecutor(pipeline.operator_a)
@@ -264,13 +325,21 @@ class OperatorExecutorTest(unittest.TestCase):
 
         self.assertEqual(0, pipeline.operator_a.service_plugin.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.service_plugin.call_counter_interrupt)
-        self.assertEqual(1, pipeline.operator_a.service_plugin.call_counter_service_start)
-        self.assertEqual(1, pipeline.operator_a.service_plugin.call_counter_service_shutdown)
+        self.assertEqual(
+            1, pipeline.operator_a.service_plugin.call_counter_service_start
+        )
+        self.assertEqual(
+            1, pipeline.operator_a.service_plugin.call_counter_service_shutdown
+        )
 
         self.assertEqual(0, pipeline.operator_a.resource_handler.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.resource_handler.call_counter_interrupt)
-        self.assertEqual(1, pipeline.operator_a.resource_handler.call_counter_resource_deletion)
-        self.assertEqual(1, pipeline.operator_a.resource_handler.call_counter_resource_creation)
+        self.assertEqual(
+            1, pipeline.operator_a.resource_handler.call_counter_resource_deletion
+        )
+        self.assertEqual(
+            1, pipeline.operator_a.resource_handler.call_counter_resource_creation
+        )
 
         self.assertEqual(1, pipeline.operator_a.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.call_counter_interrupt)
@@ -288,12 +357,16 @@ class OperatorExecutorTest(unittest.TestCase):
         self.assertEqual(1, pipeline.operator_a.output_port.call_counter_port_init)
         self.assertEqual(1, pipeline.operator_a.output_port.call_counter_port_shutdown)
 
-    def test_executor_with_error_in_operation_shutdown_expect_transition_to_error_state(self):
+    def test_executor_with_error_in_operation_shutdown_expect_transition_to_error_state(
+        self,
+    ):
         pipeline = TestPipeline("pipeline")
         pipeline.operator_a.set_parameter("raise__on_shutdown", "Test Error")
         executor = OperatorExecutor(pipeline.operator_a)
 
-        self.assertEqual(ExitCodes.StateOperationShutdownError.value, executor.execute())
+        self.assertEqual(
+            ExitCodes.StateOperationShutdownError.value, executor.execute()
+        )
 
         self.assertEqual(0, pipeline.operator_a.addon.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.addon.call_counter_interrupt)
@@ -302,13 +375,21 @@ class OperatorExecutorTest(unittest.TestCase):
 
         self.assertEqual(0, pipeline.operator_a.service_plugin.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.service_plugin.call_counter_interrupt)
-        self.assertEqual(1, pipeline.operator_a.service_plugin.call_counter_service_start)
-        self.assertEqual(1, pipeline.operator_a.service_plugin.call_counter_service_shutdown)
+        self.assertEqual(
+            1, pipeline.operator_a.service_plugin.call_counter_service_start
+        )
+        self.assertEqual(
+            1, pipeline.operator_a.service_plugin.call_counter_service_shutdown
+        )
 
         self.assertEqual(0, pipeline.operator_a.resource_handler.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.resource_handler.call_counter_interrupt)
-        self.assertEqual(1, pipeline.operator_a.resource_handler.call_counter_resource_deletion)
-        self.assertEqual(1, pipeline.operator_a.resource_handler.call_counter_resource_creation)
+        self.assertEqual(
+            1, pipeline.operator_a.resource_handler.call_counter_resource_deletion
+        )
+        self.assertEqual(
+            1, pipeline.operator_a.resource_handler.call_counter_resource_creation
+        )
 
         self.assertEqual(1, pipeline.operator_a.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.call_counter_interrupt)
@@ -341,13 +422,21 @@ class OperatorExecutorTest(unittest.TestCase):
 
         self.assertEqual(0, pipeline.operator_a.service_plugin.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.service_plugin.call_counter_interrupt)
-        self.assertEqual(1, pipeline.operator_a.service_plugin.call_counter_service_start)
-        self.assertEqual(1, pipeline.operator_a.service_plugin.call_counter_service_shutdown)
+        self.assertEqual(
+            1, pipeline.operator_a.service_plugin.call_counter_service_start
+        )
+        self.assertEqual(
+            1, pipeline.operator_a.service_plugin.call_counter_service_shutdown
+        )
 
         self.assertEqual(0, pipeline.operator_a.resource_handler.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.resource_handler.call_counter_interrupt)
-        self.assertEqual(1, pipeline.operator_a.resource_handler.call_counter_resource_deletion)
-        self.assertEqual(1, pipeline.operator_a.resource_handler.call_counter_resource_creation)
+        self.assertEqual(
+            1, pipeline.operator_a.resource_handler.call_counter_resource_deletion
+        )
+        self.assertEqual(
+            1, pipeline.operator_a.resource_handler.call_counter_resource_creation
+        )
 
         self.assertEqual(0, pipeline.operator_a.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.call_counter_interrupt)
@@ -366,9 +455,13 @@ class OperatorExecutorTest(unittest.TestCase):
         self.assertEqual(1, pipeline.operator_a.output_port.call_counter_port_init)
         self.assertEqual(1, pipeline.operator_a.output_port.call_counter_port_shutdown)
 
-    def test_executor_with_error_in_input_port_plugin_init_expect_transition_to_error_state(self):
+    def test_executor_with_error_in_input_port_plugin_init_expect_transition_to_error_state(
+        self,
+    ):
         pipeline = TestPipeline("pipeline")
-        pipeline.operator_a.input_port.set_parameter("raise__on_port_open", "Test Error")
+        pipeline.operator_a.input_port.set_parameter(
+            "raise__on_port_open", "Test Error"
+        )
         executor = OperatorExecutor(pipeline.operator_a)
 
         self.assertEqual(ExitCodes.StateOperationInitError.value, executor.execute())
@@ -380,13 +473,21 @@ class OperatorExecutorTest(unittest.TestCase):
 
         self.assertEqual(0, pipeline.operator_a.service_plugin.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.service_plugin.call_counter_interrupt)
-        self.assertEqual(1, pipeline.operator_a.service_plugin.call_counter_service_start)
-        self.assertEqual(1, pipeline.operator_a.service_plugin.call_counter_service_shutdown)
+        self.assertEqual(
+            1, pipeline.operator_a.service_plugin.call_counter_service_start
+        )
+        self.assertEqual(
+            1, pipeline.operator_a.service_plugin.call_counter_service_shutdown
+        )
 
         self.assertEqual(0, pipeline.operator_a.resource_handler.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.resource_handler.call_counter_interrupt)
-        self.assertEqual(1, pipeline.operator_a.resource_handler.call_counter_resource_deletion)
-        self.assertEqual(1, pipeline.operator_a.resource_handler.call_counter_resource_creation)
+        self.assertEqual(
+            1, pipeline.operator_a.resource_handler.call_counter_resource_deletion
+        )
+        self.assertEqual(
+            1, pipeline.operator_a.resource_handler.call_counter_resource_creation
+        )
 
         self.assertEqual(1, pipeline.operator_a.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.call_counter_interrupt)
@@ -408,12 +509,18 @@ class OperatorExecutorTest(unittest.TestCase):
         # self.assertEqual(0, pipeline.operator_a.output_port.call_counter_port_init)
         # self.assertEqual(0, pipeline.operator_a.output_port.call_counter_port_shutdown)
 
-    def test_executor_with_error_in_input_port_plugin_close_expect_transition_to_error_state(self):
+    def test_executor_with_error_in_input_port_plugin_close_expect_transition_to_error_state(
+        self,
+    ):
         pipeline = TestPipeline("pipeline")
-        pipeline.operator_a.input_port.set_parameter("raise__on_port_close", "Test Error")
+        pipeline.operator_a.input_port.set_parameter(
+            "raise__on_port_close", "Test Error"
+        )
         executor = OperatorExecutor(pipeline.operator_a)
 
-        self.assertEqual(ExitCodes.StateOperationShutdownError.value, executor.execute())
+        self.assertEqual(
+            ExitCodes.StateOperationShutdownError.value, executor.execute()
+        )
 
         self.assertEqual(0, pipeline.operator_a.addon.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.addon.call_counter_interrupt)
@@ -422,13 +529,21 @@ class OperatorExecutorTest(unittest.TestCase):
 
         self.assertEqual(0, pipeline.operator_a.service_plugin.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.service_plugin.call_counter_interrupt)
-        self.assertEqual(1, pipeline.operator_a.service_plugin.call_counter_service_start)
-        self.assertEqual(1, pipeline.operator_a.service_plugin.call_counter_service_shutdown)
+        self.assertEqual(
+            1, pipeline.operator_a.service_plugin.call_counter_service_start
+        )
+        self.assertEqual(
+            1, pipeline.operator_a.service_plugin.call_counter_service_shutdown
+        )
 
         self.assertEqual(0, pipeline.operator_a.resource_handler.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.resource_handler.call_counter_interrupt)
-        self.assertEqual(1, pipeline.operator_a.resource_handler.call_counter_resource_deletion)
-        self.assertEqual(1, pipeline.operator_a.resource_handler.call_counter_resource_creation)
+        self.assertEqual(
+            1, pipeline.operator_a.resource_handler.call_counter_resource_deletion
+        )
+        self.assertEqual(
+            1, pipeline.operator_a.resource_handler.call_counter_resource_creation
+        )
 
         self.assertEqual(1, pipeline.operator_a.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.call_counter_interrupt)
@@ -446,9 +561,13 @@ class OperatorExecutorTest(unittest.TestCase):
         self.assertEqual(1, pipeline.operator_a.output_port.call_counter_port_init)
         self.assertEqual(1, pipeline.operator_a.output_port.call_counter_port_shutdown)
 
-    def test_executor_with_error_in_plugin_resource_creation_expect_transition_to_error_state(self):
+    def test_executor_with_error_in_plugin_resource_creation_expect_transition_to_error_state(
+        self,
+    ):
         pipeline = TestPipeline("pipeline")
-        pipeline.operator_a.resource_handler.set_parameter("raise__on_resource_creation", "Test Error")
+        pipeline.operator_a.resource_handler.set_parameter(
+            "raise__on_resource_creation", "Test Error"
+        )
         executor = OperatorExecutor(pipeline.operator_a)
 
         self.assertEqual(ExitCodes.StateResourceCreationError.value, executor.execute())
@@ -460,13 +579,21 @@ class OperatorExecutorTest(unittest.TestCase):
 
         self.assertEqual(0, pipeline.operator_a.service_plugin.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.service_plugin.call_counter_interrupt)
-        self.assertEqual(1, pipeline.operator_a.service_plugin.call_counter_service_start)
-        self.assertEqual(1, pipeline.operator_a.service_plugin.call_counter_service_shutdown)
+        self.assertEqual(
+            1, pipeline.operator_a.service_plugin.call_counter_service_start
+        )
+        self.assertEqual(
+            1, pipeline.operator_a.service_plugin.call_counter_service_shutdown
+        )
 
         self.assertEqual(1, pipeline.operator_a.resource_handler.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.resource_handler.call_counter_interrupt)
-        self.assertEqual(1, pipeline.operator_a.resource_handler.call_counter_resource_deletion)
-        self.assertEqual(1, pipeline.operator_a.resource_handler.call_counter_resource_creation)
+        self.assertEqual(
+            1, pipeline.operator_a.resource_handler.call_counter_resource_deletion
+        )
+        self.assertEqual(
+            1, pipeline.operator_a.resource_handler.call_counter_resource_creation
+        )
 
         self.assertEqual(0, pipeline.operator_a.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.call_counter_interrupt)
@@ -484,12 +611,18 @@ class OperatorExecutorTest(unittest.TestCase):
         self.assertEqual(0, pipeline.operator_a.output_port.call_counter_port_init)
         self.assertEqual(0, pipeline.operator_a.output_port.call_counter_port_shutdown)
 
-    def test_executor_with_error_in_plugin_resource_deletion_expect_transition_to_error_state(self):
+    def test_executor_with_error_in_plugin_resource_deletion_expect_transition_to_error_state(
+        self,
+    ):
         pipeline = TestPipeline("pipeline")
-        pipeline.operator_a.resource_handler.set_parameter("raise__on_resource_deletion", "Test Error")
+        pipeline.operator_a.resource_handler.set_parameter(
+            "raise__on_resource_deletion", "Test Error"
+        )
         executor = OperatorExecutor(pipeline.operator_a)
 
-        self.assertEqual(ExitCodes.StateResourcesDeletionError.value, executor.execute())
+        self.assertEqual(
+            ExitCodes.StateResourcesDeletionError.value, executor.execute()
+        )
 
         self.assertEqual(0, pipeline.operator_a.addon.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.addon.call_counter_interrupt)
@@ -498,13 +631,21 @@ class OperatorExecutorTest(unittest.TestCase):
 
         self.assertEqual(0, pipeline.operator_a.service_plugin.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.service_plugin.call_counter_interrupt)
-        self.assertEqual(1, pipeline.operator_a.service_plugin.call_counter_service_start)
-        self.assertEqual(1, pipeline.operator_a.service_plugin.call_counter_service_shutdown)
+        self.assertEqual(
+            1, pipeline.operator_a.service_plugin.call_counter_service_start
+        )
+        self.assertEqual(
+            1, pipeline.operator_a.service_plugin.call_counter_service_shutdown
+        )
 
         self.assertEqual(1, pipeline.operator_a.resource_handler.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.resource_handler.call_counter_interrupt)
-        self.assertEqual(1, pipeline.operator_a.resource_handler.call_counter_resource_deletion)
-        self.assertEqual(1, pipeline.operator_a.resource_handler.call_counter_resource_creation)
+        self.assertEqual(
+            1, pipeline.operator_a.resource_handler.call_counter_resource_deletion
+        )
+        self.assertEqual(
+            1, pipeline.operator_a.resource_handler.call_counter_resource_creation
+        )
 
         self.assertEqual(0, pipeline.operator_a.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.call_counter_interrupt)
@@ -526,7 +667,10 @@ class OperatorExecutorTest(unittest.TestCase):
         pipeline = TestPipeline("pipeline")
         executor = OperatorExecutor(pipeline.operator_a)
 
-        self.assertEqual(ExitCodes.NoError.value, executor.execute(ExecutionMode.WithoutResourceDeletion))
+        self.assertEqual(
+            ExitCodes.NoError.value,
+            executor.execute(ExecutionMode.WithoutResourceDeletion),
+        )
 
         self.assertEqual(0, pipeline.operator_a.addon.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.addon.call_counter_interrupt)
@@ -535,13 +679,21 @@ class OperatorExecutorTest(unittest.TestCase):
 
         self.assertEqual(0, pipeline.operator_a.service_plugin.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.service_plugin.call_counter_interrupt)
-        self.assertEqual(1, pipeline.operator_a.service_plugin.call_counter_service_start)
-        self.assertEqual(1, pipeline.operator_a.service_plugin.call_counter_service_shutdown)
+        self.assertEqual(
+            1, pipeline.operator_a.service_plugin.call_counter_service_start
+        )
+        self.assertEqual(
+            1, pipeline.operator_a.service_plugin.call_counter_service_shutdown
+        )
 
         self.assertEqual(0, pipeline.operator_a.resource_handler.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.resource_handler.call_counter_interrupt)
-        self.assertEqual(0, pipeline.operator_a.resource_handler.call_counter_resource_deletion)
-        self.assertEqual(1, pipeline.operator_a.resource_handler.call_counter_resource_creation)
+        self.assertEqual(
+            0, pipeline.operator_a.resource_handler.call_counter_resource_deletion
+        )
+        self.assertEqual(
+            1, pipeline.operator_a.resource_handler.call_counter_resource_creation
+        )
 
         self.assertEqual(0, pipeline.operator_a.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.call_counter_interrupt)
@@ -563,7 +715,10 @@ class OperatorExecutorTest(unittest.TestCase):
         pipeline = TestPipeline("pipeline")
         executor = OperatorExecutor(pipeline.operator_a)
 
-        self.assertEqual(ExitCodes.NoError.value, executor.execute(ExecutionMode.ResourceCreationOnly))
+        self.assertEqual(
+            ExitCodes.NoError.value,
+            executor.execute(ExecutionMode.ResourceCreationOnly),
+        )
 
         self.assertEqual(0, pipeline.operator_a.addon.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.addon.call_counter_interrupt)
@@ -572,13 +727,21 @@ class OperatorExecutorTest(unittest.TestCase):
 
         self.assertEqual(0, pipeline.operator_a.service_plugin.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.service_plugin.call_counter_interrupt)
-        self.assertEqual(1, pipeline.operator_a.service_plugin.call_counter_service_start)
-        self.assertEqual(1, pipeline.operator_a.service_plugin.call_counter_service_shutdown)
+        self.assertEqual(
+            1, pipeline.operator_a.service_plugin.call_counter_service_start
+        )
+        self.assertEqual(
+            1, pipeline.operator_a.service_plugin.call_counter_service_shutdown
+        )
 
         self.assertEqual(0, pipeline.operator_a.resource_handler.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.resource_handler.call_counter_interrupt)
-        self.assertEqual(0, pipeline.operator_a.resource_handler.call_counter_resource_deletion)
-        self.assertEqual(1, pipeline.operator_a.resource_handler.call_counter_resource_creation)
+        self.assertEqual(
+            0, pipeline.operator_a.resource_handler.call_counter_resource_deletion
+        )
+        self.assertEqual(
+            1, pipeline.operator_a.resource_handler.call_counter_resource_creation
+        )
 
         self.assertEqual(0, pipeline.operator_a.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.call_counter_interrupt)
@@ -600,7 +763,10 @@ class OperatorExecutorTest(unittest.TestCase):
         pipeline = TestPipeline("pipeline")
         executor = OperatorExecutor(pipeline.operator_a)
 
-        self.assertEqual(ExitCodes.NoError.value, executor.execute(ExecutionMode.ResourceDeletionOnly))
+        self.assertEqual(
+            ExitCodes.NoError.value,
+            executor.execute(ExecutionMode.ResourceDeletionOnly),
+        )
 
         self.assertEqual(0, pipeline.operator_a.addon.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.addon.call_counter_interrupt)
@@ -609,13 +775,21 @@ class OperatorExecutorTest(unittest.TestCase):
 
         self.assertEqual(0, pipeline.operator_a.service_plugin.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.service_plugin.call_counter_interrupt)
-        self.assertEqual(1, pipeline.operator_a.service_plugin.call_counter_service_start)
-        self.assertEqual(1, pipeline.operator_a.service_plugin.call_counter_service_shutdown)
+        self.assertEqual(
+            1, pipeline.operator_a.service_plugin.call_counter_service_start
+        )
+        self.assertEqual(
+            1, pipeline.operator_a.service_plugin.call_counter_service_shutdown
+        )
 
         self.assertEqual(0, pipeline.operator_a.resource_handler.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.resource_handler.call_counter_interrupt)
-        self.assertEqual(1, pipeline.operator_a.resource_handler.call_counter_resource_deletion)
-        self.assertEqual(0, pipeline.operator_a.resource_handler.call_counter_resource_creation)
+        self.assertEqual(
+            1, pipeline.operator_a.resource_handler.call_counter_resource_deletion
+        )
+        self.assertEqual(
+            0, pipeline.operator_a.resource_handler.call_counter_resource_creation
+        )
 
         self.assertEqual(0, pipeline.operator_a.call_counter_error)
         self.assertEqual(0, pipeline.operator_a.call_counter_interrupt)
@@ -636,14 +810,30 @@ class OperatorExecutorTest(unittest.TestCase):
     def test_executor_with_dependent_plugins_expect_correct_execution_order(self):
         pipeline = TestPipeline("pipeline")
 
-        pipeline.operator_b.service_plugin_4.depends_on(pipeline.operator_b.service_plugin_3)
-        pipeline.operator_b.service_plugin_3.depends_on(pipeline.operator_b.service_plugin_2)
-        pipeline.operator_b.service_plugin_2.depends_on(pipeline.operator_b.service_plugin_1)
-        pipeline.operator_b.service_plugin_1.depends_on(pipeline.operator_b.service_plugin_0)
-        pipeline.operator_b.resource_handler_4.depends_on(pipeline.operator_b.resource_handler_3)
-        pipeline.operator_b.resource_handler_3.depends_on(pipeline.operator_b.resource_handler_2)
-        pipeline.operator_b.resource_handler_2.depends_on(pipeline.operator_b.resource_handler_1)
-        pipeline.operator_b.resource_handler_1.depends_on(pipeline.operator_b.resource_handler_0)
+        pipeline.operator_b.service_plugin_4.depends_on(
+            pipeline.operator_b.service_plugin_3
+        )
+        pipeline.operator_b.service_plugin_3.depends_on(
+            pipeline.operator_b.service_plugin_2
+        )
+        pipeline.operator_b.service_plugin_2.depends_on(
+            pipeline.operator_b.service_plugin_1
+        )
+        pipeline.operator_b.service_plugin_1.depends_on(
+            pipeline.operator_b.service_plugin_0
+        )
+        pipeline.operator_b.resource_handler_4.depends_on(
+            pipeline.operator_b.resource_handler_3
+        )
+        pipeline.operator_b.resource_handler_3.depends_on(
+            pipeline.operator_b.resource_handler_2
+        )
+        pipeline.operator_b.resource_handler_2.depends_on(
+            pipeline.operator_b.resource_handler_1
+        )
+        pipeline.operator_b.resource_handler_1.depends_on(
+            pipeline.operator_b.resource_handler_0
+        )
         pipeline.operator_b.input_port_4.depends_on(pipeline.operator_b.input_port_3)
         pipeline.operator_b.input_port_3.depends_on(pipeline.operator_b.input_port_2)
         pipeline.operator_b.input_port_2.depends_on(pipeline.operator_b.input_port_1)

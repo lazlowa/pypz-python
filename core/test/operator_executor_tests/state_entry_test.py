@@ -17,6 +17,7 @@ import unittest
 
 from pypz.executors.operator.executor import OperatorExecutor
 from pypz.executors.operator.signals import SignalServicesStart
+
 from core.test.operator_executor_tests.resources import TestPipeline
 
 
@@ -26,4 +27,6 @@ class StateEntryTest(unittest.TestCase):
         executor = OperatorExecutor(pipeline.operator_a)
         executor._OperatorExecutor__initialize()
 
-        self.assertIsInstance(executor.get_current_state().on_execute(), SignalServicesStart)
+        self.assertIsInstance(
+            executor.get_current_state().on_execute(), SignalServicesStart
+        )
