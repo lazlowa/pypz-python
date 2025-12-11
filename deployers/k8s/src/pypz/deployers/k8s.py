@@ -464,8 +464,10 @@ class KubernetesDeployer(Deployer):
                 'volumeMounts': volume_mounts,
                 'securityContext': security_context,
                 'livenessProbe': kubernetes_parameters.livenessProbe,
-                'readinessProbe': kubernetes_parameters.readinessProbe,
-                'startupProbe': kubernetes_parameters.startupProbe
+                'readinessProbe': operator.get_parameter("readinessProbe")
+                if operator.has_parameter("readinessProbe") else kubernetes_parameters.readinessProbe,
+                'startupProbe': operator.get_parameter("startupProbe")
+                if operator.has_parameter("startupProbe") else kubernetes_parameters.startupProbe
             }
         ]
 

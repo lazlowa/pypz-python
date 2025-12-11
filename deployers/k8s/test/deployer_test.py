@@ -19,7 +19,7 @@ import unittest
 from kubernetes import config
 from kubernetes.client import V1Secret, V1PodList, ApiException, V1Pod, Configuration, V1ObjectMeta, V1Namespace
 
-from deployers.k8s.test.resources.pipeline import TestPipeline
+from deployers.k8s.test.resources.pipeline import TestPipeline, TestKubernetesPipeline
 from pypz.core.commons.utils import convert_to_dict
 from pypz.core.specs.operator import Operator
 from pypz.deployers.base import DeploymentState
@@ -545,3 +545,78 @@ class KubernetesDeployerTest(unittest.TestCase):
 
         self.assertIn("PYPZ_TEST_ENV_VAR=VAL",
                       operator_logs)
+
+    def test_kubernetes_operator(self):
+        """
+        This method tests, if Kubernetes utilizes the health check plugin and
+        the configuration of startup and readiness probes.
+        The entire test takes about ~30 seconds:
+        - 10s -> delay after container start, but before operator start (not started, not ready)
+        - 10s -> after operator started (started, ready)
+        - 10s -> after operator stopped (started, not ready)
+        """
+
+        client = KubernetesDeployerTest.kubernetes_deployer._core_v1_api
+        pipeline = TestKubernetesPipeline("pipeline23")
+        pipeline.set_parameter(">operatorImageName", KubernetesDeployerTest.test_image)
+
+        kubernetes_parameters: KubernetesParameter = KubernetesParameter()
+        kubernetes_parameters.imagePullPolicy = "Never"
+        kubernetes_parameters.env = [
+            {
+                "name": "PYPZ_TEST_DELAY_START_SEC",
+                "value": "10"
+            },
+            {
+                "name": "PYPZ_TEST_DELAY_END_SEC",
+                "value": "10"
+            }
+        ]
+
+        pipeline.op.set_parameter("kubernetes", convert_to_dict(kubernetes_parameters))
+
+        KubernetesDeployerTest.kubernetes_deployer.deploy(pipeline)
+
+        # 0 seconds in the test duration
+        while KubernetesDeployerTest.kubernetes_deployer.is_all_operator_in_state(
+                pipeline.get_full_name(),
+                DeploymentState.Open
+        ):
+            time.sleep(1)
+
+        # ~1 seconds in the test duration
+        pod = client.read_namespaced_pod(
+            KubernetesDeployer.sanitize(pipeline.op.get_full_name()),
+            KubernetesDeployerTest.test_namespace
+        )
+
+        # Starting of the operator is delayed by 10 seconds after container start
+        self.assertFalse(pod.status.container_statuses[0].started)
+        self.assertFalse(pod.status.container_statuses[0].ready)
+
+        # Waiting 15 seconds, to allow the operator to be started
+        time.sleep(15)
+
+        # ~16 seconds in the test duration
+        pod = client.read_namespaced_pod(
+            KubernetesDeployer.sanitize(pipeline.op.get_full_name()),
+            KubernetesDeployerTest.test_namespace
+        )
+
+        # The operator lives 10 seconds
+        self.assertTrue(pod.status.container_statuses[0].started)
+        self.assertTrue(pod.status.container_statuses[0].ready)
+
+        # Waiting 10 seconds to allow the operator to be stopped
+        time.sleep(10)
+
+        # ~26 seconds in the test duration
+        pod = client.read_namespaced_pod(
+            KubernetesDeployer.sanitize(pipeline.op.get_full_name()),
+            KubernetesDeployerTest.test_namespace
+        )
+
+        # The container termination is delayed by 10 seconds, after
+        # operator has stopped
+        self.assertTrue(pod.status.container_statuses[0].started)
+        self.assertFalse(pod.status.container_statuses[0].ready)

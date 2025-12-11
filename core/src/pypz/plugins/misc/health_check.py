@@ -22,6 +22,12 @@ from pypz.core.specs.plugin import ServicePlugin
 
 
 class HttpHealthCheckPlugin(ServicePlugin):
+    """
+    This service plugin starts a small HTTP server with a single
+    endpoint, which remains active in the lifetime of the operator.
+    It allows external entities to realize HTTP based health checks.
+    """
+
     port = OptionalParameter(int)
 
     def __init__(self, name: str = None, *args, **kwargs):
@@ -34,8 +40,7 @@ class HttpHealthCheckPlugin(ServicePlugin):
     # Private: HTTP server setup
     # --------------------------
     def _start_http_server(self) -> None:
-        plugin = self
-        plugin.get_logger().debug("Starting HTTP server ...")
+        self.get_logger().debug("Starting HTTP server ...")
 
         class HealthHandler(BaseHTTPRequestHandler):
             def do_GET(self):
@@ -62,7 +67,7 @@ class HttpHealthCheckPlugin(ServicePlugin):
         )
         self._server_thread.start()
 
-        plugin.get_logger().debug(f"HTTP server started and listening on port: {self.port}")
+        self.get_logger().debug(f"HTTP server started and listening on port: {self.port}")
 
     def _stop_http_server(self) -> None:
         if self._server:

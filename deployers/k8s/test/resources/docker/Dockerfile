@@ -31,7 +31,7 @@ WORKDIR $CONTAINER_ROOT
 
 RUN /usr/local/bin/python -m pip install --upgrade pip
 
-COPY . .
+COPY .. .
 
 RUN pip install -e \
     core \
@@ -40,4 +40,4 @@ RUN pip install -e \
     plugins/rmq_io
 
 ENTRYPOINT ["/bin/sh"]
-CMD [".docker/pypz-startup.sh"]
+CMD ["deployers/k8s/test/resources/docker/pypz-startup.sh"]

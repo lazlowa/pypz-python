@@ -16,7 +16,7 @@
 from abc import ABC
 
 from pypz.core.specs.operator import Operator
-from pypz.plugins.k8s import HttpHealthCheckPlugin
+from pypz.plugins.misc.health_check import HttpHealthCheckPlugin
 
 
 class KubernetesOperator(Operator, ABC):
@@ -54,9 +54,9 @@ class KubernetesOperator(Operator, ABC):
                     "port": self.health_check.get_parameter("port")
                 },
                 "initialDelaySeconds": 0,
-                "periodSeconds": 10,
+                "periodSeconds": 30,
                 "timeoutSeconds": 5,
-                "failureThreshold": 2,
+                "failureThreshold": 20,
             }
         )
 

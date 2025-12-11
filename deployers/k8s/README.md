@@ -40,7 +40,7 @@ kind create cluster
 ```
 4. Build the test image from the project root
 ```shell
-docker build -t pypz-test-base -f .docker/Dockerfile_test .
+docker build -t pypz-test-base -f deployers/k8s/test/resources/docker/Dockerfile .
 ```
 5. Load the test image onto the Kind node
 ```shell

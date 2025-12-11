@@ -14,6 +14,7 @@
 # limitations under the License.
 # =============================================================================
 import os
+import time
 from typing import Optional, Any
 
 from pypz.core.commons.parameters import OptionalParameter
@@ -67,3 +68,45 @@ class TestPipeline(Pipeline):
         self.operator_b = TestOperator()
         self.operator_c = TestOperator()
         self.operator_d = TestOperator()
+
+
+class TestKubernetesOperator(KubernetesOperator):
+    def __init__(self, name: str = None, *args, **kwargs):
+        super().__init__(name, *args, **kwargs)
+        self.logger = DefaultLoggerPlugin()
+        self.logger.set_parameter("logLevel", "DEBUG")
+
+    def _on_init(self) -> bool:
+        return True
+
+    def _on_running(self) -> Optional[bool]:
+        time.sleep(10)
+        return True
+
+    def _on_shutdown(self) -> bool:
+        return True
+
+    def _on_interrupt(self, system_signal: int = None) -> None:
+        pass
+
+    def _on_error(self, source: Any, exception: Exception) -> None:
+        pass
+
+
+class TestKubernetesPipeline(Pipeline):
+
+    def __init__(self, name: str, *args, **kwargs):
+        super().__init__(name, *args, **kwargs)
+        self.op = TestKubernetesOperator()
+        self.op.set_parameter(
+            "readinessProbe", {
+                "httpGet": {
+                    "path": "/check",
+                    "port": self.op.health_check.get_parameter("port")
+                },
+                "initialDelaySeconds": 0,
+                "periodSeconds": 5,
+                "timeoutSeconds": 5,
+                "failureThreshold": 1,
+            }
+        )
