@@ -8,7 +8,7 @@ Repository = "https://github.com/lazlowa/pypz-python"
 
 [project]
 name = "pypz-k8s-deployer"
-version = "0.9.4b1"
+version = "0.9.4"
 authors = [
     { name = "Laszlo Anka", email = "laszlo.anka@gmail.com" }
 ]
