@@ -387,11 +387,12 @@ class KubernetesDeployer(Deployer):
         if pod is None:
             return DeploymentState.NotExisting
 
-        if (
-            (pod.status is None)
-            or (pod.status.phase is None)
-            or (pod.status.container_statuses is None)
-        ):
+        # Theoretically, once the pod is initialized, these values shall
+        # never be None again, however in some rare circumstances, it can
+        # be None after initialized.
+        # Notice that at this point, we only check the values necessary
+        # for the next evaluations.
+        if (pod.status is None) or (pod.status.phase is None):
             return DeploymentState.Unknown
 
         # Interpreting the statuses
@@ -412,10 +413,18 @@ class KubernetesDeployer(Deployer):
 
         # If the pod is in Running state:
         # We cannot rely only on statuses as we may miss runtime issues outside
-        # of the process like D state on unmounting etc. For this reason, we need
+        # the process like D state on unmounting etc. For this reason, we need
         # to check, if the container has already been started and is ready. Note
         # that we use readiness probe instead of liveness, since it is easier to
         # catch.
+
+        # Explanation see above at pod/status None check. Note that the checks
+        # are split, since the container status check is only necessary in case,
+        # where the pod is already in Running state. By this we can avoid returning
+        # Unknown state, if pod would be already in pending, but containers did
+        # not start yet.
+        if pod.status.container_statuses is None:
+            return DeploymentState.Unknown
 
         # Check, if the necessary probes are set, since if not, we need to fall
         # back to check the pod state.
