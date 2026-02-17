@@ -59,9 +59,11 @@ class PipelineExecutor:
         """ Creating the OperatorExecutor objects. Notice that none of the OperatorExecutors
             may handle interrupts, since this will be handled on PipelineExecutor level. """
         for operator in self.__pipeline.get_protected().get_nested_instances().values():
-            self.__operator_executors.add(
-                OperatorExecutor(operator, handle_interrupts=False)
-            )
+            # Replica operators are ignored to avoid overload
+            if operator.is_principal():
+                self.__operator_executors.add(
+                    OperatorExecutor(operator, handle_interrupts=False)
+                )
 
         if PipelineExecutor._max_operator_count < len(self.__operator_executors):
             raise AttributeError(
