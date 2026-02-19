@@ -15,6 +15,7 @@
 # =============================================================================
 import base64
 import time
+import warnings
 from typing import Any, Optional
 
 import certifi
@@ -34,6 +35,7 @@ from pypz.core.specs.operator import Operator
 from pypz.core.specs.pipeline import Pipeline
 from pypz.deployers.base import Deployer, DeploymentState
 from pypz.executors.commons import ExecutionMode
+from pypz.operators.k8s import KubernetesOperator
 
 
 class DeploymentConflictException(Exception):
@@ -76,7 +78,13 @@ class KubernetesParameter:
         startupProbe: Optional[dict] = None,
         livenessProbe: Optional[dict] = None,
         readinessProbe: Optional[dict] = None,
+        resources: Optional[dict] = None,
     ):
+        warnings.warn(
+            f"{self.__class__.__name__} is deprecated and will be removed "
+            f"in a future release. Please use the {KubernetesOperator} instead",
+            stacklevel=2,
+        )
         self.imagePullPolicy: Optional[str] = imagePullPolicy
         self.restartPolicy: Optional[str] = restartPolicy
         self.env: Optional[list[dict]] = env
@@ -100,6 +108,7 @@ class KubernetesParameter:
         self.startupProbe: Optional[dict] = startupProbe
         self.livenessProbe: Optional[dict] = livenessProbe
         self.readinessProbe: Optional[dict] = readinessProbe
+        self.resources: Optional[dict] = resources
 
 
 class KubernetesDeployer(Deployer):
@@ -593,6 +602,7 @@ class KubernetesDeployer(Deployer):
                     if operator.has_parameter("startupProbe")
                     else kubernetes_parameters.startupProbe
                 ),
+                "resources": kubernetes_parameters.resources,
             }
         ]
 
