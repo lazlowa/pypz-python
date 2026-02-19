@@ -826,7 +826,6 @@ class KubernetesDeployerTest(unittest.TestCase):
             KubernetesDeployer.sanitize(pipeline.op.get_full_name()),
             KubernetesDeployerTest.test_namespace,
         )
-        print(pod)
 
         self.assertEqual("20Mi", pod.spec.containers[0].resources.limits["memory"])
         self.assertEqual("20m", pod.spec.containers[0].resources.limits["cpu"])
