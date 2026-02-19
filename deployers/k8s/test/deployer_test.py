@@ -804,3 +804,34 @@ class KubernetesDeployerTest(unittest.TestCase):
                 pipeline.op.get_full_name()
             ),
         )
+
+    def test_kubernetes_parameter_resources(self):
+        client = KubernetesDeployerTest.kubernetes_deployer._core_v1_api
+        pipeline = TestKubernetesPipeline("pipeline24")
+        pipeline.set_parameter(">operatorImageName", KubernetesDeployerTest.test_image)
+
+        kubernetes_parameters: KubernetesParameter = KubernetesParameter()
+        kubernetes_parameters.imagePullPolicy = "Never"
+        kubernetes_parameters.resources = {
+            "requests": {"memory": "10Mi", "cpu": "10m"},
+            "limits": {"memory": "20Mi", "cpu": "20m"},
+        }
+
+        pipeline.op.set_parameter("kubernetes", convert_to_dict(kubernetes_parameters))
+        pipeline.op.set_parameter("mock_runtime_in_sec", 1)
+
+        KubernetesDeployerTest.kubernetes_deployer.deploy(pipeline)
+
+        pod = client.read_namespaced_pod(
+            KubernetesDeployer.sanitize(pipeline.op.get_full_name()),
+            KubernetesDeployerTest.test_namespace,
+        )
+        print(pod)
+
+        self.assertEqual("20Mi", pod.spec.containers[0].resources.limits["memory"])
+        self.assertEqual("20m", pod.spec.containers[0].resources.limits["cpu"])
+        self.assertEqual("10Mi", pod.spec.containers[0].resources.requests["memory"])
+        self.assertEqual("10m", pod.spec.containers[0].resources.requests["cpu"])
+
+        KubernetesDeployerTest.kubernetes_deployer.attach(pipeline.get_full_name())
+        KubernetesDeployerTest.kubernetes_deployer.destroy(pipeline.get_full_name())

@@ -71,16 +71,20 @@ class TestPipeline(Pipeline):
 
 
 class TestKubernetesOperator(KubernetesOperator):
+    mock_runtime_in_sec = OptionalParameter(int)
+
     def __init__(self, name: str = None, *args, **kwargs):
         super().__init__(name, *args, **kwargs)
         self.logger = DefaultLoggerPlugin()
         self.logger.set_parameter("logLevel", "DEBUG")
+        self.mock_runtime_in_sec: int = 10
 
     def _on_init(self) -> bool:
         return True
 
     def _on_running(self) -> Optional[bool]:
-        time.sleep(10)
+        self.get_logger().info(f"Waiting {self.mock_runtime_in_sec} second(s) ...")
+        time.sleep(self.mock_runtime_in_sec)
         return True
 
     def _on_shutdown(self) -> bool:
