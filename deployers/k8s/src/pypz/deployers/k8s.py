@@ -15,7 +15,6 @@
 # =============================================================================
 import base64
 import time
-import warnings
 from typing import Any, Optional
 
 import certifi
@@ -35,7 +34,16 @@ from pypz.core.specs.operator import Operator
 from pypz.core.specs.pipeline import Pipeline
 from pypz.deployers.base import Deployer, DeploymentState
 from pypz.executors.commons import ExecutionMode
-from pypz.operators.k8s import KubernetesOperator
+from pypz.operators.k8s import (
+    KubernetesOperator,
+    convert_to_pod_name,
+    env_var_operator_exec_mode,
+    label_key_exec_mode,
+    label_key_instance_type,
+    label_key_part_of,
+    label_value_pipeline,
+    pipeline_config_secret_key,
+)
 
 
 class DeploymentConflictException(Exception):
@@ -50,87 +58,10 @@ class DeploymentException(Exception):
     pass
 
 
-class KubernetesParameter:
-    """
-    This class represents all Pod fields that can be updated via instance parameters
-    """
-
-    def __init__(
-        self,
-        imagePullPolicy: Optional[str] = None,
-        restartPolicy: Optional[str] = None,
-        env: Optional[list[dict]] = None,
-        envFrom: Optional[list[dict]] = None,
-        volumeMounts: Optional[list[dict]] = None,
-        containers: Optional[list[dict]] = None,
-        volumes: Optional[list[dict]] = None,
-        terminationGracePeriodSeconds: Optional[int] = None,
-        serviceAccountName: Optional[str] = None,
-        labels: Optional[dict] = None,
-        containerSecurityContext: Optional[dict] = None,
-        podSecurityContext: Optional[dict] = None,
-        hostAffinity: Optional[dict] = None,
-        hostAntiAffinity: Optional[dict] = None,
-        nodeAffinity: Optional[dict] = None,
-        nodeSelector: Optional[dict] = None,
-        tolerations: Optional[list] = None,
-        nodeAntiAffinity: Optional[dict] = None,
-        startupProbe: Optional[dict] = None,
-        livenessProbe: Optional[dict] = None,
-        readinessProbe: Optional[dict] = None,
-        resources: Optional[dict] = None,
-    ):
-        warnings.warn(
-            f"{self.__class__.__name__} is deprecated and will be removed "
-            f"in a future release. Please use the {KubernetesOperator} instead",
-            stacklevel=2,
-        )
-        self.imagePullPolicy: Optional[str] = imagePullPolicy
-        self.restartPolicy: Optional[str] = restartPolicy
-        self.env: Optional[list[dict]] = env
-        self.envFrom: Optional[list[dict]] = envFrom
-        self.volumeMounts: Optional[list[dict]] = volumeMounts
-        self.containers: Optional[list[dict]] = containers
-        self.volumes: Optional[list[dict]] = volumes
-        self.terminationGracePeriodSeconds: Optional[int] = (
-            terminationGracePeriodSeconds
-        )
-        self.serviceAccountName: Optional[str] = serviceAccountName
-        self.labels: Optional[dict] = labels
-        self.containerSecurityContext: Optional[dict] = containerSecurityContext
-        self.podSecurityContext: Optional[dict] = podSecurityContext
-        self.hostAffinity: Optional[dict] = hostAffinity
-        self.hostAntiAffinity: Optional[dict] = hostAntiAffinity
-        self.nodeSelector: Optional[dict] = nodeSelector
-        self.tolerations: Optional[list] = tolerations
-        self.nodeAffinity: Optional[dict] = nodeAffinity
-        self.nodeAntiAffinity: Optional[dict] = nodeAntiAffinity
-        self.startupProbe: Optional[dict] = startupProbe
-        self.livenessProbe: Optional[dict] = livenessProbe
-        self.readinessProbe: Optional[dict] = readinessProbe
-        self.resources: Optional[dict] = resources
-
-
 class KubernetesDeployer(Deployer):
     # ========================= class variables ==========================
 
-    _label_key_instance_type = "pypz.io/instance-type"
-    _label_key_exec_mode = "pypz.io/exec-mode"
-    _label_key_part_of = "pypz.io/part-of"
-    _label_key_instance_name = "pypz.io/instance-name"
-    _label_value_pipeline = "pipeline"
-    _label_value_operator = "operator"
-
-    _pipeline_config_secret_key = "pipeline-config"
-
-    _env_var_operator_name = "PYPZ_OPERATOR_INSTANCE_NAME"
-    _env_var_operator_exec_mode = "PYPZ_OPERATOR_EXEC_MODE"
-
     # ========================= static methods ==========================
-
-    @staticmethod
-    def sanitize(string: str) -> str:
-        return string.translate(str.maketrans({"_": "-", ".": "-"}))  # type: ignore
 
     # ========================= ctor ==========================
 
@@ -168,6 +99,16 @@ class KubernetesDeployer(Deployer):
         ignore_operators: list[Operator] = None,
         wait: bool = True,
     ) -> None:
+        # Check for incompatible operator types
+        # =====================================
+
+        for operator in pipeline.get_protected().get_nested_instances().values():
+            if not isinstance(operator, KubernetesOperator):
+                raise TypeError(
+                    f"[{operator.get_full_name()}] Invalid operator type, operators must"
+                    f"extend on {KubernetesOperator}"
+                )
+
         # Check if pipeline is deployed or operators are lingering
         # ========================================================
 
@@ -191,17 +132,13 @@ class KubernetesDeployer(Deployer):
             # Storing all operators' pod name and simple name, since it can be necessary in some
             # cases like operator restart.
             secret_labels = {
-                KubernetesDeployer.sanitize(
+                convert_to_pod_name(
                     operator.get_full_name()
                 ): operator.get_simple_name()
                 for operator in pipeline.get_protected().get_nested_instances().values()
             }
-            secret_labels[KubernetesDeployer._label_key_instance_type] = (
-                KubernetesDeployer._label_value_pipeline
-            )
-            secret_labels[KubernetesDeployer._label_key_exec_mode] = (
-                execution_mode.value
-            )
+            secret_labels[label_key_instance_type] = label_value_pipeline
+            secret_labels[label_key_exec_mode] = execution_mode.value
 
             # Deploy configuration secret
             secret: V1Secret = V1Secret(
@@ -213,7 +150,7 @@ class KubernetesDeployer(Deployer):
                     labels=secret_labels,
                 ),
                 data={
-                    KubernetesDeployer._pipeline_config_secret_key: base64.b64encode(
+                    pipeline_config_secret_key: base64.b64encode(
                         pipeline.__str__().encode()
                     ).decode()
                 },
@@ -228,18 +165,42 @@ class KubernetesDeployer(Deployer):
                 time.sleep(1)
 
             # Operator deployment
-            for operator in pipeline.get_protected().get_nested_instances().values():
+            for operator in (
+                pipeline.get_protected().get_nested_instances().values()
+            ):  # type: KubernetesOperator
+                manifest = operator.get_pod_manifest()
+
+                operator_pod_name = convert_to_pod_name(operator.get_full_name())
+
+                # Extend container's environment variables by the execution mode
+                operator_container: Optional[dict] = None
+                for container in manifest["spec"]["containers"]:
+                    if operator_pod_name == container["name"]:
+                        operator_container = container
+                        break
+
+                if not operator_container:
+                    raise DeploymentException(
+                        f"[{operator.get_full_name()}] Pod manifest has no operator container"
+                    )
+
+                operator_container["env"].extend(
+                    [
+                        {
+                            "name": env_var_operator_exec_mode,
+                            "value": (
+                                execution_mode.value
+                                if (ignore_operators is None)
+                                or (operator not in ignore_operators)
+                                else ExecutionMode.Skip.value
+                            ),
+                        },
+                    ]
+                )
+
                 self._core_v1_api.create_namespaced_pod(
                     self._namespace,
-                    body=self._generate_pod_manifest(
-                        operator,
-                        (
-                            execution_mode
-                            if (ignore_operators is None)
-                            or (operator not in ignore_operators)
-                            else ExecutionMode.Skip
-                        ),
-                    ),
+                    body=manifest,
                 )
 
             while wait and self.is_any_operator_in_state(
@@ -321,7 +282,7 @@ class KubernetesDeployer(Deployer):
     def restart_operator(
         self, operator_full_name: str, force: bool = False, wait: bool = True
     ):
-        operator_pod_name = KubernetesDeployer.sanitize(operator_full_name)
+        operator_pod_name = KubernetesOperator.sanitize(operator_full_name)
 
         secret_list: V1SecretList = self._core_v1_api.list_namespaced_secret(
             self._namespace, label_selector=operator_pod_name
@@ -340,7 +301,7 @@ class KubernetesDeployer(Deployer):
         secret: V1Secret = secret_list.items[0]
         operator_simple_name: str = secret.metadata.labels[operator_pod_name]
         exec_mode: ExecutionMode = ExecutionMode(
-            secret.metadata.labels[KubernetesDeployer._label_key_exec_mode]
+            secret.metadata.labels[label_key_exec_mode]
         )
         deployed_pipeline: Pipeline = self._retrieve_deployed_pipeline_from_secret(
             secret
@@ -361,13 +322,13 @@ class KubernetesDeployer(Deployer):
     ) -> None:
         if force:
             self._core_v1_api.delete_namespaced_pod(
-                name=KubernetesDeployer.sanitize(operator_full_name),
+                name=KubernetesOperator.sanitize(operator_full_name),
                 namespace=self._namespace,
                 grace_period_seconds=0,
             )
         else:
             self._core_v1_api.delete_namespaced_pod(
-                name=KubernetesDeployer.sanitize(operator_full_name),
+                name=KubernetesOperator.sanitize(operator_full_name),
                 namespace=self._namespace,
             )
 
@@ -380,7 +341,7 @@ class KubernetesDeployer(Deployer):
     def retrieve_pipeline_deployments(self) -> set[str]:
         secret_list: V1SecretList = self._core_v1_api.list_namespaced_secret(
             self._namespace,
-            label_selector=f"{KubernetesDeployer._label_key_instance_type}={KubernetesDeployer._label_value_pipeline}",
+            label_selector=f"{label_key_instance_type}={label_value_pipeline}",
         )
 
         return {secret.metadata.name for secret in secret_list.items}
@@ -472,7 +433,7 @@ class KubernetesDeployer(Deployer):
     ) -> Optional[str]:
         try:
             return self._core_v1_api.read_namespaced_pod_log(
-                name=KubernetesDeployer.sanitize(operator_full_name),
+                name=KubernetesOperator.sanitize(operator_full_name),
                 namespace=self._namespace,
                 **kwargs,
             )
@@ -496,21 +457,19 @@ class KubernetesDeployer(Deployer):
     def _retrieve_deployed_pipeline_from_secret(
         self, secret: V1Secret
     ) -> Optional[Pipeline]:
-        if KubernetesDeployer._pipeline_config_secret_key not in secret.data:
+        if pipeline_config_secret_key not in secret.data:
             raise DeploymentException(
                 "Provided secret is not pipeline configuration secret"
             )
 
         return Pipeline.create_from_string(
-            base64.b64decode(
-                secret.data[KubernetesDeployer._pipeline_config_secret_key]
-            )
+            base64.b64decode(secret.data[pipeline_config_secret_key])
         )
 
     def _retrieve_operator_pod(self, operator_full_name: str) -> Optional[V1Pod]:
         try:
             return self._core_v1_api.read_namespaced_pod(
-                KubernetesDeployer.sanitize(operator_full_name), self._namespace
+                KubernetesOperator.sanitize(operator_full_name), self._namespace
             )
         except ApiException as e:
             if 404 == e.status:
@@ -520,220 +479,5 @@ class KubernetesDeployer(Deployer):
     def _retrieve_operator_pods(self, pipeline_name: str) -> list[V1Pod]:
         return self._core_v1_api.list_namespaced_pod(
             self._namespace,
-            label_selector=f"{KubernetesDeployer._label_key_part_of}={pipeline_name}",
+            label_selector=f"{label_key_part_of}={pipeline_name}",
         ).items
-
-    def _generate_pod_manifest(
-        self, operator: Operator, execution_mode: ExecutionMode
-    ) -> dict:
-        if operator.get_operator_image_name() is None:
-            raise DeploymentException(
-                f"[{operator.get_full_name()}] Image name must be specified"
-            )
-
-        operator_pod_name = KubernetesDeployer.sanitize(operator.get_full_name())
-
-        if operator.has_parameter("kubernetes"):
-            parameters = operator.get_parameter("kubernetes")
-            if isinstance(parameters, dict):
-                kubernetes_parameters: KubernetesParameter = KubernetesParameter(
-                    **parameters
-                )
-            elif isinstance(parameters, KubernetesParameter):
-                kubernetes_parameters: KubernetesParameter = parameters
-            else:
-                raise TypeError(
-                    f"Invalid kubernetes parameter type for '{operator.get_full_name()}': "
-                    f"{type(parameters)}"
-                )
-        else:
-            kubernetes_parameters: KubernetesParameter = KubernetesParameter()
-
-        env = [
-            {
-                "name": "PYPZ_NODE_NAME",
-                "valueFrom": {"fieldRef": {"fieldPath": "spec.nodeName"}},
-            },
-            {
-                "name": KubernetesDeployer._env_var_operator_name,
-                "value": operator.get_simple_name(),
-            },
-            {
-                "name": KubernetesDeployer._env_var_operator_exec_mode,
-                "value": execution_mode.value,
-            },
-        ]
-
-        if kubernetes_parameters.env is not None:
-            env.extend(kubernetes_parameters.env)
-
-        volume_mounts = [{"mountPath": "/operator/config", "name": operator_pod_name}]
-
-        if kubernetes_parameters.volumeMounts is not None:
-            volume_mounts.extend(kubernetes_parameters.volumeMounts)
-
-        security_context = (
-            {"privileged": True}
-            if kubernetes_parameters.containerSecurityContext is None
-            else kubernetes_parameters.containerSecurityContext
-        )
-
-        containers = [
-            {
-                "env": env,
-                "envFrom": kubernetes_parameters.envFrom,
-                "image": operator.get_operator_image_name(),
-                "imagePullPolicy": (
-                    "Always"
-                    if kubernetes_parameters.imagePullPolicy is None
-                    else kubernetes_parameters.imagePullPolicy
-                ),
-                "name": operator_pod_name,
-                "volumeMounts": volume_mounts,
-                "securityContext": security_context,
-                "livenessProbe": kubernetes_parameters.livenessProbe,
-                "readinessProbe": (
-                    operator.get_parameter("readinessProbe")
-                    if operator.has_parameter("readinessProbe")
-                    else kubernetes_parameters.readinessProbe
-                ),
-                "startupProbe": (
-                    operator.get_parameter("startupProbe")
-                    if operator.has_parameter("startupProbe")
-                    else kubernetes_parameters.startupProbe
-                ),
-                "resources": kubernetes_parameters.resources,
-            }
-        ]
-
-        if kubernetes_parameters.containers is not None:
-            containers.extend(kubernetes_parameters.containers)
-
-        volumes = [
-            {
-                "name": operator_pod_name,
-                "secret": {
-                    "defaultMode": 493,
-                    "items": [
-                        {
-                            "key": KubernetesDeployer._pipeline_config_secret_key,
-                            "mode": 493,
-                            "path": "config.json",
-                        }
-                    ],
-                    "optional": False,
-                    "secretName": operator.get_context().get_full_name(),
-                },
-            }
-        ]
-
-        if kubernetes_parameters.volumes is not None:
-            volumes.extend(kubernetes_parameters.volumes)
-
-        topology_spread_constraints = [
-            {
-                "labelSelector": {
-                    "matchLabels": {
-                        KubernetesDeployer._label_key_part_of: operator.get_context().get_full_name()
-                    }
-                },
-                "maxSkew": 1,
-                "topologyKey": "kubernetes.io/hostname",
-                "whenUnsatisfiable": "ScheduleAnyway",
-            }
-        ]
-
-        spec: dict[str, Any] = {
-            "containers": containers,
-            "restartPolicy": (
-                "Never"
-                if kubernetes_parameters.restartPolicy is None
-                else kubernetes_parameters.restartPolicy
-            ),
-            "serviceAccountName": (
-                "default"
-                if kubernetes_parameters.serviceAccountName is None
-                else kubernetes_parameters.serviceAccountName
-            ),
-            "terminationGracePeriodSeconds": (
-                300
-                if kubernetes_parameters.terminationGracePeriodSeconds is None
-                else kubernetes_parameters.terminationGracePeriodSeconds
-            ),
-            "topologySpreadConstraints": topology_spread_constraints,
-            "volumes": volumes,
-            "securityContext": kubernetes_parameters.podSecurityContext,
-        }
-
-        if (kubernetes_parameters.hostAffinity is not None) or (
-            kubernetes_parameters.hostAntiAffinity is not None
-        ):
-            node_selector_terms = []
-
-            if kubernetes_parameters.hostAffinity is not None:
-                node_selector_terms.append(
-                    {
-                        "matchExpressions": [
-                            {
-                                "key": "kubernetes.io/hostname",
-                                "operator": "In",
-                                "values": kubernetes_parameters.hostAffinity,
-                            }
-                        ]
-                    }
-                )
-
-            if kubernetes_parameters.hostAntiAffinity is not None:
-                node_selector_terms.append(
-                    {
-                        "matchExpressions": [
-                            {
-                                "key": "kubernetes.io/hostname",
-                                "operator": "NotIn",
-                                "values": kubernetes_parameters.hostAntiAffinity,
-                            }
-                        ]
-                    }
-                )
-
-            spec["affinity"] = {
-                "nodeAffinity": {
-                    "requiredDuringSchedulingIgnoredDuringExecution": {
-                        "nodeSelectorTerms": node_selector_terms
-                    }
-                }
-            }
-
-        """ Notice that since host affinity can be defined separately, we need
-            to handle the situation, where both nodeAffinity and hostAffinity is set.
-            This is not the case for nodeAntiAffinity. """
-        if kubernetes_parameters.nodeAffinity is not None:
-            if "affinity" not in spec:
-                spec["affinity"] = {}
-            spec["affinity"].update(kubernetes_parameters.nodeAffinity)
-
-        if kubernetes_parameters.nodeAntiAffinity is not None:
-            spec["nodeAntiAffinity"] = kubernetes_parameters.nodeAntiAffinity
-
-        if kubernetes_parameters.nodeSelector is not None:
-            spec["nodeSelector"] = kubernetes_parameters.nodeSelector
-
-        if kubernetes_parameters.tolerations is not None:
-            spec["tolerations"] = kubernetes_parameters.tolerations
-
-        labels = {
-            KubernetesDeployer._label_key_instance_type: KubernetesDeployer._label_value_operator,
-            KubernetesDeployer._label_key_part_of: operator.get_context().get_full_name(),
-            KubernetesDeployer._label_key_instance_name: operator.get_simple_name(),
-        }
-
-        if kubernetes_parameters.labels is not None:
-            # This is how we ensure that basic labels are not getting overwritten
-            labels = kubernetes_parameters.labels.update(labels)
-
-        metadata = {
-            "labels": labels,
-            "name": operator_pod_name,
-        }
-
-        return {"apiVersion": "v1", "kind": "Pod", "metadata": metadata, "spec": spec}
