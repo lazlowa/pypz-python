@@ -160,11 +160,7 @@ class PortPlugin(Plugin, RegisteredInterface, ABC):
     def __init__(self, name: Optional[str] = None, schema: Any = None, *args, **kwargs):
         super().__init__(name, *args, **kwargs)
 
-        self.__connected_ports: set[PortPlugin] = (
-            self.get_protected().get_reference().__connected_ports
-            if self.get_protected().get_reference() is not None
-            else set()
-        )
+        self.__connected_ports: set[PortPlugin] = set()
         """
         This member holds the information about the connected ports, where
         the key is the replication group names and the value is a list of
