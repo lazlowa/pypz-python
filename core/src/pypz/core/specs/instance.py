@@ -197,18 +197,6 @@ class Instance(
         the parent context will use the name of the variable.
         """
 
-        self.__full_name: str = (
-            self.__simple_name
-            if self.__context is None
-            else self.__context.get_full_name() + "." + self.__simple_name
-        )
-        """
-        Full name of the instance which uniquely identifies it up to its topmost context.
-        For example, if an instance A has a parent context B, which has a parent context C,
-        then the full name of A is 'C.B.A'. This value is calculated and the result is
-        stored after the first calculation to avoid recalculation every time.
-        """
-
         self.__spec_name: str = ":".join(
             [self.__class__.__module__, self.__class__.__qualname__]
         )
@@ -296,7 +284,17 @@ class Instance(
         return self.__simple_name
 
     def get_full_name(self) -> str:
-        return self.__full_name
+        """
+        Full name of the instance which uniquely identifies it up to its topmost context.
+        For example, if an instance A has a parent context B, which has a parent context C,
+        then the full name of A is 'C.B.A'. This value is calculated and the result is
+        stored after the first calculation to avoid recalculation every time.
+        """
+        return (
+            self.get_simple_name()
+            if self.__context is None
+            else self.__context.get_full_name() + "." + self.get_simple_name()
+        )
 
     def get_parameter(self, name: str):
         return self.__parameters[name]
@@ -404,9 +402,9 @@ class Instance(
                 if (expected_param.name not in self.__parameters) or (
                     self.__parameters[expected_param.name] is None
                 ):
-                    if self.__full_name not in missing_required_parameters:
-                        missing_required_parameters[self.__full_name] = set()
-                    missing_required_parameters[self.__full_name].add(
+                    if self.get_full_name() not in missing_required_parameters:
+                        missing_required_parameters[self.get_full_name()] = set()
+                    missing_required_parameters[self.get_full_name()].add(
                         expected_param.name
                     )
 
@@ -427,13 +425,13 @@ class Instance(
 
         if not isinstance(instance, Instance):
             raise TypeError(
-                f"[{self.__full_name}] Invalid dependency type: {type(instance)}"
+                f"[{self.get_full_name()}] Invalid dependency type: {type(instance)}"
             )
 
         # Instance cannot depend on self
         if self is instance:
             raise AttributeError(
-                f"[{self.__full_name}] Invalid dependency. Instance cannot depend on itself. "
+                f"[{self.get_full_name()}] Invalid dependency. Instance cannot depend on itself. "
             )
 
         # Makes no sense to express dependency between instances in different context
@@ -443,7 +441,7 @@ class Instance(
             or (self.__context is not instance.__context)
         ):
             raise AttributeError(
-                f"[{self.__full_name}] Invalid dependency. "
+                f"[{self.get_full_name()}] Invalid dependency. "
                 f"Dependencies must have identical parent context."
             )
 
@@ -451,7 +449,7 @@ class Instance(
         if self in instance.__depends_on:
             raise RecursionError(
                 f"Circular dependency between detected: "
-                f"{self.__full_name} <-> {instance.__full_name} "
+                f"{self.get_full_name()} <-> {instance.get_full_name()} "
             )
 
         self.__depends_on.add(instance)
@@ -469,7 +467,7 @@ class Instance(
         raw_parameters.update(self.__parameters)
 
         return InstanceDTO(
-            name=self.__simple_name,
+            name=self.get_simple_name(),
             parameters=raw_parameters,
             dependsOn=[instance.get_simple_name() for instance in self.__depends_on],
             spec=SpecDTO(
@@ -509,11 +507,11 @@ class Instance(
             raise TypeError(f"Invalid update source type: {type(source)}")
 
         if (instance_dto.name is not None) and (
-            instance_dto.name != self.__simple_name
+            instance_dto.name != self.get_simple_name()
         ):
             raise ValueError(
                 f"Mismatching instance name provided ({instance_dto.name}) and actual "
-                f"({self.__simple_name}) instance name. "
+                f"({self.get_simple_name()}) instance name. "
             )
 
         if instance_dto.parameters is not None:
@@ -527,7 +525,7 @@ class Instance(
                 instance_dto.spec.name != self.__spec_name
             ):
                 raise AttributeError(
-                    f"[{self.__full_name}] Mismatching specs name. Loaded: {self.__spec_name}; "
+                    f"[{self.get_full_name()}] Mismatching specs name. Loaded: {self.__spec_name}; "
                     f"Provided: {instance_dto.spec.name}"
                 )
 
@@ -557,8 +555,8 @@ class Instance(
             for instance_name in instance_dto.dependsOn:
                 if instance_name not in self.__context.__nested_instances:
                     raise AttributeError(
-                        f"[{self.__full_name}] Instance not found in context "
-                        f"'{self.__context.__full_name}': {instance_name}"
+                        f"[{self.get_full_name()}] Instance not found in context "
+                        f"'{self.__context.get_full_name()}': {instance_name}"
                     )
 
                 self.depends_on(self.__context.__nested_instances[instance_name])
@@ -580,7 +578,7 @@ class Instance(
                     instance_dto.spec.name != self.__spec_name
                 ):
                     raise AttributeError(
-                        f"[{self.__full_name}] Mismatching specs name: {self.__spec_name}; "
+                        f"[{self.get_full_name()}] Mismatching specs name: {self.__spec_name}; "
                         f"Expected: {instance_dto.spec.name}"
                     )
 
@@ -589,7 +587,7 @@ class Instance(
                 ):
                     if self.__nested_instance_type is None:
                         raise AttributeError(
-                            f"[{self.__full_name}] "
+                            f"[{self.get_full_name()}] "
                             f"No nested instance is expected for {type(self)}"
                         )
 
@@ -620,7 +618,8 @@ class Instance(
                                     f"{self.__nested_instance_type}"
                                 )
                             self.__setattr__(
-                                new_nested_instance.__simple_name, new_nested_instance
+                                new_nested_instance.get_simple_name(),
+                                new_nested_instance,
                             )
 
     # ========= internal methods ==========
@@ -682,7 +681,7 @@ class Instance(
 
         return (
             isinstance(other, type(self))
-            and (self.__simple_name == other.__simple_name)
+            and (self.get_simple_name() == other.get_simple_name())
             and (self.__parameters == other.__parameters)
             and (self.__depends_on == other.__depends_on)
             and (self.__nested_instances == other.__nested_instances)
@@ -694,7 +693,7 @@ class Instance(
         return yaml.safe_dump(convert_to_dict(self.get_dto()), default_flow_style=False)
 
     def __hash__(self):
-        return hash((self.__full_name, self.__spec_name))
+        return hash((self.get_full_name(), self.__spec_name))
 
     def __getattr__(self, name):
         return self.__getattribute__(name)
