@@ -744,3 +744,125 @@ class OperatorInstanceTest(unittest.TestCase):
                 ("operator_a" == nested_instance.name)
                 or ("operator_b" == nested_instance.name)
             )
+
+    def test_new_replication_all(self):
+        pipeline = TestPipelineWithOperator("pipeline")
+
+        self.assertEqual("pipeline", pipeline.get_full_name())
+        self.assertEqual("pipeline.operator_a", pipeline.operator_a.get_full_name())
+        self.assertEqual("pipeline.operator_a_0", pipeline.operator_a_0.get_full_name())
+
+        self.assertIsNot(pipeline.operator_a, pipeline.operator_a_0)
+        self.assertIsNot(pipeline.operator_a_0, pipeline.operator_a)
+        self.assertNotEqual(pipeline.operator_a, pipeline.operator_a_0)
+        self.assertNotEqual(pipeline.operator_a_0, pipeline.operator_a)
+        self.assertNotEqual(pipeline.operator_a_0, pipeline.operator_a_1)
+        self.assertEqual(pipeline.operator_a_0, pipeline.operator_a_0)
+        self.assertEqual(
+            pipeline.operator_a_0.input_port,
+            pipeline.operator_a_0.input_port,
+        )
+        self.assertNotEqual(hash(pipeline.operator_a), hash(pipeline.operator_a_0))
+        self.assertNotEqual(hash(pipeline.operator_a_0), hash(pipeline.operator_a))
+
+        self.assertTrue(pipeline.operator_a != pipeline.operator_a_0)
+        self.assertTrue(pipeline.operator_a_0 != pipeline.operator_a)
+        self.assertFalse(pipeline.operator_a == pipeline.operator_a_0)
+        self.assertFalse(pipeline.operator_a_0 == pipeline.operator_a)
+
+        self.assertEqual(
+            "pipeline.operator_a.input_port",
+            pipeline.operator_a.input_port.get_full_name(),
+        )
+        self.assertEqual(
+            "pipeline.operator_a_0.input_port",
+            pipeline.operator_a_0.input_port.get_full_name(),
+        )
+
+        self.assertIs(pipeline.operator_a.input_port.get_context(), pipeline.operator_a)
+        self.assertIs(
+            pipeline.operator_a_0.input_port.get_context(), pipeline.operator_a_0
+        )
+
+        operator_a_dto = pipeline.operator_a.get_dto()
+        operator_a_0_dto = pipeline.operator_a_0.get_dto()
+
+        self.assertEqual("operator_a", operator_a_dto.name)
+        self.assertEqual("operator_a_0", operator_a_0_dto.name)
+
+        self.assertEqual("pipeline.operator_a", pipeline.operator_a.get_group_name())
+        self.assertEqual("pipeline.operator_a", pipeline.operator_a_0.get_group_name())
+
+        self.assertIs(pipeline.operator_a.get_group_principal(), pipeline.operator_a)
+        self.assertIs(pipeline.operator_a_0.get_group_principal(), pipeline.operator_a)
+
+        self.assertTrue(pipeline.operator_a.is_principal())
+        self.assertFalse(pipeline.operator_a_0.is_principal())
+
+        self.assertEqual(0, pipeline.operator_a.get_group_index())
+        self.assertEqual(1, pipeline.operator_a_0.get_group_index())
+
+        self.assertEqual(
+            "pipeline.operator_a.input_port",
+            pipeline.operator_a.input_port.get_group_name(),
+        )
+        self.assertEqual(
+            "pipeline.operator_a.input_port",
+            pipeline.operator_a_0.input_port.get_group_name(),
+        )
+
+        self.assertIs(
+            pipeline.operator_a.input_port.get_group_principal(),
+            pipeline.operator_a.input_port,
+        )
+        self.assertIs(
+            pipeline.operator_a_0.input_port.get_group_principal(),
+            pipeline.operator_a.input_port,
+        )
+
+        self.assertTrue(pipeline.operator_a.input_port.is_principal())
+        self.assertFalse(pipeline.operator_a_0.input_port.is_principal())
+
+        self.assertEqual(0, pipeline.operator_a.input_port.get_group_index())
+        self.assertEqual(1, pipeline.operator_a_0.input_port.get_group_index())
+
+        self.assertIsNot(
+            pipeline.operator_a.input_port,
+            pipeline.operator_a_0.input_port,
+        )
+
+        self.assertNotEqual(
+            pipeline.operator_a.input_port,
+            pipeline.operator_a_0.input_port,
+        )
+
+        self.assertNotEqual(
+            pipeline.operator_a_0.input_port,
+            pipeline.operator_a_1.input_port,
+        )
+
+        self.assertEqual(
+            pipeline.operator_a_0.input_port,
+            pipeline.operator_a_0.input_port,
+        )
+
+        self.assertNotEqual(
+            hash(pipeline.operator_a.input_port),
+            hash(pipeline.operator_a_0.input_port),
+        )
+
+        self.assertNotEqual(
+            hash(pipeline.operator_a_0.input_port),
+            hash(pipeline.operator_a_1.input_port),
+        )
+
+
+# Operator replica + plugin
+# str
+# eq
+# hash
+
+# create from dto / string
+# all the above from the created one
+
+# replica creation / deletion -> param setting

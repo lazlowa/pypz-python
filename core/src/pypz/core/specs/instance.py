@@ -19,6 +19,8 @@ import sys
 import types
 import typing
 from abc import ABC, ABCMeta, abstractmethod
+from contextlib import contextmanager
+from contextvars import ContextVar
 from typing import Any, Generic, Optional, Type, TypeVar
 
 import yaml
@@ -37,6 +39,7 @@ from pypz.core.specs.utils import (
     load_class_by_name,
     remove_super_classes,
 )
+from wrapt import ObjectProxy
 
 
 class RegisteredInterface:
@@ -125,6 +128,10 @@ class InstanceInitInterceptor(ABCMeta):
 
 
 NestedInstanceType = TypeVar("NestedInstanceType", bound="Instance")
+_instance_replica_context: ContextVar["InstanceReplica | None"] = ContextVar(
+    "_instance_replica_context",
+    default=None,
+)
 
 
 class Instance(
@@ -278,9 +285,19 @@ class Instance(
     # ========= public methods ==========
 
     def get_context(self):
+        replica = _instance_replica_context.get()
+        if (
+            replica is not None
+            and replica.__wrapped__ is self
+            and replica.get_context() is not None
+        ):
+            return replica.get_context()
         return self.__context
 
     def get_simple_name(self) -> str:
+        replica = _instance_replica_context.get()
+        if replica is not None and replica.__wrapped__ is self:
+            return replica.get_simple_name()
         return self.__simple_name
 
     def get_full_name(self) -> str:
@@ -292,8 +309,8 @@ class Instance(
         """
         return (
             self.get_simple_name()
-            if self.__context is None
-            else self.__context.get_full_name() + "." + self.get_simple_name()
+            if self.get_context() is None
+            else self.get_context().get_full_name() + "." + self.get_simple_name()
         )
 
     def get_parameter(self, name: str):
@@ -436,9 +453,9 @@ class Instance(
 
         # Makes no sense to express dependency between instances in different context
         if (
-            (self.__context is None)
-            or (instance.__context is None)
-            or (self.__context is not instance.__context)
+            (self.get_context() is None)
+            or (instance.get_context() is None)
+            or (self.get_context() is not instance.get_context())
         ):
             raise AttributeError(
                 f"[{self.get_full_name()}] Invalid dependency. "
@@ -553,13 +570,13 @@ class Instance(
 
         if instance_dto.dependsOn is not None:
             for instance_name in instance_dto.dependsOn:
-                if instance_name not in self.__context.__nested_instances:
+                if instance_name not in self.get_context().__nested_instances:
                     raise AttributeError(
                         f"[{self.get_full_name()}] Instance not found in context "
-                        f"'{self.__context.get_full_name()}': {instance_name}"
+                        f"'{self.get_context().get_full_name()}': {instance_name}"
                     )
 
-                self.depends_on(self.__context.__nested_instances[instance_name])
+                self.depends_on(self.get_context().__nested_instances[instance_name])
 
     # ========= protected methods ==========
 
@@ -666,7 +683,7 @@ class Instance(
             hasattr(self, f"_{Instance.__name__}__nested_instance_type")
             and (self.__nested_instance_type is not None)
             and isinstance(instance, self.__nested_instance_type)
-            and (instance is not self.__context)
+            and (instance is not self.get_context())
         ):
             if instance.get_simple_name() in self.__nested_instances:
                 raise AttributeError(
@@ -850,3 +867,97 @@ class InstanceGroup(ABC):
     @abstractmethod
     def is_principal(self) -> bool:
         pass
+
+
+class InstanceReplica(ObjectProxy, InstanceGroup):
+    def __init__(
+        self,
+        original: Instance,
+        replica_index: int,
+        replica_context: Optional["InstanceReplica"] = None,
+    ):
+        super().__init__(original)
+        self._self_replica_index: int = replica_index
+        self._self_replica_context: Optional["InstanceReplica"] = replica_context
+
+        self._self_replica_name: str = (
+            f"{original.get_simple_name()}_{replica_index}"
+            if self._self_replica_context is None
+            else original.get_simple_name()
+        )
+
+    @contextmanager
+    def _self_replica_context_manager(self):
+        token = _instance_replica_context.set(self)
+        try:
+            yield
+        finally:
+            _instance_replica_context.reset(token)
+
+    def __getattribute__(self, name):
+        if name.startswith("_self_") or name in {
+            "__wrapped__",
+            "__class__",
+            "__dict__",
+            "__setattr__",
+            "__getattribute__",
+            "get_simple_name",
+            "get_group_name",
+        }:
+            return object.__getattribute__(self, name)
+
+        attr = super().__getattribute__(name)
+
+        if isinstance(attr, Instance):
+            return InstanceReplica(attr, self._self_replica_index, self)
+
+        if callable(attr):
+
+            def wrapped(*args, **kwargs):
+                with self._self_replica_context_manager():
+                    return attr(*args, **kwargs)
+
+            return wrapped
+
+        return attr
+
+    def get_simple_name(self):
+        return self._self_replica_name
+
+    def get_context(self):
+        return self._self_replica_context
+
+    def get_group_size(self) -> int:
+        return self.__wrapped__.get_group_size()
+
+    def get_group_index(self) -> int:
+        return self._self_replica_index + 1
+
+    def get_group_name(self) -> Optional[str]:
+        return self.__wrapped__.get_group_name()
+
+    def get_group_principal(self) -> Optional["Instance"]:
+        return self.__wrapped__.get_group_principal()
+
+    def is_principal(self) -> bool:
+        return False
+
+    def __eq__(self, other):
+        if not isinstance(other, InstanceReplica):
+            return False
+
+        return self.get_full_name() == other.get_full_name()
+
+    def __ne__(self, other):
+        result = self.__eq__(other)
+        if result is NotImplemented:
+            return NotImplemented
+        return not result
+
+    def __str__(self):
+        with self._self_replica_context_manager():
+            return str(self.__wrapped__)
+
+    def __hash__(self):
+        with self._self_replica_context_manager():
+            return hash(self.__wrapped__)

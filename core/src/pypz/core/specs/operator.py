@@ -26,7 +26,12 @@ from pypz.core.specs.dtos import (
     OperatorInstanceDTO,
     OperatorSpecDTO,
 )
-from pypz.core.specs.instance import Instance, InstanceGroup, RegisteredInterface
+from pypz.core.specs.instance import (
+    Instance,
+    InstanceGroup,
+    InstanceReplica,
+    RegisteredInterface,
+)
 from pypz.core.specs.plugin import (
     InputPortPlugin,
     LoggerPlugin,
@@ -48,29 +53,6 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
     """
 
     # ========================= inner classes =========================
-
-    class Replica:
-        def __init__(self, original: "Operator", replica_index: int):
-            self.__original: "Operator" = original
-            self.__simple_name: str = f"{original.get_simple_name()}_{replica_index}"
-            self.__full_name: str = (
-                self.__simple_name
-                if original.get_context() is None
-                else original.get_context().get_full_name() + "." + self.__simple_name
-            )
-
-        def get_simple_name(self) -> str:
-            return self.__simple_name
-
-        def get_full_name(self) -> str:
-            return self.__full_name
-
-        def get_dto(self) -> OperatorInstanceDTO:
-            dto = self.__original.get_dto()
-            dto.name = self.__simple_name
-            return dto
-
-        # def create_instance(self) -> "Operator":
 
     class Logger(ContextLoggerInterface):
         """
@@ -199,7 +181,7 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
         Reference to the original instance, which was the base for the replication
         """
 
-        self.__replicas: list[Operator] = []
+        self.__replicas: list[InstanceReplica] = []
         """
         List of replica instances
         """
@@ -321,7 +303,7 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
             self.__replication_origin is self
         )
 
-    def get_replica(self, replica_id: int) -> "Operator":
+    def get_replica(self, replica_id: int) -> InstanceReplica:
         """
         Returns the replica instance by id. The id is the actual place in the
         replica list, which is ensured during the replica creation.
@@ -331,7 +313,7 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
         """
         return self.__replicas[replica_id]
 
-    def get_replicas(self) -> list["Operator"]:
+    def get_replicas(self) -> list[InstanceReplica]:
         """
         :return: replica list
         """
@@ -450,7 +432,7 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
                 self.__replication_group_index = 0
 
             for idx in range(len(self.__replicas), self._replication_factor):
-                replica = Operator.Replica(self, idx + 1)
+                replica = InstanceReplica(self, idx)
 
                 if self.get_context() is not None:
                     self.get_context().__setattr__(replica.get_simple_name(), replica)

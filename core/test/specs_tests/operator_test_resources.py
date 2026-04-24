@@ -95,3 +95,50 @@ class TestPipelineWithOperator(Pipeline):
         self.operator_b = TestOperatorWithPortPlugins()
 
         self.operator_a.input_port.connect(self.operator_b.output_port)
+
+
+p = TestPipelineWithOperator("pipeline")
+# print(p.operator_a)
+print("=================================================")
+
+# print(p.operator_a_0)
+# print(hash(p.operator_a_0))
+# print(p.operator_a_0 == p.operator_a)
+print(p.operator_a_0 != p.operator_a)
+# print(p.operator_a == p.operator_a_0)
+# print(p.operator_a_0 == p.operator_a_0)
+# print(p.operator_a_0 == p.operator_a_1)
+# print(p.get_full_name())  # Expected: pipeline
+# print(p.operator_a.get_full_name())  # Expected: pipeline.operator_a
+# print(p.operator_a_0.get_full_name())  # Expected: pipeline.operator_a_0
+#
+# print(p.operator_a.input_port.get_full_name())  # Expected # Expected: pipeline.operator_a.input_port
+# print(p.operator_a_0.input_port.get_full_name())  # Expected # Expected: pipeline.operator_a_0.input_port
+#
+# odto = p.operator_a.get_dto()
+# print(odto.name)  # Expected: pipeline.operator_a
+# r1dto = p.operator_a_0.get_dto()
+# print(r1dto.name)  # Expected: pipeline.operator_a_0
+
+
+# pipeline name
+# operator full name
+# replica full name
+# operator plugin full name
+# replica plugin full name
+# context from plugin
+
+# Operator replica + plugin
+# dto
+# str
+# eq
+# hash
+# group name
+# principal
+# is principal
+# group index
+
+# create from dto / string
+# all the above from the created one
+
+# replica creation / deletion -> param setting
