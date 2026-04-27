@@ -758,6 +758,7 @@ class OperatorInstanceTest(unittest.TestCase):
         self.assertNotEqual(pipeline.operator_a_0, pipeline.operator_a)
         self.assertNotEqual(pipeline.operator_a_0, pipeline.operator_a_1)
         self.assertEqual(pipeline.operator_a_0, pipeline.operator_a_0)
+        self.assertIs(pipeline.operator_a_0, pipeline.operator_a_0)
         self.assertEqual(
             pipeline.operator_a_0.input_port,
             pipeline.operator_a_0.input_port,

@@ -885,6 +885,7 @@ class ReplicaContext(ObjectProxy, InstanceGroup):
         super().__init__(original)
         self._self_replica_index: int = replica_index
         self._self_parent_context: Optional["ReplicaContext"] = parent_context
+        self._self_child_context_by_object_id: dict[int, "ReplicaContext"] = dict()
 
         self._self_replica_name: str = (
             f"{original.get_simple_name()}_{replica_index}"
@@ -915,7 +916,11 @@ class ReplicaContext(ObjectProxy, InstanceGroup):
         attr = super().__getattribute__(name)
 
         if isinstance(attr, Instance):
-            return ReplicaContext(attr, self._self_replica_index, self)
+            if id(attr) not in self._self_child_context_by_object_id:
+                self._self_child_context_by_object_id[id(attr)] = ReplicaContext(
+                    attr, self._self_replica_index, self
+                )
+            return self._self_child_context_by_object_id[id(attr)]
 
         if callable(attr):
 
@@ -952,10 +957,7 @@ class ReplicaContext(ObjectProxy, InstanceGroup):
         if not isinstance(other, ReplicaContext):
             return False
 
-        return (
-            self.get_full_name() == other.get_full_name()
-            and self.__wrapped__ == other.__wrapped__
-        )
+        return self.get_full_name() == other.get_full_name()
 
     def __ne__(self, other):
         result = self.__eq__(other)
