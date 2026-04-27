@@ -128,7 +128,7 @@ class InstanceInitInterceptor(ABCMeta):
 
 
 NestedInstanceType = TypeVar("NestedInstanceType", bound="Instance")
-_instance_replica_context: ContextVar["InstanceReplica | None"] = ContextVar(
+_instance_replica_context: ContextVar["ReplicaContext | None"] = ContextVar(
     "_instance_replica_context",
     default=None,
 )
@@ -289,9 +289,9 @@ class Instance(
         if (
             replica is not None
             and replica.__wrapped__ is self
-            and replica.get_context() is not None
+            and replica.get_parent_context() is not None
         ):
-            return replica.get_context()
+            return replica.get_parent_context()
         return self.__context
 
     def get_simple_name(self) -> str:
@@ -698,13 +698,19 @@ class Instance(
 
         return (
             isinstance(other, type(self))
-            and (self.get_simple_name() == other.get_simple_name())
+            and (self.get_full_name() == other.get_full_name())
             and (self.__parameters == other.__parameters)
             and (self.__depends_on == other.__depends_on)
             and (self.__nested_instances == other.__nested_instances)
             and (self.__expected_parameters == other.__expected_parameters)
             and (self.__spec_name == other.__spec_name)
         )
+
+    def __ne__(self, other):
+        result = self.__eq__(other)
+        if result is NotImplemented:
+            return NotImplemented
+        return not result
 
     def __str__(self):
         return yaml.safe_dump(convert_to_dict(self.get_dto()), default_flow_style=False)
@@ -869,25 +875,25 @@ class InstanceGroup(ABC):
         pass
 
 
-class InstanceReplica(ObjectProxy, InstanceGroup):
+class ReplicaContext(ObjectProxy, InstanceGroup):
     def __init__(
         self,
         original: Instance,
         replica_index: int,
-        replica_context: Optional["InstanceReplica"] = None,
+        parent_context: Optional["ReplicaContext"] = None,
     ):
         super().__init__(original)
         self._self_replica_index: int = replica_index
-        self._self_replica_context: Optional["InstanceReplica"] = replica_context
+        self._self_parent_context: Optional["ReplicaContext"] = parent_context
 
         self._self_replica_name: str = (
             f"{original.get_simple_name()}_{replica_index}"
-            if self._self_replica_context is None
+            if self._self_parent_context is None
             else original.get_simple_name()
         )
 
     @contextmanager
-    def _self_replica_context_manager(self):
+    def _self_replica_context(self):
         token = _instance_replica_context.set(self)
         try:
             yield
@@ -909,12 +915,12 @@ class InstanceReplica(ObjectProxy, InstanceGroup):
         attr = super().__getattribute__(name)
 
         if isinstance(attr, Instance):
-            return InstanceReplica(attr, self._self_replica_index, self)
+            return ReplicaContext(attr, self._self_replica_index, self)
 
         if callable(attr):
 
             def wrapped(*args, **kwargs):
-                with self._self_replica_context_manager():
+                with self._self_replica_context():
                     return attr(*args, **kwargs)
 
             return wrapped
@@ -924,8 +930,8 @@ class InstanceReplica(ObjectProxy, InstanceGroup):
     def get_simple_name(self):
         return self._self_replica_name
 
-    def get_context(self):
-        return self._self_replica_context
+    def get_parent_context(self):
+        return self._self_parent_context
 
     def get_group_size(self) -> int:
         return self.__wrapped__.get_group_size()
@@ -943,10 +949,13 @@ class InstanceReplica(ObjectProxy, InstanceGroup):
         return False
 
     def __eq__(self, other):
-        if not isinstance(other, InstanceReplica):
+        if not isinstance(other, ReplicaContext):
             return False
 
-        return self.get_full_name() == other.get_full_name()
+        return (
+            self.get_full_name() == other.get_full_name()
+            and self.__wrapped__ == other.__wrapped__
+        )
 
     def __ne__(self, other):
         result = self.__eq__(other)
@@ -955,9 +964,9 @@ class InstanceReplica(ObjectProxy, InstanceGroup):
         return not result
 
     def __str__(self):
-        with self._self_replica_context_manager():
+        with self._self_replica_context():
             return str(self.__wrapped__)
 
     def __hash__(self):
-        with self._self_replica_context_manager():
+        with self._self_replica_context():
             return hash(self.__wrapped__)

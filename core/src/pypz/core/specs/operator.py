@@ -29,8 +29,8 @@ from pypz.core.specs.dtos import (
 from pypz.core.specs.instance import (
     Instance,
     InstanceGroup,
-    InstanceReplica,
     RegisteredInterface,
+    ReplicaContext,
 )
 from pypz.core.specs.plugin import (
     InputPortPlugin,
@@ -181,7 +181,7 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
         Reference to the original instance, which was the base for the replication
         """
 
-        self.__replicas: list[InstanceReplica] = []
+        self.__replicas: list[ReplicaContext] = []
         """
         List of replica instances
         """
@@ -303,7 +303,7 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
             self.__replication_origin is self
         )
 
-    def get_replica(self, replica_id: int) -> InstanceReplica:
+    def get_replica(self, replica_id: int) -> ReplicaContext:
         """
         Returns the replica instance by id. The id is the actual place in the
         replica list, which is ensured during the replica creation.
@@ -313,7 +313,7 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
         """
         return self.__replicas[replica_id]
 
-    def get_replicas(self) -> list[InstanceReplica]:
+    def get_replicas(self) -> list[ReplicaContext]:
         """
         :return: replica list
         """
@@ -432,7 +432,7 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
                 self.__replication_group_index = 0
 
             for idx in range(len(self.__replicas), self._replication_factor):
-                replica = InstanceReplica(self, idx)
+                replica = ReplicaContext(self, idx)
 
                 if self.get_context() is not None:
                     self.get_context().__setattr__(replica.get_simple_name(), replica)
