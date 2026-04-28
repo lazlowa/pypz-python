@@ -97,6 +97,18 @@ class TestPipelineWithOperator(Pipeline):
         self.operator_a.input_port.connect(self.operator_b.output_port)
 
 
+# p = TestPipelineWithOperator("pip")
+# print(p.operator_a.get_group_index())
+# print(p.operator_a.input_port.get_group_index())
+# print(p.operator_a_0.get_group_index())
+# print(p.operator_a_0.is_principal())
+# print(p.operator_a_0.input_port.get_group_index())
+# print(p.operator_a_0.input_port.is_principal())
+# o = p.operator_a_0.materialize()
+# print(o.input_port.get_group_index())
+# print(o.input_port.get_full_name())
+# print(o.input_port.is_principal())
+
 # Changing something in DTO of a replica should be independent from original or other replicas
 # hash
 # str

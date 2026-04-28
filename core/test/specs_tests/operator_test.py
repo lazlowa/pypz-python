@@ -223,7 +223,7 @@ class OperatorInstanceTest(unittest.TestCase):
         self.assertTrue(pipeline.operator_a.input_port.is_principal())
 
         for replica_idx in range(pipeline.operator_a.get_replication_factor()):
-            replica = pipeline.operator_a.get_replica(replica_idx)
+            replica = pipeline.operator_a.get_replica(replica_idx).materialize()
 
             self.assertEqual(6, replica.get_group_size())
             self.assertEqual(replica_idx + 1, replica.get_group_index())

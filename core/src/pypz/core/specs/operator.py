@@ -76,6 +76,7 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
             """
             return Operator.create_from_dto(
                 self.get_dto(),
+                replication_origin=self.__wrapped__,
                 context=self.__wrapped__.get_context(),
                 replication_group_index=self._self_replica_index + 1,
                 mock_nonexistent=True,
@@ -93,7 +94,6 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
         def get_dto(self) -> OperatorInstanceDTO:
             dto = self.__wrapped__.get_dto()
             dto.name = self._self_simple_name
-            dto.parameters["replicationFactor"] = 0
             return dto
 
         def get_group_size(self) -> int:
@@ -257,7 +257,9 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
     def __init__(self, name: str = None, *args, **kwargs):
         super().__init__(name, Plugin, *args, **kwargs)
 
-        self.__replication_origin: Optional[Operator] = None
+        self.__replication_origin: Optional[Operator] = kwargs.get(
+            "replication_origin", None
+        )
         """
         Reference to the original instance, which was the base for the replication
         """
