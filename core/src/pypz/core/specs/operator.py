@@ -54,36 +54,49 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
     class Replica(ObjectProxy, InstanceGroup):
         def __init__(self, original: "Operator", replica_index: int):
             super().__init__(original)
-            self.__replica_index: int = replica_index
-            self.__simple_name: str = f"{original.get_simple_name()}_{replica_index}"
-            self.__full_name: str = (
-                self.__simple_name
-                if original.get_context() is None
-                else original.get_context().get_full_name() + "." + self.__simple_name
+            self._self_replica_index: int = replica_index
+            self._self_simple_name: str = (
+                f"{original.get_simple_name()}_{replica_index}"
             )
-            self.__spec_name: str = ":".join(
+            self._self_full_name: str = (
+                self._self_simple_name
+                if original.get_context() is None
+                else original.get_context().get_full_name()
+                + "."
+                + self._self_simple_name
+            )
+            self._self_spec_name: str = ":".join(
                 [original.__class__.__module__, original.__class__.__qualname__]
             )
 
+        def create(self) -> "Operator":
+            return Operator.create_from_dto(
+                self.get_dto(),
+                context=self.__wrapped__.get_context(),
+                replication_group_index=self._self_replica_index + 1,
+                mock_nonexistent=True,
+            )
+
         def get_simple_name(self):
-            return self.__simple_name
+            return self._self_simple_name
 
         def get_full_name(self):
-            return self.__full_name
+            return self._self_full_name
 
         def get_original(self):
             return self.__wrapped__
 
         def get_dto(self):
             dto = self.__wrapped__.get_dto()
-            dto.name = self.__simple_name
+            dto.name = self._self_simple_name
+            dto.parameters["replicationFactor"] = 0
             return dto
 
         def get_group_size(self) -> int:
             return self.__wrapped__.get_group_size()
 
         def get_group_index(self) -> int:
-            return self.__replica_index + 1
+            return self._self_replica_index + 1
 
         def get_group_name(self) -> Optional[str]:
             return self.__wrapped__.get_group_name()
@@ -100,7 +113,7 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
             )
 
         def __hash__(self):
-            return hash((self.__full_name, self.__spec_name))
+            return hash((self._self_full_name, self._self_spec_name))
 
         def __eq__(self, other):
             if self is other:
@@ -108,7 +121,7 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
 
             return (
                 isinstance(other, type(self))
-                and (self.__full_name == other.__full_name)
+                and (self._self_full_name == other._self_full_name)
                 and (self.__original == other.__original)
             )
 
