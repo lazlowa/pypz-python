@@ -20,6 +20,7 @@ from typing import TYPE_CHECKING, Any, Optional, cast
 import yaml
 from pypz.core.commons.loggers import ContextLogger, ContextLoggerInterface
 from pypz.core.commons.parameters import OptionalParameter
+from pypz.core.commons.utils import convert_to_dict
 from pypz.core.specs.dtos import (
     OperatorConnection,
     OperatorConnectionSource,
@@ -33,6 +34,7 @@ from pypz.core.specs.plugin import (
     OutputPortPlugin,
     Plugin,
 )
+from wrapt import ObjectProxy
 
 if TYPE_CHECKING:
     from pypz.core.specs.pipeline import Pipeline
@@ -49,15 +51,18 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
 
     # ========================= inner logger class =========================
 
-    class Replica:
+    class Replica(ObjectProxy, InstanceGroup):
         def __init__(self, original: "Operator", replica_index: int):
-            self.__original: "Operator" = original
+            super().__init__(original)
             self.__replica_index: int = replica_index
             self.__simple_name: str = f"{original.get_simple_name()}_{replica_index}"
             self.__full_name: str = (
                 self.__simple_name
                 if original.get_context() is None
                 else original.get_context().get_full_name() + "." + self.__simple_name
+            )
+            self.__spec_name: str = ":".join(
+                [original.__class__.__module__, original.__class__.__qualname__]
             )
 
         def get_simple_name(self):
@@ -67,12 +72,51 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
             return self.__full_name
 
         def get_original(self):
-            return self.__original
+            return self.__wrapped__
 
         def get_dto(self):
-            dto = self.__original.get_dto()
+            dto = self.__wrapped__.get_dto()
             dto.name = self.__simple_name
             return dto
+
+        def get_group_size(self) -> int:
+            return self.__wrapped__.get_group_size()
+
+        def get_group_index(self) -> int:
+            return self.__replica_index + 1
+
+        def get_group_name(self) -> Optional[str]:
+            return self.__wrapped__.get_group_name()
+
+        def get_group_principal(self) -> Optional["Instance"]:
+            return self.__wrapped__
+
+        def is_principal(self) -> bool:
+            return False
+
+        def __str__(self):
+            return yaml.safe_dump(
+                convert_to_dict(self.get_dto()), default_flow_style=False
+            )
+
+        def __hash__(self):
+            return hash((self.__full_name, self.__spec_name))
+
+        def __eq__(self, other):
+            if self is other:
+                return True
+
+            return (
+                isinstance(other, type(self))
+                and (self.__full_name == other.__full_name)
+                and (self.__original == other.__original)
+            )
+
+        def __ne__(self, other):
+            result = self.__eq__(other)
+            if result is NotImplemented:
+                return NotImplemented
+            return not result
 
     class Logger(ContextLoggerInterface):
         """
@@ -453,16 +497,6 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
 
             for idx in range(len(self.__replicas), self._replication_factor):
                 replica = Operator.Replica(self, idx)
-                # replica_dto = self.get_dto()
-                # replica_dto.name = self.get_simple_name() + "_" + str(idx)
-                #
-                # replica = Operator.create_from_dto(
-                #     replica_dto,
-                #     context=self.get_context(),
-                #     reference=self,
-                #     replication_group_index=idx + 1,
-                #     mock_nonexistent=True,
-                # )
 
                 if self.get_context() is not None:
                     self.get_context().__setattr__(replica.get_simple_name(), replica)
