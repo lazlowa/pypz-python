@@ -95,3 +95,11 @@ class TestPipelineWithOperator(Pipeline):
         self.operator_b = TestOperatorWithPortPlugins()
 
         self.operator_a.input_port.connect(self.operator_b.output_port)
+
+
+# Changing something in DTO of a replica should be independent from original or other replicas
+# hash
+# str
+# eq / ne
+# replica execution
+# replicas in pipeline deployment?

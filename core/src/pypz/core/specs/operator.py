@@ -69,7 +69,11 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
                 [original.__class__.__module__, original.__class__.__qualname__]
             )
 
-        def create(self) -> "Operator":
+        def materialize(self) -> "Operator":
+            """
+            Materializes this replica proxy into a standalone Operator instance.
+            The returned object no longer shares runtime state with the original.
+            """
             return Operator.create_from_dto(
                 self.get_dto(),
                 context=self.__wrapped__.get_context(),
@@ -77,16 +81,16 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
                 mock_nonexistent=True,
             )
 
-        def get_simple_name(self):
+        def get_simple_name(self) -> str:
             return self._self_simple_name
 
-        def get_full_name(self):
+        def get_full_name(self) -> str:
             return self._self_full_name
 
-        def get_original(self):
+        def get_original(self) -> "Operator":
             return self.__wrapped__
 
-        def get_dto(self):
+        def get_dto(self) -> OperatorInstanceDTO:
             dto = self.__wrapped__.get_dto()
             dto.name = self._self_simple_name
             dto.parameters["replicationFactor"] = 0
@@ -122,7 +126,7 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
             return (
                 isinstance(other, type(self))
                 and (self._self_full_name == other._self_full_name)
-                and (self.__original == other.__original)
+                and (self.__wrapped__ == other.__wrapped__)
             )
 
         def __ne__(self, other):
