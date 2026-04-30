@@ -857,9 +857,10 @@ class OperatorInstanceTest(unittest.TestCase):
             hash(pipeline.operator_a_1.input_port),
         )
 
-        for plugin in (
-            pipeline.operator_a_0.get_protected().get_nested_instances().values()
-        ):
+        with self.assertRaises(PermissionError):
+            pipeline.operator_a_0.get_protected().get_nested_instances()
+
+        for plugin in pipeline.operator_a_0._Instance__nested_instances.values():
             self.assertIn(
                 plugin.get_full_name(),
                 {

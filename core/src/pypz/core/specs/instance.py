@@ -889,13 +889,7 @@ class ReplicaContext(ObjectProxy, InstanceGroup):
         super().__init__(original)
         self._self_replica_index: int = replica_index
         self._self_parent_context: Optional["ReplicaContext"] = parent_context
-        self._self_context_by_oid: dict[int, "ReplicaContext"] = {
-            id(nested_instance): ReplicaContext(nested_instance, replica_index, self)
-            for nested_instance in original.get_protected()
-            .get_nested_instances()
-            .values()
-        }
-        self._self_context_by_oid[id(original)] = self
+        self._self_context_by_oid: dict[int, "ReplicaContext"] = {}
 
         self._self_replica_name: str = (
             f"{original.get_simple_name()}_{replica_index}"
@@ -903,9 +897,28 @@ class ReplicaContext(ObjectProxy, InstanceGroup):
             else original.get_simple_name()
         )
 
+    def _get_or_create_child_replica(self, instance: Instance) -> "ReplicaContext":
+        object_id = id(instance)
+        child = self._self_context_by_oid.get(object_id)
+        if child is None:
+            child = ReplicaContext(instance, self._self_replica_index, self)
+            self._self_context_by_oid[object_id] = child
+        return child
+
+    def _build_replica_map(self) -> dict[int, "ReplicaContext"]:
+        replica_map = {id(self.__wrapped__): self}
+
+        for nested_instance in (
+            self.__wrapped__.get_protected().get_nested_instances().values()
+        ):
+            child = self._get_or_create_child_replica(nested_instance)
+            replica_map.update(child._build_replica_map())
+
+        return replica_map
+
     @contextmanager
     def _self_replica_context(self):
-        token = _instance_replica_context.set(self._self_context_by_oid)
+        token = _instance_replica_context.set(self._build_replica_map())
         try:
             yield
         finally:
@@ -924,8 +937,12 @@ class ReplicaContext(ObjectProxy, InstanceGroup):
         ):
             return self._self_parent_context
 
-        if isinstance(value, Instance) and (id(value) in self._self_context_by_oid):
-            return self._self_context_by_oid[id(value)]
+        if isinstance(value, Instance):
+            nested_instances = (
+                self.__wrapped__.get_protected().get_nested_instances().values()
+            )
+            if any(value is nested for nested in nested_instances):
+                return self._get_or_create_child_replica(value)
 
         return value
 
@@ -939,7 +956,10 @@ class ReplicaContext(ObjectProxy, InstanceGroup):
         if isinstance(value, set):
             return {self._wrap_instance_value(v) for v in value}
         if isinstance(value, dict):
-            return {k: self._wrap_instance_value(v) for k, v in value.items()}
+            return {
+                self._wrap_instance_value(k): self._wrap_instance_value(v)
+                for k, v in value.items()
+            }
         return value
 
     def _unwrap_instance_value(self, value):
@@ -956,12 +976,20 @@ class ReplicaContext(ObjectProxy, InstanceGroup):
         return value
 
     def __getattribute__(self, name):
+        if name == "get_protected":
+            raise PermissionError(
+                "Protected access is not supported through ReplicaContext. "
+                "Use the original instance instead."
+            )
+
         if name.startswith("_self_") or name in {
             "__wrapped__",
             "__class__",
             "__dict__",
             "__setattr__",
             "__getattribute__",
+            "_get_or_create_child_replica",
+            "_build_replica_map",
             "_self_replica_context",
             "_check_instance_type",
             "_wrap_instance_value",
@@ -993,6 +1021,15 @@ class ReplicaContext(ObjectProxy, InstanceGroup):
             return wrapped
 
         return self._wrap_instance_value(attr)
+
+    def __setattr__(self, name, value):
+        if name.startswith("_self_") or name == "__wrapped__":
+            object.__setattr__(self, name, value)
+            return
+
+        unwrapped_value = self._unwrap_instance_value(value)
+        with self._self_replica_context():
+            setattr(self.__wrapped__, name, unwrapped_value)
 
     def get_simple_name(self):
         return self._self_replica_name
