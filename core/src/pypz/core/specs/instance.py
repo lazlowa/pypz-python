@@ -21,6 +21,7 @@ import typing
 from abc import ABC, ABCMeta, abstractmethod
 from contextlib import contextmanager
 from contextvars import ContextVar
+from functools import wraps
 from typing import Any, Generic, Optional, Type, TypeVar
 
 import yaml
@@ -128,7 +129,7 @@ class InstanceInitInterceptor(ABCMeta):
 
 
 NestedInstanceType = TypeVar("NestedInstanceType", bound="Instance")
-_instance_replica_context: ContextVar["ReplicaContext | None"] = ContextVar(
+_instance_replica_context: ContextVar[dict[int, "ReplicaContext"] | None] = ContextVar(
     "_instance_replica_context",
     default=None,
 )
@@ -285,18 +286,16 @@ class Instance(
     # ========= public methods ==========
 
     def get_context(self):
-        replica = _instance_replica_context.get()
-        if (
-            replica is not None
-            and replica.__wrapped__ is self
-            and replica.get_parent_context() is not None
-        ):
+        replica_map = _instance_replica_context.get()
+        replica = replica_map.get(id(self), None) if replica_map is not None else None
+        if replica is not None and replica.get_parent_context() is not None:
             return replica.get_parent_context()
         return self.__context
 
     def get_simple_name(self) -> str:
-        replica = _instance_replica_context.get()
-        if replica is not None and replica.__wrapped__ is self:
+        replica_map = _instance_replica_context.get()
+        replica = replica_map.get(id(self), None) if replica_map is not None else None
+        if replica is not None:
             return replica.get_simple_name()
         return self.__simple_name
 
@@ -882,10 +881,21 @@ class ReplicaContext(ObjectProxy, InstanceGroup):
         replica_index: int,
         parent_context: Optional["ReplicaContext"] = None,
     ):
+        if not (isinstance(original, Instance) and isinstance(original, InstanceGroup)):
+            raise TypeError(
+                f"Replicas must be an instance of both {Instance.__name__} and {InstanceGroup.__name__}"
+            )
+
         super().__init__(original)
         self._self_replica_index: int = replica_index
         self._self_parent_context: Optional["ReplicaContext"] = parent_context
-        self._self_child_context_by_object_id: dict[int, "ReplicaContext"] = dict()
+        self._self_context_by_oid: dict[int, "ReplicaContext"] = {
+            id(nested_instance): ReplicaContext(nested_instance, replica_index, self)
+            for nested_instance in original.get_protected()
+            .get_nested_instances()
+            .values()
+        }
+        self._self_context_by_oid[id(original)] = self
 
         self._self_replica_name: str = (
             f"{original.get_simple_name()}_{replica_index}"
@@ -895,11 +905,55 @@ class ReplicaContext(ObjectProxy, InstanceGroup):
 
     @contextmanager
     def _self_replica_context(self):
-        token = _instance_replica_context.set(self)
+        token = _instance_replica_context.set(self._self_context_by_oid)
         try:
             yield
         finally:
             _instance_replica_context.reset(token)
+
+    def _check_instance_type(self, value):
+        if isinstance(value, ReplicaContext):
+            return value
+
+        if value is self.__wrapped__:
+            return self
+
+        if (
+            self._self_parent_context is not None
+            and value is self._self_parent_context.__wrapped__
+        ):
+            return self._self_parent_context
+
+        if isinstance(value, Instance) and (id(value) in self._self_context_by_oid):
+            return self._self_context_by_oid[id(value)]
+
+        return value
+
+    def _wrap_instance_value(self, value):
+        if isinstance(value, Instance):
+            return self._check_instance_type(value)
+        if isinstance(value, list):
+            return [self._wrap_instance_value(v) for v in value]
+        if isinstance(value, tuple):
+            return tuple(self._wrap_instance_value(v) for v in value)
+        if isinstance(value, set):
+            return {self._wrap_instance_value(v) for v in value}
+        if isinstance(value, dict):
+            return {k: self._wrap_instance_value(v) for k, v in value.items()}
+        return value
+
+    def _unwrap_instance_value(self, value):
+        if isinstance(value, ReplicaContext):
+            return value.__wrapped__
+        if isinstance(value, list):
+            return [self._unwrap_instance_value(v) for v in value]
+        if isinstance(value, tuple):
+            return tuple(self._unwrap_instance_value(v) for v in value)
+        if isinstance(value, set):
+            return {self._unwrap_instance_value(v) for v in value}
+        if isinstance(value, dict):
+            return {k: self._unwrap_instance_value(v) for k, v in value.items()}
+        return value
 
     def __getattribute__(self, name):
         if name.startswith("_self_") or name in {
@@ -908,29 +962,37 @@ class ReplicaContext(ObjectProxy, InstanceGroup):
             "__dict__",
             "__setattr__",
             "__getattribute__",
+            "_self_replica_context",
+            "_check_instance_type",
+            "_wrap_instance_value",
+            "_unwrap_instance_value",
             "get_simple_name",
+            "get_parent_context",
             "get_group_name",
+            "get_group_index",
+            "get_group_principal",
+            "is_principal",
         }:
             return object.__getattribute__(self, name)
 
         attr = super().__getattribute__(name)
 
-        if isinstance(attr, Instance):
-            if id(attr) not in self._self_child_context_by_object_id:
-                self._self_child_context_by_object_id[id(attr)] = ReplicaContext(
-                    attr, self._self_replica_index, self
-                )
-            return self._self_child_context_by_object_id[id(attr)]
-
         if callable(attr):
 
+            @wraps(attr)
             def wrapped(*args, **kwargs):
+                unwrapped_args = tuple(self._unwrap_instance_value(arg) for arg in args)
+                unwrapped_kwargs = {
+                    key: self._unwrap_instance_value(value)
+                    for key, value in kwargs.items()
+                }
                 with self._self_replica_context():
-                    return attr(*args, **kwargs)
+                    result = attr(*unwrapped_args, **unwrapped_kwargs)
+                return self._wrap_instance_value(result)
 
             return wrapped
 
-        return attr
+        return self._wrap_instance_value(attr)
 
     def get_simple_name(self):
         return self._self_replica_name

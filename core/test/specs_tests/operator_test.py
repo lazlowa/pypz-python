@@ -857,6 +857,17 @@ class OperatorInstanceTest(unittest.TestCase):
             hash(pipeline.operator_a_1.input_port),
         )
 
+        for plugin in (
+            pipeline.operator_a_0.get_protected().get_nested_instances().values()
+        ):
+            self.assertIn(
+                plugin.get_full_name(),
+                {
+                    "pipeline.operator_a_0.input_port",
+                    "pipeline.operator_a_0.output_port",
+                },
+            )
+
 
 # Operator replica + plugin
 # str

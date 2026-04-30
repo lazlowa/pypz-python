@@ -95,3 +95,9 @@ class TestPipelineWithOperator(Pipeline):
         self.operator_b = TestOperatorWithPortPlugins()
 
         self.operator_a.input_port.connect(self.operator_b.output_port)
+
+
+# p = TestPipelineWithOperator("pipeline")
+# p.operator_a_0.get_protected()
+# for pl in p.operator_a_0.get_protected().get_nested_instances().values():
+#     print(pl.get_full_name())
