@@ -111,6 +111,17 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
         def is_principal(self) -> bool:
             return False
 
+        def __getattr__(self, name):
+            attr = super().__getattr__(name)
+
+            if isinstance(attr, Instance):
+                raise AttributeError(
+                    f"{type(self).__name__} nested instance access is not replica-aware: {name}. "
+                    f"Call {type(self).materialize.__name__}() first."
+                )
+
+            return attr
+
         def __str__(self):
             return yaml.safe_dump(
                 convert_to_dict(self.get_dto()), default_flow_style=False
@@ -493,7 +504,10 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
                     ),
                 )
 
-                input_port_plugin.connect(output_port_plugin)
+                if self.is_principal():
+                    input_port_plugin.connect(output_port_plugin)
+                else:
+                    input_port_plugin.get_connected_ports().add(output_port_plugin)
 
     def __replicate(self):
         if not self.is_principal():

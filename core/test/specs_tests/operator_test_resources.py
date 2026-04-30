@@ -115,3 +115,5 @@ class TestPipelineWithOperator(Pipeline):
 # eq / ne
 # replica execution
 # replicas in pipeline deployment?
+
+# Külön tesztelni, hogy a replicaban materializálás előtt az identity azonos, de utánna csak equality
