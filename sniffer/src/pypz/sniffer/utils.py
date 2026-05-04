@@ -16,6 +16,7 @@
 from pypz.core.specs.operator import Operator
 from pypz.core.specs.pipeline import Pipeline
 from pypz.core.specs.plugin import OutputPortPlugin
+from pypz.core.specs.utils import Internals
 
 
 def is_sublist(subset: list, target_list: list) -> bool:
@@ -40,7 +41,7 @@ def retrieve_operator_paths(
 ) -> list[list[Operator]]:
     result_paths = []
     visited = {operator} if visited is None else visited
-    for plugin in operator.get_protected().get_nested_instances().values():
+    for plugin in Internals(operator).nested_instances.values():
         if isinstance(plugin, OutputPortPlugin):
             for input_port in plugin.get_connected_ports():
                 if input_port.get_context() not in visited:
@@ -97,7 +98,7 @@ def order_operators_by_connections(pipeline: Pipeline) -> list[set[Operator]]:
     # [2] - [B, C, E, G]
     # [3] - [B, C, D, F, G]
     # =========================================================================
-    for operator in pipeline.get_protected().get_nested_instances().values():
+    for operator in Internals(pipeline).nested_instances.values():
         if operator.is_principal() and (not any([operator in path for path in paths])):
             paths.extend(retrieve_operator_paths(operator))
 

@@ -21,6 +21,7 @@ from pypz.abstracts.channel_ports import ChannelInputPort, ChannelOutputPort
 from pypz.core.specs.dtos import PipelineInstanceDTO
 from pypz.core.specs.operator import Operator
 from pypz.core.specs.pipeline import Pipeline
+from pypz.core.specs.utils import Internals
 from pypz.sniffer.sniffer import PipelineSniffer
 from pypz.sniffer.utils import order_operators_by_connections
 from pypz.sniffer.views import ChannelRWView, ChannelView, OperatorView, ViewConfig
@@ -117,7 +118,7 @@ class PipelineSnifferViewer(tk.Tk):
         self._pipeline_canvas.configure(scrollregion=self._pipeline_canvas.bbox("all"))
 
     def __init_sniffer(self):
-        for operator in self._pipeline.get_protected().get_nested_instances().values():
+        for operator in Internals(self._pipeline).nested_instances.values():
             self._operator_views[operator] = OperatorView(
                 self._pipeline_canvas, operator
             )

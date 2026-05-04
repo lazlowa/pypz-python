@@ -19,6 +19,7 @@ from typing import Optional
 from pypz.abstracts.channel_ports import ChannelInputPort, ChannelOutputPort
 from pypz.core.channels.status import ChannelStatus, ChannelStatusMessage
 from pypz.core.specs.operator import Operator
+from pypz.core.specs.utils import Internals
 
 
 class ViewConfig:
@@ -287,15 +288,17 @@ class OperatorView:
         self.canvas = canvas
         self.name: str = operator.get_simple_name()
 
+        operator_internals = Internals(operator)
+
         self.input_port_views: dict[ChannelInputPort, PortView] = {
             input_port: PortView(canvas, input_port.get_simple_name())
-            for input_port in operator.get_protected().get_nested_instances().values()
+            for input_port in operator_internals.nested_instances.values()
             if isinstance(input_port, ChannelInputPort)
         }
 
         self.output_port_views: dict[ChannelOutputPort, PortView] = {
             output_port: PortView(canvas, output_port.get_simple_name())
-            for output_port in operator.get_protected().get_nested_instances().values()
+            for output_port in operator_internals.nested_instances.values()
             if isinstance(output_port, ChannelOutputPort)
         }
 

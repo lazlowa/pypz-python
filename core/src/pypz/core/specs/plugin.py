@@ -25,6 +25,7 @@ from pypz.core.commons.loggers import (
 )
 from pypz.core.specs.dtos import PluginInstanceDTO, PluginSpecDTO
 from pypz.core.specs.instance import Instance, InstanceGroup, RegisteredInterface
+from pypz.core.specs.utils import Internals
 
 if TYPE_CHECKING:
     from pypz.core.specs.operator import Operator
@@ -82,12 +83,9 @@ class Plugin(Instance[None], InstanceGroup, RegisteredInterface, ABC):
             self.get_context().get_group_principal() is None
         ):
             return None
-        return (
-            self.get_context()
-            .get_group_principal()
-            .get_protected()
-            .get_nested_instance(self.get_simple_name())
-        )
+        return Internals(self.get_context().get_group_principal()).nested_instances[
+            self.get_simple_name()
+        ]
 
     def is_principal(self) -> bool:
         return True if self.get_context() is None else self.get_context().is_principal()
@@ -160,9 +158,11 @@ class PortPlugin(Plugin, RegisteredInterface, ABC):
     def __init__(self, name: Optional[str] = None, schema: Any = None, *args, **kwargs):
         super().__init__(name, *args, **kwargs)
 
+        internals = Internals(self)
+
         self.__connected_ports: set[PortPlugin] = (
-            self.get_protected().get_reference().__connected_ports
-            if self.get_protected().get_reference() is not None
+            internals.reference.__connected_ports
+            if internals.reference is not None
             else set()
         )
         """
@@ -400,6 +400,11 @@ class ExtendedPlugin(Plugin, RegisteredInterface, ABC):
 
     :param name: name of the instance, if not provided, it will be attempted to deduce from the variable's name
     """
+
+    _internal_access = {
+        "pre_execution",
+        "post_execution",
+    }
 
     def __init__(self, name: str = None, *args, **kwargs):
         super().__init__(name, None, *args, **kwargs)

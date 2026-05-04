@@ -28,6 +28,7 @@ from kubernetes.client import (
 )
 from pypz.core.commons.utils import convert_to_dict
 from pypz.core.specs.operator import Operator
+from pypz.core.specs.utils import Internals
 from pypz.deployers.base import DeploymentState
 from pypz.deployers.k8s import (
     DeploymentConflictException,
@@ -410,7 +411,7 @@ class KubernetesDeployerTest(unittest.TestCase):
         ):
             time.sleep(1)
 
-        for operator in pipeline.get_protected().get_nested_instances().values():
+        for operator in Internals(pipeline).nested_instances.values():
             self.assertEqual(
                 DeploymentState.Completed,
                 KubernetesDeployerTest.kubernetes_deployer.retrieve_operator_state(
@@ -438,7 +439,7 @@ class KubernetesDeployerTest(unittest.TestCase):
             )
         )
 
-        for operator in pipeline.get_protected().get_nested_instances().values():
+        for operator in Internals(pipeline).nested_instances.values():
             self.assertIn(operator.get_full_name(), operator_states)
             self.assertEqual(
                 DeploymentState.Completed, operator_states[operator.get_full_name()]

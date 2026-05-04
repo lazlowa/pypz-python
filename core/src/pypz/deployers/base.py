@@ -20,6 +20,7 @@ from typing import Callable, Optional
 
 from pypz.core.specs.operator import Operator
 from pypz.core.specs.pipeline import Pipeline
+from pypz.core.specs.utils import Internals
 from pypz.executors.commons import ExecutionMode
 
 
@@ -167,7 +168,7 @@ class Deployer(ABC):
         pipeline: Pipeline = self.retrieve_deployed_pipeline(pipeline_name)
 
         operator_states = {}
-        for operator in pipeline.get_protected().get_nested_instances().values():
+        for operator in Internals(pipeline).nested_instances.values():
             operator_states[operator.get_full_name()] = self.retrieve_operator_state(
                 operator.get_full_name()
             )
@@ -184,7 +185,7 @@ class Deployer(ABC):
         """
 
         pipeline: Pipeline = self.retrieve_deployed_pipeline(pipeline_name)
-        for operator in pipeline.get_protected().get_nested_instances().values():
+        for operator in Internals(pipeline).nested_instances.values():
             operator_state = self.retrieve_operator_state(operator.get_full_name())
             if operator_state in state:
                 return True
@@ -200,7 +201,7 @@ class Deployer(ABC):
         """
 
         pipeline: Pipeline = self.retrieve_deployed_pipeline(pipeline_name)
-        for operator in pipeline.get_protected().get_nested_instances().values():
+        for operator in Internals(pipeline).nested_instances.values():
             operator_state = self.retrieve_operator_state(operator.get_full_name())
             if operator_state not in state:
                 return False
@@ -221,16 +222,17 @@ class Deployer(ABC):
         :param on_operator_state_change: callback to hook into state changes
         """
         pipeline: Pipeline = self.retrieve_deployed_pipeline(pipeline_name)
+        pipeline_internals = Internals(pipeline)
 
         operator_states: dict[Operator, DeploymentState] = {
             operator: DeploymentState.Unknown
-            for operator in pipeline.get_protected().get_nested_instances().values()
+            for operator in pipeline_internals.nested_instances.values()
         }
 
         finished: bool = False
 
         while not finished:
-            for operator in pipeline.get_protected().get_nested_instances().values():
+            for operator in pipeline_internals.nested_instances.values():
                 operator_state = self.retrieve_operator_state(operator.get_full_name())
 
                 if operator_state != operator_states[operator]:

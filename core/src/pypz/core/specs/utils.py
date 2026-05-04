@@ -13,8 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # =============================================================================
-import re
-import types
 import typing
 from importlib import import_module
 from typing import Any, Callable, Iterable
@@ -30,6 +28,59 @@ ExcludedCascadingParameterPrefix = ">"
 This strings denotes a cascading parameter. Excluded cascading parameter means
 that the model defines this parameter will NOT get it provided ONLY the sub instances.
 """
+
+
+class Internals:
+    """
+    This helper class realizes a thin wrapper around an Instance object allowing
+    the access of protected and private attributes as they were public. It is
+    just a convenience feature to hide these getters from the users in a way
+    any linter can live with it.
+
+    Notice that it relies on a class variable called '_internal_access', which
+    specifies the accessible attributes. If the Instance is being extended, then
+    every child classes can define that class variable, since all those fields
+    will be resolved in a reverse order dynamically.
+
+    :param instance: the instance object to access internals from
+    """
+
+    def __init__(self, instance):
+        self._instance = instance
+
+    def __getattr__(self, name):
+        allowed = self._collect_allowed_names()
+        if name not in allowed:
+            raise AttributeError(f"Access to '{name}' is not allowed")
+
+        for cls in type(self._instance).__mro__:
+            mangled = f"_{cls.__name__}__{name}"
+            if hasattr(self._instance, mangled):
+                return getattr(self._instance, mangled)
+
+        protected = f"_{name}"
+        if hasattr(self._instance, protected):
+            return getattr(self._instance, protected)
+
+        if hasattr(self._instance, name):
+            return getattr(self._instance, name)
+
+        raise AttributeError(
+            f"'{type(self._instance).__name__}' has no internal attribute '{name}'"
+        )
+
+    def _collect_allowed_names(self) -> set[str]:
+        """
+        This method collects all the available names specified through '_internal_access'
+        field on the classes. It resolves them in a reserve order in the inheritance.
+        """
+        names: set[str] = set()
+        for cls in reversed(type(self._instance).__mro__):
+            names.update(getattr(cls, "_internal_access", set()))
+        return names
+
+    def __dir__(self):
+        return sorted(set(super().__dir__()) | self._collect_allowed_names())
 
 
 class InstanceParameters(dict):
@@ -99,8 +150,8 @@ def resolve_dependency_graph(instances: set | Iterable) -> list[set]:
                 # It is possible that instances have dependencies that are not present
                 # in the list provided as argument, hence we need to create an intersection,
                 # so we attempt to resolve dependencies only present in the provided list.
-                available_dependencies = (
-                    instance.get_protected().get_depends_on().intersection(instance_set)
+                available_dependencies = Internals(instance).depends_on.intersection(
+                    instance_set
                 )
 
                 if (instance not in resolved_instances) and (
@@ -121,72 +172,6 @@ def resolve_dependency_graph(instances: set | Iterable) -> list[set]:
         raise RecursionError("Circular dependency detected in instance dependencies")
 
     return []
-
-
-class SingletonAccessWrapper(type):
-    """
-    This metaclass extends the AccessWrapper class with the functionality
-    of caching AccessWrapper objects based on the Instance object. This
-    allows to reuse the AccessWrapper object instead of creating a new one.
-    """
-
-    __singletons: dict[int, "AccessWrapper"] = {}
-
-    def __call__(cls, instance, *args, **kwargs):
-        if id(instance) in SingletonAccessWrapper.__singletons:
-            return SingletonAccessWrapper.__singletons[id(instance)]
-        instance_access = type.__call__(cls, instance, *args, **kwargs)
-        SingletonAccessWrapper.__singletons[id(instance)] = instance_access
-        return instance_access
-
-
-class AccessWrapper(metaclass=SingletonAccessWrapper):
-    """
-    This class wraps the access of the provided object's protected and private
-    attributes into publicly accessible methods.
-    """
-
-    PATTERN = r"^(_[a-zA-Z0-9]+__|_(?!_))"
-
-    def __init__(self, instance: object):
-        # Wrapping methods
-        # ================
-
-        for name in dir(instance):
-            if hasattr(instance, name):
-                attr = getattr(instance, name)
-                if isinstance(attr, types.MethodType) and (
-                    not re.match(r"^__\w+__$", name)
-                ):
-                    public_name = re.sub(AccessWrapper.PATTERN, "", name)
-                    if (not hasattr(instance, public_name)) or (
-                        not isinstance(getattr(instance, public_name), types.MethodType)
-                    ):
-                        self.__dict__[public_name] = attr
-
-        # Wrapping fields
-        # ===============
-
-        for name, value in instance.__dict__.items():
-            object.__setattr__(self, name, value)
-
-            if re.match(AccessWrapper.PATTERN, name):
-                getter_name = re.sub(AccessWrapper.PATTERN, "get_", name)
-                if (not hasattr(instance, getter_name)) or (
-                    not isinstance(getattr(instance, getter_name), types.MethodType)
-                ):
-                    self.__dict__[getter_name] = types.MethodType(
-                        lambda this, n=name: this.__dict__[n], self
-                    )
-
-    def get_nested_instance(self, name):
-        return self.get_nested_instances()[name]
-
-    def has_nested_instance(self, name):
-        return name in self.get_nested_instances()
-
-    def __getattr__(self, name):
-        return self.__getattribute__(name)
 
 
 def load_class_by_name(class_name: str) -> type:

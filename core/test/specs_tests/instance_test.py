@@ -21,7 +21,7 @@ from pypz.core.specs.dtos import InstanceDTO, SpecDTO
 from pypz.core.specs.instance import Instance
 from pypz.core.specs.misc import BlankInstance
 from pypz.core.specs.plugin import InputPortPlugin, ResourceHandlerPlugin
-from pypz.core.specs.utils import resolve_dependency_graph
+from pypz.core.specs.utils import Internals, resolve_dependency_graph
 
 from core.test.specs_tests.instance_test_resources import (
     TestClassForDependencyResolution,
@@ -63,41 +63,37 @@ class InstanceTest(TestCase):
     def test_object_linking_with_nested_objects(self):
         l0 = TestClassL0("l0")
 
-        self.assertEqual(2, len(l0.get_protected().get_nested_instances()))
-        self.assertEqual(l0.l10, l0.get_protected().get_nested_instance("l10"))
-        self.assertEqual(l0.l11, l0.get_protected().get_nested_instance("other_name"))
+        self.assertEqual(2, len(Internals(l0).nested_instances))
+        self.assertEqual(l0.l10, Internals(l0).nested_instances["l10"])
+        self.assertEqual(l0.l11, Internals(l0).nested_instances["other_name"])
         self.assertEqual(l0, l0.l10.get_context())
         self.assertEqual(l0, l0.l11.get_context())
 
-        self.assertEqual(1, len(l0.l10.get_protected().get_nested_instances()))
-        self.assertEqual(1, len(l0.l11.get_protected().get_nested_instances()))
-        self.assertEqual(l0.l10.l2, l0.l10.get_protected().get_nested_instance("l2"))
-        self.assertEqual(l0.l11.l2, l0.l11.get_protected().get_nested_instance("l2"))
+        self.assertEqual(1, len(Internals(l0.l10).nested_instances))
+        self.assertEqual(1, len(Internals(l0.l11).nested_instances))
+        self.assertEqual(l0.l10.l2, Internals(l0.l10).nested_instances["l2"])
+        self.assertEqual(l0.l11.l2, Internals(l0.l11).nested_instances["l2"])
         self.assertEqual(l0.l10, l0.l10.l2.get_context())
         self.assertEqual(l0.l11, l0.l11.l2.get_context())
 
-        self.assertEqual(1, len(l0.l10.l2.get_protected().get_nested_instances()))
-        self.assertEqual(1, len(l0.l11.l2.get_protected().get_nested_instances()))
-        self.assertEqual(
-            l0.l10.l2.l3, l0.l10.l2.get_protected().get_nested_instance("l3")
-        )
-        self.assertEqual(
-            l0.l11.l2.l3, l0.l11.l2.get_protected().get_nested_instance("l3")
-        )
+        self.assertEqual(1, len(Internals(l0.l10.l2).nested_instances))
+        self.assertEqual(1, len(Internals(l0.l11.l2).nested_instances))
+        self.assertEqual(l0.l10.l2.l3, Internals(l0.l10.l2).nested_instances["l3"])
+        self.assertEqual(l0.l11.l2.l3, Internals(l0.l11.l2).nested_instances["l3"])
         self.assertEqual(l0.l10.l2, l0.l10.l2.l3.get_context())
         self.assertEqual(l0.l11.l2, l0.l11.l2.l3.get_context())
 
-        self.assertEqual(0, len(l0.l10.l2.l3.get_protected().get_nested_instances()))
-        self.assertEqual(0, len(l0.l11.l2.l3.get_protected().get_nested_instances()))
+        self.assertEqual(0, len(Internals(l0.l10.l2.l3).nested_instances))
+        self.assertEqual(0, len(Internals(l0.l11.l2.l3).nested_instances))
         self.assertNotEqual(l0.l10.l2.l3, l0.l10.l2.l3.l4.get_context())
         self.assertNotEqual(l0.l11.l2.l3, l0.l11.l2.l3.l4.get_context())
 
         l0 = TestClassWithDifferentNestedType("l0")
 
-        self.assertEqual(3, len(l0.get_protected().get_nested_instances()))
-        self.assertEqual(l0.a, l0.get_protected().get_nested_instance("a"))
-        self.assertEqual(l0.b, l0.get_protected().get_nested_instance("b"))
-        self.assertEqual(l0.c, l0.get_protected().get_nested_instance("c"))
+        self.assertEqual(3, len(Internals(l0).nested_instances))
+        self.assertEqual(l0.a, Internals(l0).nested_instances["a"])
+        self.assertEqual(l0.b, Internals(l0).nested_instances["b"])
+        self.assertEqual(l0.c, Internals(l0).nested_instances["c"])
         self.assertEqual(l0, l0.a.get_context())
         self.assertEqual(l0, l0.b.get_context())
         self.assertEqual(l0, l0.c.get_context())
@@ -105,7 +101,7 @@ class InstanceTest(TestCase):
     def test_depends_on_handling(self):
         l0 = TestClassL0("l0")
 
-        self.assertTrue(l0.l11 in l0.l10.get_protected().get_depends_on())
+        self.assertTrue(l0.l11 in Internals(l0.l10).depends_on)
 
         # Circular dependency
         with self.assertRaises(RecursionError):
@@ -131,7 +127,7 @@ class InstanceTest(TestCase):
         instance.instance_4.depends_on(instance.instance_3)
 
         dependency_levels = resolve_dependency_graph(
-            instance.get_protected().get_nested_instances().values()
+            Internals(instance).nested_instances.values()
         )
 
         self.assertEqual(5, len(dependency_levels))
@@ -154,7 +150,7 @@ class InstanceTest(TestCase):
         instance.instance_3.depends_on(instance.instance_4)
 
         dependency_levels = resolve_dependency_graph(
-            instance.get_protected().get_nested_instances().values()
+            Internals(instance).nested_instances.values()
         )
 
         self.assertEqual(5, len(dependency_levels))
@@ -179,7 +175,7 @@ class InstanceTest(TestCase):
         instance.instance_4.depends_on(instance.instance_0)
 
         dependency_levels = resolve_dependency_graph(
-            instance.get_protected().get_nested_instances().values()
+            Internals(instance).nested_instances.values()
         )
 
         self.assertEqual(4, len(dependency_levels))
@@ -201,7 +197,7 @@ class InstanceTest(TestCase):
         instance.instance_3.depends_on(instance.instance_2)
 
         dependency_levels = resolve_dependency_graph(
-            instance.get_protected().get_nested_instances().values()
+            Internals(instance).nested_instances.values()
         )
 
         self.assertEqual(3, len(dependency_levels))
@@ -224,9 +220,7 @@ class InstanceTest(TestCase):
         instance.instance_0._Instance__depends_on.add(instance.instance_4)
 
         with self.assertRaises(RecursionError):
-            resolve_dependency_graph(
-                instance.get_protected().get_nested_instances().values()
-            )
+            resolve_dependency_graph(Internals(instance).nested_instances.values())
 
     def test_dependency_order_resolution_with_extra_dependency(self):
         # The case shall be tested, where one instance has an extra dependency
@@ -245,7 +239,7 @@ class InstanceTest(TestCase):
         instance.instance_4._Instance__depends_on.add(BlankInstance("inst"))
 
         dependency_levels = resolve_dependency_graph(
-            instance.get_protected().get_nested_instances().values()
+            Internals(instance).nested_instances.values()
         )
 
         self.assertEqual(5, len(dependency_levels))
@@ -314,31 +308,31 @@ class InstanceTest(TestCase):
         l0.set_parameter("##l012", "l012")
         l0.set_parameter("###l0123", "l0123")
 
-        self.assertEqual(7, len(l0.get_protected().get_parameters()))
+        self.assertEqual(7, len(Internals(l0).parameters))
         self.assertEqual("l0", l0.get_parameter("l0"))
         self.assertEqual("l01", l0.get_parameter("l01"))
         self.assertEqual("l012", l0.get_parameter("l012"))
         self.assertEqual("l0123", l0.get_parameter("l0123"))
 
-        self.assertEqual(6, len(l0.l10.get_protected().get_parameters()))
+        self.assertEqual(6, len(Internals(l0.l10).parameters))
         self.assertEqual("l01", l0.l10.get_parameter("l01"))
         self.assertEqual("l012", l0.l10.get_parameter("l012"))
         self.assertEqual("l0123", l0.l10.get_parameter("l0123"))
-        self.assertEqual(6, len(l0.l11.get_protected().get_parameters()))
+        self.assertEqual(6, len(Internals(l0.l11).parameters))
         self.assertEqual("l01", l0.l11.get_parameter("l01"))
         self.assertEqual("l012", l0.l11.get_parameter("l012"))
         self.assertEqual("l0123", l0.l11.get_parameter("l0123"))
 
-        self.assertEqual(5, len(l0.l10.l2.get_protected().get_parameters()))
+        self.assertEqual(5, len(Internals(l0.l10.l2).parameters))
         self.assertEqual("l012", l0.l10.l2.get_parameter("l012"))
         self.assertEqual("l0123", l0.l10.l2.get_parameter("l0123"))
-        self.assertEqual(5, len(l0.l11.l2.get_protected().get_parameters()))
+        self.assertEqual(5, len(Internals(l0.l11.l2).parameters))
         self.assertEqual("l012", l0.l11.l2.get_parameter("l012"))
         self.assertEqual("l0123", l0.l11.l2.get_parameter("l0123"))
 
-        self.assertEqual(4, len(l0.l10.l2.l3.get_protected().get_parameters()))
+        self.assertEqual(4, len(Internals(l0.l10.l2.l3).parameters))
         self.assertEqual("l0123", l0.l10.l2.l3.get_parameter("l0123"))
-        self.assertEqual(4, len(l0.l11.l2.l3.get_protected().get_parameters()))
+        self.assertEqual(4, len(Internals(l0.l11.l2.l3).parameters))
         self.assertEqual("l0123", l0.l11.l2.l3.get_parameter("l0123"))
 
     def test_exclusive_cascaded_parameters(self):
@@ -347,19 +341,19 @@ class InstanceTest(TestCase):
         l0.set_parameter(">>l2", "l2")
         l0.set_parameter(">>>l3", "l3")
 
-        self.assertEqual(4, len(l0.l10.get_protected().get_parameters()))
+        self.assertEqual(4, len(Internals(l0.l10).parameters))
         self.assertEqual("l1", l0.l10.get_parameter("l1"))
-        self.assertEqual(4, len(l0.l11.get_protected().get_parameters()))
+        self.assertEqual(4, len(Internals(l0.l11).parameters))
         self.assertEqual("l1", l0.l11.get_parameter("l1"))
 
-        self.assertEqual(4, len(l0.l10.l2.get_protected().get_parameters()))
+        self.assertEqual(4, len(Internals(l0.l10.l2).parameters))
         self.assertEqual("l2", l0.l10.l2.get_parameter("l2"))
-        self.assertEqual(4, len(l0.l11.l2.get_protected().get_parameters()))
+        self.assertEqual(4, len(Internals(l0.l11.l2).parameters))
         self.assertEqual("l2", l0.l11.l2.get_parameter("l2"))
 
-        self.assertEqual(4, len(l0.l10.l2.l3.get_protected().get_parameters()))
+        self.assertEqual(4, len(Internals(l0.l10.l2.l3).parameters))
         self.assertEqual("l3", l0.l10.l2.l3.get_parameter("l3"))
-        self.assertEqual(4, len(l0.l11.l2.l3.get_protected().get_parameters()))
+        self.assertEqual(4, len(Internals(l0.l11.l2.l3).parameters))
         self.assertEqual("l3", l0.l11.l2.l3.get_parameter("l3"))
 
     def test_mixed_cascaded_parameters(self):
@@ -370,33 +364,33 @@ class InstanceTest(TestCase):
         l0.set_parameter("##>l013", "l013")
         l0.set_parameter(">#>l13", "l13")
 
-        self.assertEqual(5, len(l0.get_protected().get_parameters()))
+        self.assertEqual(5, len(Internals(l0).parameters))
         self.assertEqual("l03", l0.get_parameter("l03"))
         self.assertEqual("l013", l0.get_parameter("l013"))
 
-        self.assertEqual(6, len(l0.l10.get_protected().get_parameters()))
+        self.assertEqual(6, len(Internals(l0.l10).parameters))
         self.assertEqual("l123", l0.l10.get_parameter("l123"))
         self.assertEqual("l013", l0.l10.get_parameter("l013"))
         self.assertEqual("l13", l0.l10.get_parameter("l13"))
-        self.assertEqual(6, len(l0.l11.get_protected().get_parameters()))
+        self.assertEqual(6, len(Internals(l0.l11).parameters))
         self.assertEqual("l123", l0.l11.get_parameter("l123"))
         self.assertEqual("l013", l0.l11.get_parameter("l013"))
         self.assertEqual("l13", l0.l11.get_parameter("l13"))
 
-        self.assertEqual(5, len(l0.l10.l2.get_protected().get_parameters()))
+        self.assertEqual(5, len(Internals(l0.l10.l2).parameters))
         self.assertEqual("l123", l0.l10.l2.get_parameter("l123"))
         self.assertEqual("l23", l0.l10.l2.get_parameter("l23"))
-        self.assertEqual(5, len(l0.l11.l2.get_protected().get_parameters()))
+        self.assertEqual(5, len(Internals(l0.l11.l2).parameters))
         self.assertEqual("l123", l0.l11.l2.get_parameter("l123"))
         self.assertEqual("l23", l0.l11.l2.get_parameter("l23"))
 
-        self.assertEqual(8, len(l0.l10.l2.l3.get_protected().get_parameters()))
+        self.assertEqual(8, len(Internals(l0.l10.l2.l3).parameters))
         self.assertEqual("l123", l0.l10.l2.l3.get_parameter("l123"))
         self.assertEqual("l23", l0.l10.l2.l3.get_parameter("l23"))
         self.assertEqual("l03", l0.l10.l2.l3.get_parameter("l03"))
         self.assertEqual("l013", l0.l10.l2.l3.get_parameter("l013"))
         self.assertEqual("l13", l0.l10.l2.l3.get_parameter("l13"))
-        self.assertEqual(8, len(l0.l11.l2.l3.get_protected().get_parameters()))
+        self.assertEqual(8, len(Internals(l0.l11.l2.l3).parameters))
         self.assertEqual("l123", l0.l11.l2.l3.get_parameter("l123"))
         self.assertEqual("l23", l0.l11.l2.l3.get_parameter("l23"))
         self.assertEqual("l03", l0.l11.l2.l3.get_parameter("l03"))
@@ -490,9 +484,7 @@ class InstanceTest(TestCase):
         l0 = TestClassL0("l0")
 
         try:
-            l0.update(
-                InstanceDTO(spec=SpecDTO(name=l0.get_protected().get_spec_name()))
-            )
+            l0.update(InstanceDTO(spec=SpecDTO(name=Internals(l0).spec_name)))
         except AttributeError:
             self.fail()
 
@@ -531,31 +523,31 @@ class InstanceTest(TestCase):
 
         l0.update(to_update)
 
-        self.assertEqual(7, len(l0.get_protected().get_parameters()))
+        self.assertEqual(7, len(Internals(l0).parameters))
         self.assertEqual("l0", l0.get_parameter("l0"))
         self.assertEqual("l01", l0.get_parameter("l01"))
         self.assertEqual("l012", l0.get_parameter("l012"))
         self.assertEqual("l0123", l0.get_parameter("l0123"))
 
-        self.assertEqual(6, len(l0.l10.get_protected().get_parameters()))
+        self.assertEqual(6, len(Internals(l0.l10).parameters))
         self.assertEqual("l01", l0.get_parameter("l01"))
         self.assertEqual("l012", l0.get_parameter("l012"))
         self.assertEqual("l0123", l0.get_parameter("l0123"))
-        self.assertEqual(6, len(l0.l11.get_protected().get_parameters()))
+        self.assertEqual(6, len(Internals(l0.l11).parameters))
         self.assertEqual("l01", l0.get_parameter("l01"))
         self.assertEqual("l012", l0.get_parameter("l012"))
         self.assertEqual("l0123", l0.get_parameter("l0123"))
 
-        self.assertEqual(5, len(l0.l10.l2.get_protected().get_parameters()))
+        self.assertEqual(5, len(Internals(l0.l10.l2).parameters))
         self.assertEqual("l012", l0.get_parameter("l012"))
         self.assertEqual("l0123", l0.get_parameter("l0123"))
-        self.assertEqual(5, len(l0.l11.l2.get_protected().get_parameters()))
+        self.assertEqual(5, len(Internals(l0.l11.l2).parameters))
         self.assertEqual("l012", l0.get_parameter("l012"))
         self.assertEqual("l0123", l0.get_parameter("l0123"))
 
-        self.assertEqual(4, len(l0.l10.l2.l3.get_protected().get_parameters()))
+        self.assertEqual(4, len(Internals(l0.l10.l2.l3).parameters))
         self.assertEqual("l0123", l0.get_parameter("l0123"))
-        self.assertEqual(4, len(l0.l11.l2.l3.get_protected().get_parameters()))
+        self.assertEqual(4, len(Internals(l0.l11.l2.l3).parameters))
         self.assertEqual("l0123", l0.get_parameter("l0123"))
 
     def test_instance_update_nested_instances_with_parameters_and_dependencies(self):
@@ -573,8 +565,8 @@ class InstanceTest(TestCase):
         l0.update(to_update)
 
         self.assertEqual("value", l0.a.get_parameter("updated_param"))
-        self.assertEqual(1, len(l0.b.get_protected().get_depends_on()))
-        self.assertEqual(l0.c, l0.b.get_protected().get_depends_on().pop())
+        self.assertEqual(1, len(Internals(l0.b).depends_on))
+        self.assertEqual(l0.c, Internals(l0.b).depends_on.pop())
 
     def test_instance_update_with_missing_dependency_instance(self):
         l0 = TestClassWithDifferentNestedType("base")
@@ -617,13 +609,13 @@ class InstanceTest(TestCase):
 
         l0.update(to_update)
 
-        self.assertEqual(4, len(l0.l10.get_protected().get_parameters()))
+        self.assertEqual(4, len(Internals(l0.l10).parameters))
         self.assertEqual("l10", l0.l10.get_parameter("l10"))
 
-        self.assertEqual(4, len(l0.l10.l2.get_protected().get_parameters()))
+        self.assertEqual(4, len(Internals(l0.l10.l2).parameters))
         self.assertEqual("l2", l0.l10.l2.get_parameter("l2"))
 
-        self.assertEqual(4, len(l0.l10.l2.l3.get_protected().get_parameters()))
+        self.assertEqual(4, len(Internals(l0.l10.l2.l3).parameters))
         self.assertEqual("l3", l0.l10.l2.l3.get_parameter("l3"))
 
     def test_instance_update_with_multilevel_cascading_parameters(self):
@@ -672,7 +664,7 @@ class InstanceTest(TestCase):
         l0 = TestClassL0("instance")
 
         to_retrieve = InstanceDTO(
-            name="instance", spec=SpecDTO(name=l0.get_protected().get_spec_name())
+            name="instance", spec=SpecDTO(name=Internals(l0).spec_name)
         )
 
         l0_retrieved = Instance.create_from_dto(to_retrieve)
@@ -682,7 +674,7 @@ class InstanceTest(TestCase):
     def test_instance_retrieval_with_missing_instance_name_expect_error(self):
         l0 = TestClassL0("instance")
 
-        to_retrieve = InstanceDTO(spec=SpecDTO(name=l0.get_protected().get_spec_name()))
+        to_retrieve = InstanceDTO(spec=SpecDTO(name=Internals(l0).spec_name))
 
         with self.assertRaises(ValueError):
             Instance.create_from_dto(to_retrieve)
@@ -701,18 +693,18 @@ class InstanceTest(TestCase):
         to_retrieve = InstanceDTO(
             name="instance",
             spec=SpecDTO(
-                name=l0.l10.get_protected().get_spec_name(),
+                name=Internals(l0.l10).spec_name,
                 nestedInstances=[
                     InstanceDTO(
                         name="instance",
-                        spec=SpecDTO(name=l0.get_protected().get_spec_name()),
+                        spec=SpecDTO(name=Internals(l0).spec_name),
                     )
                 ],
             ),
         )
 
         l0_retrieved = Instance.create_from_dto(to_retrieve)
-        self.assertTrue(l0_retrieved.get_protected().has_nested_instance("instance"))
+        self.assertTrue("instance" in Internals(l0_retrieved).nested_instances)
 
     def test_instance_object_serde(self):
         l0 = TestClassL0("instance")
@@ -884,9 +876,7 @@ class InstanceTest(TestCase):
 
         instance = Instance.create_from_string(json_string, mock_nonexistent=True)
         self.assertEqual("instance", instance.get_simple_name())
-        self.assertEqual(
-            "dummy.module:NotExistingClass", instance.get_protected().get_spec_name()
-        )
+        self.assertEqual("dummy.module:NotExistingClass", Internals(instance).spec_name)
         self.assertEqual("testValue", instance.get_parameter("env"))
         self.assertTrue(issubclass(instance.__class__, Instance))
         self.assertTrue(instance.__class__.__dict__["mocked"])

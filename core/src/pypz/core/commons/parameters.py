@@ -19,6 +19,7 @@ from types import GenericAlias
 from typing import Any, Callable, Generic, Optional, Type, TypeVar
 
 from pypz.core.commons.utils import is_type_allowed
+from pypz.core.specs.utils import Internals
 
 allowed_param_types = (str, int, float, set, list, dict, type(None))
 
@@ -150,18 +151,20 @@ class ExpectedParameter(Generic[ParameterType]):
 
         # TODO - evtl. checking against generic parameters
 
+        internals = Internals(instance)
+
         if (not hasattr(instance, self.internal_name)) and (
-            self.name not in instance.get_protected().get_parameters()
+            self.name not in internals.parameters
         ):
             """This is the normal init path, where an object has just been constructed and
             the parameters' initial value is set"""
 
             setattr(instance, self.internal_name, value)
-            instance.get_protected().get_parameters()[self.name] = value
+            internals.parameters[self.name] = value
             if self.on_update is not None:
                 self.on_update(instance, value)
         elif (not hasattr(instance, self.internal_name)) and (
-            self.name in instance.get_protected().get_parameters()
+            self.name in internals.parameters
         ):
             """This path usually represents the case, where a replica is created. The parameter in the dict is
             already set through the original, but the actual parameter attribute is not yet set in the replica.
@@ -171,12 +174,12 @@ class ExpectedParameter(Generic[ParameterType]):
             setattr(
                 instance,
                 self.internal_name,
-                instance.get_protected().get_parameters()[self.name],
+                internals.parameters[self.name],
             )
             if self.on_update is not None:
                 self.on_update(instance, value)
         elif (hasattr(instance, self.internal_name)) and (
-            self.name in instance.get_protected().get_parameters()
+            self.name in internals.parameters
         ):
             """This is the normal update path for both the normal and the replicated case. Logic shall be
             executed only, if there is value difference."""
@@ -185,7 +188,7 @@ class ExpectedParameter(Generic[ParameterType]):
                 setattr(instance, self.internal_name, value)
                 if self.on_update is not None:
                     self.on_update(instance, value)
-            if instance.get_protected().get_parameters()[self.name] != value:
+            if internals.parameters[self.name] != value:
                 """Note that if parameter has been set directly on the attribute, then
                 we need to update it in the parameters as well. Notice that
                 we cause recurrence, since this __set__ will be called again. This
@@ -194,7 +197,7 @@ class ExpectedParameter(Generic[ParameterType]):
                 value in the just before. Recursion is not nice, but still it is
                 the least complex solution to ensure consistency between parameters
                 and ExpectedParameter attributes."""
-                instance.get_protected().get_parameters()[self.name] = value
+                internals.parameters[self.name] = value
         else:
             """This path shall actually never be executed, since there is no case, where the value is set, but
             the parameter dict is not updated. This is ensured by the first path."""

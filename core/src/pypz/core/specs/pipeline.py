@@ -19,6 +19,7 @@ import yaml
 from pypz.core.specs.dtos import PipelineInstanceDTO, PipelineSpecDTO
 from pypz.core.specs.instance import Instance, RegisteredInterface
 from pypz.core.specs.operator import Operator
+from pypz.core.specs.utils import Internals
 
 
 class Pipeline(Instance[Operator], RegisteredInterface):
@@ -40,7 +41,7 @@ class Pipeline(Instance[Operator], RegisteredInterface):
         # Replicas must be excluded from the dto
         instance_dto.spec.nestedInstances = {
             operator.get_dto()
-            for operator in self.get_protected().get_nested_instances().values()
+            for operator in Internals(self).nested_instances.values()
             if operator.is_principal()
         }
 

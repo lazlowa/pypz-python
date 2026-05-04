@@ -20,6 +20,7 @@ from pypz.core.specs.dtos import (
     OperatorConnectionSource,
     OperatorInstanceDTO,
 )
+from pypz.core.specs.utils import Internals
 
 from core.test.specs_tests.operator_test_resources import (
     OperatorWithWrongLoggerPlugin,
@@ -291,8 +292,8 @@ class OperatorInstanceTest(unittest.TestCase):
             self.assertEqual(replica.param_e, pipeline.operator_a.param_e)
 
             self.assertIs(
-                pipeline.operator_a.get_protected().get_parameters(),
-                replica.get_protected().get_parameters(),
+                Internals(pipeline.operator_a).parameters,
+                Internals(replica).parameters,
             )
 
         pipeline.operator_a.param_a = 1
@@ -322,8 +323,8 @@ class OperatorInstanceTest(unittest.TestCase):
             self.assertEqual(replica.param_e, pipeline.operator_a.param_e)
 
             self.assertIs(
-                pipeline.operator_a.get_protected().get_parameters(),
-                replica.get_protected().get_parameters(),
+                Internals(pipeline.operator_a).parameters,
+                Internals(replica).parameters,
             )
 
         pipeline.operator_a.get_replica(0).param_a = 12345
@@ -353,8 +354,8 @@ class OperatorInstanceTest(unittest.TestCase):
             self.assertEqual(replica.param_e, pipeline.operator_a.param_e)
 
             self.assertIs(
-                pipeline.operator_a.get_protected().get_parameters(),
-                replica.get_protected().get_parameters(),
+                Internals(pipeline.operator_a).parameters,
+                Internals(replica).parameters,
             )
 
     def test_operator_replication_indirect_set_parameter_attribute_expect_equality(
@@ -383,8 +384,8 @@ class OperatorInstanceTest(unittest.TestCase):
             self.assertEqual(replica.param_e, pipeline.operator_a.param_e)
 
             self.assertIs(
-                pipeline.operator_a.get_protected().get_parameters(),
-                replica.get_protected().get_parameters(),
+                Internals(pipeline.operator_a).parameters,
+                Internals(replica).parameters,
             )
 
         pipeline.operator_a.set_parameter("param_a", 1)
@@ -414,8 +415,8 @@ class OperatorInstanceTest(unittest.TestCase):
             self.assertEqual(replica.param_e, pipeline.operator_a.param_e)
 
             self.assertIs(
-                pipeline.operator_a.get_protected().get_parameters(),
-                replica.get_protected().get_parameters(),
+                Internals(pipeline.operator_a).parameters,
+                Internals(replica).parameters,
             )
 
         pipeline.operator_a.get_replica(0).set_parameter("param_a", 12345)
@@ -445,8 +446,8 @@ class OperatorInstanceTest(unittest.TestCase):
             self.assertEqual(replica.param_e, pipeline.operator_a.param_e)
 
             self.assertIs(
-                pipeline.operator_a.get_protected().get_parameters(),
-                replica.get_protected().get_parameters(),
+                Internals(pipeline.operator_a).parameters,
+                Internals(replica).parameters,
             )
 
     def test_operator_replication_basic_attributes_without_pipeline_context(self):
@@ -470,27 +471,31 @@ class OperatorInstanceTest(unittest.TestCase):
 
     def test_operator_replication_replica_equality_without_updates(self):
         operator = TestOperatorWithPortPlugins("operator", 5)
+        operator_internals = Internals(operator)
 
         for replica in operator.get_replicas():
+            replica_internals = Internals(operator)
+
             self.assertEqual(5, replica.get_replication_factor())
             self.assertEqual(id(operator), id(replica.get_group_principal()))
             self.assertEqual(0, len(replica.get_replicas()))
             self.assertEqual(id(operator.get_context()), id(replica.get_context()))
             self.assertEqual(
-                operator.get_protected().get_nested_instances(),
-                replica.get_protected().get_nested_instances(),
+                operator_internals.nested_instances,
+                replica_internals.nested_instances,
             )
             self.assertEqual(
-                operator.get_protected().get_parameters(),
-                replica.get_protected().get_parameters(),
+                operator_internals.parameters,
+                replica_internals.parameters,
             )
             self.assertEqual(
-                operator.get_protected().get_depends_on(),
-                replica.get_protected().get_depends_on(),
+                operator_internals.depends_on,
+                replica_internals.depends_on,
             )
 
     def test_operator_replication_replica_equality_with_updates_on_origin(self):
         operator = TestOperatorWithPortPlugins("operator", 1)
+        operator_internals = Internals(operator)
 
         operator.set_parameter("param", "value")
         operator.output_port.depends_on(operator.input_port)
@@ -501,33 +506,35 @@ class OperatorInstanceTest(unittest.TestCase):
         operator.output_port.set_parameter("_opt_int", 4321)
 
         for replica in operator.get_replicas():
+            replica_internals = Internals(operator)
+
             self.assertEqual(
-                operator.get_protected().get_nested_instances(),
-                replica.get_protected().get_nested_instances(),
+                operator_internals.nested_instances,
+                replica_internals.nested_instances,
             )
             self.assertEqual(
-                id(operator.get_protected().get_parameters()),
-                id(replica.get_protected().get_parameters()),
+                id(operator_internals.parameters),
+                id(replica_internals.parameters),
             )
             self.assertEqual(
-                id(operator.get_protected().get_depends_on()),
-                id(replica.get_protected().get_depends_on()),
+                id(operator_internals.depends_on),
+                id(replica_internals.depends_on),
             )
             self.assertEqual(
-                id(operator.output_port.get_protected().get_parameters()),
-                id(replica.output_port.get_protected().get_parameters()),
+                id(Internals(operator.output_port).parameters),
+                id(Internals(replica.output_port).parameters),
             )
             self.assertEqual(
-                id(operator.output_port.get_protected().get_depends_on()),
-                id(replica.output_port.get_protected().get_depends_on()),
+                id(Internals(operator.output_port).depends_on),
+                id(Internals(replica.output_port).depends_on),
             )
             self.assertEqual(
-                id(operator.input_port.get_protected().get_parameters()),
-                id(replica.input_port.get_protected().get_parameters()),
+                id(Internals(operator.input_port).parameters),
+                id(Internals(replica.input_port).parameters),
             )
             self.assertEqual(
-                id(operator.input_port.get_protected().get_depends_on()),
-                id(replica.input_port.get_protected().get_depends_on()),
+                id(Internals(operator.input_port).depends_on),
+                id(Internals(replica.input_port).depends_on),
             )
             self.assertEqual(
                 id(operator.output_port.req_str), id(replica.output_port.req_str)
@@ -558,32 +565,32 @@ class OperatorInstanceTest(unittest.TestCase):
 
         for replica in operator.get_replicas():
             self.assertEqual(
-                operator.get_protected().get_nested_instances(),
-                replica.get_protected().get_nested_instances(),
+                Internals(operator).nested_instances,
+                Internals(replica).nested_instances,
             )
             self.assertEqual(
-                id(operator.get_protected().get_parameters()),
-                id(replica.get_protected().get_parameters()),
+                id(Internals(operator).parameters),
+                id(Internals(replica).parameters),
             )
             self.assertEqual(
-                id(operator.get_protected().get_depends_on()),
-                id(replica.get_protected().get_depends_on()),
+                id(Internals(operator).depends_on),
+                id(Internals(replica).depends_on),
             )
             self.assertEqual(
-                id(operator.output_port.get_protected().get_parameters()),
-                id(replica.output_port.get_protected().get_parameters()),
+                id(Internals(operator.output_port).parameters),
+                id(Internals(replica.output_port).parameters),
             )
             self.assertEqual(
-                id(operator.output_port.get_protected().get_depends_on()),
-                id(replica.output_port.get_protected().get_depends_on()),
+                id(Internals(operator.output_port).depends_on),
+                id(Internals(replica.output_port).depends_on),
             )
             self.assertEqual(
-                id(operator.input_port.get_protected().get_parameters()),
-                id(replica.input_port.get_protected().get_parameters()),
+                id(Internals(operator.input_port).parameters),
+                id(Internals(replica.input_port).parameters),
             )
             self.assertEqual(
-                id(operator.input_port.get_protected().get_depends_on()),
-                id(replica.input_port.get_protected().get_depends_on()),
+                id(Internals(operator.input_port).depends_on),
+                id(Internals(replica.input_port).depends_on),
             )
             self.assertEqual(
                 id(operator.output_port.req_str), id(replica.output_port.req_str)
@@ -613,32 +620,32 @@ class OperatorInstanceTest(unittest.TestCase):
 
         for replica in operator.get_replicas():
             self.assertEqual(
-                operator.get_protected().get_nested_instances(),
-                replica.get_protected().get_nested_instances(),
+                Internals(operator).nested_instances,
+                Internals(replica).nested_instances,
             )
             self.assertEqual(
-                id(operator.get_protected().get_parameters()),
-                id(replica.get_protected().get_parameters()),
+                id(Internals(operator).parameters),
+                id(Internals(replica).parameters),
             )
             self.assertEqual(
-                id(operator.get_protected().get_depends_on()),
-                id(replica.get_protected().get_depends_on()),
+                id(Internals(operator).depends_on),
+                id(Internals(replica).depends_on),
             )
             self.assertEqual(
-                id(operator.output_port.get_protected().get_parameters()),
-                id(replica.output_port.get_protected().get_parameters()),
+                id(Internals(operator.output_port).parameters),
+                id(Internals(replica.output_port).parameters),
             )
             self.assertEqual(
-                id(operator.output_port.get_protected().get_depends_on()),
-                id(replica.output_port.get_protected().get_depends_on()),
+                id(Internals(operator.output_port).depends_on),
+                id(Internals(replica.output_port).depends_on),
             )
             self.assertEqual(
-                id(operator.input_port.get_protected().get_parameters()),
-                id(replica.input_port.get_protected().get_parameters()),
+                id(Internals(operator.input_port).parameters),
+                id(Internals(replica.input_port).parameters),
             )
             self.assertEqual(
-                id(operator.input_port.get_protected().get_depends_on()),
-                id(replica.input_port.get_protected().get_depends_on()),
+                id(Internals(operator.input_port).depends_on),
+                id(Internals(replica.input_port).depends_on),
             )
             self.assertEqual(
                 id(operator.output_port.req_str), id(replica.output_port.req_str)
@@ -671,32 +678,32 @@ class OperatorInstanceTest(unittest.TestCase):
 
         for replica in operator.get_replicas():
             self.assertEqual(
-                operator.get_protected().get_nested_instances(),
-                replica.get_protected().get_nested_instances(),
+                Internals(operator).nested_instances,
+                Internals(replica).nested_instances,
             )
             self.assertEqual(
-                id(operator.get_protected().get_parameters()),
-                id(replica.get_protected().get_parameters()),
+                id(Internals(operator).parameters),
+                id(Internals(replica).parameters),
             )
             self.assertEqual(
-                id(operator.get_protected().get_depends_on()),
-                id(replica.get_protected().get_depends_on()),
+                id(Internals(operator).depends_on),
+                id(Internals(replica).depends_on),
             )
             self.assertEqual(
-                id(operator.output_port.get_protected().get_parameters()),
-                id(replica.output_port.get_protected().get_parameters()),
+                id(Internals(operator.output_port).parameters),
+                id(Internals(replica.output_port).parameters),
             )
             self.assertEqual(
-                id(operator.output_port.get_protected().get_depends_on()),
-                id(replica.output_port.get_protected().get_depends_on()),
+                id(Internals(operator.output_port).depends_on),
+                id(Internals(replica.output_port).depends_on),
             )
             self.assertEqual(
-                id(operator.input_port.get_protected().get_parameters()),
-                id(replica.input_port.get_protected().get_parameters()),
+                id(Internals(operator.input_port).parameters),
+                id(Internals(replica.input_port).parameters),
             )
             self.assertEqual(
-                id(operator.input_port.get_protected().get_depends_on()),
-                id(replica.input_port.get_protected().get_depends_on()),
+                id(Internals(operator.input_port).depends_on),
+                id(Internals(replica.input_port).depends_on),
             )
             self.assertEqual(
                 id(operator.output_port.req_str), id(replica.output_port.req_str)

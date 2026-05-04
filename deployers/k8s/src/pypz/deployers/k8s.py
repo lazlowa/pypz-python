@@ -33,6 +33,7 @@ from kubernetes.client import (
 from pypz.core.commons.loggers import ContextLogger, DefaultContextLogger
 from pypz.core.specs.operator import Operator
 from pypz.core.specs.pipeline import Pipeline
+from pypz.core.specs.utils import Internals
 from pypz.deployers.base import Deployer, DeploymentState
 from pypz.executors.commons import ExecutionMode
 from pypz.operators.k8s import KubernetesOperator
@@ -176,7 +177,9 @@ class KubernetesDeployer(Deployer):
                 f"Pipeline already deployed: {pipeline.get_full_name()}"
             )
 
-        for operator in pipeline.get_protected().get_nested_instances().values():
+        pipeline_internals = Internals(pipeline)
+
+        for operator in pipeline_internals.nested_instances.values():
             operator_state = self.retrieve_operator_state(operator.get_full_name())
             if DeploymentState.NotExisting != operator_state:
                 raise DeploymentConflictException(
@@ -194,7 +197,7 @@ class KubernetesDeployer(Deployer):
                 KubernetesDeployer.sanitize(
                     operator.get_full_name()
                 ): operator.get_simple_name()
-                for operator in pipeline.get_protected().get_nested_instances().values()
+                for operator in pipeline_internals.nested_instances.values()
             }
             secret_labels[KubernetesDeployer._label_key_instance_type] = (
                 KubernetesDeployer._label_value_pipeline
@@ -228,7 +231,7 @@ class KubernetesDeployer(Deployer):
                 time.sleep(1)
 
             # Operator deployment
-            for operator in pipeline.get_protected().get_nested_instances().values():
+            for operator in pipeline_internals.nested_instances.values():
                 self._core_v1_api.create_namespaced_pod(
                     self._namespace,
                     body=self._generate_pod_manifest(
@@ -254,7 +257,7 @@ class KubernetesDeployer(Deployer):
             self._logger.error("Rolling back deployment ...")
 
             # Delete deployed operators gracefully
-            for operator in pipeline.get_protected().get_nested_instances().values():
+            for operator in pipeline_internals.nested_instances.values():
                 if DeploymentState.NotExisting != self.retrieve_operator_state(
                     operator.get_full_name()
                 ):
@@ -289,9 +292,7 @@ class KubernetesDeployer(Deployer):
     ) -> None:
         deployed_pipeline = self.retrieve_deployed_pipeline(pipeline_name)
         # Delete deployed operators
-        for operator in (
-            deployed_pipeline.get_protected().get_nested_instances().values()
-        ):
+        for operator in Internals(deployed_pipeline).nested_instances.values():
             if DeploymentState.NotExisting != self.retrieve_operator_state(
                 operator.get_full_name()
             ):
@@ -345,9 +346,9 @@ class KubernetesDeployer(Deployer):
         deployed_pipeline: Pipeline = self._retrieve_deployed_pipeline_from_secret(
             secret
         )
-        operator: Operator = deployed_pipeline.get_protected().get_nested_instance(
+        operator: Operator = Internals(deployed_pipeline).nested_instances[
             operator_simple_name
-        )
+        ]
 
         if self._retrieve_operator_pod(operator_pod_name) is not None:
             self.destroy_operator(operator_pod_name, force)
