@@ -172,9 +172,7 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
     def __init__(self, name: str = None, *args, **kwargs):
         super().__init__(name, Plugin, *args, **kwargs)
 
-        internals = Internals(self)
-
-        self.__replication_origin: Optional[Operator] = internals.reference
+        self.__replication_origin: Optional[Operator] = None
         """
         Reference to the original instance, which was the base for the replication
         """
@@ -184,11 +182,7 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
         List of replica instances
         """
 
-        self._replication_factor: int = (
-            0
-            if internals.reference is None
-            else internals.reference.get_replication_factor()
-        )
+        self._replication_factor: int = 0
         """
         PARAMETER - The replication factor specifies, how many replicas shall be created along
         the original instance.

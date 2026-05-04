@@ -190,12 +190,6 @@ class Instance(
         be able to discover those instances
         """
 
-        self.__reference = kwargs["reference"] if "reference" in kwargs else None
-        """
-        Reference to the reference instance. If specified, then some instance internal
-        configuration related attributes will refer to the attributes of the reference instance.
-        """
-
         self.__context: Instance = kwargs["context"] if "context" in kwargs else None
         """
         Reference to the context aka parent object. Derived automatically
@@ -213,18 +207,6 @@ class Instance(
         Name of the instance, which is represented by the object created from the
         implementation class. If not provided and there is a parent context, then
         the parent context will use the name of the variable.
-        """
-
-        self.__full_name: str = (
-            self.__simple_name
-            if self.__context is None
-            else self.__context.get_full_name() + "." + self.__simple_name
-        )
-        """
-        Full name of the instance which uniquely identifies it up to its topmost context.
-        For example, if an instance A has a parent context B, which has a parent context C,
-        then the full name of A is 'C.B.A'. This value is calculated and the result is
-        stored after the first calculation to avoid recalculation every time.
         """
 
         self.__spec_name: str = ":".join(
@@ -257,18 +239,12 @@ class Instance(
         shall be set upon instance parameter setting.
         """
 
-        self.__parameters: InstanceParameters = (
-            self.__reference.__parameters
-            if self.__reference is not None
-            else InstanceParameters()
-        )
+        self.__parameters: InstanceParameters = InstanceParameters()
         """
         The interpreted instance parameters i.e., cascading and templates are interpreted
         """
 
-        self.__depends_on: set = (
-            self.__reference.__depends_on if self.__reference is not None else set()
-        )
+        self.__depends_on: set = set()
         """
         Set of other instances that is this instance depending on. Note however that
         the type of the dependencies are checked dynamically in runtime, since dependencies
@@ -314,7 +290,17 @@ class Instance(
         return self.__simple_name
 
     def get_full_name(self) -> str:
-        return self.__full_name
+        """
+        Full name of the instance which uniquely identifies it up to its topmost context.
+        For example, if an instance A has a parent context B, which has a parent context C,
+        then the full name of A is 'C.B.A'. This value is calculated and the result is
+        stored after the first calculation to avoid recalculation every time.
+        """
+        return (
+            self.get_simple_name()
+            if self.get_context() is None
+            else self.get_context().get_full_name() + "." + self.get_simple_name()
+        )
 
     def get_parameter(self, name: str):
         return self.__parameters[name]
@@ -422,9 +408,9 @@ class Instance(
                 if (expected_param.name not in self.__parameters) or (
                     self.__parameters[expected_param.name] is None
                 ):
-                    if self.__full_name not in missing_required_parameters:
-                        missing_required_parameters[self.__full_name] = set()
-                    missing_required_parameters[self.__full_name].add(
+                    if self.get_full_name() not in missing_required_parameters:
+                        missing_required_parameters[self.get_full_name()] = set()
+                    missing_required_parameters[self.get_full_name()].add(
                         expected_param.name
                     )
 
@@ -445,23 +431,23 @@ class Instance(
 
         if not isinstance(instance, Instance):
             raise TypeError(
-                f"[{self.__full_name}] Invalid dependency type: {type(instance)}"
+                f"[{self.get_full_name()}] Invalid dependency type: {type(instance)}"
             )
 
         # Instance cannot depend on self
         if self is instance:
             raise AttributeError(
-                f"[{self.__full_name}] Invalid dependency. Instance cannot depend on itself. "
+                f"[{self.get_full_name()}] Invalid dependency. Instance cannot depend on itself. "
             )
 
         # Makes no sense to express dependency between instances in different context
         if (
-            (self.__context is None)
-            or (instance.__context is None)
-            or (self.__context is not instance.__context)
+            (self.get_context() is None)
+            or (instance.get_context() is None)
+            or (self.get_context() is not instance.get_context())
         ):
             raise AttributeError(
-                f"[{self.__full_name}] Invalid dependency. "
+                f"[{self.get_full_name()}] Invalid dependency. "
                 f"Dependencies must have identical parent context."
             )
 
@@ -469,7 +455,7 @@ class Instance(
         if self in instance.__depends_on:
             raise RecursionError(
                 f"Circular dependency between detected: "
-                f"{self.__full_name} <-> {instance.__full_name} "
+                f"{self.get_full_name()} <-> {instance.get_full_name()} "
             )
 
         self.__depends_on.add(instance)
@@ -487,7 +473,7 @@ class Instance(
         raw_parameters.update(self.__parameters)
 
         return InstanceDTO(
-            name=self.__simple_name,
+            name=self.get_simple_name(),
             parameters=raw_parameters,
             dependsOn=[instance.get_simple_name() for instance in self.__depends_on],
             spec=SpecDTO(
@@ -527,11 +513,11 @@ class Instance(
             raise TypeError(f"Invalid update source type: {type(source)}")
 
         if (instance_dto.name is not None) and (
-            instance_dto.name != self.__simple_name
+            instance_dto.name != self.get_simple_name()
         ):
             raise ValueError(
                 f"Mismatching instance name provided ({instance_dto.name}) and actual "
-                f"({self.__simple_name}) instance name. "
+                f"({self.get_simple_name()}) instance name. "
             )
 
         if instance_dto.parameters is not None:
@@ -545,7 +531,7 @@ class Instance(
                 instance_dto.spec.name != self.__spec_name
             ):
                 raise AttributeError(
-                    f"[{self.__full_name}] Mismatching specs name. Loaded: {self.__spec_name}; "
+                    f"[{self.get_full_name()}] Mismatching specs name. Loaded: {self.__spec_name}; "
                     f"Provided: {instance_dto.spec.name}"
                 )
 
@@ -573,13 +559,13 @@ class Instance(
 
         if instance_dto.dependsOn is not None:
             for instance_name in instance_dto.dependsOn:
-                if instance_name not in self.__context.__nested_instances:
+                if instance_name not in self.get_context().__nested_instances:
                     raise AttributeError(
-                        f"[{self.__full_name}] Instance not found in context "
-                        f"'{self.__context.__full_name}': {instance_name}"
+                        f"[{self.get_full_name()}] Instance not found in context "
+                        f"'{self.get_context().get_full_name()}': {instance_name}"
                     )
 
-                self.depends_on(self.__context.__nested_instances[instance_name])
+                self.depends_on(self.get_context().__nested_instances[instance_name])
 
     # ========= protected methods ==========
 
@@ -598,7 +584,7 @@ class Instance(
                     instance_dto.spec.name != self.__spec_name
                 ):
                     raise AttributeError(
-                        f"[{self.__full_name}] Mismatching specs name: {self.__spec_name}; "
+                        f"[{self.get_full_name()}] Mismatching specs name: {self.__spec_name}; "
                         f"Expected: {instance_dto.spec.name}"
                     )
 
@@ -607,7 +593,7 @@ class Instance(
                 ):
                     if self.__nested_instance_type is None:
                         raise AttributeError(
-                            f"[{self.__full_name}] "
+                            f"[{self.get_full_name()}] "
                             f"No nested instance is expected for {type(self)}"
                         )
 
@@ -620,18 +606,10 @@ class Instance(
                         # an already existing instance refers to a not yet existing
                         # then error will arise.
                         if nested_instance_dto.name not in self.__nested_instances:
-                            nested_instance_reference = (
-                                self.__reference.__nested_instances[
-                                    nested_instance_dto.name
-                                ]
-                                if self.__reference is not None
-                                else None
-                            )
                             new_nested_instance = (
                                 self.__nested_instance_type.create_from_dto(
                                     nested_instance_dto,
                                     context=self,
-                                    reference=nested_instance_reference,
                                     mock_nonexistent=True,
                                     disable_auto_update=True,
                                 )
@@ -646,7 +624,8 @@ class Instance(
                                     f"{self.__nested_instance_type}"
                                 )
                             self.__setattr__(
-                                new_nested_instance.__simple_name, new_nested_instance
+                                new_nested_instance.get_simple_name(),
+                                new_nested_instance,
                             )
 
     # ========= internal methods ==========
@@ -667,18 +646,13 @@ class Instance(
             final_instance_name = (
                 value.instance_name if value.instance_name is not None else name
             )
-            nested_instance_reference = (
-                self.__reference.__nested_instances[final_instance_name]
-                if self.__reference is not None
-                else None
-            )
+
             if (self.__nested_instance_type is not None) and (
                 issubclass(value.context_class, self.__nested_instance_type)
             ):
                 instance: Instance[Any] = value.context_class(
                     final_instance_name,
                     context=self,
-                    reference=nested_instance_reference,
                     *value.args,
                     **value.kwargs,
                 )
@@ -686,7 +660,6 @@ class Instance(
                 instance: Instance[Any] = value.context_class(
                     final_instance_name,
                     context=None,
-                    reference=nested_instance_reference,
                     *value.args,
                     **value.kwargs,
                 )
@@ -699,7 +672,7 @@ class Instance(
             hasattr(self, f"_{Instance.__name__}__nested_instance_type")
             and (self.__nested_instance_type is not None)
             and isinstance(instance, self.__nested_instance_type)
-            and (instance is not self.__context)
+            and (instance is not self.get_context())
         ):
             if instance.get_simple_name() in self.__nested_instances:
                 raise AttributeError(
@@ -714,7 +687,7 @@ class Instance(
 
         return (
             isinstance(other, type(self))
-            and (self.__simple_name == other.__simple_name)
+            and (self.get_full_name() == other.get_full_name())
             and (self.__parameters == other.__parameters)
             and (self.__depends_on == other.__depends_on)
             and (self.__nested_instances == other.__nested_instances)
@@ -722,11 +695,17 @@ class Instance(
             and (self.__spec_name == other.__spec_name)
         )
 
+    def __ne__(self, other):
+        result = self.__eq__(other)
+        if result is NotImplemented:
+            return NotImplemented
+        return not result
+
     def __str__(self):
         return yaml.safe_dump(convert_to_dict(self.get_dto()), default_flow_style=False)
 
     def __hash__(self):
-        return hash((self.__full_name, self.__spec_name))
+        return hash((self.get_full_name(), self.__spec_name))
 
     def __getattr__(self, name):
         return self.__getattribute__(name)
