@@ -26,7 +26,12 @@ from pypz.core.specs.dtos import (
     OperatorInstanceDTO,
     OperatorSpecDTO,
 )
-from pypz.core.specs.instance import Instance, InstanceGroup, RegisteredInterface
+from pypz.core.specs.instance import (
+    Instance,
+    InstanceGroup,
+    RegisteredInterface,
+    ReplicaContext,
+)
 from pypz.core.specs.plugin import (
     InputPortPlugin,
     LoggerPlugin,
@@ -48,7 +53,7 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
     :param name: name of the instance, if not provided, it will be attempted to deduce from the variable's name
     """
 
-    # ========================= inner logger class =========================
+    # ========================= inner classes =========================
 
     class Logger(ContextLoggerInterface):
         """
@@ -177,7 +182,7 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
         Reference to the original instance, which was the base for the replication
         """
 
-        self.__replicas: list[Operator] = []
+        self.__replicas: list[ReplicaContext] = []
         """
         List of replica instances
         """
@@ -299,7 +304,7 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
             self.__replication_origin is self
         )
 
-    def get_replica(self, replica_id: int) -> "Operator":
+    def get_replica(self, replica_id: int) -> ReplicaContext:
         """
         Returns the replica instance by id. The id is the actual place in the
         replica list, which is ensured during the replica creation.
@@ -309,7 +314,7 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
         """
         return self.__replicas[replica_id]
 
-    def get_replicas(self) -> list["Operator"]:
+    def get_replicas(self) -> list[ReplicaContext]:
         """
         :return: replica list
         """
@@ -360,12 +365,7 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
         # Update connections
         # ==================
 
-        # Replicas shall not update connections as those are shared from the original
-        if (
-            (instance_dto.connections is not None)
-            and (self.get_context() is not None)
-            and self.is_principal()
-        ):
+        if instance_dto.connections and self.get_context():
             internals = Internals(self)
             for connection in instance_dto.connections:
                 if connection.inputPortName not in internals.nested_instances:
@@ -431,16 +431,7 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
                 self.__replication_group_index = 0
 
             for idx in range(len(self.__replicas), self._replication_factor):
-                replica_dto = self.get_dto()
-                replica_dto.name = self.get_simple_name() + "_" + str(idx)
-
-                replica = Operator.create_from_dto(
-                    replica_dto,
-                    context=self.get_context(),
-                    reference=self,
-                    replication_group_index=idx + 1,
-                    mock_nonexistent=True,
-                )
+                replica = ReplicaContext(self, idx)
 
                 if self.get_context() is not None:
                     self.get_context().__setattr__(replica.get_simple_name(), replica)
