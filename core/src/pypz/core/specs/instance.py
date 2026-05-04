@@ -36,6 +36,7 @@ from pypz.core.specs.utils import (
     ExcludedCascadingParameterPrefix,
     IncludedCascadingParameterPrefix,
     InstanceParameters,
+    Internals,
     load_class_by_name,
     remove_super_classes,
 )
@@ -912,9 +913,7 @@ class ReplicaContext(ObjectProxy, InstanceGroup):
     def _build_replica_map(self) -> dict[int, "ReplicaContext"]:
         replica_map = {id(self.__wrapped__): self}
 
-        for nested_instance in (
-            self.__wrapped__.get_protected().get_nested_instances().values()
-        ):
+        for nested_instance in Internals(self.__wrapped__).nested_instances.values():
             child = self._get_or_create_child_replica(nested_instance)
             replica_map.update(child._build_replica_map())
 
@@ -942,9 +941,7 @@ class ReplicaContext(ObjectProxy, InstanceGroup):
             return self._self_parent_context
 
         if isinstance(value, Instance):
-            nested_instances = (
-                self.__wrapped__.get_protected().get_nested_instances().values()
-            )
+            nested_instances = Internals(self.__wrapped__).nested_instances.values()
             if any(value is nested for nested in nested_instances):
                 return self._get_or_create_child_replica(value)
 
@@ -980,12 +977,6 @@ class ReplicaContext(ObjectProxy, InstanceGroup):
         return value
 
     def __getattribute__(self, name):
-        if name == "get_protected":
-            raise PermissionError(
-                "Protected access is not supported through ReplicaContext. "
-                "Use the original instance instead."
-            )
-
         if name.startswith("_self_") or name in {
             "__wrapped__",
             "__class__",
@@ -1028,7 +1019,7 @@ class ReplicaContext(ObjectProxy, InstanceGroup):
 
     def __setattr__(self, name, value):
         if name.startswith("_self_") or name == "__wrapped__":
-            object.__setattr__(self, name, value)
+            super().__setattr__(name, value)
             return
 
         unwrapped_value = self._unwrap_instance_value(value)
