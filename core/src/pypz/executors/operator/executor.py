@@ -22,6 +22,7 @@ import traceback
 from pypz.core.commons.utils import SynchronizedReference, TemplateResolver
 from pypz.core.specs.operator import Operator
 from pypz.core.specs.plugin import ExtendedPlugin, Plugin
+from pypz.core.specs.utils import Internals
 from pypz.executors.commons import ExecutionMode, ExitCodes
 from pypz.executors.operator.context import ExecutionContext
 from pypz.executors.operator.signals import (
@@ -76,6 +77,11 @@ class OperatorExecutor:
         The actual operator instance, which shall be processed by the state machine
         """
 
+        self.__operator_internals = Internals(self.__operator)
+        """
+        Helper utility to allow access to internal properties of the operator
+        """
+
         self.__context: ExecutionContext | None = None
         """
         The stored execution context for this executor
@@ -116,13 +122,13 @@ class OperatorExecutor:
         # ==================
 
         # Resolve runtime templates as well for plugins
-        for name, value in self.__operator.get_protected().get_parameters().items():
+        for name, value in self.__operator_internals.parameters.items():
             self.__operator.set_parameter(
                 name, TemplateResolver("$(", ")").resolve(value)
             )
 
-        for plugin in self.__operator.get_protected().get_nested_instances().values():
-            for name, value in plugin.get_protected().get_parameters().items():
+        for plugin in self.__operator_internals.nested_instances.values():
+            for name, value in Internals(plugin).parameters.items():
                 plugin.set_parameter(name, TemplateResolver("$(", ")").resolve(value))
 
         # This is the point, where required parameters shall be checked, before continue
@@ -143,7 +149,7 @@ class OperatorExecutor:
             )
 
         # If a non-mock operator has a mock plugin, then something went wrong
-        for plugin in self.__operator.get_protected().get_nested_instances().values():
+        for plugin in self.__operator_internals.nested_instances.values():
             if "mocked" in plugin.__class__.__dict__:
                 raise PermissionError(
                     f"[{plugin.get_full_name()}] Mock plugin in regular operator"
@@ -228,12 +234,12 @@ class OperatorExecutor:
                 try:
                     self.__context.for_each_plugin_objects_with_type(
                         ExtendedPlugin,
-                        lambda plugin: plugin.get_protected().post_execution(),
+                        lambda plugin: Internals(plugin).post_execution(),
                     )
                 except Exception as e:  # noqa: F841
                     self.__context.for_each_plugin_objects_with_type(
                         ExtendedPlugin,
-                        lambda plugin: plugin.get_protected().on_error(
+                        lambda plugin: Internals(plugin).on_error(
                             self.__class__, e  # noqa: F821
                         ),
                     )
@@ -268,12 +274,12 @@ class OperatorExecutor:
             # Addons shall be initialized as early as possible to cover the most part
             # of the execution
             self.__context.for_each_plugin_objects_with_type(
-                ExtendedPlugin, lambda plugin: plugin.get_protected().pre_execution()
+                ExtendedPlugin, lambda plugin: Internals(plugin).pre_execution()
             )
         except Exception as e:  # noqa: F841
             self.__context.for_each_plugin_objects_with_type(
                 ExtendedPlugin,
-                lambda plugin: plugin.get_protected().on_error(
+                lambda plugin: Internals(plugin).on_error(
                     self.__class__, e  # noqa: F821
                 ),
             )
@@ -380,7 +386,7 @@ class OperatorExecutor:
             try:
                 self.__context.for_each_plugin_objects_with_type(
                     Plugin,
-                    lambda plugin: plugin.get_protected().on_interrupt(signal_number),
+                    lambda plugin: Internals(plugin).on_interrupt(signal_number),
                 )
             except:  # noqa: E722
                 # Ignore exception to be able to proceed with the shutdown
@@ -388,7 +394,7 @@ class OperatorExecutor:
 
             # Invoking operator's on_interrupt() method
             try:
-                self.__operator.get_protected().on_interrupt(signal_number)
+                self.__operator_internals.on_interrupt(signal_number)
             except:  # noqa: E722
                 # Ignore exception to be able to proceed with the shutdown
                 traceback.print_exc(file=sys.stderr)

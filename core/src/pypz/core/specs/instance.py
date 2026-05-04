@@ -30,7 +30,6 @@ from pypz.core.commons.parameters import (
 from pypz.core.commons.utils import TemplateResolver, convert_to_dict, is_type_allowed
 from pypz.core.specs.dtos import InstanceDTO, SpecDTO
 from pypz.core.specs.utils import (
-    AccessWrapper,
     ExcludedCascadingParameterPrefix,
     IncludedCascadingParameterPrefix,
     InstanceParameters,
@@ -142,6 +141,19 @@ class Instance(
     :param name: name of the instance, if not provided, it will be attempted to deduce from the variable's name
     :param nested_instance_type: type of the expected nested instances
     """
+
+    _internal_access = {
+        "parameters",
+        "nested_instances",
+        "depends_on",
+        "spec_name",
+        "spec_classes",
+        "expected_parameters",
+        "nested_instance_type",
+        "reference",
+        "on_interrupt",
+        "on_error",
+    }
 
     # ========= ctor ==========
 
@@ -271,12 +283,6 @@ class Instance(
                 param.name,
                 lambda value, p=param, instance=self: p.__set__(instance, value),
             )
-
-        """ It is clear that in python anything can be accessed, however methods and attributes that
-            should not be used are hidden (at least from autocompletion) from the user, still with
-            the following dynamically created method it is possible to access them so that the IDE
-            is not complaining. """
-        object.__setattr__(self, "get_protected", lambda this=self: AccessWrapper(this))
 
     # ========= overridable methods ==========
 

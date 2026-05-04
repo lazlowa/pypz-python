@@ -22,6 +22,7 @@ from pypz.core.channels.status import ChannelStatusMessage
 from pypz.core.commons.utils import SynchronizedReference
 from pypz.core.specs.misc import BlankInputPortPlugin, BlankOutputPortPlugin
 from pypz.core.specs.pipeline import Pipeline
+from pypz.core.specs.utils import Internals
 
 
 class ChannelSniffer:
@@ -98,11 +99,9 @@ class PipelineSniffer:
         self.all_opened: SynchronizedReference[bool] = SynchronizedReference(False)
         self.all_closed: SynchronizedReference[bool] = SynchronizedReference(False)
 
-        for operator in pipeline.get_protected().get_nested_instances().values():
+        for operator in Internals(pipeline).nested_instances.values():
             if operator.is_principal():
-                for input_port in (
-                    operator.get_protected().get_nested_instances().values()
-                ):
+                for input_port in Internals(operator).get_nested_instances().values():
                     if isinstance(input_port, ChannelInputPort):
                         for output_port in input_port.get_connected_ports():
                             if isinstance(output_port, ChannelOutputPort):

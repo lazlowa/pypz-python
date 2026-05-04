@@ -33,6 +33,7 @@ from pypz.core.specs.plugin import (
     OutputPortPlugin,
     Plugin,
 )
+from pypz.core.specs.utils import Internals
 
 if TYPE_CHECKING:
     from pypz.core.specs.pipeline import Pipeline
@@ -171,9 +172,9 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
     def __init__(self, name: str = None, *args, **kwargs):
         super().__init__(name, Plugin, *args, **kwargs)
 
-        self.__replication_origin: Optional[Operator] = (
-            self.get_protected().get_reference()
-        )
+        internals = Internals(self)
+
+        self.__replication_origin: Optional[Operator] = internals.reference
         """
         Reference to the original instance, which was the base for the replication
         """
@@ -185,8 +186,8 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
 
         self._replication_factor: int = (
             0
-            if self.get_protected().get_reference() is None
-            else self.get_protected().get_reference().get_replication_factor()
+            if internals.reference is None
+            else internals.reference.get_replication_factor()
         )
         """
         PARAMETER - The replication factor specifies, how many replicas shall be created along
@@ -323,7 +324,7 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
 
     def get_dto(self) -> OperatorInstanceDTO:
         connections = []
-        for instance in self.get_protected().get_nested_instances().values():
+        for instance in Internals(self).nested_instances.values():
             if isinstance(instance, InputPortPlugin):
                 for connected_port in instance.get_connected_ports():
                     connections.append(
@@ -371,33 +372,33 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
             and (self.get_context() is not None)
             and self.is_principal()
         ):
+            internals = Internals(self)
             for connection in instance_dto.connections:
-                if not self.get_protected().has_nested_instance(
-                    connection.inputPortName
-                ):
+                if connection.inputPortName not in internals.nested_instances:
                     raise AttributeError(
                         f"[{self.get_full_name()}] Invalid update: InputPort plugin not found "
                         f"with name '{connection.inputPortName}'"
                     )
 
+                context_internals = Internals(self.get_context())
+
                 if (
-                    not self.get_context()
-                    .get_protected()
-                    .has_nested_instance(connection.source.instanceName)
+                    connection.source.instanceName
+                    not in context_internals.nested_instances
                 ):
                     raise AttributeError(
                         f"[{self.get_full_name()}] Invalid update: source instance not found "
                         f"in pipeline with name '{connection.source.instanceName}'"
                     )
 
-                source_instance = (
-                    self.get_context()
-                    .get_protected()
-                    .get_nested_instance(connection.source.instanceName)
-                )
+                source_instance = context_internals.nested_instances[
+                    connection.source.instanceName
+                ]
+                source_internals = Internals(source_instance)
 
-                if not source_instance.get_protected().has_nested_instance(
+                if (
                     connection.source.outputPortName
+                    not in source_internals.nested_instances
                 ):
                     raise AttributeError(
                         f"[{self.get_full_name()}] Invalid update: OutputPort plugin not found "
@@ -407,13 +408,11 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
 
                 input_port_plugin: InputPortPlugin = cast(
                     InputPortPlugin,
-                    self.get_protected().get_nested_instance(connection.inputPortName),
+                    internals.nested_instances[connection.inputPortName],
                 )
                 output_port_plugin: OutputPortPlugin = cast(
                     OutputPortPlugin,
-                    source_instance.get_protected().get_nested_instance(
-                        connection.source.outputPortName
-                    ),
+                    source_internals.nested_instances[connection.source.outputPortName],
                 )
 
                 input_port_plugin.connect(output_port_plugin)
@@ -462,11 +461,9 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
             for replica in replicas_to_remove:
                 self.__replicas.remove(replica)
                 if self.get_context() is not None:
-                    del (
-                        self.get_context()
-                        .get_protected()
-                        .get_nested_instances()[replica.get_simple_name()]
-                    )
+                    del Internals(self.get_context()).nested_instances[
+                        replica.get_simple_name()
+                    ]
                     self.get_context().__delattr__(replica.get_simple_name())
 
             if 0 == len(self.__replicas):
@@ -480,8 +477,7 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
 
         # Logger addon handling
         # =====================
-
-        for nested_instance in self.get_protected().get_nested_instances().values():
+        for nested_instance in Internals(self).nested_instances.values():
             if isinstance(nested_instance, LoggerPlugin):
                 self.__logger_plugins.add(nested_instance)
 

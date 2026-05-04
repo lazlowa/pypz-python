@@ -18,6 +18,7 @@ import signal
 from typing import Optional
 
 from pypz.core.specs.pipeline import Pipeline
+from pypz.core.specs.utils import Internals
 from pypz.executors.commons import ExecutionMode
 from pypz.executors.operator.executor import OperatorExecutor
 
@@ -58,7 +59,7 @@ class PipelineExecutor:
 
         """ Creating the OperatorExecutor objects. Notice that none of the OperatorExecutors
             may handle interrupts, since this will be handled on PipelineExecutor level. """
-        for operator in self.__pipeline.get_protected().get_nested_instances().values():
+        for operator in Internals(self.__pipeline).nested_instances.values():
             self.__operator_executors.add(
                 OperatorExecutor(operator, handle_interrupts=False)
             )

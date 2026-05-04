@@ -18,6 +18,7 @@ from typing import Optional
 from pypz.core.specs.misc import BlankOperator
 from pypz.core.specs.operator import Operator
 from pypz.core.specs.pipeline import Pipeline
+from pypz.core.specs.utils import Internals
 from pypz.deployers.base import Deployer, DeploymentState
 from pypz.executors.commons import ExecutionMode
 
@@ -38,7 +39,7 @@ class TestDeployer(Deployer):
     ) -> None:
         self.deployed_pipelines[pipeline.get_full_name()] = pipeline
 
-        for operator in pipeline.get_protected().get_nested_instances().values():
+        for operator in Internals(pipeline).nested_instances.values():
             self.deployed_operators[operator.get_full_name()] = DeploymentState.Running
 
     def destroy(
@@ -46,7 +47,7 @@ class TestDeployer(Deployer):
     ) -> None:
         pipeline = self.deployed_pipelines[pipeline_name]
 
-        for operator in pipeline.get_protected().get_nested_instances().values():
+        for operator in Internals(pipeline).nested_instances.values():
             del self.deployed_operators[operator.get_full_name()]
 
         del self.deployed_pipelines[pipeline_name]

@@ -17,7 +17,7 @@ from typing import Callable, Type, TypeVar
 
 from pypz.core.specs.operator import Operator
 from pypz.core.specs.plugin import Plugin
-from pypz.core.specs.utils import resolve_dependency_graph
+from pypz.core.specs.utils import Internals, resolve_dependency_graph
 from pypz.executors.commons import ExecutionMode, ExitCodes
 
 PluginType = TypeVar("PluginType", bound=Plugin)
@@ -54,10 +54,13 @@ class ExecutionContext:
         simple type based iteration/execution.
         """
 
-        for nested_instance in (
-            self.__operator.get_protected().get_nested_instances().values()
-        ):
-            for spec_class in nested_instance.get_protected().get_spec_classes():
+        self.__operator_internals = Internals(self.__operator)
+        """
+        Helper utility to allow access to internal properties of the operator
+        """
+
+        for nested_instance in self.__operator_internals.nested_instances.values():
+            for spec_class in Internals(nested_instance).spec_classes:
                 if spec_class not in self.__plugin_type_registry:
                     self.__plugin_type_registry[spec_class] = set()
                 self.__plugin_type_registry[spec_class].add(nested_instance)
@@ -107,9 +110,7 @@ class ExecutionContext:
         )
 
     def for_each_plugin_instances(self, consumer: Callable[[PluginType], None]) -> None:
-        for plugin_instance in (
-            self.__operator.get_protected().get_nested_instances().values()
-        ):
+        for plugin_instance in self.__operator_internals.nested_instances.values():
             consumer(plugin_instance)
 
     def for_each_plugin_objects_with_type(

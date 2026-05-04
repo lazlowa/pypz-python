@@ -19,6 +19,7 @@ import yaml
 from pypz.core.specs.dtos import PipelineInstanceDTO
 from pypz.core.specs.operator import Operator
 from pypz.core.specs.pipeline import Pipeline
+from pypz.core.specs.utils import Internals
 from pypz.executors.commons import ExecutionMode
 from pypz.executors.operator.executor import OperatorExecutor
 
@@ -44,7 +45,7 @@ if __name__ == "__main__":
         pipeline: Pipeline = Pipeline.create_from_dto(
             pipeline_dto, mock_nonexistent=True
         )
-        operator: Operator = pipeline.get_protected().get_nested_instance(sys.argv[2])
+        operator: Operator = Internals(pipeline).nested_instances[sys.argv[2]]
         exec_mode: ExecutionMode = (
             ExecutionMode.Standard if 4 > len(sys.argv) else ExecutionMode(sys.argv[3])
         )
