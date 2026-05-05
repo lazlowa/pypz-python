@@ -17,6 +17,8 @@ import typing
 from importlib import import_module
 from typing import Any, Callable, Iterable
 
+from wrapt import ObjectProxy
+
 IncludedCascadingParameterPrefix = "#"
 """
 This strings denotes a cascading parameter. Included cascading parameter means
@@ -47,13 +49,18 @@ class Internals:
 
     def __init__(self, instance):
         self._instance = instance
+        self._target = (
+            self._instance
+            if not isinstance(self._instance, ObjectProxy)
+            else self._instance.__wrapped__
+        )
+        self._allowed = self._collect_allowed_names()
 
     def __getattr__(self, name):
-        allowed = self._collect_allowed_names()
-        if name not in allowed:
+        if name not in self._allowed:
             raise AttributeError(f"Access to '{name}' is not allowed")
 
-        for cls in type(self._instance).__mro__:
+        for cls in type(self._target).__mro__:
             mangled = f"_{cls.__name__}__{name}"
             if hasattr(self._instance, mangled):
                 return getattr(self._instance, mangled)
@@ -75,7 +82,7 @@ class Internals:
         field on the classes. It resolves them in a reserve order in the inheritance.
         """
         names: set[str] = set()
-        for cls in reversed(type(self._instance).__mro__):
+        for cls in reversed(type(self._target).__mro__):
             names.update(getattr(cls, "_internal_access", set()))
         return names
 
