@@ -319,7 +319,7 @@ class Instance(
             else self.get_context().get_full_name() + "." + self.get_simple_name()
         )
 
-    def get_parameter(self, name: str):
+    def get_parameter(self, name: str) -> Any:
         return self.__parameters[name]
 
     def has_parameter(self, name: str) -> bool:
@@ -704,7 +704,7 @@ class Instance(
 
         return (
             isinstance(other, type(self))
-            and (self.get_full_name() == other.get_full_name())
+            and (self.get_simple_name() == other.get_simple_name())
             and (self.__parameters == other.__parameters)
             and (self.__depends_on == other.__depends_on)
             and (self.__nested_instances == other.__nested_instances)
@@ -951,6 +951,27 @@ class ReplicaContext(ObjectProxy, InstanceGroup):
 
         return value
 
+    def _wrap_instance_value(self, value):
+        if isinstance(value, Instance):
+            return self._check_instance_type(value)
+
+        if type(value) is list:
+            return [self._wrap_instance_value(v) for v in value]
+
+        if type(value) is tuple:
+            return tuple(self._wrap_instance_value(v) for v in value)
+
+        if type(value) is set:
+            return {self._wrap_instance_value(v) for v in value}
+
+        if type(value) is dict:
+            return {
+                self._wrap_instance_value(k): self._wrap_instance_value(v)
+                for k, v in value.items()
+            }
+
+        return value
+
     def __getattribute__(self, name):
         if name.startswith("_self_") or name in {
             "__wrapped__",
@@ -983,7 +1004,10 @@ class ReplicaContext(ObjectProxy, InstanceGroup):
 
             return wrapped
 
-        return self._check_instance_type(attr)
+        if name.endswith("__nested_instances"):
+            return self._wrap_instance_value(attr)
+        else:
+            return self._check_instance_type(attr)
 
     def get_simple_name(self):
         return self._self_replica_name
@@ -1007,10 +1031,24 @@ class ReplicaContext(ObjectProxy, InstanceGroup):
         return False
 
     def __eq__(self, other):
-        if not isinstance(other, ReplicaContext):
-            return False
+        if self is other:
+            return True
 
-        return self.get_full_name() == other.get_full_name()
+        self_internals = Internals(self)
+        other_internals = Internals(other)
+
+        return (
+            isinstance(other, type(self))
+            and (self.get_simple_name() == other.get_simple_name())
+            and (self_internals.parameters == other_internals.parameters)
+            and (self_internals.depends_on == other_internals.depends_on)
+            and (self_internals.nested_instances == other_internals.nested_instances)
+            and (
+                self_internals.expected_parameters
+                == other_internals.expected_parameters
+            )
+            and (self_internals.spec_name == other_internals.spec_name)
+        )
 
     def __ne__(self, other):
         result = self.__eq__(other)
