@@ -698,13 +698,53 @@ class Instance(
 
             self.__nested_instances[instance.get_simple_name()] = instance
 
+    def is_equivalent_to(self, other: "Instance") -> bool:
+        """
+        This method provides a less rigid comparison between instances. It does
+        not check structural equality, only content equality.
+
+        :param other: other instance to compare
+        """
+        if not isinstance(other, type(self)):
+            return False
+
+        if self.__spec_name != other.__spec_name:
+            return False
+
+        if self.__parameters != other.__parameters:
+            return False
+
+        if self.__expected_parameters != other.__expected_parameters:
+            return False
+
+        if len(self.__depends_on) != len(other.__depends_on):
+            return False
+
+        if len(self.__nested_instances) != len(other.__nested_instances):
+            return False
+
+        if set(self.__nested_instances.keys()) != set(other.__nested_instances.keys()):
+            return False
+
+        for name, nested in self.__nested_instances.items():
+            if not nested.is_equivalent_to(other.__nested_instances[name]):
+                return False
+
+        # depends_on comparison should be based on local dependency names
+        if {inst.get_simple_name() for inst in self.__depends_on} != {
+            inst.get_simple_name() for inst in other.__depends_on
+        }:
+            return False
+
+        return True
+
     def __eq__(self, other):
         if self is other:
             return True
 
         return (
             isinstance(other, type(self))
-            and (self.get_simple_name() == other.get_simple_name())
+            and (self.get_full_name() == other.get_full_name())
             and (self.__parameters == other.__parameters)
             and (self.__depends_on == other.__depends_on)
             and (self.__nested_instances == other.__nested_instances)
@@ -983,6 +1023,7 @@ class ReplicaContext(ObjectProxy, InstanceGroup):
             "_build_replica_map",
             "_self_replica_context",
             "_check_instance_type",
+            "_wrap_instance_value",
             "get_simple_name",
             "get_parent_context",
             "get_group_name",
@@ -1039,7 +1080,7 @@ class ReplicaContext(ObjectProxy, InstanceGroup):
 
         return (
             isinstance(other, type(self))
-            and (self.get_simple_name() == other.get_simple_name())
+            and (self.get_full_name() == other.get_full_name())
             and (self_internals.parameters == other_internals.parameters)
             and (self_internals.depends_on == other_internals.depends_on)
             and (self_internals.nested_instances == other_internals.nested_instances)

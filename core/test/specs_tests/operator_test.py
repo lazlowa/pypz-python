@@ -496,7 +496,7 @@ class OperatorInstanceTest(unittest.TestCase):
 
     def test_operator_replication_replica_equality_with_updates_on_origin(self):
         operator = TestOperatorWithPortPlugins("operator", 1)
-        operator_internals = Internals(operator)
+        operator.set_parameter("replicationFactor", 1)
 
         operator.set_parameter("param", "value")
         operator.output_port.depends_on(operator.input_port)
@@ -507,48 +507,45 @@ class OperatorInstanceTest(unittest.TestCase):
         operator.output_port.set_parameter("_opt_int", 4321)
 
         for replica in operator.get_replicas():
-            replica_internals = Internals(operator)
-
-            self.assertEqual(
-                operator_internals.nested_instances,
-                replica_internals.nested_instances,
+            self.assertTrue(replica.is_equivalent_to(operator))
+            for name, nested in Internals(replica).nested_instances.items():
+                if not nested.is_equivalent_to(
+                    Internals(operator).nested_instances[name]
+                ):
+                    self.fail()
+            for name, nested in Internals(operator).nested_instances.items():
+                if not nested.is_equivalent_to(
+                    Internals(replica).nested_instances[name]
+                ):
+                    self.fail()
+            self.assertIs(
+                Internals(operator).parameters,
+                Internals(replica).parameters,
             )
-            self.assertEqual(
-                id(operator_internals.parameters),
-                id(replica_internals.parameters),
+            self.assertIs(
+                Internals(operator).depends_on,
+                Internals(replica).depends_on,
             )
-            self.assertEqual(
-                id(operator_internals.depends_on),
-                id(replica_internals.depends_on),
+            self.assertIs(
+                Internals(operator.output_port).parameters,
+                Internals(replica.output_port).parameters,
             )
-            self.assertEqual(
-                id(Internals(operator.output_port).parameters),
-                id(Internals(replica.output_port).parameters),
+            self.assertIs(
+                Internals(operator.output_port).depends_on,
+                Internals(replica.output_port).depends_on,
             )
-            self.assertEqual(
-                id(Internals(operator.output_port).depends_on),
-                id(Internals(replica.output_port).depends_on),
+            self.assertIs(
+                Internals(operator.input_port).parameters,
+                Internals(replica.input_port).parameters,
             )
-            self.assertEqual(
-                id(Internals(operator.input_port).parameters),
-                id(Internals(replica.input_port).parameters),
+            self.assertIs(
+                Internals(operator.input_port).depends_on,
+                Internals(replica.input_port).depends_on,
             )
-            self.assertEqual(
-                id(Internals(operator.input_port).depends_on),
-                id(Internals(replica.input_port).depends_on),
-            )
-            self.assertEqual(
-                id(operator.output_port.req_str), id(replica.output_port.req_str)
-            )
-            self.assertEqual(
-                id(operator.output_port._opt_str), id(replica.output_port._opt_str)
-            )
-            self.assertEqual(
-                id(operator.output_port.req_int), id(replica.output_port.req_int)
-            )
-            self.assertEqual(
-                id(operator.output_port._opt_int), id(replica.output_port._opt_int)
-            )
+            self.assertIs(operator.output_port.req_str, replica.output_port.req_str)
+            self.assertIs(operator.output_port._opt_str, replica.output_port._opt_str)
+            self.assertIs(operator.output_port.req_int, replica.output_port.req_int)
+            self.assertIs(operator.output_port._opt_int, replica.output_port._opt_int)
 
     def test_operator_replication_replica_equality_with_updates_on_replica(self):
         operator = TestOperatorWithPortPlugins("operator")
@@ -565,51 +562,51 @@ class OperatorInstanceTest(unittest.TestCase):
         operator.get_replica(0).output_port.set_parameter("_opt_int", 4321)
 
         for replica in operator.get_replicas():
-            self.assertEqual(
-                Internals(operator).nested_instances,
-                Internals(replica).nested_instances,
+            self.assertTrue(replica.is_equivalent_to(operator))
+            for name, nested in Internals(replica).nested_instances.items():
+                if not nested.is_equivalent_to(
+                    Internals(operator).nested_instances[name]
+                ):
+                    self.fail()
+            for name, nested in Internals(operator).nested_instances.items():
+                if not nested.is_equivalent_to(
+                    Internals(replica).nested_instances[name]
+                ):
+                    self.fail()
+            self.assertIs(
+                Internals(operator).parameters,
+                Internals(replica).parameters,
             )
-            self.assertEqual(
-                id(Internals(operator).parameters),
-                id(Internals(replica).parameters),
+            self.assertIs(
+                Internals(operator).depends_on,
+                Internals(replica).depends_on,
             )
-            self.assertEqual(
-                id(Internals(operator).depends_on),
-                id(Internals(replica).depends_on),
+            self.assertIs(
+                Internals(operator.output_port).parameters,
+                Internals(replica.output_port).parameters,
             )
-            self.assertEqual(
-                id(Internals(operator.output_port).parameters),
-                id(Internals(replica.output_port).parameters),
+            self.assertIs(
+                Internals(operator.output_port).depends_on,
+                Internals(replica.output_port).depends_on,
             )
-            self.assertEqual(
-                id(Internals(operator.output_port).depends_on),
-                id(Internals(replica.output_port).depends_on),
+            self.assertIs(
+                Internals(operator.input_port).parameters,
+                Internals(replica.input_port).parameters,
             )
-            self.assertEqual(
-                id(Internals(operator.input_port).parameters),
-                id(Internals(replica.input_port).parameters),
+            self.assertIs(
+                Internals(operator.input_port).depends_on,
+                Internals(replica.input_port).depends_on,
             )
-            self.assertEqual(
-                id(Internals(operator.input_port).depends_on),
-                id(Internals(replica.input_port).depends_on),
-            )
-            self.assertEqual(
-                id(operator.output_port.req_str), id(replica.output_port.req_str)
-            )
-            self.assertEqual(
-                id(operator.output_port._opt_str), id(replica.output_port._opt_str)
-            )
-            self.assertEqual(
-                id(operator.output_port.req_int), id(replica.output_port.req_int)
-            )
-            self.assertEqual(
-                id(operator.output_port._opt_int), id(replica.output_port._opt_int)
-            )
+            self.assertIs(operator.output_port.req_str, replica.output_port.req_str)
+            self.assertIs(operator.output_port._opt_str, replica.output_port._opt_str)
+            self.assertIs(operator.output_port.req_int, replica.output_port.req_int)
+            self.assertIs(operator.output_port._opt_int, replica.output_port._opt_int)
 
     def test_operator_replication_replica_equality_with_direct_parameter_update_on_origin(
         self,
     ):
         operator = TestOperatorWithPortPlugins("operator", 1)
+        operator.set_parameter("replicationFactor", 1)
 
         operator.set_parameter("param", "value")
         operator.output_port.depends_on(operator.input_port)
@@ -620,46 +617,45 @@ class OperatorInstanceTest(unittest.TestCase):
         operator.output_port._opt_int = 4321
 
         for replica in operator.get_replicas():
-            self.assertEqual(
-                Internals(operator).nested_instances,
-                Internals(replica).nested_instances,
+            self.assertTrue(replica.is_equivalent_to(operator))
+            for name, nested in Internals(replica).nested_instances.items():
+                if not nested.is_equivalent_to(
+                    Internals(operator).nested_instances[name]
+                ):
+                    self.fail()
+            for name, nested in Internals(operator).nested_instances.items():
+                if not nested.is_equivalent_to(
+                    Internals(replica).nested_instances[name]
+                ):
+                    self.fail()
+            self.assertIs(
+                Internals(operator).parameters,
+                Internals(replica).parameters,
             )
-            self.assertEqual(
-                id(Internals(operator).parameters),
-                id(Internals(replica).parameters),
+            self.assertIs(
+                Internals(operator).depends_on,
+                Internals(replica).depends_on,
             )
-            self.assertEqual(
-                id(Internals(operator).depends_on),
-                id(Internals(replica).depends_on),
+            self.assertIs(
+                Internals(operator.output_port).parameters,
+                Internals(replica.output_port).parameters,
             )
-            self.assertEqual(
-                id(Internals(operator.output_port).parameters),
-                id(Internals(replica.output_port).parameters),
+            self.assertIs(
+                Internals(operator.output_port).depends_on,
+                Internals(replica.output_port).depends_on,
             )
-            self.assertEqual(
-                id(Internals(operator.output_port).depends_on),
-                id(Internals(replica.output_port).depends_on),
+            self.assertIs(
+                Internals(operator.input_port).parameters,
+                Internals(replica.input_port).parameters,
             )
-            self.assertEqual(
-                id(Internals(operator.input_port).parameters),
-                id(Internals(replica.input_port).parameters),
+            self.assertIs(
+                Internals(operator.input_port).depends_on,
+                Internals(replica.input_port).depends_on,
             )
-            self.assertEqual(
-                id(Internals(operator.input_port).depends_on),
-                id(Internals(replica.input_port).depends_on),
-            )
-            self.assertEqual(
-                id(operator.output_port.req_str), id(replica.output_port.req_str)
-            )
-            self.assertEqual(
-                id(operator.output_port._opt_str), id(replica.output_port._opt_str)
-            )
-            self.assertEqual(
-                id(operator.output_port.req_int), id(replica.output_port.req_int)
-            )
-            self.assertEqual(
-                id(operator.output_port._opt_int), id(replica.output_port._opt_int)
-            )
+            self.assertIs(operator.output_port.req_str, replica.output_port.req_str)
+            self.assertIs(operator.output_port._opt_str, replica.output_port._opt_str)
+            self.assertIs(operator.output_port.req_int, replica.output_port.req_int)
+            self.assertIs(operator.output_port._opt_int, replica.output_port._opt_int)
 
     def test_operator_replication_replica_equality_with_direct_parameter_update_on_replica(
         self,
@@ -678,46 +674,46 @@ class OperatorInstanceTest(unittest.TestCase):
         operator.get_replica(0).output_port._opt_int = 4321
 
         for replica in operator.get_replicas():
-            self.assertEqual(
-                Internals(operator).nested_instances,
-                Internals(replica).nested_instances,
+            self.assertTrue(replica.is_equivalent_to(operator))
+            for name, nested in Internals(replica).nested_instances.items():
+                if not nested.is_equivalent_to(
+                    Internals(operator).nested_instances[name]
+                ):
+                    self.fail()
+            for name, nested in Internals(operator).nested_instances.items():
+                if not nested.is_equivalent_to(
+                    Internals(replica).nested_instances[name]
+                ):
+                    self.fail()
+
+            self.assertIs(
+                Internals(operator).parameters,
+                Internals(replica).parameters,
             )
-            self.assertEqual(
-                id(Internals(operator).parameters),
-                id(Internals(replica).parameters),
+            self.assertIs(
+                Internals(operator).depends_on,
+                Internals(replica).depends_on,
             )
-            self.assertEqual(
-                id(Internals(operator).depends_on),
-                id(Internals(replica).depends_on),
+            self.assertIs(
+                Internals(operator.output_port).parameters,
+                Internals(replica.output_port).parameters,
             )
-            self.assertEqual(
-                id(Internals(operator.output_port).parameters),
-                id(Internals(replica.output_port).parameters),
+            self.assertIs(
+                Internals(operator.output_port).depends_on,
+                Internals(replica.output_port).depends_on,
             )
-            self.assertEqual(
-                id(Internals(operator.output_port).depends_on),
-                id(Internals(replica.output_port).depends_on),
+            self.assertIs(
+                Internals(operator.input_port).parameters,
+                Internals(replica.input_port).parameters,
             )
-            self.assertEqual(
-                id(Internals(operator.input_port).parameters),
-                id(Internals(replica.input_port).parameters),
+            self.assertIs(
+                Internals(operator.input_port).depends_on,
+                Internals(replica.input_port).depends_on,
             )
-            self.assertEqual(
-                id(Internals(operator.input_port).depends_on),
-                id(Internals(replica.input_port).depends_on),
-            )
-            self.assertEqual(
-                id(operator.output_port.req_str), id(replica.output_port.req_str)
-            )
-            self.assertEqual(
-                id(operator.output_port._opt_str), id(replica.output_port._opt_str)
-            )
-            self.assertEqual(
-                id(operator.output_port.req_int), id(replica.output_port.req_int)
-            )
-            self.assertEqual(
-                id(operator.output_port._opt_int), id(replica.output_port._opt_int)
-            )
+            self.assertIs(operator.output_port.req_str, replica.output_port.req_str)
+            self.assertIs(operator.output_port._opt_str, replica.output_port._opt_str)
+            self.assertIs(operator.output_port.req_int, replica.output_port.req_int)
+            self.assertIs(operator.output_port._opt_int, replica.output_port._opt_int)
 
     def test_operator_replication_with_negative_factor_expect_error(self):
         with self.assertRaises(ValueError):
@@ -840,14 +836,16 @@ class OperatorInstanceTest(unittest.TestCase):
             pipeline.operator_a_0.input_port,
         )
 
-        self.assertEqual(
-            pipeline.operator_a.input_port,
-            pipeline.operator_a_0.input_port,
+        self.assertTrue(
+            pipeline.operator_a.input_port.is_equivalent_to(
+                pipeline.operator_a_0.input_port
+            )
         )
 
-        self.assertEqual(
-            pipeline.operator_a_0.input_port,
-            pipeline.operator_a_1.input_port,
+        self.assertTrue(
+            pipeline.operator_a_0.input_port.is_equivalent_to(
+                pipeline.operator_a_1.input_port
+            )
         )
 
         self.assertEqual(
