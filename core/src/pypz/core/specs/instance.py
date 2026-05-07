@@ -931,6 +931,9 @@ class ReplicaContext(ObjectProxy, InstanceGroup):
         if not isinstance(original, Instance):
             raise TypeError(f"Replicas must be an instance of {Instance.__name__}")
 
+        if not isinstance(original, InstanceGroup):
+            raise TypeError(f"Replicas must be an instance of {InstanceGroup.__name__}")
+
         if not isinstance(original, ObjectProxy):
             super().__init__(original)
         else:
@@ -941,9 +944,9 @@ class ReplicaContext(ObjectProxy, InstanceGroup):
         self._self_context_by_oid: dict[int, "ReplicaContext"] = {}
 
         self._self_replica_name: str = (
-            f"{original.get_simple_name()}_{replica_index}"
+            f"{self.__wrapped__.get_simple_name()}_{replica_index}"
             if self._self_parent_context is None
-            else original.get_simple_name()
+            else self.__wrapped__.get_simple_name()
         )
 
     def _get_or_create_child_replica(self, instance: Instance) -> "ReplicaContext":
