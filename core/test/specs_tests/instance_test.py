@@ -18,7 +18,7 @@ import types
 from unittest import TestCase
 
 from pypz.core.specs.dtos import InstanceDTO, SpecDTO
-from pypz.core.specs.instance import Instance
+from pypz.core.specs.instance import Instance, ReplicaContext
 from pypz.core.specs.misc import BlankInstance
 from pypz.core.specs.plugin import InputPortPlugin, ResourceHandlerPlugin
 from pypz.core.specs.utils import Internals, resolve_dependency_graph
@@ -1258,3 +1258,12 @@ class InstanceTest(TestCase):
 
         with self.assertRaises(AttributeError):
             Instance.create_from_string(json_string, mock_nonexistent=True)
+
+    def test_replica_context_with_invalid_input(self):
+        with self.assertRaises(TypeError):
+            ReplicaContext("invalid_input", 0)
+        with self.assertRaises(TypeError):
+            ReplicaContext(TestClassL0("l0"), 0)
+
+
+# depends_on

@@ -129,6 +129,12 @@ class InstanceInitInterceptor(ABCMeta):
 
 
 NestedInstanceType = TypeVar("NestedInstanceType", bound="Instance")
+
+"""
+The internal context variable, which will be adjusted by the ReplicaContext class depending
+on, which replica context object is being used. This is the one of the 2 pillars of the
+replication.
+"""
 _instance_replica_context: ContextVar[dict[int, "ReplicaContext"] | None] = ContextVar(
     "_instance_replica_context",
     default=None,
@@ -293,6 +299,12 @@ class Instance(
     # ========= public methods ==========
 
     def get_context(self):
+        """
+        Context getter. Notice that this method shall be replica context aware.
+        The rule is, if the ContextVar is set and the current object can be found
+        in the cache of the current replica context, then the corresponding
+        ReplicaContext object will be used to retrieve the value, otherwise the original.
+        """
         replica_map = _instance_replica_context.get()
         replica = replica_map.get(id(self), None) if replica_map is not None else None
         if replica is not None and replica.get_parent_context() is not None:
@@ -300,6 +312,12 @@ class Instance(
         return self.__context
 
     def get_simple_name(self) -> str:
+        """
+        Simple name getter. Notice that this method shall be replica context aware.
+        The rule is, if the ContextVar is set and the current object can be found
+        in the cache of the current replica context, then the corresponding
+        ReplicaContext object will be used to retrieve the value, otherwise the original.
+        """
         replica_map = _instance_replica_context.get()
         replica = replica_map.get(id(self), None) if replica_map is not None else None
         if replica is not None:
@@ -922,6 +940,59 @@ class InstanceGroup(ABC):
 
 
 class ReplicaContext(ObjectProxy, InstanceGroup):
+    """
+    This class realizes an Instance proxy for replication purposes. Important
+    to notice that this class is not realizing the process of replication itself,
+    but only how the replicas shall be represented. The intention behind this
+    kind of replication handling is to make it more efficient. Previously, for
+    each replica an object has been created (and as well for the nested objects),
+    which was unnecessary resource consumption, because only one object has been
+    executed at a time. The new concept creates only the original object and
+    shares them across all replicas. This reduces the memory footprint and
+    ensures common mutation (see requirement section).
+
+    The main requirements are:
+
+    - all replicas share the same original object i.e., every mutation on either
+      replicas or the original will affect only the original
+    - every attribute call shall be proxied to the original to ensure consistent
+      retrieval i.e., it does not matter, if an attribute is accessed on the replica,
+      it still behaves as it would have been accessed on the original
+    - name is different for each replica and is composed based on the replication index
+    - the name access throughout the entire :class:`Instance <pypz.core.specs.instance.Instance>`
+      and all of its implementation shall be intercepted and, if name access performed
+      through a replica context then the replica name shall be injected
+    - nested instances are wrapped into ReplicaContexts upon accessing them through
+      the actual replica
+    - context access of the nested instances are intercepted and re-bound to the
+      parent replica context instead of the original context
+    - group information are taken from the original directly with two exceptions:
+      1) a replica returns False on is_principal() 2) group index is the actual
+      replication index plus 1, since the original is also part of the group
+
+    Known limitations:
+    - one shall not assign name statically (e.g., in ctor) through the getters as
+      if it happens, tha value of that member variable will not be replica aware, since
+      the result of the getter depends on, through which context it was called, e.g.,
+      if you call it in the original, you might get "instance", but if called in a
+      replica, then something like "instance_0"
+    - in any case, where the user implements a method, which returns in any form
+      any nested instances, the user shall take care of wrapping them into
+      ReplicaContext as currently it happens only on accessing the __nested_instances
+      attribute
+    - if an :class:`Instance <pypz.core.specs.instance.Instance>` has been replicated,
+      then no nested instance must be replicated
+      as there would be a big ambiguity around the group information, since the
+      nested instance would not know whether the group information shall come from
+      the parent or from itself
+    - any form of sibling access from inside a replication context is
+      intentionally not supported
+
+    :param original: the original :class:`Instance <pypz.core.specs.instance.Instance>`
+    :param replica_index: index of this replica
+    :param parent_context: parent replica context, not None only in case of nested instances
+    """
+
     def __init__(
         self,
         original: Instance,
@@ -934,13 +1005,15 @@ class ReplicaContext(ObjectProxy, InstanceGroup):
         if not isinstance(original, InstanceGroup):
             raise TypeError(f"Replicas must be an instance of {InstanceGroup.__name__}")
 
-        if not isinstance(original, ObjectProxy):
-            super().__init__(original)
-        else:
-            super().__init__(original.__wrapped__)
+        if isinstance(original, ObjectProxy):
+            raise TypeError(f"Replication target must not be {ReplicaContext.__name__}")
+
+        super().__init__(original)
 
         self._self_replica_index: int = replica_index
+
         self._self_parent_context: Optional["ReplicaContext"] = parent_context
+
         self._self_context_by_oid: dict[int, "ReplicaContext"] = {}
 
         self._self_replica_name: str = (
@@ -950,6 +1023,12 @@ class ReplicaContext(ObjectProxy, InstanceGroup):
         )
 
     def _get_or_create_child_replica(self, instance: Instance) -> "ReplicaContext":
+        """
+        This method wraps :class:`Instance <pypz.core.specs.instance.Instance>` objects
+        into replica context and caches them for later access.
+
+        :param instance: :class:`Instance <pypz.core.specs.instance.Instance>` to be wrapped
+        """
         object_id = id(instance)
         child = self._self_context_by_oid.get(object_id)
         if child is None:
@@ -958,6 +1037,13 @@ class ReplicaContext(ObjectProxy, InstanceGroup):
         return child
 
     def _build_replica_map(self) -> dict[int, "ReplicaContext"]:
+        """
+        This method recursively checks for nested instances and creates a map of
+        original id to replica context. It is used to retrieve replica context
+        inside the :class:`Instance <pypz.core.specs.instance.Instance>` class'
+        simple name and context getter. This is the key point of functionality,
+        because without that, the actual replica context could not be identified.
+        """
         replica_map = {id(self.__wrapped__): self}
 
         for nested_instance in Internals(self.__wrapped__).nested_instances.values():
@@ -968,6 +1054,9 @@ class ReplicaContext(ObjectProxy, InstanceGroup):
 
     @contextmanager
     def _self_replica_context(self):
+        """
+        This is a helper context manager method to wrap arbitrary logic into the context.
+        """
         token = _instance_replica_context.set(self._build_replica_map())
         try:
             yield
@@ -975,6 +1064,14 @@ class ReplicaContext(ObjectProxy, InstanceGroup):
             _instance_replica_context.reset(token)
 
     def _check_instance_type(self, value):
+        """
+        This helper method checks, whether the provided object is an
+        :class:`Instance <pypz.core.specs.instance.Instance>` and if it is a nested
+        instance. If yes, then it will return the wrapped version, if not (e.g., sibling),
+        then it returns the original.
+
+        :param value: the value to be checked
+        """
         if isinstance(value, ReplicaContext):
             return value
 
@@ -995,6 +1092,15 @@ class ReplicaContext(ObjectProxy, InstanceGroup):
         return value
 
     def _wrap_instance_value(self, value):
+        """
+        This helper method recursively wraps the provided :class:`Instance <pypz.core.specs.instance.Instance>`
+        types into replica contexts. Notice that, if any base type has been extended, then it will bypass
+        the wrapping. For example :class:`InstanceParameters <pypz.core.specs.utils.InstanceParameters>`
+        extends dict, hence re-wrapping would mean, a dict will be created from
+        :class:`InstanceParameters <pypz.core.specs.utils.InstanceParameters>`, which is not intended.
+
+        :param value: value to be wrapped recursively
+        """
         if isinstance(value, Instance):
             return self._check_instance_type(value)
 
@@ -1016,6 +1122,12 @@ class ReplicaContext(ObjectProxy, InstanceGroup):
         return value
 
     def __getattribute__(self, name):
+        """
+        Intercepting the base attribute getting of the ObjectProxy class.
+        """
+        # For any of these methods, we bypass the proxy and directly access the
+        # attribute on the ReplicaContext. This is necessary to avoid endless
+        # recursion.
         if name.startswith("_self_") or name in {
             "__wrapped__",
             "__class__",
@@ -1036,8 +1148,11 @@ class ReplicaContext(ObjectProxy, InstanceGroup):
         }:
             return object.__getattribute__(self, name)
 
+        # In any other case, the attribute is retrieved through the proxy
         attr = super().__getattribute__(name)
 
+        # if the attribute is callable, then its execution will be wrapped in the
+        # replication context.
         if callable(attr):
 
             @wraps(attr)
@@ -1048,33 +1163,77 @@ class ReplicaContext(ObjectProxy, InstanceGroup):
 
             return wrapped
 
+        # The only case, where it is important to wrap any result is the nested instances
+        # since for each replica, any nested instance shall be wrapped as well to route
+        # the context path properly that is a nested instance of a replica shall get its
+        # parent replica as context and not the parent original.
         if name.endswith("__nested_instances"):
             return self._wrap_instance_value(attr)
         else:
             return self._check_instance_type(attr)
 
-    def get_simple_name(self):
+    def get_simple_name(self) -> str:
+        """
+        The only intercepted getter, since the name changes for each replica.
+        """
         return self._self_replica_name
 
-    def get_parent_context(self):
+    def get_parent_context(self) -> "ReplicaContext":
+        """
+        This getter is used to intercept context getter in the
+        :class:`Instance <pypz.core.specs.instance.Instance>.
+        """
         return self._self_parent_context
 
     def get_group_size(self) -> int:
+        """
+        Group size getter. Notice that it is routed intentionally to the original,
+        since the size of the group can be possibly known only by it.
+        """
         return self.__wrapped__.get_group_size()
 
     def get_group_index(self) -> int:
+        """
+        Group index getter. Notice that group index is not the same as replication
+        index, since the original belongs to the group as well, hence
+        group index = replication index + 1
+        """
         return self._self_replica_index + 1
 
     def get_group_name(self) -> Optional[str]:
+        """
+        Group name getter. Notice that the group name is actually the full name of
+        the original :class:`Instance <pypz.core.specs.instance.Instance>`, nevertheless
+        it is expected that the original's identical getter already implements it.
+        """
         return self.__wrapped__.get_group_name()
 
     def get_group_principal(self) -> Optional["Instance"]:
+        """
+        Group principal getter. Notice that the group principal is actually
+        the original :class:`Instance <pypz.core.specs.instance.Instance>`, nevertheless
+        it is expected that the original's identical getter already implements it.
+        """
         return self.__wrapped__.get_group_principal()
 
     def is_principal(self) -> bool:
+        """
+        This method signalizes, if the object is a principal in the group or not.
+        It is obvious that a replica is never a principal.
+        """
         return False
 
     def __eq__(self, other):
+        """
+        The equality check had to be adapted, since this is the only place, where
+        both original and replica objects can be represented, hence a common wrapping
+        of any super().__eq__ was not an option, otherwise the following equality
+        checks returned with inconsistent results:
+        - o == r1 -> True (will call :class:`Instance <pypz.core.specs.instance.Instance>`.__eq__)
+        - r1 == o -> False (will call :class:`Instance <pypz.core.specs.instance.ReplicaContext>`.__eq__)
+        - r1 == r2 -> False (will call :class:`Instance <pypz.core.specs.instance.ReplicaContext>`.__eq__)
+        Re-implementing the actual equality check solves this issue.
+        """
         if self is other:
             return True
 
@@ -1101,9 +1260,17 @@ class ReplicaContext(ObjectProxy, InstanceGroup):
         return not result
 
     def __str__(self):
+        """
+        This method simply wraps the originals method in replicate context, since
+        the get_full_name method is replica-aware.
+        """
         with self._self_replica_context():
             return str(self.__wrapped__)
 
     def __hash__(self):
+        """
+        This method simply wraps the originals method in replicate context, since
+        the get_full_name method is replica-aware.
+        """
         with self._self_replica_context():
             return hash(self.__wrapped__)
