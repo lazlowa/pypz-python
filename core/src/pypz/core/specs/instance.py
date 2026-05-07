@@ -1022,156 +1022,6 @@ class ReplicaContext(ObjectProxy, InstanceGroup):
             else self.__wrapped__.get_simple_name()
         )
 
-    def _get_or_create_child_replica(self, instance: Instance) -> "ReplicaContext":
-        """
-        This method wraps :class:`Instance <pypz.core.specs.instance.Instance>` objects
-        into replica context and caches them for later access.
-
-        :param instance: :class:`Instance <pypz.core.specs.instance.Instance>` to be wrapped
-        """
-        object_id = id(instance)
-        child = self._self_context_by_oid.get(object_id)
-        if child is None:
-            child = ReplicaContext(instance, self._self_replica_index, self)
-            self._self_context_by_oid[object_id] = child
-        return child
-
-    def _build_replica_map(self) -> dict[int, "ReplicaContext"]:
-        """
-        This method recursively checks for nested instances and creates a map of
-        original id to replica context. It is used to retrieve replica context
-        inside the :class:`Instance <pypz.core.specs.instance.Instance>` class'
-        simple name and context getter. This is the key point of functionality,
-        because without that, the actual replica context could not be identified.
-        """
-        replica_map = {id(self.__wrapped__): self}
-
-        for nested_instance in Internals(self.__wrapped__).nested_instances.values():
-            child = self._get_or_create_child_replica(nested_instance)
-            replica_map.update(child._build_replica_map())
-
-        return replica_map
-
-    @contextmanager
-    def _self_replica_context(self):
-        """
-        This is a helper context manager method to wrap arbitrary logic into the context.
-        """
-        token = _instance_replica_context.set(self._build_replica_map())
-        try:
-            yield
-        finally:
-            _instance_replica_context.reset(token)
-
-    def _check_instance_type(self, value):
-        """
-        This helper method checks, whether the provided object is an
-        :class:`Instance <pypz.core.specs.instance.Instance>` and if it is a nested
-        instance. If yes, then it will return the wrapped version, if not (e.g., sibling),
-        then it returns the original.
-
-        :param value: the value to be checked
-        """
-        if isinstance(value, ReplicaContext):
-            return value
-
-        if value is self.__wrapped__:
-            return self
-
-        if (
-            self._self_parent_context is not None
-            and value is self._self_parent_context.__wrapped__
-        ):
-            return self._self_parent_context
-
-        if isinstance(value, Instance):
-            nested_instances = Internals(self.__wrapped__).nested_instances.values()
-            if any(value is nested for nested in nested_instances):
-                return self._get_or_create_child_replica(value)
-
-        return value
-
-    def _wrap_instance_value(self, value):
-        """
-        This helper method recursively wraps the provided :class:`Instance <pypz.core.specs.instance.Instance>`
-        types into replica contexts. Notice that, if any base type has been extended, then it will bypass
-        the wrapping. For example :class:`InstanceParameters <pypz.core.specs.utils.InstanceParameters>`
-        extends dict, hence re-wrapping would mean, a dict will be created from
-        :class:`InstanceParameters <pypz.core.specs.utils.InstanceParameters>`, which is not intended.
-
-        :param value: value to be wrapped recursively
-        """
-        if isinstance(value, Instance):
-            return self._check_instance_type(value)
-
-        if type(value) is list:
-            return [self._wrap_instance_value(v) for v in value]
-
-        if type(value) is tuple:
-            return tuple(self._wrap_instance_value(v) for v in value)
-
-        if type(value) is set:
-            return {self._wrap_instance_value(v) for v in value}
-
-        if type(value) is dict:
-            return {
-                self._wrap_instance_value(k): self._wrap_instance_value(v)
-                for k, v in value.items()
-            }
-
-        return value
-
-    def __getattribute__(self, name):
-        """
-        Intercepting the base attribute getting of the ObjectProxy class.
-        """
-        # For any of these methods, we bypass the proxy and directly access the
-        # attribute on the ReplicaContext. This is necessary to avoid endless
-        # recursion.
-        if name.startswith("_self_") or name in {
-            "__wrapped__",
-            "__class__",
-            "__dict__",
-            "__setattr__",
-            "__getattribute__",
-            "_get_or_create_child_replica",
-            "_build_replica_map",
-            "_self_replica_context",
-            "_check_instance_type",
-            "_wrap_instance_value",
-            "get_simple_name",
-            "get_parent_context",
-            "get_group_name",
-            "get_group_index",
-            "get_group_principal",
-            "is_principal",
-        }:
-            return object.__getattribute__(self, name)
-
-        # In any other case, the attribute is retrieved through the proxy
-        attr = super().__getattribute__(name)
-
-        # if the attribute is callable, then its execution will be wrapped in the
-        # replication context.
-        if callable(attr):
-
-            @wraps(attr)
-            def wrapped(*args, **kwargs):
-                with self._self_replica_context():
-                    result = attr(*args, **kwargs)
-                return self._check_instance_type(result)
-
-            return wrapped
-
-        # The only case, where it is important to wrap any result is the nested instances
-        # since for each replica, any nested instance shall be wrapped as well to route
-        # the context path properly that is a nested instance of a replica shall get its
-        # parent replica as context and not the parent original.
-        if name.endswith("__nested_instances"):
-            return self._wrap_instance_value(attr)
-        else:
-            return self._check_instance_type(attr)
-
     def get_simple_name(self) -> str:
         """
         The only intercepted getter, since the name changes for each replica.
@@ -1222,6 +1072,164 @@ class ReplicaContext(ObjectProxy, InstanceGroup):
         It is obvious that a replica is never a principal.
         """
         return False
+
+    def _get_or_create_nested_replica(self, instance: Instance) -> "ReplicaContext":
+        """
+        This method wraps :class:`Instance <pypz.core.specs.instance.Instance>` objects
+        into replica context and caches them for later access.
+
+        :param instance: :class:`Instance <pypz.core.specs.instance.Instance>` to be wrapped
+        """
+        if not isinstance(instance, InstanceGroup) or not isinstance(
+            instance, Instance
+        ):
+            raise TypeError(
+                f"Nested instance must be a typo of both "
+                f"{InstanceGroup.__name__} and {Instance.__name__}"
+            )
+
+        object_id = id(instance)
+        child = self._self_context_by_oid.get(object_id)
+        if child is None:
+            child = ReplicaContext(instance, self._self_replica_index, self)
+            self._self_context_by_oid[object_id] = child
+        return child
+
+    def _build_replica_map(self) -> dict[int, "ReplicaContext"]:
+        """
+        This method recursively checks for nested instances and creates a map of
+        original id to replica context. It is used to retrieve replica context
+        inside the :class:`Instance <pypz.core.specs.instance.Instance>` class'
+        simple name and context getter. This is the key point of functionality,
+        because without that, the actual replica context could not be identified.
+        """
+        replica_map = {id(self.__wrapped__): self}
+
+        for nested_instance in Internals(self.__wrapped__).nested_instances.values():
+            child = self._get_or_create_nested_replica(nested_instance)
+            replica_map.update(child._build_replica_map())
+
+        return replica_map
+
+    @contextmanager
+    def _self_replica_context(self):
+        """
+        This is a helper context manager method to wrap arbitrary logic into the context.
+        """
+        token = _instance_replica_context.set(self._build_replica_map())
+        try:
+            yield
+        finally:
+            _instance_replica_context.reset(token)
+
+    def _check_instance_type(self, value):
+        """
+        This helper method checks, whether the provided object is an
+        :class:`Instance <pypz.core.specs.instance.Instance>` and if it is a nested
+        instance. If yes, then it will return the wrapped version, if not (e.g., sibling),
+        then it returns the original.
+
+        :param value: the value to be checked
+        """
+        if isinstance(value, ReplicaContext):
+            return value
+
+        if value is self.__wrapped__:
+            return self
+
+        if (
+            self._self_parent_context is not None
+            and value is self._self_parent_context.__wrapped__
+        ):
+            return self._self_parent_context
+
+        if isinstance(value, Instance):
+            nested_instances = Internals(self.__wrapped__).nested_instances.values()
+            if any(value is nested for nested in nested_instances):
+                return self._get_or_create_nested_replica(value)
+
+        return value
+
+    def _wrap_instance_value(self, value):
+        """
+        This helper method recursively wraps the provided :class:`Instance <pypz.core.specs.instance.Instance>`
+        types into replica contexts. Notice that, if any base type has been extended, then it will bypass
+        the wrapping. For example :class:`InstanceParameters <pypz.core.specs.utils.InstanceParameters>`
+        extends dict, hence re-wrapping would mean, a dict will be created from
+        :class:`InstanceParameters <pypz.core.specs.utils.InstanceParameters>`, which is not intended.
+
+        :param value: value to be wrapped recursively
+        """
+        if isinstance(value, Instance):
+            return self._check_instance_type(value)
+
+        if type(value) is list:
+            return [self._wrap_instance_value(v) for v in value]
+
+        if type(value) is tuple:
+            return tuple(self._wrap_instance_value(v) for v in value)
+
+        if type(value) is set:
+            return {self._wrap_instance_value(v) for v in value}
+
+        if type(value) is dict:
+            return {
+                self._wrap_instance_value(k): self._wrap_instance_value(v)
+                for k, v in value.items()
+            }
+
+        return value
+
+    def __getattribute__(self, name):
+        """
+        Intercepting the base attribute getting of the ObjectProxy class.
+        """
+        # For any of these methods, we bypass the proxy and directly access the
+        # attribute on the ReplicaContext. This is necessary to avoid endless
+        # recursion.
+        if name.startswith("_self_") or name in {
+            "__wrapped__",
+            "__class__",
+            "__dict__",
+            "__setattr__",
+            "__getattribute__",
+            "_get_or_create_nested_replica",
+            "_build_replica_map",
+            "_self_replica_context",
+            "_check_instance_type",
+            "_wrap_instance_value",
+            "get_simple_name",
+            "get_parent_context",
+            "get_group_name",
+            "get_group_index",
+            "get_group_principal",
+            "is_principal",
+        }:
+            return object.__getattribute__(self, name)
+
+        # In any other case, the attribute is retrieved through the proxy
+        attr = super().__getattribute__(name)
+
+        # if the attribute is callable, then its execution will be wrapped in the
+        # replication context.
+        if callable(attr):
+
+            @wraps(attr)
+            def wrapped(*args, **kwargs):
+                with self._self_replica_context():
+                    result = attr(*args, **kwargs)
+                return self._check_instance_type(result)
+
+            return wrapped
+
+        # The only case, where it is important to wrap any result is the nested instances
+        # since for each replica, any nested instance shall be wrapped as well to route
+        # the context path properly that is a nested instance of a replica shall get its
+        # parent replica as context and not the parent original.
+        if name.endswith("__nested_instances"):
+            return self._wrap_instance_value(attr)
+        else:
+            return self._check_instance_type(attr)
 
     def __eq__(self, other):
         """

@@ -28,6 +28,7 @@ from core.test.specs_tests.instance_test_resources import (
     TestClassL0,
     TestClassL3,
     TestClassWithDifferentNestedType,
+    TestReplicableClassL0,
 )
 
 
@@ -1259,11 +1260,76 @@ class InstanceTest(TestCase):
         with self.assertRaises(AttributeError):
             Instance.create_from_string(json_string, mock_nonexistent=True)
 
+    def test_replica_context_with_valid_input(self):
+        l0 = TestReplicableClassL0("l0")
+        try:
+            ReplicaContext(l0, 0)
+        except Exception as e:
+            self.fail(e)
+
     def test_replica_context_with_invalid_input(self):
+        # Invalid type
         with self.assertRaises(TypeError):
             ReplicaContext("invalid_input", 0)
+
+        # Instance with no InstanceGroup implementation
         with self.assertRaises(TypeError):
             ReplicaContext(TestClassL0("l0"), 0)
 
+        # ReplicaContext as original for replication
+        with self.assertRaises(TypeError):
+            ReplicaContext(ReplicaContext(TestReplicableClassL0("l0"), 0), 0)
 
-# depends_on
+    def test_get_or_create_nested_replica(self):
+        l0 = TestReplicableClassL0("l0")
+        l0_r0 = ReplicaContext(l0, 0)
+
+        l0l1_r0 = l0_r0._get_or_create_nested_replica(l0.l1)
+        self.assertIs(l0l1_r0, l0_r0._get_or_create_nested_replica(l0.l1))
+
+        with self.assertRaises(TypeError):
+            l0_r0._get_or_create_nested_replica("invalid_input")
+
+        # Instance with no InstanceGroup implementation
+        with self.assertRaises(TypeError):
+            l0_r0._get_or_create_nested_replica(TestClassL0("l0"))
+
+    def test_build_replica_map(self):
+        l0 = TestReplicableClassL0("l0")
+        l0_r0 = ReplicaContext(l0, 0)
+        l0_replica_map = l0_r0._build_replica_map()
+        self.assertEqual(3, len(l0_replica_map))
+        self.assertIn(id(l0), l0_replica_map)
+        self.assertIn(id(l0.l1), l0_replica_map)
+        self.assertIn(id(l0.l1.l2), l0_replica_map)
+
+        l1_r0 = l0_replica_map[id(l0.l1)]
+        l1_replica_map = l1_r0._build_replica_map()
+        self.assertEqual(2, len(l1_replica_map))
+        self.assertIn(id(l0.l1), l1_replica_map)
+        self.assertIn(id(l0.l1.l2), l1_replica_map)
+
+        l2_r0 = l0_replica_map[id(l0.l1.l2)]
+        l2_replica_map = l2_r0._build_replica_map()
+        self.assertEqual(1, len(l2_replica_map))
+        self.assertIn(id(l0.l1.l2), l2_replica_map)
+
+        self.assertIs(l0_replica_map[id(l0.l1)], l1_replica_map[id(l0.l1)])
+        self.assertIs(l0_replica_map[id(l0.l1.l2)], l1_replica_map[id(l0.l1.l2)])
+        self.assertIs(l1_replica_map[id(l0.l1.l2)], l2_replica_map[id(l0.l1.l2)])
+
+    def test_check_instance_type(self):
+        l0 = TestReplicableClassL0("l0")
+        l0_2 = TestReplicableClassL0("l0_2")
+        l0_r0 = ReplicaContext(l0, 0)
+
+        self.assertIs(l0_r0, l0_r0._check_instance_type(l0_r0))
+        self.assertIs(l0_r0, l0_r0._check_instance_type(l0))
+        self.assertIs(l0_r0, l0_r0.l1._check_instance_type(l0))
+        self.assertIs(l0_r0.l1, l0_r0._check_instance_type(l0.l1))
+        self.assertIs(l0_2.l1, l0_r0._check_instance_type(l0_2.l1))
+
+
+# depends_on-ban megnézni, hogy le van e vhogy védve a replica context ellen
+# nested replication
+# nested instance from inside

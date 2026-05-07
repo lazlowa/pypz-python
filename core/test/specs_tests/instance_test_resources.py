@@ -13,8 +13,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # =============================================================================
+from typing import Optional
+
 from pypz.core.commons.parameters import OptionalParameter, RequiredParameter
-from pypz.core.specs.instance import Instance
+from pypz.core.specs.instance import Instance, InstanceGroup, ReplicaContext
 from pypz.core.specs.misc import BlankInstance
 
 
@@ -152,3 +154,126 @@ class CustomParameterClass:
         self._dict = {"a": 0, "b": 0}
         self._list = [0, 1, 2]
         self._set = {0, 1, 2}
+
+
+class TestReplicableClassL0(BlankInstance[Instance], InstanceGroup):
+
+    req_str = RequiredParameter(str)
+    opt_str = OptionalParameter(str)
+    opt_int = OptionalParameter(int, alt_name="optional_int")
+
+    def __init__(self, name: str = None, *args, **kwargs):
+        super().__init__(name, Instance, *args, **kwargs)
+
+        self.l1 = TestReplicableClassL1()
+
+        self.req_str = None
+        self.opt_str = "str"
+        self.opt_int = 1234
+
+    def get_group_size(self) -> int:
+        return 0
+
+    def get_group_index(self) -> int:
+        return 0
+
+    def get_group_name(self) -> Optional[str]:
+        return self.get_full_name()
+
+    def get_group_principal(self) -> Optional["Instance"]:
+        return self
+
+    def is_principal(self) -> bool:
+        return True
+
+
+class TestReplicableClassWithNestedReplicaL0(BlankInstance[Instance], InstanceGroup):
+
+    req_str = RequiredParameter(str)
+    opt_str = OptionalParameter(str)
+    opt_int = OptionalParameter(int, alt_name="optional_int")
+
+    def __init__(self, name: str = None, *args, **kwargs):
+        super().__init__(name, Instance, *args, **kwargs)
+
+        self.l1 = TestReplicableClassL1()
+        self.l1_r0 = ReplicaContext(self.l1, 0)
+
+        self.req_str = None
+        self.opt_str = "str"
+        self.opt_int = 1234
+
+    def get_group_size(self) -> int:
+        return 0
+
+    def get_group_index(self) -> int:
+        return 0
+
+    def get_group_name(self) -> Optional[str]:
+        return self.get_full_name()
+
+    def get_group_principal(self) -> Optional["Instance"]:
+        return self
+
+    def is_principal(self) -> bool:
+        return True
+
+
+class TestReplicableClassL1(BlankInstance[Instance], InstanceGroup):
+
+    req_str = RequiredParameter(str)
+    opt_str = OptionalParameter(str)
+    opt_int = OptionalParameter(int, alt_name="optional_int")
+
+    def __init__(self, name: str = None, *args, **kwargs):
+        super().__init__(name, Instance, *args, **kwargs)
+
+        self.l2 = TestReplicableClassL2()
+
+        self.req_str = None
+        self.opt_str = "str"
+        self.opt_int = 1234
+
+    def get_group_size(self) -> int:
+        return self.get_context().get_parameter("replicationFactor")
+
+    def get_group_index(self) -> int:
+        return 0
+
+    def get_group_name(self) -> Optional[str]:
+        return self.get_full_name()
+
+    def get_group_principal(self) -> Optional["Instance"]:
+        return self
+
+    def is_principal(self) -> bool:
+        return True
+
+
+class TestReplicableClassL2(BlankInstance[Instance], InstanceGroup):
+
+    req_str = RequiredParameter(str)
+    opt_str = OptionalParameter(str)
+    opt_int = OptionalParameter(int, alt_name="optional_int")
+
+    def __init__(self, name: str = None, *args, **kwargs):
+        super().__init__(name, Instance, *args, **kwargs)
+
+        self.req_str = None
+        self.opt_str = "str"
+        self.opt_int = 1234
+
+    def get_group_size(self) -> int:
+        return self.get_context().get_parameter("replicationFactor")
+
+    def get_group_index(self) -> int:
+        return 0
+
+    def get_group_name(self) -> Optional[str]:
+        return self.get_full_name()
+
+    def get_group_principal(self) -> Optional["Instance"]:
+        return self
+
+    def is_principal(self) -> bool:
+        return True
