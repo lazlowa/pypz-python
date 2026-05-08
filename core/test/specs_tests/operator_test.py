@@ -874,9 +874,7 @@ class OperatorInstanceTest(unittest.TestCase):
             )
 
 
-# ha replica contextet teszünk replica contextbe
 # channel
-# depends_on
 # get_full_name a ctorban
 # tényleg lemennek-e executálás közben a replicált dolgok
 # docs

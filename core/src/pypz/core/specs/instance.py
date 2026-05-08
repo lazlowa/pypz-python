@@ -469,25 +469,43 @@ class Instance(
                 f"[{self.get_full_name()}] Invalid dependency type: {type(instance)}"
             )
 
+        dependency = (
+            instance
+            if not isinstance(instance, ReplicaContext)
+            else instance.__wrapped__
+        )
+        dependency_context = (
+            dependency.get_context()
+            if not isinstance(dependency.get_context(), ReplicaContext)
+            else dependency.get_context().__wrapped__
+        )
+        this = self if not isinstance(self, ReplicaContext) else self.__wrapped__
+        this_context = (
+            this.get_context()
+            if not isinstance(this.get_context(), ReplicaContext)
+            else this.get_context().__wrapped__
+        )
+
         # Instance cannot depend on self
-        if self is instance:
+        if this is dependency:
             raise AttributeError(
                 f"[{self.get_full_name()}] Invalid dependency. Instance cannot depend on itself. "
             )
 
         # Makes no sense to express dependency between instances in different context
         if (
-            (self.get_context() is None)
-            or (instance.get_context() is None)
-            or (self.get_context() is not instance.get_context())
+            (this_context is None)
+            or (dependency_context is None)
+            or (this_context is not dependency_context)
         ):
             raise AttributeError(
-                f"[{self.get_full_name()}] Invalid dependency. "
-                f"Dependencies must have identical parent context."
+                f"[{this.get_full_name()}] Invalid dependency. "
+                f"Dependencies must have identical parent context: "
+                f"{dependency.get_full_name()}"
             )
 
         # Check circular dependency
-        if self in instance.__depends_on:
+        if this in dependency.__depends_on:
             raise RecursionError(
                 f"Circular dependency between detected: "
                 f"{self.get_full_name()} <-> {instance.get_full_name()} "
@@ -1003,10 +1021,14 @@ class ReplicaContext(ObjectProxy, InstanceGroup):
             raise TypeError(f"Replicas must be an instance of {Instance.__name__}")
 
         if not isinstance(original, InstanceGroup):
-            raise TypeError(f"Replicas must be an instance of {InstanceGroup.__name__}")
+            raise TypeError(
+                f"[{original.get_full_name()}] Replicas must be an instance of {InstanceGroup.__name__}"
+            )
 
-        if isinstance(original, ObjectProxy):
-            raise TypeError(f"Replication target must not be {ReplicaContext.__name__}")
+        if isinstance(original, ReplicaContext):
+            raise TypeError(
+                f"[{original.get_full_name()}] Replication target must not be {ReplicaContext.__name__}"
+            )
 
         super().__init__(original)
 
@@ -1021,6 +1043,9 @@ class ReplicaContext(ObjectProxy, InstanceGroup):
             if self._self_parent_context is None
             else self.__wrapped__.get_simple_name()
         )
+
+        # Invoking this will ensure that no nested instances are being replicated as well
+        self._build_replica_map()
 
     def get_simple_name(self) -> str:
         """
@@ -1228,8 +1253,8 @@ class ReplicaContext(ObjectProxy, InstanceGroup):
         # parent replica as context and not the parent original.
         if name.endswith("__nested_instances"):
             return self._wrap_instance_value(attr)
-        else:
-            return self._check_instance_type(attr)
+
+        return self._check_instance_type(attr)
 
     def __eq__(self, other):
         """

@@ -171,6 +171,12 @@ class TestReplicableClassL0(BlankInstance[Instance], InstanceGroup):
         self.opt_str = "str"
         self.opt_int = 1234
 
+    def get_l1_full_name(self):
+        return self.l1.get_full_name()
+
+    def get_l2_full_name(self):
+        return self.l1.l2.get_full_name()
+
     def get_group_size(self) -> int:
         return 0
 
@@ -197,6 +203,7 @@ class TestReplicableClassWithNestedReplicaL0(BlankInstance[Instance], InstanceGr
         super().__init__(name, Instance, *args, **kwargs)
 
         self.l1 = TestReplicableClassL1()
+        self.l12 = TestReplicableClassL1()
         self.l1_r0 = ReplicaContext(self.l1, 0)
 
         self.req_str = None
@@ -233,6 +240,9 @@ class TestReplicableClassL1(BlankInstance[Instance], InstanceGroup):
         self.req_str = None
         self.opt_str = "str"
         self.opt_int = 1234
+
+    def get_l2_full_name(self):
+        return self.l2.get_full_name()
 
     def get_group_size(self) -> int:
         return self.get_context().get_parameter("replicationFactor")

@@ -29,6 +29,7 @@ from core.test.specs_tests.instance_test_resources import (
     TestClassL3,
     TestClassWithDifferentNestedType,
     TestReplicableClassL0,
+    TestReplicableClassWithNestedReplicaL0,
 )
 
 
@@ -1280,7 +1281,7 @@ class InstanceTest(TestCase):
         with self.assertRaises(TypeError):
             ReplicaContext(ReplicaContext(TestReplicableClassL0("l0"), 0), 0)
 
-    def test_get_or_create_nested_replica(self):
+    def test_replica_context_get_or_create_nested_replica(self):
         l0 = TestReplicableClassL0("l0")
         l0_r0 = ReplicaContext(l0, 0)
 
@@ -1294,7 +1295,7 @@ class InstanceTest(TestCase):
         with self.assertRaises(TypeError):
             l0_r0._get_or_create_nested_replica(TestClassL0("l0"))
 
-    def test_build_replica_map(self):
+    def test_replica_context_build_replica_map(self):
         l0 = TestReplicableClassL0("l0")
         l0_r0 = ReplicaContext(l0, 0)
         l0_replica_map = l0_r0._build_replica_map()
@@ -1318,7 +1319,7 @@ class InstanceTest(TestCase):
         self.assertIs(l0_replica_map[id(l0.l1.l2)], l1_replica_map[id(l0.l1.l2)])
         self.assertIs(l1_replica_map[id(l0.l1.l2)], l2_replica_map[id(l0.l1.l2)])
 
-    def test_check_instance_type(self):
+    def test_replica_context_check_instance_type(self):
         l0 = TestReplicableClassL0("l0")
         l0_2 = TestReplicableClassL0("l0_2")
         l0_r0 = ReplicaContext(l0, 0)
@@ -1329,7 +1330,100 @@ class InstanceTest(TestCase):
         self.assertIs(l0_r0.l1, l0_r0._check_instance_type(l0.l1))
         self.assertIs(l0_2.l1, l0_r0._check_instance_type(l0_2.l1))
 
+    def test_replica_context_equality(self):
+        l0 = TestReplicableClassL0("l0")
+        l0_r0 = ReplicaContext(l0, 0)
+        l0_r1 = ReplicaContext(l0, 1)
 
-# depends_on-ban megnézni, hogy le van e vhogy védve a replica context ellen
-# nested replication
-# nested instance from inside
+        self.assertNotEqual(l0, l0_r0)
+        self.assertNotEqual(l0_r0, l0)
+        self.assertNotEqual(l0_r0, l0_r1)
+        self.assertIsNot(l0, l0_r0)
+        self.assertIsNot(l0_r0, l0_r1)
+
+        self.assertNotEqual(l0.l1, l0_r0.l1)
+        self.assertNotEqual(l0_r0.l1, l0.l1)
+        self.assertNotEqual(l0_r0.l1, l0_r1.l1)
+        self.assertIsNot(l0.l1, l0_r0.l1)
+        self.assertIsNot(l0_r0.l1, l0_r1.l1)
+
+        self.assertNotEqual(l0.l1.l2, l0_r0.l1.l2)
+        self.assertNotEqual(l0_r0.l1.l2, l0.l1.l2)
+        self.assertNotEqual(l0_r0.l1.l2, l0_r1.l1.l2)
+        self.assertIsNot(l0.l1.l2, l0_r0.l1.l2)
+        self.assertIsNot(l0_r0.l1.l2, l0_r1.l1.l2)
+
+    def test_replica_context_equivalence(self):
+        l0 = TestReplicableClassL0("l0")
+        l0_r0 = ReplicaContext(l0, 0)
+
+        self.assertTrue(l0.is_equivalent_to(l0_r0))
+        self.assertTrue(l0_r0.is_equivalent_to(l0))
+
+        self.assertTrue(l0.l1.is_equivalent_to(l0_r0.l1))
+        self.assertTrue(l0_r0.l1.is_equivalent_to(l0.l1))
+
+        self.assertTrue(l0.l1.l2.is_equivalent_to(l0_r0.l1.l2))
+        self.assertTrue(l0_r0.l1.l2.is_equivalent_to(l0.l1.l2))
+
+    def test_replica_context_hash(self):
+        l0 = TestReplicableClassL0("l0")
+        l0_r0 = ReplicaContext(l0, 0)
+        l0_r1 = ReplicaContext(l0, 1)
+
+        self.assertNotEqual(hash(l0), hash(l0_r0))
+        self.assertNotEqual(hash(l0_r0), hash(l0_r1))
+
+    def test_replica_context_get_dto(self):
+        l0 = TestReplicableClassL0("l0")
+        l0_r0 = ReplicaContext(l0, 0)
+        dto = l0_r0.get_dto()
+        self.assertEqual("l0_0", dto.name)
+
+    def test_replica_context_with_nested_replication(self):
+        l0 = TestReplicableClassWithNestedReplicaL0("l0")
+        self.assertEqual("l0.l1_0", l0.l1_r0.get_full_name())
+        self.assertEqual("l0.l1_0.l2", l0.l1_r0.l2.get_full_name())
+
+    def test_replica_context_replicate_with_nested_replication(self):
+        l0 = TestReplicableClassWithNestedReplicaL0("l0")
+        with self.assertRaises(TypeError):
+            ReplicaContext(l0, 0)
+
+    def test_replica_context_from_nested_context(self):
+        l0 = TestReplicableClassL0("l0")
+        self.assertEqual("l0.l1", l0.get_l1_full_name())
+        self.assertEqual("l0.l1.l2", l0.get_l2_full_name())
+
+        l0_r0 = ReplicaContext(l0, 0)
+        self.assertEqual("l0_0.l1", l0_r0.get_l1_full_name())
+        self.assertEqual("l0_0.l1.l2", l0_r0.get_l2_full_name())
+        self.assertEqual("l0_0.l1.l2", l0_r0.l1.get_l2_full_name())
+
+    def test_replica_context_depends_on(self):
+        l0 = TestReplicableClassWithNestedReplicaL0("l0")
+        l0.l1.depends_on(l0.l12)
+
+        self.assertEqual(1, len(Internals(l0.l1).depends_on))
+        self.assertIs(l0.l12, Internals(l0.l1).depends_on.pop())
+
+        l0 = TestReplicableClassWithNestedReplicaL0("l0")
+        l0.l1_r0.depends_on(l0.l12)
+
+        self.assertEqual(1, len(Internals(l0.l1).depends_on))
+        self.assertIs(l0.l12, Internals(l0.l1).depends_on.pop())
+
+        l0 = TestReplicableClassWithNestedReplicaL0("l0")
+        l0.l1_r0.depends_on(l0.l12)
+
+        self.assertEqual(1, len(Internals(l0.l1).depends_on))
+        self.assertIs(l0.l12, Internals(l0.l1_r0).depends_on.pop())
+
+    def test_replica_context_depends_on_with_replica_expect_error(self):
+        l0 = TestReplicableClassWithNestedReplicaL0("l0")
+
+        with self.assertRaises(AttributeError):
+            l0.l1.depends_on(l0.l1_r0)
+
+        with self.assertRaises(AttributeError):
+            l0.l1_r0.depends_on(l0.l1)
