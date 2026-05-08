@@ -18,6 +18,7 @@ import re
 import sys
 import types
 import typing
+import warnings
 from abc import ABC, ABCMeta, abstractmethod
 from contextlib import contextmanager
 from contextvars import ContextVar
@@ -125,6 +126,7 @@ class InstanceInitInterceptor(ABCMeta):
 
         instance = type.__call__(cls, name, *args, **kwargs)
         instance.__on_init_finished__(*args, **kwargs)
+        instance.__init_finished = True
         return instance
 
 
@@ -275,6 +277,8 @@ class Instance(
                 lambda value, p=param, instance=self: p.__set__(instance, value),
             )
 
+        self.__init_finished: bool = False
+
     # ========= overridable methods ==========
 
     @abstractmethod
@@ -318,6 +322,17 @@ class Instance(
         in the cache of the current replica context, then the corresponding
         ReplicaContext object will be used to retrieve the value, otherwise the original.
         """
+        # If object initialization is not yet finished, but this method is being called
+        # e.g., in ctor, then a warning shall be given, since that variable will not
+        # be replica aware.
+        if not self.__init_finished:
+            warnings.warn(
+                "Calling get_simple_name() in ctor makes the"
+                "assigned variable replica unaware. Better call it in a "
+                "later initialization phase.",
+                stacklevel=2,
+            )
+
         replica_map = _instance_replica_context.get()
         replica = replica_map.get(id(self), None) if replica_map is not None else None
         if replica is not None:
@@ -331,6 +346,17 @@ class Instance(
         then the full name of A is 'C.B.A'. This value is calculated and the result is
         stored after the first calculation to avoid recalculation every time.
         """
+        # If object initialization is not yet finished, but this method is being called
+        # e.g., in ctor, then a warning shall be given, since that variable will not
+        # be replica aware.
+        if not self.__init_finished:
+            warnings.warn(
+                "Calling get_full_name() in ctor makes the"
+                "assigned variable replica unaware. Better call it in a "
+                "later initialization phase.",
+                stacklevel=2,
+            )
+
         return (
             self.get_simple_name()
             if self.get_context() is None

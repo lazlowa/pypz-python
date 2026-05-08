@@ -875,6 +875,5 @@ class OperatorInstanceTest(unittest.TestCase):
 
 
 # channel
-# get_full_name a ctorban
 # tényleg lemennek-e executálás közben a replicált dolgok
 # docs

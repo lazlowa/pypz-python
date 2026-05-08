@@ -287,3 +287,24 @@ class TestReplicableClassL2(BlankInstance[Instance], InstanceGroup):
 
     def is_principal(self) -> bool:
         return True
+
+
+class TestReplicableClassWithNameAccessInCtor(BlankInstance[None], InstanceGroup):
+    def __init__(self, name: str = None, *args, **kwargs):
+        super().__init__(name, None, *args, **kwargs)
+        self.full_name = self.get_full_name()
+
+    def get_group_size(self) -> int:
+        pass
+
+    def get_group_index(self) -> int:
+        pass
+
+    def get_group_name(self) -> Optional[str]:
+        pass
+
+    def get_group_principal(self) -> Optional["Instance"]:
+        pass
+
+    def is_principal(self) -> bool:
+        pass

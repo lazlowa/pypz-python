@@ -29,6 +29,7 @@ from core.test.specs_tests.instance_test_resources import (
     TestClassL3,
     TestClassWithDifferentNestedType,
     TestReplicableClassL0,
+    TestReplicableClassWithNameAccessInCtor,
     TestReplicableClassWithNestedReplicaL0,
 )
 
@@ -1427,3 +1428,13 @@ class InstanceTest(TestCase):
 
         with self.assertRaises(AttributeError):
             l0.l1_r0.depends_on(l0.l1)
+
+    def test_replica_context_full_name_in_ctor(self):
+        with self.assertWarns(UserWarning):
+            TestReplicableClassWithNameAccessInCtor("instance")
+
+        instance = TestReplicableClassWithNameAccessInCtor("instance")
+        replica = ReplicaContext(instance, 0)
+
+        self.assertEqual("instance_0", replica.get_simple_name())
+        self.assertEqual("instance", replica.full_name)
