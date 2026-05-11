@@ -874,6 +874,5 @@ class OperatorInstanceTest(unittest.TestCase):
             )
 
 
-# channel
 # tényleg lemennek-e executálás közben a replicált dolgok
 # docs

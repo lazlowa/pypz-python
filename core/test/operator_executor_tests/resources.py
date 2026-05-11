@@ -337,3 +337,11 @@ class TestPipeline(Pipeline):
         super().__init__(name, *args, **kwargs)
         self.operator_a = TestOperator()
         self.operator_b = TestOperatorWithMultiplePluginsFromSameType()
+
+
+class TestPipelineWithReplicatedOperator(Pipeline):
+
+    def __init__(self, name: str, *args, **kwargs):
+        super().__init__(name, *args, **kwargs)
+        self.operator_a = TestOperator()
+        self.operator_a.set_parameter("replicationFactor", 1)

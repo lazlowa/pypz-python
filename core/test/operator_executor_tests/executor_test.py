@@ -18,7 +18,10 @@ import unittest
 from pypz.executors.commons import ExecutionMode, ExitCodes
 from pypz.executors.operator.executor import OperatorExecutor
 
-from core.test.operator_executor_tests.resources import TestPipeline
+from core.test.operator_executor_tests.resources import (
+    TestPipeline,
+    TestPipelineWithReplicatedOperator,
+)
 
 
 class OperatorExecutorTest(unittest.TestCase):
@@ -890,3 +893,7 @@ class OperatorExecutorTest(unittest.TestCase):
         self.assertEqual(2, pipeline.operator_b.output_port_2.shutdown_order_idx)
         self.assertEqual(1, pipeline.operator_b.output_port_3.shutdown_order_idx)
         self.assertEqual(0, pipeline.operator_b.output_port_4.shutdown_order_idx)
+
+    def test_executor_with_replicated_operator(self):
+        pipeline = TestPipelineWithReplicatedOperator("pipeline")
+        print(pipeline.operator_a_0.get_full_name())

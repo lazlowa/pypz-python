@@ -327,7 +327,7 @@ class Instance(
         # be replica aware.
         if not self.__init_finished:
             warnings.warn(
-                "Calling get_simple_name() in ctor makes the"
+                "Retrieving instance names in ctor makes the "
                 "assigned variable replica unaware. Better call it in a "
                 "later initialization phase.",
                 stacklevel=2,
@@ -346,17 +346,6 @@ class Instance(
         then the full name of A is 'C.B.A'. This value is calculated and the result is
         stored after the first calculation to avoid recalculation every time.
         """
-        # If object initialization is not yet finished, but this method is being called
-        # e.g., in ctor, then a warning shall be given, since that variable will not
-        # be replica aware.
-        if not self.__init_finished:
-            warnings.warn(
-                "Calling get_full_name() in ctor makes the"
-                "assigned variable replica unaware. Better call it in a "
-                "later initialization phase.",
-                stacklevel=2,
-            )
-
         return (
             self.get_simple_name()
             if self.get_context() is None
