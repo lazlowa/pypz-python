@@ -249,6 +249,8 @@ class TestOperator(Operator):
 
         self.interrupted = False
 
+        self.full_name = self.get_full_name()
+
     def _on_interrupt(self, system_signal: int = None) -> None:
         self.call_counter_interrupt += 1
         self.get_logger().warning(f"Interrupted by signal: {system_signal}")
@@ -260,6 +262,7 @@ class TestOperator(Operator):
         return self.control_handler(TestPluginBase._on_error.__name__, None)
 
     def _on_init(self) -> bool:
+        self.full_name = self.get_full_name()
         self.call_counter_init += 1
         return self.control_handler(TestOperator._on_init.__name__, True)
 
@@ -344,4 +347,4 @@ class TestPipelineWithReplicatedOperator(Pipeline):
     def __init__(self, name: str, *args, **kwargs):
         super().__init__(name, *args, **kwargs)
         self.operator_a = TestOperator()
-        self.operator_a.set_parameter("replicationFactor", 1)
+        self.operator_a.set_parameter("replicationFactor", 2)

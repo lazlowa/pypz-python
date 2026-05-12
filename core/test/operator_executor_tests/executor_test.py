@@ -896,4 +896,8 @@ class OperatorExecutorTest(unittest.TestCase):
 
     def test_executor_with_replicated_operator(self):
         pipeline = TestPipelineWithReplicatedOperator("pipeline")
-        print(pipeline.operator_a_0.get_full_name())
+        self.assertEqual("pipeline.operator_a", pipeline.operator_a.full_name)
+
+        executor = OperatorExecutor(pipeline.operator_a_0)
+        executor.execute()
+        self.assertEqual("pipeline.operator_a_0", pipeline.operator_a_0.full_name)
