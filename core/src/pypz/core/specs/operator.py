@@ -20,6 +20,7 @@ from typing import TYPE_CHECKING, Any, Optional, cast
 import yaml
 from pypz.core.commons.loggers import ContextLogger, ContextLoggerInterface
 from pypz.core.commons.parameters import OptionalParameter
+from pypz.core.commons.utils import convert_to_dict
 from pypz.core.specs.dtos import (
     OperatorConnection,
     OperatorConnectionSource,
@@ -48,7 +49,53 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
     :param name: name of the instance, if not provided, it will be attempted to deduce from the variable's name
     """
 
-    # ========================= inner logger class =========================
+    # ========================= inner class =========================
+
+    class Replica:
+        def __init__(self, original: "Operator", replica_index: int):
+            self._original = original
+            self._replica_index: int = replica_index
+            self._simple_name: str = f"{original.get_simple_name()}_{replica_index}"
+            self._full_name: str = (
+                self._simple_name
+                if original.get_context() is None
+                else original.get_context().get_full_name() + "." + self._simple_name
+            )
+            self._spec_name: str = ":".join(
+                [original.__class__.__module__, original.__class__.__qualname__]
+            )
+
+        def materialize(self) -> "Operator":
+            """
+            Materializes this replica proxy into a standalone Operator instance.
+            The returned object no longer shares runtime state with the original.
+            """
+            return Operator.create_from_dto(
+                self.get_dto(),
+                replication_origin=self._original,
+                context=self._original.get_context(),
+                replication_group_index=self._replica_index + 1,
+                mock_nonexistent=True,
+            )
+
+        def get_simple_name(self) -> str:
+            return self._simple_name
+
+        def get_full_name(self) -> str:
+            return self._full_name
+
+        def get_original(self) -> "Operator":
+            return self._original
+
+        def get_dto(self) -> OperatorInstanceDTO:
+            dto = self._original.get_dto()
+            dto.name = self._simple_name
+            return dto
+
+        def __str__(self):
+            return yaml.safe_dump(
+                convert_to_dict(self.get_dto()), default_flow_style=False
+            )
 
     class Logger(ContextLoggerInterface):
         """
@@ -172,23 +219,19 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
     def __init__(self, name: str = None, *args, **kwargs):
         super().__init__(name, Plugin, *args, **kwargs)
 
-        internals = Internals(self)
-
-        self.__replication_origin: Optional[Operator] = internals.reference
+        self.__replication_origin: Optional[Operator] = kwargs.get(
+            "replication_origin", None
+        )
         """
         Reference to the original instance, which was the base for the replication
         """
 
-        self.__replicas: list[Operator] = []
+        self.__replicas: list[Operator.Replica] = []
         """
         List of replica instances
         """
 
-        self._replication_factor: int = (
-            0
-            if internals.reference is None
-            else internals.reference.get_replication_factor()
-        )
+        self._replication_factor: int = 0
         """
         PARAMETER - The replication factor specifies, how many replicas shall be created along
         the original instance.
@@ -305,7 +348,7 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
             self.__replication_origin is self
         )
 
-    def get_replica(self, replica_id: int) -> "Operator":
+    def get_replica(self, replica_id: int) -> "Operator.Replica":
         """
         Returns the replica instance by id. The id is the actual place in the
         replica list, which is ensured during the replica creation.
@@ -315,7 +358,7 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
         """
         return self.__replicas[replica_id]
 
-    def get_replicas(self) -> list["Operator"]:
+    def get_replicas(self) -> list["Operator.Replica"]:
         """
         :return: replica list
         """
@@ -366,12 +409,7 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
         # Update connections
         # ==================
 
-        # Replicas shall not update connections as those are shared from the original
-        if (
-            (instance_dto.connections is not None)
-            and (self.get_context() is not None)
-            and self.is_principal()
-        ):
+        if instance_dto.connections and self.get_context():
             internals = Internals(self)
             for connection in instance_dto.connections:
                 if connection.inputPortName not in internals.nested_instances:
@@ -437,16 +475,7 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
                 self.__replication_group_index = 0
 
             for idx in range(len(self.__replicas), self._replication_factor):
-                replica_dto = self.get_dto()
-                replica_dto.name = self.get_simple_name() + "_" + str(idx)
-
-                replica = Operator.create_from_dto(
-                    replica_dto,
-                    context=self.get_context(),
-                    reference=self,
-                    replication_group_index=idx + 1,
-                    mock_nonexistent=True,
-                )
+                replica = Operator.Replica(self, idx)
 
                 if self.get_context() is not None:
                     self.get_context().__setattr__(replica.get_simple_name(), replica)

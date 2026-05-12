@@ -190,12 +190,6 @@ class Instance(
         be able to discover those instances
         """
 
-        self.__reference = kwargs["reference"] if "reference" in kwargs else None
-        """
-        Reference to the reference instance. If specified, then some instance internal
-        configuration related attributes will refer to the attributes of the reference instance.
-        """
-
         self.__context: Instance = kwargs["context"] if "context" in kwargs else None
         """
         Reference to the context aka parent object. Derived automatically
@@ -257,18 +251,12 @@ class Instance(
         shall be set upon instance parameter setting.
         """
 
-        self.__parameters: InstanceParameters = (
-            self.__reference.__parameters
-            if self.__reference is not None
-            else InstanceParameters()
-        )
+        self.__parameters: InstanceParameters = InstanceParameters()
         """
         The interpreted instance parameters i.e., cascading and templates are interpreted
         """
 
-        self.__depends_on: set = (
-            self.__reference.__depends_on if self.__reference is not None else set()
-        )
+        self.__depends_on: set = set()
         """
         Set of other instances that is this instance depending on. Note however that
         the type of the dependencies are checked dynamically in runtime, since dependencies
@@ -620,18 +608,10 @@ class Instance(
                         # an already existing instance refers to a not yet existing
                         # then error will arise.
                         if nested_instance_dto.name not in self.__nested_instances:
-                            nested_instance_reference = (
-                                self.__reference.__nested_instances[
-                                    nested_instance_dto.name
-                                ]
-                                if self.__reference is not None
-                                else None
-                            )
                             new_nested_instance = (
                                 self.__nested_instance_type.create_from_dto(
                                     nested_instance_dto,
                                     context=self,
-                                    reference=nested_instance_reference,
                                     mock_nonexistent=True,
                                     disable_auto_update=True,
                                 )
@@ -667,18 +647,13 @@ class Instance(
             final_instance_name = (
                 value.instance_name if value.instance_name is not None else name
             )
-            nested_instance_reference = (
-                self.__reference.__nested_instances[final_instance_name]
-                if self.__reference is not None
-                else None
-            )
+
             if (self.__nested_instance_type is not None) and (
                 issubclass(value.context_class, self.__nested_instance_type)
             ):
                 instance: Instance[Any] = value.context_class(
                     final_instance_name,
                     context=self,
-                    reference=nested_instance_reference,
                     *value.args,
                     **value.kwargs,
                 )
@@ -686,7 +661,6 @@ class Instance(
                 instance: Instance[Any] = value.context_class(
                     final_instance_name,
                     context=None,
-                    reference=nested_instance_reference,
                     *value.args,
                     **value.kwargs,
                 )
@@ -721,6 +695,12 @@ class Instance(
             and (self.__expected_parameters == other.__expected_parameters)
             and (self.__spec_name == other.__spec_name)
         )
+
+    def __ne__(self, other):
+        result = self.__eq__(other)
+        if result is NotImplemented:
+            return NotImplemented
+        return not result
 
     def __str__(self):
         return yaml.safe_dump(convert_to_dict(self.get_dto()), default_flow_style=False)
