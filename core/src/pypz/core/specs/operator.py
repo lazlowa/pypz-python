@@ -93,6 +93,10 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
 
                 if materialized_plugin is not None:
                     memo[id(original_plugin)] = materialized_plugin
+                else:
+                    memo[id(original_plugin)] = original_plugin.__class__(
+                        name=plugin_name, context=replica
+                    )
 
             self._copy_attributes(original, replica, memo)
 
@@ -137,6 +141,7 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
                 "_Instance__parameters",
                 "_Instance__depends_on",
                 "_PortPlugin__schema",
+                "_PortPlugin__connected_ports",
             )
             source_internals = Internals(source)
             target_internals = Internals(target)
@@ -145,7 +150,7 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
                     not attr_name.startswith(attr_exclude_prefixes)
                     or (attr_name in attr_includes)
                 ) and (attr_name not in target_internals.nested_instances):
-                    object.__setattr__(
+                    setattr(
                         target,
                         attr_name,
                         copy.deepcopy(attr_value, memo),
