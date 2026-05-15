@@ -98,3 +98,4 @@ class TestPipelineWithOperator(Pipeline):
 
 
 # pipeline from string with dummy classes -> nested replicas shall have different id and proper name
+# at connections, the source shall not be recreated, since it is not part of the current operator/replica

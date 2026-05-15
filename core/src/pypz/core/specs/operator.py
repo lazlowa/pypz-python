@@ -112,6 +112,12 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
             return self.__wrapped__
 
         def get_dto(self) -> OperatorInstanceDTO:
+            """
+            Creates a DTO object for the replica. Notice that only operator's simple name is adapted,
+            since the underlying plugins don't change names upon replication. Furthermore, notice
+            that each replica effectively represents connections to the original, so there is no
+            need to update connection details either.
+            """
             dto = self.__wrapped__.get_dto()
             dto.name = self._self_simple_name
             return dto
@@ -189,11 +195,12 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
             if self is other:
                 return True
 
+            if not isinstance(other, Operator):
+                return False
+
             return (
-                isinstance(other, type(self))
-                and (self.get_full_name() == other.get_full_name())
-                and self.is_equivalent_to(other)
-            )
+                self.get_full_name() == other.get_full_name()
+            ) and self.is_equivalent_to(other)
 
         def __ne__(self, other):
             result = self.__eq__(other)
@@ -591,9 +598,6 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
                 if self.get_context() is not None:
                     self.get_context().__setattr__(replica.get_simple_name(), replica)
 
-                # We need to store the replicas in the internal replicas list, since
-                # that is the only place, where those can be found. Replicas are not
-                # direct part of the nested instances
                 self.__replicas.append(replica)
         else:
             replicas_to_remove = self.__replicas[self._replication_factor :]
