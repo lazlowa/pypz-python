@@ -69,6 +69,35 @@ class Internals:
             f"'{type(self._instance).__name__}' has no internal attribute '{name}'"
         )
 
+    def __setattr__(self, name, value):
+        # Keep wrapper internals on the wrapper itself
+        if name == "_instance":
+            object.__setattr__(self, name, value)
+            return
+
+        allowed = self._collect_allowed_names()
+        if name not in allowed:
+            raise AttributeError(f"Access to '{name}' is not allowed")
+
+        for cls in type(self._instance).__mro__:
+            mangled = f"_{cls.__name__}__{name}"
+            if hasattr(self._instance, mangled):
+                setattr(self._instance, mangled, value)
+                return
+
+        protected = f"_{name}"
+        if hasattr(self._instance, protected):
+            setattr(self._instance, protected, value)
+            return
+
+        if hasattr(self._instance, name):
+            setattr(self._instance, name, value)
+            return
+
+        raise AttributeError(
+            f"'{type(self._instance).__name__}' has no internal attribute '{name}'"
+        )
+
     def _collect_allowed_names(self) -> set[str]:
         """
         This method collects all the available names specified through '_internal_access'

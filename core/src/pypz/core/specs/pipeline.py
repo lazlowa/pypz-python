@@ -39,11 +39,11 @@ class Pipeline(Instance[Operator], RegisteredInterface):
         instance_dto = super().get_dto()
 
         # Replicas must be excluded from the dto
-        instance_dto.spec.nestedInstances = {
+        instance_dto.spec.nestedInstances = [
             operator.get_dto()
             for operator in Internals(self).nested_instances.values()
             if operator.is_principal()
-        }
+        ]
 
         return PipelineInstanceDTO(
             name=instance_dto.name,

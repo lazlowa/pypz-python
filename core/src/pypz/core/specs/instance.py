@@ -569,6 +569,46 @@ class Instance(
 
                 self.depends_on(self.__context.__nested_instances[instance_name])
 
+    def is_equivalent_to(self, other: "Instance") -> bool:
+        """
+        This method provides a less rigid comparison between instances. It does
+        not check structural equality, only content equality.
+
+        :param other: other instance to compare
+        """
+        if not isinstance(other, type(self)):
+            return False
+
+        if self.__spec_name != other.__spec_name:
+            return False
+
+        if self.__parameters != other.__parameters:
+            return False
+
+        if self.__expected_parameters != other.__expected_parameters:
+            return False
+
+        if len(self.__depends_on) != len(other.__depends_on):
+            return False
+
+        if len(self.__nested_instances) != len(other.__nested_instances):
+            return False
+
+        if set(self.__nested_instances.keys()) != set(other.__nested_instances.keys()):
+            return False
+
+        for name, nested in self.__nested_instances.items():
+            if not nested.is_equivalent_to(other.__nested_instances[name]):
+                return False
+
+        # depends_on comparison should be based on local dependency names
+        if {inst.get_simple_name() for inst in self.__depends_on} != {
+            inst.get_simple_name() for inst in other.__depends_on
+        }:
+            return False
+
+        return True
+
     # ========= protected methods ==========
 
     def __on_init_finished__(self, *args, **kwargs) -> None:
@@ -688,7 +728,7 @@ class Instance(
 
         return (
             isinstance(other, type(self))
-            and (self.__simple_name == other.__simple_name)
+            and (self.__full_name == other.__full_name)
             and (self.__parameters == other.__parameters)
             and (self.__depends_on == other.__depends_on)
             and (self.__nested_instances == other.__nested_instances)
@@ -710,6 +750,25 @@ class Instance(
 
     def __getattr__(self, name):
         return self.__getattribute__(name)
+
+    def __deepcopy__(self, memo):
+        """
+        Framework-aware deepcopy behavior.
+
+        Instance objects are identity/reference objects by default. They should not
+        be recursively deep-copied unless the caller explicitly provides a
+        replacement in the deepcopy memo.
+
+        This is important for replica materialization. User attributes may reference
+        operators, plugins, ports, pipelines, or other framework instances. During
+        deepcopy, only the original operator and its local nested plugins should be
+        remapped to the materialized replica equivalents. External framework objects
+        should remain shared references.
+        """
+        if id(self) in memo:
+            return memo[id(self)]
+
+        return self
 
     # ================= static methods =====================
 

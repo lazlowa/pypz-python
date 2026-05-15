@@ -302,13 +302,13 @@ class InputPortPlugin(PortPlugin, RegisteredInterface, ABC):
     ):
         super().__init__(name, schema, *args, **kwargs)
 
-        self._group_mode: bool = group_mode
+        self.__group_mode: bool = group_mode
         """
         If True, the InputPortPlugin shall receive all records sent to the group
         """
 
     def is_in_group_mode(self):
-        return self._group_mode
+        return self.__group_mode
 
     @abstractmethod
     def can_retrieve(self) -> bool:

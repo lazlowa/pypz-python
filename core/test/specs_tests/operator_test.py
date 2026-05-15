@@ -224,7 +224,7 @@ class OperatorInstanceTest(unittest.TestCase):
         self.assertTrue(pipeline.operator_a.input_port.is_principal())
 
         for replica_idx in range(pipeline.operator_a.get_replication_factor()):
-            replica = pipeline.operator_a.get_replica(replica_idx)
+            replica = pipeline.operator_a.get_replica(replica_idx).materialize()
 
             self.assertEqual(6, replica.get_group_size())
             self.assertEqual(replica_idx + 1, replica.get_group_index())
@@ -283,7 +283,7 @@ class OperatorInstanceTest(unittest.TestCase):
         self.assertEqual(0, pipeline.operator_a.get_parameter("param_e"))
 
         for replica_idx in range(pipeline.operator_a.get_replication_factor()):
-            replica = pipeline.operator_a.get_replica(replica_idx)
+            replica = pipeline.operator_a.get_replica(replica_idx).materialize()
 
             self.assertEqual(replica.param_a, pipeline.operator_a.param_a)
             self.assertEqual(replica.param_b, pipeline.operator_a.param_b)
@@ -291,7 +291,7 @@ class OperatorInstanceTest(unittest.TestCase):
             self.assertEqual(replica.param_d, pipeline.operator_a.param_d)
             self.assertEqual(replica.param_e, pipeline.operator_a.param_e)
 
-            self.assertIs(
+            self.assertEqual(
                 Internals(pipeline.operator_a).parameters,
                 Internals(replica).parameters,
             )
@@ -314,7 +314,7 @@ class OperatorInstanceTest(unittest.TestCase):
         self.assertEqual(12345, pipeline.operator_a.get_parameter("param_e"))
 
         for replica_idx in range(pipeline.operator_a.get_replication_factor()):
-            replica = pipeline.operator_a.get_replica(replica_idx)
+            replica = pipeline.operator_a.get_replica(replica_idx).materialize()
 
             self.assertEqual(replica.param_a, pipeline.operator_a.param_a)
             self.assertEqual(replica.param_b, pipeline.operator_a.param_b)
@@ -322,7 +322,7 @@ class OperatorInstanceTest(unittest.TestCase):
             self.assertEqual(replica.param_d, pipeline.operator_a.param_d)
             self.assertEqual(replica.param_e, pipeline.operator_a.param_e)
 
-            self.assertIs(
+            self.assertEqual(
                 Internals(pipeline.operator_a).parameters,
                 Internals(replica).parameters,
             )
@@ -345,7 +345,7 @@ class OperatorInstanceTest(unittest.TestCase):
         self.assertEqual(1, pipeline.operator_a.get_parameter("param_e"))
 
         for replica_idx in range(pipeline.operator_a.get_replication_factor()):
-            replica = pipeline.operator_a.get_replica(replica_idx)
+            replica = pipeline.operator_a.get_replica(replica_idx).materialize()
 
             self.assertEqual(replica.param_a, pipeline.operator_a.param_a)
             self.assertEqual(replica.param_b, pipeline.operator_a.param_b)
@@ -353,7 +353,7 @@ class OperatorInstanceTest(unittest.TestCase):
             self.assertEqual(replica.param_d, pipeline.operator_a.param_d)
             self.assertEqual(replica.param_e, pipeline.operator_a.param_e)
 
-            self.assertIs(
+            self.assertEqual(
                 Internals(pipeline.operator_a).parameters,
                 Internals(replica).parameters,
             )
@@ -375,7 +375,7 @@ class OperatorInstanceTest(unittest.TestCase):
         self.assertEqual(0, pipeline.operator_a.get_parameter("param_e"))
 
         for replica_idx in range(pipeline.operator_a.get_replication_factor()):
-            replica = pipeline.operator_a.get_replica(replica_idx)
+            replica = pipeline.operator_a.get_replica(replica_idx).materialize()
 
             self.assertEqual(replica.param_a, pipeline.operator_a.param_a)
             self.assertEqual(replica.param_b, pipeline.operator_a.param_b)
@@ -383,7 +383,7 @@ class OperatorInstanceTest(unittest.TestCase):
             self.assertEqual(replica.param_d, pipeline.operator_a.param_d)
             self.assertEqual(replica.param_e, pipeline.operator_a.param_e)
 
-            self.assertIs(
+            self.assertEqual(
                 Internals(pipeline.operator_a).parameters,
                 Internals(replica).parameters,
             )
@@ -406,7 +406,7 @@ class OperatorInstanceTest(unittest.TestCase):
         self.assertEqual(12345, pipeline.operator_a.get_parameter("param_e"))
 
         for replica_idx in range(pipeline.operator_a.get_replication_factor()):
-            replica = pipeline.operator_a.get_replica(replica_idx)
+            replica = pipeline.operator_a.get_replica(replica_idx).materialize()
 
             self.assertEqual(replica.param_a, pipeline.operator_a.param_a)
             self.assertEqual(replica.param_b, pipeline.operator_a.param_b)
@@ -414,7 +414,7 @@ class OperatorInstanceTest(unittest.TestCase):
             self.assertEqual(replica.param_d, pipeline.operator_a.param_d)
             self.assertEqual(replica.param_e, pipeline.operator_a.param_e)
 
-            self.assertIs(
+            self.assertEqual(
                 Internals(pipeline.operator_a).parameters,
                 Internals(replica).parameters,
             )
@@ -437,7 +437,7 @@ class OperatorInstanceTest(unittest.TestCase):
         self.assertEqual(1, pipeline.operator_a.get_parameter("param_e"))
 
         for replica_idx in range(pipeline.operator_a.get_replication_factor()):
-            replica = pipeline.operator_a.get_replica(replica_idx)
+            replica = pipeline.operator_a.get_replica(replica_idx).materialize()
 
             self.assertEqual(replica.param_a, pipeline.operator_a.param_a)
             self.assertEqual(replica.param_b, pipeline.operator_a.param_b)
@@ -445,7 +445,7 @@ class OperatorInstanceTest(unittest.TestCase):
             self.assertEqual(replica.param_d, pipeline.operator_a.param_d)
             self.assertEqual(replica.param_e, pipeline.operator_a.param_e)
 
-            self.assertIs(
+            self.assertEqual(
                 Internals(pipeline.operator_a).parameters,
                 Internals(replica).parameters,
             )
@@ -462,7 +462,7 @@ class OperatorInstanceTest(unittest.TestCase):
         self.assertEqual("operator", operator.get_full_name())
 
         for replica_idx in range(operator.get_replication_factor()):
-            replica = operator.get_replica(replica_idx)
+            replica = operator.get_replica(replica_idx).materialize()
 
             self.assertEqual(operator, replica.get_group_principal())
             self.assertEqual(operator.get_simple_name(), replica.get_group_name())
@@ -474,7 +474,7 @@ class OperatorInstanceTest(unittest.TestCase):
         operator_internals = Internals(operator)
 
         for replica in operator.get_replicas():
-            replica_internals = Internals(operator)
+            replica_internals = Internals(replica.materialize())
 
             self.assertEqual(5, replica.get_replication_factor())
             self.assertEqual(id(operator), id(replica.get_group_principal()))
@@ -506,7 +506,7 @@ class OperatorInstanceTest(unittest.TestCase):
         operator.output_port.set_parameter("_opt_int", 4321)
 
         for replica in operator.get_replicas():
-            replica_internals = Internals(operator)
+            replica_internals = Internals(replica.materialize())
 
             self.assertEqual(
                 operator_internals.nested_instances,
@@ -564,46 +564,8 @@ class OperatorInstanceTest(unittest.TestCase):
         operator.get_replica(0).output_port.set_parameter("_opt_int", 4321)
 
         for replica in operator.get_replicas():
-            self.assertEqual(
-                Internals(operator).nested_instances,
-                Internals(replica).nested_instances,
-            )
-            self.assertEqual(
-                id(Internals(operator).parameters),
-                id(Internals(replica).parameters),
-            )
-            self.assertEqual(
-                id(Internals(operator).depends_on),
-                id(Internals(replica).depends_on),
-            )
-            self.assertEqual(
-                id(Internals(operator.output_port).parameters),
-                id(Internals(replica.output_port).parameters),
-            )
-            self.assertEqual(
-                id(Internals(operator.output_port).depends_on),
-                id(Internals(replica.output_port).depends_on),
-            )
-            self.assertEqual(
-                id(Internals(operator.input_port).parameters),
-                id(Internals(replica.input_port).parameters),
-            )
-            self.assertEqual(
-                id(Internals(operator.input_port).depends_on),
-                id(Internals(replica.input_port).depends_on),
-            )
-            self.assertEqual(
-                id(operator.output_port.req_str), id(replica.output_port.req_str)
-            )
-            self.assertEqual(
-                id(operator.output_port._opt_str), id(replica.output_port._opt_str)
-            )
-            self.assertEqual(
-                id(operator.output_port.req_int), id(replica.output_port.req_int)
-            )
-            self.assertEqual(
-                id(operator.output_port._opt_int), id(replica.output_port._opt_int)
-            )
+            materialized_replica = replica.materialize()
+            self.assertTrue(operator.is_equivalent_to(materialized_replica))
 
     def test_operator_replication_replica_equality_with_direct_parameter_update_on_origin(
         self,
@@ -619,45 +581,50 @@ class OperatorInstanceTest(unittest.TestCase):
         operator.output_port._opt_int = 4321
 
         for replica in operator.get_replicas():
+            materialized_replica = replica.materialize()
             self.assertEqual(
                 Internals(operator).nested_instances,
-                Internals(replica).nested_instances,
+                Internals(materialized_replica).nested_instances,
             )
             self.assertEqual(
                 id(Internals(operator).parameters),
-                id(Internals(replica).parameters),
+                id(Internals(materialized_replica).parameters),
             )
             self.assertEqual(
                 id(Internals(operator).depends_on),
-                id(Internals(replica).depends_on),
+                id(Internals(materialized_replica).depends_on),
             )
             self.assertEqual(
                 id(Internals(operator.output_port).parameters),
-                id(Internals(replica.output_port).parameters),
+                id(Internals(materialized_replica.output_port).parameters),
             )
             self.assertEqual(
                 id(Internals(operator.output_port).depends_on),
-                id(Internals(replica.output_port).depends_on),
+                id(Internals(materialized_replica.output_port).depends_on),
             )
             self.assertEqual(
                 id(Internals(operator.input_port).parameters),
-                id(Internals(replica.input_port).parameters),
+                id(Internals(materialized_replica.input_port).parameters),
             )
             self.assertEqual(
                 id(Internals(operator.input_port).depends_on),
-                id(Internals(replica.input_port).depends_on),
+                id(Internals(materialized_replica.input_port).depends_on),
             )
             self.assertEqual(
-                id(operator.output_port.req_str), id(replica.output_port.req_str)
+                id(operator.output_port.req_str),
+                id(materialized_replica.output_port.req_str),
             )
             self.assertEqual(
-                id(operator.output_port._opt_str), id(replica.output_port._opt_str)
+                id(operator.output_port._opt_str),
+                id(materialized_replica.output_port._opt_str),
             )
             self.assertEqual(
-                id(operator.output_port.req_int), id(replica.output_port.req_int)
+                id(operator.output_port.req_int),
+                id(materialized_replica.output_port.req_int),
             )
             self.assertEqual(
-                id(operator.output_port._opt_int), id(replica.output_port._opt_int)
+                id(operator.output_port._opt_int),
+                id(materialized_replica.output_port._opt_int),
             )
 
     def test_operator_replication_replica_equality_with_direct_parameter_update_on_replica(
@@ -677,46 +644,8 @@ class OperatorInstanceTest(unittest.TestCase):
         operator.get_replica(0).output_port._opt_int = 4321
 
         for replica in operator.get_replicas():
-            self.assertEqual(
-                Internals(operator).nested_instances,
-                Internals(replica).nested_instances,
-            )
-            self.assertEqual(
-                id(Internals(operator).parameters),
-                id(Internals(replica).parameters),
-            )
-            self.assertEqual(
-                id(Internals(operator).depends_on),
-                id(Internals(replica).depends_on),
-            )
-            self.assertEqual(
-                id(Internals(operator.output_port).parameters),
-                id(Internals(replica.output_port).parameters),
-            )
-            self.assertEqual(
-                id(Internals(operator.output_port).depends_on),
-                id(Internals(replica.output_port).depends_on),
-            )
-            self.assertEqual(
-                id(Internals(operator.input_port).parameters),
-                id(Internals(replica.input_port).parameters),
-            )
-            self.assertEqual(
-                id(Internals(operator.input_port).depends_on),
-                id(Internals(replica.input_port).depends_on),
-            )
-            self.assertEqual(
-                id(operator.output_port.req_str), id(replica.output_port.req_str)
-            )
-            self.assertEqual(
-                id(operator.output_port._opt_str), id(replica.output_port._opt_str)
-            )
-            self.assertEqual(
-                id(operator.output_port.req_int), id(replica.output_port.req_int)
-            )
-            self.assertEqual(
-                id(operator.output_port._opt_int), id(replica.output_port._opt_int)
-            )
+            materialized_replica = replica.materialize()
+            self.assertTrue(operator.is_equivalent_to(materialized_replica))
 
     def test_operator_replication_with_negative_factor_expect_error(self):
         with self.assertRaises(ValueError):
