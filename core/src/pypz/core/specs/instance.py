@@ -378,13 +378,11 @@ class Instance(
            }
         """
 
-        expected_parameters = {}
-        [
-            expected_parameters.update(param.to_dict(self))
+        return {
+            key: value
             for param in self.__expected_parameters.values()
-        ]
-
-        return expected_parameters
+            for key, value in param.to_dict(self).items()
+        }
 
     def get_missing_required_parameters(self) -> dict[str, set[str]]:
         """
@@ -728,7 +726,7 @@ class Instance(
 
         return (
             isinstance(other, type(self))
-            and (self.__full_name == other.__full_name)
+            and (self.get_full_name() == other.get_full_name())
             and (self.__parameters == other.__parameters)
             and (self.__depends_on == other.__depends_on)
             and (self.__nested_instances == other.__nested_instances)

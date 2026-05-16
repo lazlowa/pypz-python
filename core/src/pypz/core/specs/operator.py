@@ -69,7 +69,7 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
             )
             self._self_original_internals = Internals(original)
 
-        def materialize(self):
+        def materialize(self) -> "Operator":
             original = self.__wrapped__
             replica = original.__class__(
                 name=self._self_simple_name,

@@ -63,6 +63,9 @@ class TestOperatorWithPortPlugins(BlankOperator):
     param_c = OptionalParameter(int)
     param_d = OptionalParameter(int)
     param_e = OptionalParameter(int)
+    param_all = OptionalParameter(
+        int, on_update=lambda instance, val: instance.change_all_parameters()
+    )
 
     def __init__(self, name: str = None, *args, **kwargs):
         super().__init__(name, *args, **kwargs)
@@ -75,6 +78,14 @@ class TestOperatorWithPortPlugins(BlankOperator):
         self.param_c = 0
         self.param_d = 0
         self.param_e = 0
+        self.param_all = 0
+
+    def change_all_parameters(self):
+        self.param_a = self.param_all
+        self.param_b = self.param_all
+        self.param_c = self.param_all
+        self.param_d = self.param_all
+        self.param_e = self.param_all
 
 
 class OperatorWithWrongLoggerPlugin(BlankOperator):
@@ -91,7 +102,10 @@ class TestPipelineWithOperator(Pipeline):
 
         self.operator_a = TestOperatorWithPortPlugins()
         self.operator_a.set_parameter("replicationFactor", 5)
+        self.operator_a.set_parameter("operatorImageName", "test_image")
 
         self.operator_b = TestOperatorWithPortPlugins()
 
         self.operator_a.input_port.connect(self.operator_b.output_port)
+
+        self.operator_a.depends_on(self.operator_b)

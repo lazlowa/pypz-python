@@ -20,6 +20,9 @@ from pypz.core.specs.dtos import (
     OperatorConnectionSource,
     OperatorInstanceDTO,
 )
+from pypz.core.specs.instance import InstanceGroup
+from pypz.core.specs.operator import Operator
+from pypz.core.specs.pipeline import Pipeline
 from pypz.core.specs.utils import Internals
 
 from core.test.specs_tests.operator_test_resources import (
@@ -681,22 +684,291 @@ class OperatorInstanceTest(unittest.TestCase):
                 or ("operator_b" == nested_instance.name)
             )
 
+    def test_replication_replica_phase_basics(self):
+        pipeline = TestPipelineWithOperator("pipeline")
 
-# Replica phase
-# name
-# context
-# group info
-# dto
-# equality in all directions and identity
-# hash
-# changing attributes on original and on replicas (depends_on, parameters etc.)
-# from dto
+        replica_idx = 0
+        for replica in pipeline.operator_a.get_replicas():
+            self.assertTrue(isinstance(replica, Operator.Replica))
+            self.assertTrue(isinstance(replica, Operator))
+            self.assertTrue(isinstance(replica, InstanceGroup))
+
+            self.assertEqual(
+                f"{pipeline.operator_a.get_simple_name()}_{replica_idx}",
+                replica.get_simple_name(),
+            )
+            self.assertEqual(
+                f"{pipeline.operator_a.get_full_name()}_{replica_idx}",
+                replica.get_full_name(),
+            )
+
+            self.assertIs(replica.get_original(), pipeline.operator_a)
+            replica_idx += 1
+
+        # From DTO
+        pipeline = Pipeline.create_from_dto(pipeline.get_dto())
+        replica_idx = 0
+        for replica in pipeline.operator_a.get_replicas():
+            self.assertTrue(isinstance(replica, Operator.Replica))
+            self.assertTrue(isinstance(replica, Operator))
+            self.assertTrue(isinstance(replica, InstanceGroup))
+
+            self.assertEqual(
+                f"{pipeline.operator_a.get_simple_name()}_{replica_idx}",
+                replica.get_simple_name(),
+            )
+            self.assertEqual(
+                f"{pipeline.operator_a.get_full_name()}_{replica_idx}",
+                replica.get_full_name(),
+            )
+
+            self.assertIs(replica.get_original(), pipeline.operator_a)
+            replica_idx += 1
+
+    def test_replication_replica_phase_group_information(self):
+        pipeline = TestPipelineWithOperator("pipeline")
+
+        replica_idx = 0
+        for replica in pipeline.operator_a.get_replicas():
+            self.assertEqual(
+                pipeline.operator_a.get_full_name(), replica.get_group_name()
+            )
+            self.assertEqual(replica_idx + 1, replica.get_group_index())
+            self.assertIs(replica.get_group_principal(), pipeline.operator_a)
+            self.assertFalse(replica.is_principal())
+            self.assertEqual(
+                len(pipeline.operator_a.get_replicas()) + 1, replica.get_group_size()
+            )
+            replica_idx += 1
+
+        # From DTO
+        pipeline = Pipeline.create_from_dto(pipeline.get_dto())
+
+        replica_idx = 0
+        for replica in pipeline.operator_a.get_replicas():
+            self.assertEqual(
+                pipeline.operator_a.get_full_name(), replica.get_group_name()
+            )
+            self.assertEqual(replica_idx + 1, replica.get_group_index())
+            self.assertIs(replica.get_group_principal(), pipeline.operator_a)
+            self.assertFalse(replica.is_principal())
+            self.assertEqual(
+                len(pipeline.operator_a.get_replicas()) + 1, replica.get_group_size()
+            )
+            replica_idx += 1
+
+    def test_replication_replica_phase_dto(self):
+        pipeline = TestPipelineWithOperator("pipeline")
+
+        replica_idx = 0
+        for replica in pipeline.operator_a.get_replicas():
+            dto = replica.get_dto()
+            self.assertEqual(
+                f"{pipeline.operator_a.get_simple_name()}_{replica_idx}", dto.name
+            )
+            replica_idx += 1
+
+        # From DTO
+        pipeline = Pipeline.create_from_dto(pipeline.get_dto())
+
+        replica_idx = 0
+        for replica in pipeline.operator_a.get_replicas():
+            dto = replica.get_dto()
+            self.assertEqual(
+                f"{pipeline.operator_a.get_simple_name()}_{replica_idx}", dto.name
+            )
+            replica_idx += 1
+
+    def test_replication_replica_phase_equality(self):
+        pipeline = TestPipelineWithOperator("pipeline")
+
+        for replica in pipeline.operator_a.get_replicas():
+            self.assertNotEqual(pipeline.operator_a, replica)
+            self.assertNotEqual(replica, pipeline.operator_a)
+            self.assertEqual(replica, replica)
+            self.assertTrue(pipeline.operator_a.is_equivalent_to(replica))
+            self.assertTrue(replica.is_equivalent_to(pipeline.operator_a))
+
+            self.assertNotEqual(hash(pipeline.operator_a), hash(replica))
+
+        self.assertNotEqual(
+            pipeline.operator_a.get_replica(0), pipeline.operator_a.get_replica(1)
+        )
+        self.assertNotEqual(
+            hash(pipeline.operator_a.get_replica(0)),
+            hash(pipeline.operator_a.get_replica(1)),
+        )
+        self.assertTrue(
+            pipeline.operator_a.get_replica(0).is_equivalent_to(
+                pipeline.operator_a.get_replica(1)
+            )
+        )
+
+        # From DTO
+        pipeline = Pipeline.create_from_dto(pipeline.get_dto())
+
+        for replica in pipeline.operator_a.get_replicas():
+            self.assertNotEqual(pipeline.operator_a, replica)
+            self.assertNotEqual(replica, pipeline.operator_a)
+            self.assertEqual(replica, replica)
+            self.assertTrue(pipeline.operator_a.is_equivalent_to(replica))
+            self.assertTrue(replica.is_equivalent_to(pipeline.operator_a))
+
+            self.assertNotEqual(hash(pipeline.operator_a), hash(replica))
+
+        self.assertNotEqual(
+            pipeline.operator_a.get_replica(0), pipeline.operator_a.get_replica(1)
+        )
+        self.assertNotEqual(
+            hash(pipeline.operator_a.get_replica(0)),
+            hash(pipeline.operator_a.get_replica(1)),
+        )
+        self.assertTrue(
+            pipeline.operator_a.get_replica(0).is_equivalent_to(
+                pipeline.operator_a.get_replica(1)
+            )
+        )
+
+    def test_replication_materialized_phase_basics(self):
+        pipeline = TestPipelineWithOperator("pipeline")
+
+        replica_idx = 0
+        for raw_replica in pipeline.operator_a.get_replicas():
+            replica = raw_replica.materialize()
+            self.assertFalse(isinstance(replica, Operator.Replica))
+            self.assertTrue(isinstance(replica, Operator))
+            self.assertTrue(isinstance(replica, InstanceGroup))
+
+            self.assertEqual(
+                f"{pipeline.operator_a.get_simple_name()}_{replica_idx}",
+                replica.get_simple_name(),
+            )
+            self.assertEqual(
+                f"{pipeline.operator_a.get_full_name()}_{replica_idx}",
+                replica.get_full_name(),
+            )
+
+            self.assertEqual(
+                f"{pipeline.operator_a.get_full_name()}_{replica_idx}."
+                f"{pipeline.operator_a.input_port.get_simple_name()}",
+                replica.input_port.get_full_name(),
+            )
+            self.assertEqual(
+                f"{pipeline.operator_a.get_full_name()}_{replica_idx}."
+                f"{pipeline.operator_a.output_port.get_simple_name()}",
+                replica.output_port.get_full_name(),
+            )
+
+            self.assertIs(replica.get_context(), pipeline)
+            replica_idx += 1
+
+    def test_replication_materialized_phase_group_information(self):
+        pipeline = TestPipelineWithOperator("pipeline")
+
+        replica_idx = 0
+        for raw_replica in pipeline.operator_a.get_replicas():
+            replica = raw_replica.materialize()
+
+            self.assertEqual(
+                pipeline.operator_a.get_full_name(), replica.get_group_name()
+            )
+            self.assertEqual(replica_idx + 1, replica.get_group_index())
+            self.assertIs(replica.get_group_principal(), pipeline.operator_a)
+            self.assertFalse(replica.is_principal())
+            self.assertEqual(
+                len(pipeline.operator_a.get_replicas()) + 1, replica.get_group_size()
+            )
+            replica_idx += 1
+
+    def test_replication_materialized_phase_dto(self):
+        pipeline = TestPipelineWithOperator("pipeline")
+
+        replica_idx = 0
+        for raw_replica in pipeline.operator_a.get_replicas():
+            replica = raw_replica.materialize()
+
+            dto = replica.get_dto()
+            self.assertEqual(
+                f"{pipeline.operator_a.get_simple_name()}_{replica_idx}", dto.name
+            )
+            replica_idx += 1
+
+        print(pipeline.operator_a)
+
+    def test_replication_materialized_phase_equality(self):
+        pipeline = TestPipelineWithOperator("pipeline")
+        pipeline.operator_a.set_parameter("param_a", 10)
+        pipeline.operator_a.set_parameter("param_b", 11)
+        pipeline.operator_a.set_parameter("param_c", 12)
+        pipeline.operator_a.set_parameter("param_d", 13)
+        pipeline.operator_a.set_parameter("param_e", 14)
+
+        operator_a_internals = Internals(pipeline.operator_a)
+        for raw_replica in pipeline.operator_a.get_replicas():
+            replica = raw_replica.materialize()
+            replica_internals = Internals(replica)
+
+            self.assertIsNot(
+                operator_a_internals.parameters, replica_internals.parameters
+            )
+            self.assertEqual(
+                operator_a_internals.parameters, replica_internals.parameters
+            )
+
+            self.assertEqual(5, replica.get_parameter("replicationFactor"))
+            self.assertEqual("test_image", replica.get_parameter("operatorImageName"))
+            self.assertEqual(5, replica._replication_factor)
+            self.assertEqual("test_image", replica._operator_image_name)
+            self.assertEqual(10, replica.param_a)
+            self.assertEqual(11, replica.param_b)
+            self.assertEqual(12, replica.param_c)
+            self.assertEqual(13, replica.param_d)
+            self.assertEqual(14, replica.param_e)
+
+            # Test parameter independence
+            replica.set_parameter("replicationFactor", 0)
+            replica.set_parameter("operatorImageName", "other_image")
+            self.assertNotEqual(
+                pipeline.operator_a._replication_factor, replica._replication_factor
+            )
+            self.assertNotEqual(
+                pipeline.operator_a._operator_image_name, replica._operator_image_name
+            )
+
+            # Test, if parameter update callback are bound correctly
+            replica.set_parameter("param_all", 33)
+            self.assertEqual(10, pipeline.operator_a.param_a)
+            self.assertEqual(11, pipeline.operator_a.param_b)
+            self.assertEqual(12, pipeline.operator_a.param_c)
+            self.assertEqual(13, pipeline.operator_a.param_d)
+            self.assertEqual(14, pipeline.operator_a.param_e)
+            self.assertEqual(33, replica.param_a)
+            self.assertEqual(33, replica.param_b)
+            self.assertEqual(33, replica.param_c)
+            self.assertEqual(33, replica.param_d)
+            self.assertEqual(33, replica.param_e)
+
+            self.assertEqual(
+                operator_a_internals.depends_on, replica_internals.depends_on
+            )
+            self.assertIsNot(
+                operator_a_internals.depends_on, replica_internals.depends_on
+            )
+
+            self.assertIsNot(pipeline.operator_a.input_port, replica.input_port)
+            self.assertNotEqual(pipeline.operator_a.input_port, replica.input_port)
+            self.assertTrue(
+                pipeline.operator_a.input_port.is_equivalent_to(replica.input_port)
+            )
+
+            self.assertIsNot(pipeline.operator_a.output_port, replica.output_port)
+            self.assertNotEqual(pipeline.operator_a.output_port, replica.output_port)
+            self.assertTrue(
+                pipeline.operator_a.output_port.is_equivalent_to(replica.output_port)
+            )
+
 
 # Materialised phase
-# name
-# context
-# group info
-# dto
 # hash
 
 # excluded attributes not copied
@@ -706,3 +978,6 @@ class OperatorInstanceTest(unittest.TestCase):
 # parameters' callbacks are properly bound to replica
 # pipeline from string with dummy classes -> nested replicas shall have different id and proper name
 # at connections, the source shall not be recreated, since it is not part of the current operator/replica
+# cascading parameter setting on pipeline will set parameter on nested instances hence on replicas as well,
+# which will again trigger parameter setting on original
+# replicas are not replicating

@@ -135,14 +135,15 @@ class InstanceParameters(dict):
 
     @typing.no_type_check
     def update(self, __m, **kwargs) -> None:
-        super().update(__m, **kwargs)
+        updates = {}
 
-        for name, value in __m.items():
-            if ((name not in self) or (value != self[name])) and (
-                name in self.__update_callbacks
-            ):
-                for callback in self.__update_callbacks[name]:
-                    callback(value)
+        if __m is not None:
+            updates.update(dict(__m))
+
+        updates.update(kwargs)
+
+        for name, value in updates.items():
+            self[name] = value
 
     def on_parameter_update(self, name, callback: Callable[[Any], None]):
         if name not in self.__update_callbacks:

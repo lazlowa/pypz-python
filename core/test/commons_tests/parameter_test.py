@@ -21,6 +21,7 @@ from pypz.core.commons.parameters import (
     retrieve_parameters,
 )
 from pypz.core.specs.misc import BlankInstance
+from pypz.core.specs.utils import InstanceParameters
 
 # Test resources
 # ==============
@@ -247,3 +248,59 @@ class ParameterTest(unittest.TestCase):
 
         self.assertEqual(10, test_obj_1.value)
         self.assertEqual(20, test_obj_2.value)
+
+    def test_instance_parameters_value_setting(self):
+        instance_parameters = InstanceParameters()
+
+        self.assertEqual(0, len(instance_parameters))
+        instance_parameters["param1"] = 10
+        instance_parameters["param2"] = "10"
+        instance_parameters["param3"] = False
+        instance_parameters["param4"] = [0, 1, 2]
+
+        self.assertEqual(4, len(instance_parameters))
+        self.assertEqual(10, instance_parameters["param1"])
+        self.assertEqual("10", instance_parameters["param2"])
+        self.assertEqual(False, instance_parameters["param3"])
+        self.assertEqual([0, 1, 2], instance_parameters["param4"])
+
+    def test_instance_parameters_value_setting_via_update(self):
+        instance_parameters = InstanceParameters()
+        instance_parameters.update(
+            {
+                "param1": 10,
+                "param2": "10",
+            }
+        )
+
+        self.assertEqual(2, len(instance_parameters))
+        self.assertEqual(10, instance_parameters["param1"])
+        self.assertEqual("10", instance_parameters["param2"])
+
+    def test_instance_parameters_value_setting_with_callback(self):
+        instance_parameters = InstanceParameters()
+
+        self.assertEqual(0, len(instance_parameters))
+
+        def on_update(value):
+            instance_parameters["param2"] = str(value)
+
+        instance_parameters.on_parameter_update("param1", on_update)
+        instance_parameters["param1"] = 100
+
+        self.assertEqual(100, instance_parameters["param1"])
+        self.assertEqual("100", instance_parameters["param2"])
+
+    def test_instance_parameters_value_setting_with_callback_via_update(self):
+        instance_parameters = InstanceParameters()
+
+        self.assertEqual(0, len(instance_parameters))
+
+        def on_update(value):
+            instance_parameters["param2"] = str(value)
+
+        instance_parameters.on_parameter_update("param1", on_update)
+        instance_parameters.update({"param1": 100})
+
+        self.assertEqual(100, instance_parameters["param1"])
+        self.assertEqual("100", instance_parameters["param2"])
