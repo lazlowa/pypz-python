@@ -117,6 +117,7 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
             since the underlying plugins don't change names upon replication. Furthermore, notice
             that each replica effectively represents connections to the original, so there is no
             need to update connection details either.
+            A replica DTO always describes the principal connection graph.
             """
             dto = self.__wrapped__.get_dto()
             dto.name = self._self_simple_name

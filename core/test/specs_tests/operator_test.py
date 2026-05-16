@@ -680,3 +680,29 @@ class OperatorInstanceTest(unittest.TestCase):
                 ("operator_a" == nested_instance.name)
                 or ("operator_b" == nested_instance.name)
             )
+
+
+# Replica phase
+# name
+# context
+# group info
+# dto
+# equality in all directions and identity
+# hash
+# changing attributes on original and on replicas (depends_on, parameters etc.)
+# from dto
+
+# Materialised phase
+# name
+# context
+# group info
+# dto
+# hash
+
+# excluded attributes not copied
+# included attributes copied
+# self and nested instances are properly set to replica (make custom instances)
+# sibling operators and plugins are properly shared (make custom instances)
+# parameters' callbacks are properly bound to replica
+# pipeline from string with dummy classes -> nested replicas shall have different id and proper name
+# at connections, the source shall not be recreated, since it is not part of the current operator/replica

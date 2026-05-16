@@ -95,7 +95,3 @@ class TestPipelineWithOperator(Pipeline):
         self.operator_b = TestOperatorWithPortPlugins()
 
         self.operator_a.input_port.connect(self.operator_b.output_port)
-
-
-# pipeline from string with dummy classes -> nested replicas shall have different id and proper name
-# at connections, the source shall not be recreated, since it is not part of the current operator/replica
