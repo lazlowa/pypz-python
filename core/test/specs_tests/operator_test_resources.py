@@ -66,6 +66,9 @@ class TestOperatorWithPortPlugins(BlankOperator):
     param_all = OptionalParameter(
         int, on_update=lambda instance, val: instance.change_all_parameters()
     )
+    param_increment = OptionalParameter(
+        int, on_update=lambda instance, val: instance.on_param_increment()
+    )
 
     def __init__(self, name: str = None, *args, **kwargs):
         super().__init__(name, *args, **kwargs)
@@ -80,12 +83,18 @@ class TestOperatorWithPortPlugins(BlankOperator):
         self.param_e = 0
         self.param_all = 0
 
+        self.increment_value = 0
+        self.param_increment = 0
+
     def change_all_parameters(self):
         self.param_a = self.param_all
         self.param_b = self.param_all
         self.param_c = self.param_all
         self.param_d = self.param_all
         self.param_e = self.param_all
+
+    def on_param_increment(self):
+        self.increment_value += self.param_increment
 
 
 class OperatorWithWrongLoggerPlugin(BlankOperator):

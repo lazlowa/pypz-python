@@ -904,6 +904,11 @@ class OperatorInstanceTest(unittest.TestCase):
         pipeline.operator_a.set_parameter("param_e", 14)
         pipeline.operator_a.set_parameter("dynamic", "value")
 
+        pipeline.operator_a.set_parameter("param_increment", 2)
+        self.assertEqual(2, pipeline.operator_a.increment_value)
+        pipeline.operator_a.set_parameter("param_increment", 3)
+        self.assertEqual(5, pipeline.operator_a.increment_value)
+
         operator_a_internals = Internals(pipeline.operator_a)
         for raw_replica in pipeline.operator_a.get_replicas():
             replica = raw_replica.materialize()
@@ -926,6 +931,9 @@ class OperatorInstanceTest(unittest.TestCase):
             self.assertEqual(13, replica.param_d)
             self.assertEqual(14, replica.param_e)
             self.assertEqual("value", replica.get_parameter("dynamic"))
+            self.assertEqual(3, replica.get_parameter("param_increment"))
+            self.assertEqual(3, replica.param_increment)
+            self.assertEqual(5, replica.increment_value)
 
             # Test parameter independence
             replica.set_parameter("replicationFactor", 0)
@@ -974,12 +982,18 @@ class OperatorInstanceTest(unittest.TestCase):
 # hash
 
 # excluded attributes not copied
+
 # included attributes copied
+
 # self and nested instances are properly set to replica (make custom instances)
+
 # sibling operators and plugins are properly shared (make custom instances)
-# parameters' callbacks are properly bound to replica
+
 # pipeline from string with dummy classes -> nested replicas shall have different id and proper name
+
 # at connections, the source shall not be recreated, since it is not part of the current operator/replica
+
 # cascading parameter setting on pipeline will set parameter on nested instances hence on replicas as well,
 # which will again trigger parameter setting on original
+
 # replicas are not replicating
