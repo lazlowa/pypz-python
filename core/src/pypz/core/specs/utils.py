@@ -13,9 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # =============================================================================
-import typing
 from importlib import import_module
-from typing import Any, Callable, Iterable
+from typing import Iterable
 
 IncludedCascadingParameterPrefix = "#"
 """
@@ -110,45 +109,6 @@ class Internals:
 
     def __dir__(self):
         return sorted(set(super().__dir__()) | self._collect_allowed_names())
-
-
-class InstanceParameters(dict):
-    """
-    This class represents the parameters of the instance organized into
-    a dictionary. The necessity of extending the builtin dict is that
-    the parameter changes shall be watched because the expected parameters
-    that are represented by instance attributes shall be updated as well,
-    so we need to be able to define callbacks on parameter set.
-    The mentioned default callbacks are defined in the Instance class.
-    """
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.__update_callbacks: dict[str, list[Callable[[Any], None]]] = {}
-
-    def __setitem__(self, name, value):
-        if (name not in self) or (value != self[name]):
-            super().__setitem__(name, value)
-            if name in self.__update_callbacks:
-                for callback in self.__update_callbacks[name]:
-                    callback(value)
-
-    @typing.no_type_check
-    def update(self, __m, **kwargs) -> None:
-        updates = {}
-
-        if __m is not None:
-            updates.update(dict(__m))
-
-        updates.update(kwargs)
-
-        for name, value in updates.items():
-            self[name] = value
-
-    def on_parameter_update(self, name, callback: Callable[[Any], None]):
-        if name not in self.__update_callbacks:
-            self.__update_callbacks[name] = []
-        self.__update_callbacks[name].append(callback)
 
 
 def resolve_dependency_graph(instances: set | Iterable) -> list[set]:

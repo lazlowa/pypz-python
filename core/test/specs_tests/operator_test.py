@@ -902,6 +902,7 @@ class OperatorInstanceTest(unittest.TestCase):
         pipeline.operator_a.set_parameter("param_c", 12)
         pipeline.operator_a.set_parameter("param_d", 13)
         pipeline.operator_a.set_parameter("param_e", 14)
+        pipeline.operator_a.set_parameter("dynamic", "value")
 
         operator_a_internals = Internals(pipeline.operator_a)
         for raw_replica in pipeline.operator_a.get_replicas():
@@ -924,6 +925,7 @@ class OperatorInstanceTest(unittest.TestCase):
             self.assertEqual(12, replica.param_c)
             self.assertEqual(13, replica.param_d)
             self.assertEqual(14, replica.param_e)
+            self.assertEqual("value", replica.get_parameter("dynamic"))
 
             # Test parameter independence
             replica.set_parameter("replicationFactor", 0)

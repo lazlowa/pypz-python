@@ -32,7 +32,6 @@ from pypz.core.specs.dtos import InstanceDTO, SpecDTO
 from pypz.core.specs.utils import (
     ExcludedCascadingParameterPrefix,
     IncludedCascadingParameterPrefix,
-    InstanceParameters,
     load_class_by_name,
     remove_super_classes,
 )
@@ -251,7 +250,7 @@ class Instance(
         shall be set upon instance parameter setting.
         """
 
-        self.__parameters: InstanceParameters = InstanceParameters()
+        self.__parameters: dict = {}
         """
         The interpreted instance parameters i.e., cascading and templates are interpreted
         """
@@ -262,15 +261,6 @@ class Instance(
         the type of the dependencies are checked dynamically in runtime, since dependencies
         can only be defined on the same type of instance.
         """
-
-        """ Registering expected parameter update. This means that, if a parameter has been set via
-        the set_parameter() method, we need to make sure that the corresponding parameter object
-        is updated as well. """
-        for param in self.__expected_parameters.values():
-            self.__parameters.on_parameter_update(
-                param.name,
-                lambda value, p=param, instance=self: p.__set__(instance, value),
-            )
 
     # ========= overridable methods ==========
 
@@ -350,6 +340,9 @@ class Instance(
                     nested_instance.set_parameter(name[1:], resolved_value)
 
             self.__parameters[param_name] = resolved_value
+
+            if param_name in self.__expected_parameters:
+                self.__expected_parameters[param_name].__set__(self, resolved_value)
 
     def set_parameters(self, parameters: dict) -> None:
         """
