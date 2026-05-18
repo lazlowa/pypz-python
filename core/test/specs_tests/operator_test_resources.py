@@ -150,3 +150,15 @@ class ReplicaTestPipeline(Pipeline):
 
         self.replicated.input_port.connect(self.operator.output_port)
         self.replicated.depends_on(self.operator)
+
+
+class EmptyReplicaTestOperator(BlankOperator):
+
+    def __init__(self, name: str = None, *args, **kwargs):
+        super().__init__(name, *args, **kwargs)
+        self.plugin1 = ReplicaTestPlugin()
+
+
+class EmptyReplicaTestPipeline(Pipeline):
+    def __init__(self, name: str, *args, **kwargs):
+        super().__init__(name, *args, **kwargs)

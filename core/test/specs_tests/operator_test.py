@@ -28,6 +28,7 @@ from pypz.core.specs.utils import Internals
 from core.test.specs_tests.operator_test_resources import (
     OperatorWithWrongLoggerPlugin,
     ReplicaTestPipeline,
+    ReplicaTestPlugin,
     TestOperatorWithPortPlugins,
     TestPipelineWithOperator,
 )
@@ -1038,11 +1039,74 @@ class OperatorInstanceTest(unittest.TestCase):
         )
         self.assertIs(pipeline.operator.plugin, materialized.plugin.operator_sibling)
 
+    def test_replication_materialized_phase_with_operator_from_string(self):
+        pipeline_string = """
+        dependsOn: []
+        name: pipeline
+        parameters: {}
+        spec:
+          expectedParameters: {}
+          location: null
+          name: core.test.specs_tests.operator_test_resources:EmptyReplicaTestPipeline
+          nestedInstanceType: <class 'pypz.core.specs.operator.Operator'>
+          nestedInstances:
+          - connections: []
+            dependsOn: []
+            name: operator
+            parameters:
+              operatorImageName: null
+              replicationFactor: 1
+            spec:
+              expectedParameters:
+                operatorImageName:
+                  currentValue: null
+                  description: The image containing the operator's resources. It will be used
+                    mainly by the deployers.
+                  required: false
+                  type: str
+                replicationFactor:
+                  currentValue: 0
+                  description: Determines, how many replicas shall be created from the original.
+                  required: false
+                  type: int
+              location: null
+              name: core.test.specs_tests.operator_test_resources:EmptyReplicaTestOperator
+              nestedInstanceType: <class 'pypz.core.specs.plugin.Plugin'>
+              nestedInstances:
+              - dependsOn:
+                - plugin1
+                name: plugin2
+                parameters: {}
+                spec:
+                  expectedParameters: {}
+                  location: null
+                  name: core.test.specs_tests.operator_test_resources:ReplicaTestPlugin
+                  nestedInstanceType: null
+                  nestedInstances: null
+                  types:
+                  - <class 'pypz.core.specs.plugin.Plugin'>
+              types:
+              - <class 'pypz.core.specs.operator.Operator'>
 
-# Materialised phase
+          types:
+          - <class 'pypz.core.specs.operator.Operator'>
+        """
 
-# excluded attributes not copied
+        pipeline = Pipeline.create_from_string(pipeline_string)
+        replica = pipeline.operator_0.materialize()
+        self.assertTrue(hasattr(replica, "plugin2"))
+        self.assertTrue(isinstance(replica.plugin2, ReplicaTestPlugin))
+        self.assertEqual("pipeline.operator_0.plugin2", replica.plugin2.get_full_name())
+        self.assertIsNot(pipeline.operator.plugin2, replica.plugin2)
+        self.assertNotEqual(pipeline.operator.plugin2, replica.plugin2)
+        self.assertTrue(pipeline.operator.plugin2.is_equivalent_to(replica.plugin2))
+        self.assertIsNot(
+            pipeline.operator.plugin1, next(iter(replica.plugin2._Instance__depends_on))
+        )
+        self.assertIs(
+            replica.plugin1, next(iter(replica.plugin2._Instance__depends_on))
+        )
 
-# included attributes copied
 
-# pipeline from string with dummy classes -> nested replicas shall have different id and proper name
+# executor
+# compare with v4
