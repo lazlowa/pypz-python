@@ -232,10 +232,11 @@ class KafkaChannelTest(unittest.TestCase):
     ):
         operator = TestReaderOperator("reader")
         operator.set_parameter("replicationFactor", 1)
+        replica = operator.get_replica(0).materialize()
 
         reader = KafkaChannelReader(
             channel_name=KafkaChannelTest.test_channel_name,
-            context=operator.get_replica(0).input_port,
+            context=replica.input_port,
         )
 
         reader.set_location(KafkaChannelTest.bootstrap_url)
@@ -257,10 +258,11 @@ class KafkaChannelTest(unittest.TestCase):
 
         operator = TestReaderOperator("reader")
         operator.set_parameter("replicationFactor", 4)
+        replica = operator.get_replica(0).materialize()
 
         reader = KafkaChannelReader(
             channel_name=KafkaChannelTest.test_channel_name,
-            context=operator.get_replica(0).input_port,
+            context=replica.input_port,
         )
 
         reader.set_location(KafkaChannelTest.bootstrap_url)
@@ -446,10 +448,11 @@ class KafkaChannelTest(unittest.TestCase):
     ):
         operator = TestReaderOperator("reader")
         operator.set_parameter("replicationFactor", 1)
+        replica = operator.get_replica(0).materialize()
 
         reader = KafkaChannelReader(
             channel_name=KafkaChannelTest.test_channel_name,
-            context=operator.get_replica(0).input_port,
+            context=replica.input_port,
         )
 
         reader.set_location(KafkaChannelTest.bootstrap_url)
@@ -749,13 +752,14 @@ class KafkaChannelTest(unittest.TestCase):
     def test_reader_consumer_lag_calculation_in_group(self):
         operator = TestReaderOperator("reader")
         operator.set_parameter("replicationFactor", 1)
+        replica = operator.get_replica(0).materialize()
 
         reader = KafkaChannelReader(
             channel_name=KafkaChannelTest.test_channel_name, context=operator.input_port
         )
         reader_1 = KafkaChannelReader(
             channel_name=KafkaChannelTest.test_channel_name,
-            context=operator.get_replica(0).input_port,
+            context=replica.input_port,
         )
         writer = KafkaChannelWriter(
             channel_name=KafkaChannelTest.test_channel_name,

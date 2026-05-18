@@ -903,21 +903,16 @@ class RMQChannelTest(unittest.TestCase):
             # With no connected replica channel
             self.assertTrue(channel_reader.can_close())
 
+            replica = operator_context.get_replica(0).materialize()
             # With connected replica channel
             self.admin_channel.basic_publish(
                 Message(
                     str(
                         ChannelStatusMessage(
                             channel_name=RMQChannelTest.test_channel_name,
-                            channel_context_name=operator_context.get_replica(
-                                0
-                            ).reader.get_full_name(),
-                            channel_group_name=operator_context.get_replica(
-                                0
-                            ).reader.get_group_name(),
-                            channel_group_index=operator_context.get_replica(
-                                0
-                            ).reader.get_group_index(),
+                            channel_context_name=replica.reader.get_full_name(),
+                            channel_group_name=replica.reader.get_group_name(),
+                            channel_group_index=replica.reader.get_group_index(),
                             status=ChannelStatus.Opened,
                         )
                     )
@@ -929,15 +924,9 @@ class RMQChannelTest(unittest.TestCase):
                     str(
                         ChannelStatusMessage(
                             channel_name=RMQChannelTest.test_channel_name,
-                            channel_context_name=operator_context.get_replica(
-                                0
-                            ).reader.get_full_name(),
-                            channel_group_name=operator_context.get_replica(
-                                0
-                            ).reader.get_group_name(),
-                            channel_group_index=operator_context.get_replica(
-                                0
-                            ).reader.get_group_index(),
+                            channel_context_name=replica.reader.get_full_name(),
+                            channel_group_name=replica.reader.get_group_name(),
+                            channel_group_index=replica.reader.get_group_index(),
                             status=ChannelStatus.HealthCheck,
                         )
                     )
@@ -952,15 +941,9 @@ class RMQChannelTest(unittest.TestCase):
                     str(
                         ChannelStatusMessage(
                             channel_name=RMQChannelTest.test_channel_name,
-                            channel_context_name=operator_context.get_replica(
-                                0
-                            ).reader.get_full_name(),
-                            channel_group_name=operator_context.get_replica(
-                                0
-                            ).reader.get_group_name(),
-                            channel_group_index=operator_context.get_replica(
-                                0
-                            ).reader.get_group_index(),
+                            channel_context_name=replica.reader.get_full_name(),
+                            channel_group_name=replica.reader.get_group_name(),
+                            channel_group_index=replica.reader.get_group_index(),
                             status=ChannelStatus.Closed,
                         )
                     )
@@ -980,9 +963,10 @@ class RMQChannelTest(unittest.TestCase):
             "reader", BlankInputPortPlugin("reader", context=operator_context)
         )
         operator_context.set_parameter("replicationFactor", 2)
+        replica_1 = operator_context.get_replica(1).materialize()
         channel_reader = RMQChannelReader(
             channel_name=RMQChannelTest.test_channel_name,
-            context=operator_context.get_replica(1).reader,
+            context=replica_1.reader,
         )
         channel_reader.set_location(RMQChannelTest.bootstrap_url)
 
@@ -993,21 +977,16 @@ class RMQChannelTest(unittest.TestCase):
             # With no connected replica channel
             self.assertTrue(channel_reader.can_close())
 
+            replica_0 = operator_context.get_replica(0).materialize()
             # With connected replica channel
             self.admin_channel.basic_publish(
                 Message(
                     str(
                         ChannelStatusMessage(
                             channel_name=RMQChannelTest.test_channel_name,
-                            channel_context_name=operator_context.get_replica(
-                                0
-                            ).reader.get_full_name(),
-                            channel_group_name=operator_context.get_replica(
-                                0
-                            ).reader.get_group_name(),
-                            channel_group_index=operator_context.get_replica(
-                                0
-                            ).reader.get_group_index(),
+                            channel_context_name=replica_0.reader.get_full_name(),
+                            channel_group_name=replica_0.reader.get_group_name(),
+                            channel_group_index=replica_0.reader.get_group_index(),
                             status=ChannelStatus.Opened,
                         )
                     )
@@ -1019,15 +998,9 @@ class RMQChannelTest(unittest.TestCase):
                     str(
                         ChannelStatusMessage(
                             channel_name=RMQChannelTest.test_channel_name,
-                            channel_context_name=operator_context.get_replica(
-                                0
-                            ).reader.get_full_name(),
-                            channel_group_name=operator_context.get_replica(
-                                0
-                            ).reader.get_group_name(),
-                            channel_group_index=operator_context.get_replica(
-                                0
-                            ).reader.get_group_index(),
+                            channel_context_name=replica_0.reader.get_full_name(),
+                            channel_group_name=replica_0.reader.get_group_name(),
+                            channel_group_index=replica_0.reader.get_group_index(),
                             status=ChannelStatus.HealthCheck,
                         )
                     )
@@ -1042,15 +1015,9 @@ class RMQChannelTest(unittest.TestCase):
                     str(
                         ChannelStatusMessage(
                             channel_name=RMQChannelTest.test_channel_name,
-                            channel_context_name=operator_context.get_replica(
-                                0
-                            ).reader.get_full_name(),
-                            channel_group_name=operator_context.get_replica(
-                                0
-                            ).reader.get_group_name(),
-                            channel_group_index=operator_context.get_replica(
-                                0
-                            ).reader.get_group_index(),
+                            channel_context_name=replica_0.reader.get_full_name(),
+                            channel_group_name=replica_0.reader.get_group_name(),
+                            channel_group_index=replica_0.reader.get_group_index(),
                             status=ChannelStatus.Closed,
                         )
                     )
