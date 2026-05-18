@@ -153,10 +153,22 @@ class ChannelInputPortTest(unittest.TestCase):
             ParamKeyChannelConfig, {"return__create_resources": True}
         )
 
-        reader_replica = pipeline.reader.get_replica(0)
+        reader_replica = pipeline.reader.get_replica(0).materialize()
+
+        self.assertIsNone(reader_replica.input_port_a._channel_reader)
+        self.assertIsNone(reader_replica.input_port_b._channel_reader)
 
         reader_replica.input_port_a._pre_execution()
         reader_replica.input_port_b._pre_execution()
+
+        self.assertEqual(
+            "pipeline.reader_0.input_port_a",
+            reader_replica.input_port_a._channel_reader.get_channel_name(),
+        )
+        self.assertEqual(
+            "pipeline.reader_0.input_port_b",
+            reader_replica.input_port_b._channel_reader.get_channel_name(),
+        )
 
         self.assertTrue(reader_replica.input_port_a._on_resource_creation())
         self.assertTrue(reader_replica.input_port_b._on_resource_creation())

@@ -288,10 +288,10 @@ class State(ABC):
 
                 method_reference = getattr(instance, method_name)
 
-                if not isinstance(method_reference, types.MethodType):
+                if not callable(method_reference):
                     raise TypeError(
-                        f"Invalid callable method type: {type(method_reference)}. "
-                        f"Must be FunctionType of Callable[[], bool]."
+                        f"Invalid method type for method '{method_name}': {type(method_reference)}. "
+                        f"Must be a Callable[[], bool]."
                     )
 
                 method_to_instance[method_reference] = instance
