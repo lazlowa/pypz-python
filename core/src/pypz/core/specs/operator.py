@@ -70,6 +70,21 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
             self._self_original_internals = Internals(original)
 
         def materialize(self) -> "Operator":
+            """
+            This method materializes a replica that is it creates a standalone object,
+            which is basically a clone of the original at the moment of materialization.
+            Notice that the operator object is being created from the original's class,
+            which already makes sure that all the internal attributes are set up. However,
+            there can be user defined and other external settings (e.g., dependencies,
+            connections etc.) that must be copied.
+            Notice as well the creation of the memo for deepcopy, the memo maps the
+            id of the original instances to the materialized replicas. It is necessary,
+            since there can be references stored to internal instances inside the replica
+            and without the memo, those would point to the original instances.
+            Notice as well, that the Instance.__deepcopy__ method makes sure that no
+            Instance object is being copied only referenced unless specified differently
+            in the memo.
+            """
             original = self.__wrapped__
             replica = original.__class__(
                 name=self._self_simple_name,
@@ -91,6 +106,9 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
                     plugin_name
                 )
 
+                # In some situation, a nested instance is not part of the actual
+                # code, but provided by a DTO configuration, in this case, those
+                # nested instances shall be created here.
                 if materialized_plugin is not None:
                     memo[id(original_plugin)] = materialized_plugin
                 else:
@@ -139,19 +157,31 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
             return False
 
         def _copy_attributes(self, source, target, memo):
+            """
+            This recursive helper method deep copies all attributes, which are not excluded.
+            """
+            # Exclude all framework attributes, since those are recreated, if the
+            # instance object is being created from class.
             attr_exclude_prefixes = tuple(
                 f"_{clz.__name__}__"
                 for clz in source.__class__.mro()
                 if RegisteredInterface in clz.__bases__
             )
+
+            # The following attributes are shared from the original, hence
+            # those shall be copied.
             attr_includes = (
                 "_Instance__parameters",
                 "_Instance__depends_on",
                 "_PortPlugin__schema",
                 "_PortPlugin__connected_ports",
             )
+
             source_internals = Internals(source)
             target_internals = Internals(target)
+
+            # Loop through all attributes and deep copy them, however
+            # nested instances and excluded attributes are skipped.
             for attr_name, attr_value in source.__dict__.items():
                 if (
                     not attr_name.startswith(attr_exclude_prefixes)
@@ -162,6 +192,9 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
                         attr_name,
                         copy.deepcopy(attr_value, memo),
                     )
+
+            # Nested instances shall be treated differently, since most of them
+            # are created upon object creation, hence only attributes shall be copied.
             for (
                 source_plugin_name,
                 source_plugin,

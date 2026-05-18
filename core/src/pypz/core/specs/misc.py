@@ -38,7 +38,7 @@ class BlankInstance(Instance[BlankNestedInstanceType]):
         pass
 
 
-class BlankPlugin(BlankInstance[None]):
+class BlankPlugin(BlankInstance[None], Plugin):
     pass
 
 

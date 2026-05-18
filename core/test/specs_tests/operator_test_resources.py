@@ -118,3 +118,35 @@ class TestPipelineWithOperator(Pipeline):
         self.operator_a.input_port.connect(self.operator_b.output_port)
 
         self.operator_a.depends_on(self.operator_b)
+
+
+class ReplicaTestPlugin(BlankPlugin):
+
+    def __init__(self, name: str = None, *args, **kwargs):
+        super().__init__(name, *args, **kwargs)
+        self.this = self
+        self.ctx = self.get_context()
+
+
+class ReplicaTestOperator(BlankOperator):
+    def __init__(self, name: str = None, *args, **kwargs):
+        super().__init__(name, *args, **kwargs)
+        self.plugin = ReplicaTestPlugin()
+        self.input_port = BlankInputPortPlugin()
+        self.output_port = BlankOutputPortPlugin()
+        self.this = self
+        self.ctx = self.get_context()
+
+
+class ReplicaTestPipeline(Pipeline):
+    def __init__(self, name: str, *args, **kwargs):
+        super().__init__(name, *args, **kwargs)
+        self.operator = ReplicaTestOperator()
+        self.replicated = ReplicaTestOperator()
+        self.replicated.set_parameter("replicationFactor", 2)
+        self.replicated.sibling = self.operator
+        self.replicated.plugin.sibling = self.replicated.input_port
+        self.replicated.plugin.operator_sibling = self.operator.plugin
+
+        self.replicated.input_port.connect(self.operator.output_port)
+        self.replicated.depends_on(self.operator)

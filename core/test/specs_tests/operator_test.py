@@ -27,6 +27,7 @@ from pypz.core.specs.utils import Internals
 
 from core.test.specs_tests.operator_test_resources import (
     OperatorWithWrongLoggerPlugin,
+    ReplicaTestPipeline,
     TestOperatorWithPortPlugins,
     TestPipelineWithOperator,
 )
@@ -839,6 +840,9 @@ class OperatorInstanceTest(unittest.TestCase):
             self.assertTrue(isinstance(replica, Operator))
             self.assertTrue(isinstance(replica, InstanceGroup))
 
+            self.assertNotEqual(hash(pipeline.operator_a), hash(replica))
+            self.assertEqual(0, len(replica.get_replicas()))
+
             self.assertEqual(
                 f"{pipeline.operator_a.get_simple_name()}_{replica_idx}",
                 replica.get_simple_name(),
@@ -977,23 +981,68 @@ class OperatorInstanceTest(unittest.TestCase):
                 pipeline.operator_a.output_port.is_equivalent_to(replica.output_port)
             )
 
+    def test_replication_materialized_phase_identity(self):
+        pipeline = ReplicaTestPipeline("pipeline")
+
+        # Pre-materialization checks
+        # The proxy practically returns the original so identity shall be given
+        replica_0 = pipeline.replicated.get_replica(0)
+
+        self.assertIs(pipeline.replicated, replica_0.this)
+        self.assertIs(pipeline.replicated.plugin, replica_0.plugin)
+        self.assertIs(pipeline.replicated.plugin, replica_0.plugin.this)
+        self.assertIs(pipeline.operator, next(iter(replica_0._Instance__depends_on)))
+        self.assertIs(
+            pipeline.operator.output_port,
+            next(iter(replica_0.input_port._PortPlugin__connected_ports)),
+        )
+
+        # Post-materialization checks
+        # Upon creation of the replica based on the provided class, the entire
+        # internals will be set up, so identity of replica internals shall not be
+        # the identity of original internals. However, if there is a reference
+        # to an external entity like through connection or dependency, then
+        # those shall be shared and therefore the identities shall be the same.
+        materialized = replica_0.materialize()
+
+        self.assertIsNot(pipeline.replicated, materialized)
+        self.assertIsNot(pipeline.replicated, materialized.this)
+        self.assertIs(materialized, materialized.this)
+        self.assertIs(pipeline.replicated.ctx, materialized.ctx)
+
+        self.assertIs(materialized.plugin, materialized.plugin.this)
+        self.assertIsNot(pipeline.replicated.plugin, materialized.plugin)
+        self.assertIsNot(pipeline.replicated.plugin, materialized.plugin.this)
+        self.assertIsNot(pipeline.replicated.plugin.this, materialized.plugin.this)
+
+        self.assertIs(materialized, materialized.plugin.ctx)
+        self.assertIsNot(pipeline.replicated, materialized.plugin.ctx)
+        self.assertIsNot(pipeline.replicated.plugin.ctx, materialized.plugin.ctx)
+
+        self.assertIs(pipeline.operator, next(iter(materialized._Instance__depends_on)))
+        self.assertIs(
+            pipeline.operator.output_port,
+            next(iter(materialized.input_port._PortPlugin__connected_ports)),
+        )
+
+        self.assertIs(pipeline.replicated.sibling, materialized.sibling)
+        self.assertIs(pipeline.operator, materialized.sibling)
+        # sibling is treated as nested instance, hence will be recreated
+        self.assertIsNot(
+            pipeline.replicated.plugin.sibling, materialized.plugin.sibling
+        )
+        self.assertIs(materialized.input_port, materialized.plugin.sibling)
+        self.assertIs(
+            pipeline.replicated.plugin.operator_sibling,
+            materialized.plugin.operator_sibling,
+        )
+        self.assertIs(pipeline.operator.plugin, materialized.plugin.operator_sibling)
+
 
 # Materialised phase
-# hash
 
 # excluded attributes not copied
 
 # included attributes copied
 
-# self and nested instances are properly set to replica (make custom instances)
-
-# sibling operators and plugins are properly shared (make custom instances)
-
 # pipeline from string with dummy classes -> nested replicas shall have different id and proper name
-
-# at connections, the source shall not be recreated, since it is not part of the current operator/replica
-
-# cascading parameter setting on pipeline will set parameter on nested instances hence on replicas as well,
-# which will again trigger parameter setting on original
-
-# replicas are not replicating
