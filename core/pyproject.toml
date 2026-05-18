@@ -27,7 +27,8 @@ keywords = [
 ]
 
 dependencies = [
-    "PyYAML~=6.0.1"
+    "PyYAML~=6.0.1",
+    "wrapt~=2.1.2"
 ]
 
 [project.optional-dependencies]
