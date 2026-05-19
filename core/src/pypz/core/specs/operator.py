@@ -195,33 +195,53 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
             source_internals = Internals(source)
             target_internals = Internals(target)
 
+            # This helper is necessary to identify, if a source attribute is
+            # actually a nested instance and if it exists on the target side
+            source_nested_instance_names_by_id = {
+                id(nested_instance): nested_instance_name
+                for nested_instance_name, nested_instance in source_internals.nested_instances.items()
+            }
+
             # Loop through all attributes and deep copy them, however
             # nested instances and excluded attributes are skipped.
             for attr_name, attr_value in source.__dict__.items():
-                if (
-                    not attr_name.startswith(attr_exclude_prefixes)
-                    or (attr_name in attr_includes)
-                ) and (attr_name not in target_internals.nested_instances):
-                    setattr(
-                        target,
-                        attr_name,
-                        copy.deepcopy(attr_value, memo),
-                    )
+                if attr_name.startswith(attr_exclude_prefixes) and (
+                    attr_name not in attr_includes
+                ):
+                    continue
+
+                # If the source attribute is a nested instance, and it exists on the target side
+                # then simply skip it. Nested instances shall be copied in the cases, where
+                # those are not part of the Operator's description, but have been added later
+                # either via update() or via direct attribute setting.
+                registered_nested_name = source_nested_instance_names_by_id.get(
+                    id(attr_value)
+                )
+                if (registered_nested_name is not None) and (
+                    registered_nested_name in target_internals.nested_instances
+                ):
+                    continue
+
+                setattr(
+                    target,
+                    attr_name,
+                    copy.deepcopy(attr_value, memo),
+                )
 
             # Nested instances shall be treated differently, since most of them
             # are created upon object creation, hence only attributes shall be copied.
             for (
-                source_plugin_name,
-                source_plugin,
+                source_nested_instance_name,
+                source_nested_instance,
             ) in source_internals.nested_instances.items():
-                if source_plugin_name not in target_internals.nested_instances:
+                if source_nested_instance_name not in target_internals.nested_instances:
                     raise AttributeError(
-                        f"Replicated plugin ({source_plugin_name}) not found "
+                        f"Replicated plugin ({source_nested_instance_name}) not found "
                         f"in original operator ({self.__wrapped__.get_full_name()})"
                     )
                 self._copy_attributes(
-                    source_plugin,
-                    target_internals.nested_instances[source_plugin_name],
+                    source_nested_instance,
+                    target_internals.nested_instances[source_nested_instance_name],
                     memo,
                 )
 

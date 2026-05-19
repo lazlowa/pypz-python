@@ -26,7 +26,9 @@ from pypz.core.specs.pipeline import Pipeline
 from pypz.core.specs.utils import Internals
 
 from core.test.specs_tests.operator_test_resources import (
+    EmptyReplicaTestPipeline,
     OperatorWithWrongLoggerPlugin,
+    ReplicaTestOperatorWithSimplePluginWithCustomName,
     ReplicaTestPipeline,
     ReplicaTestPlugin,
     TestOperatorWithPortPlugins,
@@ -834,6 +836,12 @@ class OperatorInstanceTest(unittest.TestCase):
     def test_replication_materialized_phase_basics(self):
         pipeline = TestPipelineWithOperator("pipeline")
 
+        operator_a_0 = pipeline.operator_a.get_replica(0)
+        mat1 = operator_a_0.materialize()
+        mat2 = operator_a_0.materialize()
+
+        self.assertIsNot(mat1, mat2)
+
         replica_idx = 0
         for raw_replica in pipeline.operator_a.get_replicas():
             replica = raw_replica.materialize()
@@ -898,8 +906,6 @@ class OperatorInstanceTest(unittest.TestCase):
             )
             replica_idx += 1
 
-        print(pipeline.operator_a)
-
     def test_replication_materialized_phase_equality(self):
         pipeline = TestPipelineWithOperator("pipeline")
         pipeline.operator_a.set_parameter("param_a", 10)
@@ -939,6 +945,10 @@ class OperatorInstanceTest(unittest.TestCase):
             self.assertEqual(3, replica.get_parameter("param_increment"))
             self.assertEqual(3, replica.param_increment)
             self.assertEqual(5, replica.increment_value)
+
+            replica.set_parameter("param_a", 20)
+
+            self.assertNotEqual(pipeline.operator_a.param_a, replica.param_a)
 
             # Test parameter independence
             replica.set_parameter("replicationFactor", 0)
@@ -1070,7 +1080,7 @@ class OperatorInstanceTest(unittest.TestCase):
                   required: false
                   type: int
               location: null
-              name: core.test.specs_tests.operator_test_resources:EmptyReplicaTestOperator
+              name: core.test.specs_tests.operator_test_resources:ReplicaTestOperatorWithSimplePlugin
               nestedInstanceType: <class 'pypz.core.specs.plugin.Plugin'>
               nestedInstances:
               - dependsOn:
@@ -1107,6 +1117,37 @@ class OperatorInstanceTest(unittest.TestCase):
             replica.plugin1, next(iter(replica.plugin2._Instance__depends_on))
         )
 
+    def test_replication_materialized_phase_with_plugin_added_from_outside(self):
+        pipeline = EmptyReplicaTestPipeline("pipeline")
+        pipeline.operator = ReplicaTestOperatorWithSimplePluginWithCustomName(
+            "operator", context=pipeline
+        )
+        pipeline.operator.plugin2 = ReplicaTestPlugin(
+            "plugin22", context=pipeline.operator
+        )
+        pipeline.operator.set_parameter("replicationFactor", 1)
+        replica = pipeline.operator_0.materialize()
 
-# executor
-# compare with v4
+        self.assertEqual(2, len(Internals(pipeline.operator).nested_instances))
+        self.assertTrue(hasattr(pipeline.operator, "plugin1"))
+        self.assertTrue(isinstance(pipeline.operator.plugin1, ReplicaTestPlugin))
+        self.assertEqual(
+            "pipeline.operator.plugin", pipeline.operator.plugin1.get_full_name()
+        )
+
+        self.assertTrue(hasattr(pipeline.operator, "plugin2"))
+        self.assertTrue(isinstance(pipeline.operator.plugin2, ReplicaTestPlugin))
+        self.assertEqual(
+            "pipeline.operator.plugin22", pipeline.operator.plugin2.get_full_name()
+        )
+
+        self.assertEqual(2, len(Internals(replica).nested_instances))
+        self.assertTrue(hasattr(replica, "plugin1"))
+        self.assertTrue(isinstance(replica.plugin1, ReplicaTestPlugin))
+        self.assertEqual("pipeline.operator_0.plugin", replica.plugin1.get_full_name())
+
+        self.assertTrue(hasattr(replica, "plugin2"))
+        self.assertTrue(isinstance(replica.plugin2, ReplicaTestPlugin))
+        self.assertEqual(
+            "pipeline.operator_0.plugin22", replica.plugin2.get_full_name()
+        )

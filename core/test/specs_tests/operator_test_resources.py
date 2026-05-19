@@ -152,11 +152,18 @@ class ReplicaTestPipeline(Pipeline):
         self.replicated.depends_on(self.operator)
 
 
-class EmptyReplicaTestOperator(BlankOperator):
+class ReplicaTestOperatorWithSimplePlugin(BlankOperator):
 
     def __init__(self, name: str = None, *args, **kwargs):
         super().__init__(name, *args, **kwargs)
         self.plugin1 = ReplicaTestPlugin()
+
+
+class ReplicaTestOperatorWithSimplePluginWithCustomName(BlankOperator):
+
+    def __init__(self, name: str = None, *args, **kwargs):
+        super().__init__(name, *args, **kwargs)
+        self.plugin1 = ReplicaTestPlugin("plugin")
 
 
 class EmptyReplicaTestPipeline(Pipeline):
