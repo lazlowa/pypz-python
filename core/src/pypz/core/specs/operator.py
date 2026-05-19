@@ -545,12 +545,12 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
         """
         return self.__replicas[replica_id]
 
-    def get_replicas(self) -> list["Operator.Replica"]:
+    def get_replicas(self) -> tuple["Operator.Replica", ...]:
         """
         :return: replica list
         """
 
-        return self.__replicas
+        return tuple(self.__replicas)
 
     def get_dto(self) -> OperatorInstanceDTO:
         connections = []
@@ -656,7 +656,9 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
         if 0 == difference:
             return
 
-        if 0 < difference:
+        context = self.get_context()
+
+        if difference > 0:
             if self.__replication_origin is None:
                 self.__replication_origin = self
                 self.__replication_group_index = 0
@@ -664,20 +666,21 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
             for idx in range(len(self.__replicas), self._replication_factor):
                 replica = Operator.Replica(self, idx)
 
-                if self.get_context() is not None:
-                    self.get_context().__setattr__(replica.get_simple_name(), replica)
+                if context is not None:
+                    context.__setattr__(replica.get_simple_name(), replica)
 
                 self.__replicas.append(replica)
-        else:
-            replicas_to_remove = self.__replicas[self._replication_factor :]
 
-            for replica in replicas_to_remove:
-                self.__replicas.pop()
-                if self.get_context() is not None:
-                    del Internals(self.get_context()).nested_instances[
-                        replica.get_simple_name()
-                    ]
-                    self.get_context().__delattr__(replica.get_simple_name())
+        else:
+            for _ in range(-difference):
+                replica = self.__replicas.pop()
+
+                if context is not None:
+                    replica_name = replica.get_simple_name()
+                    Internals(context).nested_instances.pop(replica_name, None)
+
+                    if hasattr(context, replica_name):
+                        context.__delattr__(replica_name)
 
             if 0 == len(self.__replicas):
                 self.__replication_origin = None
