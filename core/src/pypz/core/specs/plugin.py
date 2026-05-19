@@ -158,13 +158,7 @@ class PortPlugin(Plugin, RegisteredInterface, ABC):
     def __init__(self, name: Optional[str] = None, schema: Any = None, *args, **kwargs):
         super().__init__(name, *args, **kwargs)
 
-        internals = Internals(self)
-
-        self.__connected_ports: set[PortPlugin] = (
-            internals.reference.__connected_ports
-            if internals.reference is not None
-            else set()
-        )
+        self.__connected_ports: set[PortPlugin] = set()
         """
         This member holds the information about the connected ports, where
         the key is the replication group names and the value is a list of
@@ -308,13 +302,13 @@ class InputPortPlugin(PortPlugin, RegisteredInterface, ABC):
     ):
         super().__init__(name, schema, *args, **kwargs)
 
-        self._group_mode: bool = group_mode
+        self.__group_mode: bool = group_mode
         """
         If True, the InputPortPlugin shall receive all records sent to the group
         """
 
     def is_in_group_mode(self):
-        return self._group_mode
+        return self.__group_mode
 
     @abstractmethod
     def can_retrieve(self) -> bool:

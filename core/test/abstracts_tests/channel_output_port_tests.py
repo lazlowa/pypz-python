@@ -240,7 +240,7 @@ class ChannelOutputPortTest(unittest.TestCase):
             ParamKeyChannelConfig, {"return__create_resources": True}
         )
 
-        writer_replica = pipeline.writer.get_replica(0)
+        writer_replica = pipeline.writer.get_replica(0).materialize()
 
         writer_replica.output_port._pre_execution()
 

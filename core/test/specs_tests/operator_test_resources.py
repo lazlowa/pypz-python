@@ -63,6 +63,12 @@ class TestOperatorWithPortPlugins(BlankOperator):
     param_c = OptionalParameter(int)
     param_d = OptionalParameter(int)
     param_e = OptionalParameter(int)
+    param_all = OptionalParameter(
+        int, on_update=lambda instance, val: instance.change_all_parameters()
+    )
+    param_increment = OptionalParameter(
+        int, on_update=lambda instance, val: instance.on_param_increment()
+    )
 
     def __init__(self, name: str = None, *args, **kwargs):
         super().__init__(name, *args, **kwargs)
@@ -75,6 +81,20 @@ class TestOperatorWithPortPlugins(BlankOperator):
         self.param_c = 0
         self.param_d = 0
         self.param_e = 0
+        self.param_all = 0
+
+        self.increment_value = 0
+        self.param_increment = 0
+
+    def change_all_parameters(self):
+        self.param_a = self.param_all
+        self.param_b = self.param_all
+        self.param_c = self.param_all
+        self.param_d = self.param_all
+        self.param_e = self.param_all
+
+    def on_param_increment(self):
+        self.increment_value += self.param_increment
 
 
 class OperatorWithWrongLoggerPlugin(BlankOperator):
@@ -91,7 +111,61 @@ class TestPipelineWithOperator(Pipeline):
 
         self.operator_a = TestOperatorWithPortPlugins()
         self.operator_a.set_parameter("replicationFactor", 5)
+        self.operator_a.set_parameter("operatorImageName", "test_image")
 
         self.operator_b = TestOperatorWithPortPlugins()
 
         self.operator_a.input_port.connect(self.operator_b.output_port)
+
+        self.operator_a.depends_on(self.operator_b)
+
+
+class ReplicaTestPlugin(BlankPlugin):
+
+    def __init__(self, name: str = None, *args, **kwargs):
+        super().__init__(name, *args, **kwargs)
+        self.this = self
+        self.ctx = self.get_context()
+
+
+class ReplicaTestOperator(BlankOperator):
+    def __init__(self, name: str = None, *args, **kwargs):
+        super().__init__(name, *args, **kwargs)
+        self.plugin = ReplicaTestPlugin()
+        self.input_port = BlankInputPortPlugin()
+        self.output_port = BlankOutputPortPlugin()
+        self.this = self
+        self.ctx = self.get_context()
+
+
+class ReplicaTestPipeline(Pipeline):
+    def __init__(self, name: str, *args, **kwargs):
+        super().__init__(name, *args, **kwargs)
+        self.operator = ReplicaTestOperator()
+        self.replicated = ReplicaTestOperator()
+        self.replicated.set_parameter("replicationFactor", 2)
+        self.replicated.sibling = self.operator
+        self.replicated.plugin.sibling = self.replicated.input_port
+        self.replicated.plugin.operator_sibling = self.operator.plugin
+
+        self.replicated.input_port.connect(self.operator.output_port)
+        self.replicated.depends_on(self.operator)
+
+
+class ReplicaTestOperatorWithSimplePlugin(BlankOperator):
+
+    def __init__(self, name: str = None, *args, **kwargs):
+        super().__init__(name, *args, **kwargs)
+        self.plugin1 = ReplicaTestPlugin()
+
+
+class ReplicaTestOperatorWithSimplePluginWithCustomName(BlankOperator):
+
+    def __init__(self, name: str = None, *args, **kwargs):
+        super().__init__(name, *args, **kwargs)
+        self.plugin1 = ReplicaTestPlugin("plugin")
+
+
+class EmptyReplicaTestPipeline(Pipeline):
+    def __init__(self, name: str, *args, **kwargs):
+        super().__init__(name, *args, **kwargs)

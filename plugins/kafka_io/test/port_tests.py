@@ -82,9 +82,9 @@ class KafkaIOPortTest(unittest.TestCase):
         pipeline.set_parameter("##channelLocation", KafkaIOPortTest.bootstrap_url)
 
         reader = pipeline.reader
-        reader_0 = pipeline.reader.get_replica(0)
+        reader_0 = pipeline.reader.get_replica(0).materialize()
         writer = pipeline.writer
-        writer_0 = pipeline.writer.get_replica(0)
+        writer_0 = pipeline.writer.get_replica(0).materialize()
 
         try:
             reader.input_port._pre_execution()
@@ -267,9 +267,9 @@ class KafkaIOPortTest(unittest.TestCase):
         pipeline.reader.input_port._sync_connections_open = True
 
         reader = pipeline.reader
-        reader_0 = pipeline.reader.get_replica(0)
+        reader_0 = pipeline.reader.get_replica(0).materialize()
         writer = pipeline.writer
-        writer_0 = pipeline.writer.get_replica(0)
+        writer_0 = pipeline.writer.get_replica(0).materialize()
 
         try:
             reader.input_port._pre_execution()
@@ -323,9 +323,9 @@ class KafkaIOPortTest(unittest.TestCase):
         pipeline.set_parameter("##channelLocation", KafkaIOPortTest.bootstrap_url)
 
         reader = pipeline.reader
-        reader_0 = pipeline.reader.get_replica(0)
+        reader_0 = pipeline.reader.get_replica(0).materialize()
         writer = pipeline.writer
-        writer_0 = pipeline.writer.get_replica(0)
+        writer_0 = pipeline.writer.get_replica(0).materialize()
 
         try:
             reader.group_input_port._pre_execution()

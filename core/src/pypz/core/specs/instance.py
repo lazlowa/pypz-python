@@ -32,7 +32,6 @@ from pypz.core.specs.dtos import InstanceDTO, SpecDTO
 from pypz.core.specs.utils import (
     ExcludedCascadingParameterPrefix,
     IncludedCascadingParameterPrefix,
-    InstanceParameters,
     load_class_by_name,
     remove_super_classes,
 )
@@ -190,12 +189,6 @@ class Instance(
         be able to discover those instances
         """
 
-        self.__reference = kwargs["reference"] if "reference" in kwargs else None
-        """
-        Reference to the reference instance. If specified, then some instance internal
-        configuration related attributes will refer to the attributes of the reference instance.
-        """
-
         self.__context: Instance = kwargs["context"] if "context" in kwargs else None
         """
         Reference to the context aka parent object. Derived automatically
@@ -257,32 +250,17 @@ class Instance(
         shall be set upon instance parameter setting.
         """
 
-        self.__parameters: InstanceParameters = (
-            self.__reference.__parameters
-            if self.__reference is not None
-            else InstanceParameters()
-        )
+        self.__parameters: dict = {}
         """
         The interpreted instance parameters i.e., cascading and templates are interpreted
         """
 
-        self.__depends_on: set = (
-            self.__reference.__depends_on if self.__reference is not None else set()
-        )
+        self.__depends_on: set = set()
         """
         Set of other instances that is this instance depending on. Note however that
         the type of the dependencies are checked dynamically in runtime, since dependencies
         can only be defined on the same type of instance.
         """
-
-        """ Registering expected parameter update. This means that, if a parameter has been set via
-        the set_parameter() method, we need to make sure that the corresponding parameter object
-        is updated as well. """
-        for param in self.__expected_parameters.values():
-            self.__parameters.on_parameter_update(
-                param.name,
-                lambda value, p=param, instance=self: p.__set__(instance, value),
-            )
 
     # ========= overridable methods ==========
 
@@ -363,6 +341,9 @@ class Instance(
 
             self.__parameters[param_name] = resolved_value
 
+            if param_name in self.__expected_parameters:
+                self.__expected_parameters[param_name].__set__(self, resolved_value)
+
     def set_parameters(self, parameters: dict) -> None:
         """
         Convenience parameter setter method for dicts, where all key value pair will be
@@ -390,13 +371,11 @@ class Instance(
            }
         """
 
-        expected_parameters = {}
-        [
-            expected_parameters.update(param.to_dict(self))
+        return {
+            key: value
             for param in self.__expected_parameters.values()
-        ]
-
-        return expected_parameters
+            for key, value in param.to_dict(self).items()
+        }
 
     def get_missing_required_parameters(self) -> dict[str, set[str]]:
         """
@@ -581,6 +560,46 @@ class Instance(
 
                 self.depends_on(self.__context.__nested_instances[instance_name])
 
+    def is_equivalent_to(self, other: "Instance") -> bool:
+        """
+        This method provides a less rigid comparison between instances. It does
+        not check structural equality, only content equality.
+
+        :param other: other instance to compare
+        """
+        if not isinstance(other, type(self)):
+            return False
+
+        if self.__spec_name != other.__spec_name:
+            return False
+
+        if self.__parameters != other.__parameters:
+            return False
+
+        if self.__expected_parameters != other.__expected_parameters:
+            return False
+
+        if len(self.__depends_on) != len(other.__depends_on):
+            return False
+
+        if len(self.__nested_instances) != len(other.__nested_instances):
+            return False
+
+        if set(self.__nested_instances.keys()) != set(other.__nested_instances.keys()):
+            return False
+
+        for name, nested in self.__nested_instances.items():
+            if not nested.is_equivalent_to(other.__nested_instances[name]):
+                return False
+
+        # depends_on comparison should be based on local dependency names
+        if {inst.get_simple_name() for inst in self.__depends_on} != {
+            inst.get_simple_name() for inst in other.__depends_on
+        }:
+            return False
+
+        return True
+
     # ========= protected methods ==========
 
     def __on_init_finished__(self, *args, **kwargs) -> None:
@@ -620,18 +639,10 @@ class Instance(
                         # an already existing instance refers to a not yet existing
                         # then error will arise.
                         if nested_instance_dto.name not in self.__nested_instances:
-                            nested_instance_reference = (
-                                self.__reference.__nested_instances[
-                                    nested_instance_dto.name
-                                ]
-                                if self.__reference is not None
-                                else None
-                            )
                             new_nested_instance = (
                                 self.__nested_instance_type.create_from_dto(
                                     nested_instance_dto,
                                     context=self,
-                                    reference=nested_instance_reference,
                                     mock_nonexistent=True,
                                     disable_auto_update=True,
                                 )
@@ -667,18 +678,13 @@ class Instance(
             final_instance_name = (
                 value.instance_name if value.instance_name is not None else name
             )
-            nested_instance_reference = (
-                self.__reference.__nested_instances[final_instance_name]
-                if self.__reference is not None
-                else None
-            )
+
             if (self.__nested_instance_type is not None) and (
                 issubclass(value.context_class, self.__nested_instance_type)
             ):
                 instance: Instance[Any] = value.context_class(
                     final_instance_name,
                     context=self,
-                    reference=nested_instance_reference,
                     *value.args,
                     **value.kwargs,
                 )
@@ -686,7 +692,6 @@ class Instance(
                 instance: Instance[Any] = value.context_class(
                     final_instance_name,
                     context=None,
-                    reference=nested_instance_reference,
                     *value.args,
                     **value.kwargs,
                 )
@@ -714,13 +719,19 @@ class Instance(
 
         return (
             isinstance(other, type(self))
-            and (self.__simple_name == other.__simple_name)
+            and (self.get_full_name() == other.get_full_name())
             and (self.__parameters == other.__parameters)
             and (self.__depends_on == other.__depends_on)
             and (self.__nested_instances == other.__nested_instances)
             and (self.__expected_parameters == other.__expected_parameters)
             and (self.__spec_name == other.__spec_name)
         )
+
+    def __ne__(self, other):
+        result = self.__eq__(other)
+        if result is NotImplemented:
+            return NotImplemented
+        return not result
 
     def __str__(self):
         return yaml.safe_dump(convert_to_dict(self.get_dto()), default_flow_style=False)
@@ -730,6 +741,25 @@ class Instance(
 
     def __getattr__(self, name):
         return self.__getattribute__(name)
+
+    def __deepcopy__(self, memo):
+        """
+        Framework-aware deepcopy behavior.
+
+        Instance objects are identity/reference objects by default. They should not
+        be recursively deep-copied unless the caller explicitly provides a
+        replacement in the deepcopy memo.
+
+        This is important for replica materialization. User attributes may reference
+        operators, plugins, ports, pipelines, or other framework instances. During
+        deepcopy, only the original operator and its local nested plugins should be
+        remapped to the materialized replica equivalents. External framework objects
+        should remain shared references.
+        """
+        if id(self) in memo:
+            return memo[id(self)]
+
+        return self
 
     # ================= static methods =====================
 

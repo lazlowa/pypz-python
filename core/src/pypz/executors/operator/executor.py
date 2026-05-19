@@ -72,7 +72,11 @@ class OperatorExecutor:
             signal.signal(signal.SIGTERM, self.interrupt)
             signal.signal(signal.SIGINT, self.interrupt)
 
-        self.__operator: Operator = operator
+        self.__operator: Operator = (
+            operator
+            if not isinstance(operator, Operator.Replica)
+            else operator.materialize()
+        )
         """
         The actual operator instance, which shall be processed by the state machine
         """

@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # =============================================================================
+import copy
 import inspect
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Any, Optional, cast
@@ -20,6 +21,7 @@ from typing import TYPE_CHECKING, Any, Optional, cast
 import yaml
 from pypz.core.commons.loggers import ContextLogger, ContextLoggerInterface
 from pypz.core.commons.parameters import OptionalParameter
+from pypz.core.commons.utils import convert_to_dict
 from pypz.core.specs.dtos import (
     OperatorConnection,
     OperatorConnectionSource,
@@ -34,6 +36,7 @@ from pypz.core.specs.plugin import (
     Plugin,
 )
 from pypz.core.specs.utils import Internals
+from wrapt import ObjectProxy
 
 if TYPE_CHECKING:
     from pypz.core.specs.pipeline import Pipeline
@@ -48,7 +51,238 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
     :param name: name of the instance, if not provided, it will be attempted to deduce from the variable's name
     """
 
-    # ========================= inner logger class =========================
+    # ========================= inner class =========================
+
+    class Replica(ObjectProxy, InstanceGroup):
+        """
+        This class represents an operator replica. Replication has two phases, in the
+        first phase a simple proxy of the original operator is being created by this
+        class. It routes every attribute access to the original except some replica
+        specific like name and name related attributes/methods. This prevents unnecessary
+        creation of fully fledged operator objects and ensures that every mutation
+        targets the original and hence all replicas. In the second phase, the replica
+        can be materialized i.e., a full-fledged individual operator object will be
+        created and all the relevant attributes will be copied. So the replica will
+        be identical to the original except the name and related attributes.
+
+        :param original: the original operator to be replicated
+        :param replica_index: the index of the replica
+        """
+
+        def __init__(self, original: "Operator", replica_index: int):
+            super().__init__(original)
+            self._self_replica_index: int = replica_index
+            self._self_simple_name: str = (
+                f"{original.get_simple_name()}_{replica_index}"
+            )
+            self._self_full_name: str = (
+                self._self_simple_name
+                if original.get_context() is None
+                else original.get_context().get_full_name()
+                + "."
+                + self._self_simple_name
+            )
+            self._self_original_internals = Internals(original)
+
+        def materialize(self) -> "Operator":
+            """
+            This method materializes a replica that is it creates a standalone object,
+            which is basically a clone of the original at the moment of materialization.
+            Notice that the operator object is being created from the original's class,
+            which already makes sure that all the internal attributes are set up. However,
+            there can be user defined and other external settings (e.g., dependencies,
+            connections etc.) that must be copied.
+            Notice as well the creation of the memo for deepcopy, the memo maps the
+            id of the original instances to the materialized replicas. It is necessary,
+            since there can be references stored to internal instances inside the replica
+            and without the memo, those would point to the original instances.
+            Notice as well, that the Instance.__deepcopy__ method makes sure that no
+            Instance object is being copied only referenced unless specified differently
+            in the memo.
+            """
+            original = self.__wrapped__
+            replica = original.__class__(
+                name=self._self_simple_name,
+                replication_origin=original,
+                context=original.get_context(),
+                replication_group_index=self._self_replica_index + 1,
+            )
+            materialized_internals = Internals(replica)
+
+            memo: dict[int, object] = {
+                id(original): replica,
+            }
+
+            for (
+                plugin_name,
+                original_plugin,
+            ) in self._self_original_internals.nested_instances.items():
+                materialized_plugin = materialized_internals.nested_instances.get(
+                    plugin_name
+                )
+
+                # In some situation, a nested instance is not part of the actual
+                # code, but provided by a DTO configuration, in this case, those
+                # nested instances shall be created here.
+                if materialized_plugin is not None:
+                    memo[id(original_plugin)] = materialized_plugin
+                else:
+                    memo[id(original_plugin)] = original_plugin.__class__(
+                        name=plugin_name, context=replica
+                    )
+
+            self._copy_attributes(original, replica, memo)
+
+            return replica
+
+        def get_simple_name(self) -> str:
+            return self._self_simple_name
+
+        def get_full_name(self) -> str:
+            return self._self_full_name
+
+        def get_original(self) -> "Operator":
+            return self.__wrapped__
+
+        def get_dto(self) -> OperatorInstanceDTO:
+            """
+            Creates a DTO object for the replica. Notice that only operator's simple name is adapted,
+            since the underlying plugins don't change names upon replication. Furthermore, notice
+            that each replica effectively represents connections to the original, so there is no
+            need to update connection details either.
+            A replica DTO always describes the principal connection graph.
+            """
+            dto = self.__wrapped__.get_dto()
+            dto.name = self._self_simple_name
+            return dto
+
+        def get_group_size(self) -> int:
+            return self.__wrapped__.get_group_size()
+
+        def get_group_index(self) -> int:
+            return self._self_replica_index + 1
+
+        def get_group_name(self) -> Optional[str]:
+            return self.__wrapped__.get_group_name()
+
+        def get_group_principal(self) -> Optional["Instance"]:
+            return self.__wrapped__.get_group_principal()
+
+        def is_principal(self) -> bool:
+            return False
+
+        def _copy_attributes(self, source, target, memo):
+            """
+            This recursive helper method deep copies all attributes, which are not excluded.
+            """
+            # Exclude all framework attributes, since those are recreated, if the
+            # instance object is being created from class.
+            attr_exclude_prefixes = tuple(
+                f"_{clz.__name__}__"
+                for clz in source.__class__.mro()
+                if RegisteredInterface in clz.__bases__
+            )
+
+            # The following attributes are shared from the original, hence
+            # those shall be copied.
+            attr_includes = (
+                "_Instance__parameters",
+                "_Instance__depends_on",
+                "_PortPlugin__schema",
+                "_PortPlugin__connected_ports",
+            )
+
+            source_internals = Internals(source)
+            target_internals = Internals(target)
+
+            # This helper is necessary to identify, if a source attribute is
+            # actually a nested instance and if it exists on the target side
+            source_nested_instance_names_by_id = {
+                id(nested_instance): nested_instance_name
+                for nested_instance_name, nested_instance in source_internals.nested_instances.items()
+            }
+
+            # Loop through all attributes and deep copy them, however
+            # nested instances and excluded attributes are skipped.
+            for attr_name, attr_value in source.__dict__.items():
+                if attr_name.startswith(attr_exclude_prefixes) and (
+                    attr_name not in attr_includes
+                ):
+                    continue
+
+                # If the source attribute is a nested instance, and it exists on the target side
+                # then simply skip it. Nested instances shall be copied in the cases, where
+                # those are not part of the Operator's description, but have been added later
+                # either via update() or via direct attribute setting.
+                registered_nested_name = source_nested_instance_names_by_id.get(
+                    id(attr_value)
+                )
+                if (registered_nested_name is not None) and (
+                    registered_nested_name in target_internals.nested_instances
+                ):
+                    continue
+
+                setattr(
+                    target,
+                    attr_name,
+                    copy.deepcopy(attr_value, memo),
+                )
+
+            # Nested instances shall be treated differently, since most of them
+            # are created upon object creation, hence only attributes shall be copied.
+            for (
+                source_nested_instance_name,
+                source_nested_instance,
+            ) in source_internals.nested_instances.items():
+                if source_nested_instance_name not in target_internals.nested_instances:
+                    raise AttributeError(
+                        f"Replicated plugin ({source_nested_instance_name}) not found "
+                        f"in original operator ({self.__wrapped__.get_full_name()})"
+                    )
+                self._copy_attributes(
+                    source_nested_instance,
+                    target_internals.nested_instances[source_nested_instance_name],
+                    memo,
+                )
+
+        def __str__(self):
+            return yaml.safe_dump(
+                convert_to_dict(self.get_dto()), default_flow_style=False
+            )
+
+        def __eq__(self, other):
+            """
+            The equality check had to be adapted, since this is the only place, where
+            both original and replica objects can be represented, hence a common wrapping
+            of any super().__eq__ is not an option, otherwise the following equality
+            checks returned with inconsistent results:
+            - o == r1 -> True (will call :class:`Instance <pypz.core.specs.instance.Instance>`.__eq__)
+            - r1 == o -> False (will call :class:`Operator.Replica <pypz.core.specs.operator.Operator.Replica>`.__eq__)
+            - r1 == r2 -> False (will call :class:`Operator.Replica <pypz.core.specs.operator.Operator.Replica>`.__eq__)
+            Re-implementing the actual equality check solves this issue.
+            """
+            if self is other:
+                return True
+
+            if not isinstance(other, Operator):
+                return False
+
+            return (
+                self.get_full_name() == other.get_full_name()
+            ) and self.is_equivalent_to(other)
+
+        def __ne__(self, other):
+            result = self.__eq__(other)
+            if result is NotImplemented:
+                return NotImplemented
+            return not result
+
+        def __hash__(self):
+            """
+            This method simply wraps the originals method in replicate context, since
+            the get_full_name method is replica-aware.
+            """
+            return hash((self.get_full_name(), self._self_original_internals.spec_name))
 
     class Logger(ContextLoggerInterface):
         """
@@ -172,23 +406,19 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
     def __init__(self, name: str = None, *args, **kwargs):
         super().__init__(name, Plugin, *args, **kwargs)
 
-        internals = Internals(self)
-
-        self.__replication_origin: Optional[Operator] = internals.reference
+        self.__replication_origin: Optional[Operator] = kwargs.get(
+            "replication_origin", None
+        )
         """
         Reference to the original instance, which was the base for the replication
         """
 
-        self.__replicas: list[Operator] = []
+        self.__replicas: list[Operator.Replica] = []
         """
         List of replica instances
         """
 
-        self._replication_factor: int = (
-            0
-            if internals.reference is None
-            else internals.reference.get_replication_factor()
-        )
+        self._replication_factor: int = 0
         """
         PARAMETER - The replication factor specifies, how many replicas shall be created along
         the original instance.
@@ -305,7 +535,7 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
             self.__replication_origin is self
         )
 
-    def get_replica(self, replica_id: int) -> "Operator":
+    def get_replica(self, replica_id: int) -> "Operator.Replica":
         """
         Returns the replica instance by id. The id is the actual place in the
         replica list, which is ensured during the replica creation.
@@ -315,12 +545,12 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
         """
         return self.__replicas[replica_id]
 
-    def get_replicas(self) -> list["Operator"]:
+    def get_replicas(self) -> tuple["Operator.Replica", ...]:
         """
         :return: replica list
         """
 
-        return self.__replicas
+        return tuple(self.__replicas)
 
     def get_dto(self) -> OperatorInstanceDTO:
         connections = []
@@ -366,12 +596,7 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
         # Update connections
         # ==================
 
-        # Replicas shall not update connections as those are shared from the original
-        if (
-            (instance_dto.connections is not None)
-            and (self.get_context() is not None)
-            and self.is_principal()
-        ):
+        if instance_dto.connections and self.get_context():
             internals = Internals(self)
             for connection in instance_dto.connections:
                 if connection.inputPortName not in internals.nested_instances:
@@ -431,40 +656,31 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
         if 0 == difference:
             return
 
-        if 0 < difference:
+        context = self.get_context()
+
+        if difference > 0:
             if self.__replication_origin is None:
                 self.__replication_origin = self
                 self.__replication_group_index = 0
 
             for idx in range(len(self.__replicas), self._replication_factor):
-                replica_dto = self.get_dto()
-                replica_dto.name = self.get_simple_name() + "_" + str(idx)
+                replica = Operator.Replica(self, idx)
 
-                replica = Operator.create_from_dto(
-                    replica_dto,
-                    context=self.get_context(),
-                    reference=self,
-                    replication_group_index=idx + 1,
-                    mock_nonexistent=True,
-                )
+                if context is not None:
+                    context.__setattr__(replica.get_simple_name(), replica)
 
-                if self.get_context() is not None:
-                    self.get_context().__setattr__(replica.get_simple_name(), replica)
-
-                # We need to store the replicas in the internal replicas list, since
-                # that is the only place, where those can be found. Replicas are not
-                # direct part of the nested instances
                 self.__replicas.append(replica)
-        else:
-            replicas_to_remove = self.__replicas[difference:]
 
-            for replica in replicas_to_remove:
-                self.__replicas.remove(replica)
-                if self.get_context() is not None:
-                    del Internals(self.get_context()).nested_instances[
-                        replica.get_simple_name()
-                    ]
-                    self.get_context().__delattr__(replica.get_simple_name())
+        else:
+            for _ in range(-difference):
+                replica = self.__replicas.pop()
+
+                if context is not None:
+                    replica_name = replica.get_simple_name()
+                    Internals(context).nested_instances.pop(replica_name, None)
+
+                    if hasattr(context, replica_name):
+                        context.__delattr__(replica_name)
 
             if 0 == len(self.__replicas):
                 self.__replication_origin = None
