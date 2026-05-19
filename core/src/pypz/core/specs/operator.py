@@ -54,6 +54,21 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
     # ========================= inner class =========================
 
     class Replica(ObjectProxy, InstanceGroup):
+        """
+        This class represents an operator replica. Replication has two phases, in the
+        first phase a simple proxy of the original operator is being created by this
+        class. It routes every attribute access to the original except some replica
+        specific like name and name related attributes/methods. This prevents unnecessary
+        creation of fully fledged operator objects and ensures that every mutation
+        targets the original and hence all replicas. In the second phase, the replica
+        can be materialized i.e., a full-fledged individual operator object will be
+        created and all the relevant attributes will be copied. So the replica will
+        be identical to the original except the name and related attributes.
+
+        :param original: the original operator to be replicated
+        :param replica_index: the index of the replica
+        """
+
         def __init__(self, original: "Operator", replica_index: int):
             super().__init__(original)
             self._self_replica_index: int = replica_index
@@ -219,11 +234,11 @@ class Operator(Instance[Plugin], InstanceGroup, RegisteredInterface, ABC):
             """
             The equality check had to be adapted, since this is the only place, where
             both original and replica objects can be represented, hence a common wrapping
-            of any super().__eq__ was not an option, otherwise the following equality
+            of any super().__eq__ is not an option, otherwise the following equality
             checks returned with inconsistent results:
             - o == r1 -> True (will call :class:`Instance <pypz.core.specs.instance.Instance>`.__eq__)
-            - r1 == o -> False (will call :class:`Instance <pypz.core.specs.instance.ReplicaContext>`.__eq__)
-            - r1 == r2 -> False (will call :class:`Instance <pypz.core.specs.instance.ReplicaContext>`.__eq__)
+            - r1 == o -> False (will call :class:`Operator.Replica <pypz.core.specs.operator.Operator.Replica>`.__eq__)
+            - r1 == r2 -> False (will call :class:`Operator.Replica <pypz.core.specs.operator.Operator.Replica>`.__eq__)
             Re-implementing the actual equality check solves this issue.
             """
             if self is other:
