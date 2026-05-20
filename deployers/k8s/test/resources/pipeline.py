@@ -18,13 +18,12 @@ import time
 from typing import Any, Optional
 
 from pypz.core.commons.parameters import OptionalParameter
-from pypz.core.specs.operator import Operator
 from pypz.core.specs.pipeline import Pipeline
 from pypz.operators.k8s import KubernetesOperator
 from pypz.plugins.loggers.default import DefaultLoggerPlugin
 
 
-class TestOperator(Operator):
+class TestSimpleKubernetesOperator(KubernetesOperator):
 
     error = OptionalParameter(bool)
     env_var = OptionalParameter(str)
@@ -57,20 +56,20 @@ class TestOperator(Operator):
         pass
 
 
-class TestPipeline(Pipeline):
+class TestSimpleKubernetesPipeline(Pipeline):
 
     def __init__(self, name: str, *args, **kwargs):
         super().__init__(name, *args, **kwargs)
 
-        self.operator_a = TestOperator()
+        self.operator_a = TestSimpleKubernetesOperator()
         self.operator_a.set_parameter("replicationFactor", 1)
 
-        self.operator_b = TestOperator()
-        self.operator_c = TestOperator()
-        self.operator_d = TestOperator()
+        self.operator_b = TestSimpleKubernetesOperator()
+        self.operator_c = TestSimpleKubernetesOperator()
+        self.operator_d = TestSimpleKubernetesOperator()
 
 
-class TestKubernetesOperator(KubernetesOperator):
+class TestKubernetesOperatorWithCustomProbes(KubernetesOperator):
     mock_runtime_in_sec = OptionalParameter(int)
 
     def __init__(self, name: str = None, *args, **kwargs):
@@ -78,6 +77,16 @@ class TestKubernetesOperator(KubernetesOperator):
         self.logger = DefaultLoggerPlugin()
         self.logger.set_parameter("logLevel", "DEBUG")
         self.mock_runtime_in_sec: int = 10
+        self.readiness_probe: dict = {
+            "httpGet": {
+                "path": "/check",
+                "port": self.health_check.get_parameter("port"),
+            },
+            "initialDelaySeconds": 0,
+            "periodSeconds": 5,
+            "timeoutSeconds": 5,
+            "failureThreshold": 1,
+        }
 
     def _on_init(self) -> bool:
         return True
@@ -97,21 +106,8 @@ class TestKubernetesOperator(KubernetesOperator):
         pass
 
 
-class TestKubernetesPipeline(Pipeline):
+class TestKubernetesPipelineWithCustomProbes(Pipeline):
 
     def __init__(self, name: str, *args, **kwargs):
         super().__init__(name, *args, **kwargs)
-        self.op = TestKubernetesOperator()
-        self.op.set_parameter(
-            "readinessProbe",
-            {
-                "httpGet": {
-                    "path": "/check",
-                    "port": self.op.health_check.get_parameter("port"),
-                },
-                "initialDelaySeconds": 0,
-                "periodSeconds": 5,
-                "timeoutSeconds": 5,
-                "failureThreshold": 1,
-            },
-        )
+        self.op = TestKubernetesOperatorWithCustomProbes()
