@@ -40,6 +40,17 @@ Before you build, you will need to install the "build" package:
 pip install build
 ```
 
+Optionally, you might want to set a version for local testing. Using setuptools-scm, you can
+pretend a version via setting the following environment variable:
+
+```shell
+# Windows
+$env:SETUPTOOLS_SCM_PRETEND_VERSION_FOR_PYPZ_IO_SNIFFER="v1.2.3"
+
+# Linux
+export SETUPTOOLS_SCM_PRETEND_VERSION_FOR_PYPZ_IO_SNIFFER="v1.2.3"
+```
+
 Then from the subproject's root, you will need to execute the following command:
 
 ```shell
