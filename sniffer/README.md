@@ -44,7 +44,7 @@ Optionally, you might want to set a version for local testing. Using setuptools-
 pretend a version via setting the following environment variable:
 
 ```shell
-# Windows
+# Powershell
 $env:SETUPTOOLS_SCM_PRETEND_VERSION_FOR_PYPZ_IO_SNIFFER="v1.2.3"
 
 # Linux
