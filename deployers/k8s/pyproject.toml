@@ -44,3 +44,6 @@ static = [
 [tool.setuptools.packages.find]
 where = ["src", "test/resources"]
 namespaces = true
+
+[tool.setuptools_scm]
+root = "../.."

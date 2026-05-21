@@ -42,3 +42,6 @@ static = [
 [tool.setuptools.packages.find]
 where = ["src"]
 namespaces = true
+
+[tool.setuptools_scm]
+root = ".."
