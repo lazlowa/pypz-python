@@ -33,9 +33,9 @@ jobs:
             path: ./sniffer
             pypi-url: https://pypi.org/p/pypz-rmq-io
 
-#    environment:
-#      name: release
-#      url: ${{ matrix.package.pypi-url }}
+    environment:
+      name: test
+      url: ${{ matrix.package.pypi-url }}
 
     steps:
       - name: Checkout repository
@@ -44,7 +44,7 @@ jobs:
           fetch-depth: 0
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.11"
 
