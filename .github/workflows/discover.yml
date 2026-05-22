@@ -1,0 +1,61 @@
+name: Discover
+
+on: push
+
+jobs:
+  discover_packages:
+    name: Discover Python packages
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.discover.outputs.matrix }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: Discover packages
+        id: discover
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python <<'PY' >> "$GITHUB_OUTPUT"
+          import json
+          import pathlib
+          import tomllib
+
+          root = pathlib.Path(".")
+          packages = []
+
+          for pyproject in sorted(root.glob("**/pyproject.toml")):
+              # Skip the monorepo/root pyproject if it is not a publishable package.
+              if pyproject.parent == root:
+                  continue
+
+              data = tomllib.loads(pyproject.read_text())
+              project = data.get("project", {})
+              name = project.get("name")
+
+              # Only include actual Python distributions.
+              if not name:
+                  continue
+
+              packages.append({
+                  "name": name,
+                  "path": str(pyproject.parent),
+              })
+
+          if not packages:
+              raise SystemExit("No publishable packages found")
+
+          print("matrix=" + json.dumps({"package": packages}, separators=(",", ":")))
+          PY
+
+      - name: Show discovered matrix
+        run: echo '${{ steps.discover.outputs.matrix }}'
