@@ -33,9 +33,9 @@ jobs:
             path: ./sniffer
             pypi-url: https://pypi.org/p/pypz-rmq-io
 
-    environment:
-      name: release
-      url: ${{ matrix.package.pypi-url }}
+#    environment:
+#      name: release
+#      url: ${{ matrix.package.pypi-url }}
 
     steps:
       - name: Checkout repository
