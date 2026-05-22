@@ -11,24 +11,71 @@ permissions:
   packages: read
 
 jobs:
+  discover_packages:
+    name: Discover Python packages
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.discover.outputs.matrix }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: Discover packages
+        id: discover
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python <<'PY' >> "$GITHUB_OUTPUT"
+          import json
+          import pathlib
+          import tomllib
+
+          root = pathlib.Path(".")
+          packages = []
+
+          for pyproject in sorted(root.glob("**/pyproject.toml")):
+              if pyproject.parent == root:
+                  continue
+
+              data = tomllib.loads(pyproject.read_text())
+              project = data.get("project", {})
+              name = project.get("name")
+
+              # Only include actual Python distributions.
+              if not name:
+                  continue
+
+              packages.append({
+                  "name": name,
+                  "path": f"./{pyproject.parent}",
+              })
+
+          if not packages:
+              raise SystemExit("No publishable packages found")
+
+          print("matrix=" + json.dumps(packages, separators=(",", ":")))
+          PY
+
+      - name: Show discovered matrix
+        run: echo '${{ steps.discover.outputs.matrix }}'
+
   publish_artifacts:
+    needs: discover_packages
     name: ${{ matrix.package.name }}
     runs-on: ubuntu-latest
 
     strategy:
       fail-fast: false
       matrix:
-        package:
-          - name: pypz-core
-            path: ./core
-          - name: pypz-k8s-deployer
-            path: ./deployers/k8s
-          - name: pypz-kafka-io
-            path: ./plugins/kafka_io
-          - name: pypz-rmq-io
-            path: ./plugins/rmq_io
-          - name: pypz-io-sniffer
-            path: ./sniffer
+        package: ${{ fromJSON(needs.discover_packages.outputs.matrix) }}
 
     environment:
       name: test
