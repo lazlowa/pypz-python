@@ -68,7 +68,7 @@ jobs:
           name: artifacts
           path: ${{ matrix.package.path }}/dist/
 
-  publish_image_dev:
+  publish_docker:
     needs: publish_artifacts
     name: "Publish Docker Image :: ${{ matrix.revision }}"
     runs-on: ubuntu-latest
