@@ -70,9 +70,15 @@ jobs:
 
   publish_image_dev:
     needs: publish_artifacts
-    name: "Publish Docker Image :: Dev"
+    name: "Publish Docker Image :: ${{ matrix.revision }}"
     runs-on: ubuntu-latest
     environment: test
+    strategy:
+      fail-fast: false
+      matrix:
+        revision:
+          - dev
+          - alpine
     steps:
     - name: Checkout repository
       uses: actions/checkout@v5
@@ -105,8 +111,8 @@ jobs:
       uses: docker/build-push-action@v7
       with:
         context: .
-        file: .docker/Dockerfile_dev
+        file: .docker/Dockerfile_${{ matrix.revision }}
         push: true
         tags: |
-          pypz/${{ vars.DOCKER_IMAGE_NAME_PREFIX }}-dev:latest
-          pypz/${{ vars.DOCKER_IMAGE_NAME_PREFIX }}-dev:${{ env.PYPZ_VERSION }}
+          pypz/${{ vars.DOCKER_IMAGE_NAME_PREFIX }}-${{ matrix.revision }}:latest
+          pypz/${{ vars.DOCKER_IMAGE_NAME_PREFIX }}-${{ matrix.revision }}:${{ env.PYPZ_VERSION }}
