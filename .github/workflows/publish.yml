@@ -11,6 +11,7 @@ permissions:
 
 jobs:
   publish:
+    name: ${{ matrix.package.name }}
     runs-on: ubuntu-latest
 
     strategy:
@@ -19,23 +20,17 @@ jobs:
         package:
           - name: pypz-core
             path: ./core
-            pypi-url: https://pypi.org/p/pypz-core
           - name: pypz-k8s-deployer
             path: ./deployers/k8s
-            pypi-url: https://pypi.org/p/pypz-kafka-io
           - name: pypz-kafka-io
             path: ./plugins/kafka_io
-            pypi-url: https://pypi.org/p/pypz-kafka-io
           - name: pypz-rmq-io
             path: ./plugins/rmq_io
-            pypi-url: https://pypi.org/p/pypz-rmq-io
           - name: pypz-io-sniffer
             path: ./sniffer
-            pypi-url: https://pypi.org/p/pypz-rmq-io
 
     environment:
       name: test
-      url: ${{ matrix.package.pypi-url }}
 
     steps:
       - name: Checkout repository
@@ -59,3 +54,9 @@ jobs:
         run: |
           set -euo pipefail
           python -m build "${{ matrix.package.path }}"
+
+      - name: Publish
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: ${{ matrix.package.path }}/dist
+          repository-url: ${{ env.PYPI_REPOSITORY_URL }}/
