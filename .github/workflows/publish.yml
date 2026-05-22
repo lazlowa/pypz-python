@@ -1,24 +1,61 @@
-name: "Publish :: Core"
+name: Publish
 
 on:
   push:
     tags:
       - "v*"
 
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
-  core:
-    name: "Publish Core"
+  publish:
     runs-on: ubuntu-latest
 
+    strategy:
+      fail-fast: false
+      matrix:
+        package:
+          - name: pypz-core
+            path: ./core
+            pypi-url: https://pypi.org/p/pypz-core
+          - name: pypz-k8s-deployer
+            path: ./deployers/k8s
+            pypi-url: https://pypi.org/p/pypz-kafka-io
+          - name: pypz-kafka-io
+            path: ./plugins/kafka_io
+            pypi-url: https://pypi.org/p/pypz-kafka-io
+          - name: pypz-rmq-io
+            path: ./plugins/rmq_io
+            pypi-url: https://pypi.org/p/pypz-rmq-io
+          - name: pypz-io-sniffer
+            path: ./sniffer
+            pypi-url: https://pypi.org/p/pypz-rmq-io
+
+    environment:
+      name: release
+      url: ${{ matrix.package.pypi-url }}
+
     steps:
-    - uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-    - name: Set up Python 3.11
-      uses: actions/setup-python@v5
-      with:
-        python-version: "3.11"
-    - name: Publish
-      uses: ./.github/actions/publish
-      with:
-        path: ./core
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install build
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip build
+
+      - name: Build ${{ matrix.package.name }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m build "${{ matrix.package.path }}"
