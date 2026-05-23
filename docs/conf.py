@@ -32,6 +32,9 @@ extensions = [
 
 html_theme = "sphinx_rtd_theme"
 html_static_path = ["_static"]
+html_theme_options = {
+    "display_version": True,
+}
 
 inheritance_graph_attrs = dict(rankdir="TB", ratio="fill", size='"16.0, 10.0"')
 inheritance_node_attrs = dict(
