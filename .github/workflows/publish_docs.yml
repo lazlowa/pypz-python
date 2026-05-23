@@ -135,6 +135,15 @@ jobs:
               ])
           PY
 
+      - name: Show resolved version
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pypz.version import PROJECT_VERSION
+          print(PROJECT_VERSION)
+          PY
+
       - name: Build Indexes
         shell: bash
         run: |
@@ -179,7 +188,7 @@ jobs:
           sphinx-build ./docs ./docs/_build
 
       - name: Upload GitHub Pages artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: ./docs/_build
 
@@ -199,4 +208,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
