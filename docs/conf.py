@@ -1,4 +1,4 @@
-from pypz.version import PROJECT_VERSION
+# from pypz.version import PROJECT_VERSION
 
 # Configuration file for the Sphinx documentation builder.
 #
@@ -11,8 +11,8 @@ from pypz.version import PROJECT_VERSION
 project = "pypz"
 copyright = "2024, Laszlo Anka"
 author = "Laszlo Anka"
-version = PROJECT_VERSION
-release = PROJECT_VERSION
+version = "0.0.1"
+release = "0.0.2"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
