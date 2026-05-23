@@ -12,6 +12,7 @@ project = "pypz"
 copyright = "2024, Laszlo Anka"
 author = "Laszlo Anka"
 version = PROJECT_VERSION
+release = PROJECT_VERSION
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
