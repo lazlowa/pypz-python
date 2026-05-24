@@ -19,8 +19,8 @@ jobs:
       plugin_rmq_io: ${{ steps.changes.outputs.plugin_rmq_io }}
       sniffer: ${{ steps.changes.outputs.sniffer }}
     steps:
-      - uses: actions/checkout@v3
-      - uses: dorny/paths-filter@v2
+      - uses: actions/checkout@v5
+      - uses: dorny/paths-filter@v4
         id: changes
         with:
           filters: |
@@ -60,9 +60,9 @@ jobs:
     runs-on: ubuntu-latest
     if: needs.check-changes.outputs.core == 'true'
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v5
     - name: Set up Python 3.11
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6
       with:
         python-version: "3.11"
     - name: Install
@@ -96,9 +96,9 @@ jobs:
     runs-on: ubuntu-latest
     if: needs.check-changes.outputs.deployer_k8s == 'true'
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v5
     - name: Set up Python 3.11
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6
       with:
         python-version: "3.11"
     - name: Install
@@ -127,9 +127,9 @@ jobs:
     runs-on: ubuntu-latest
     if: needs.check-changes.outputs.plugin_kafka_io == 'true'
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v5
     - name: Set up Python 3.11
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6
       with:
         python-version: "3.11"
     - name: Install
@@ -152,9 +152,9 @@ jobs:
     runs-on: ubuntu-latest
     if: needs.check-changes.outputs.plugin_rmq_io == 'true'
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v5
     - name: Set up Python 3.11
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6
       with:
         python-version: "3.11"
     - name: Install
@@ -181,9 +181,9 @@ jobs:
     runs-on: ubuntu-latest
     if: needs.check-changes.outputs.sniffer == 'true'
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v5
     - name: Set up Python 3.11
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6
       with:
         python-version: "3.11"
     - name: Install
