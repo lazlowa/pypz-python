@@ -163,3 +163,148 @@ jobs:
         tags: |
           pypz/${{ vars.DOCKER_IMAGE_NAME_PREFIX }}-${{ matrix.revision }}:latest
           pypz/${{ vars.DOCKER_IMAGE_NAME_PREFIX }}-${{ matrix.revision }}:${{ env.PYPZ_VERSION }}
+
+  build_docs:
+    needs: discover_packages
+    name: "Build Docs"
+    runs-on: ubuntu-latest
+    environment: test
+
+    permissions:
+      contents: write
+
+    concurrency:
+      group: "pages"
+      cancel-in-progress: false
+
+    env:
+      PACKAGES_JSON: ${{ needs.discover_packages.outputs.packages }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: Install system dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y graphviz
+
+      - name: Install Python dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python -m pip install --upgrade pip
+          python -m pip install -r ./docs/requirements.txt
+
+      - name: Install discovered packages in editable mode
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python <<'PY'
+          import json
+          import os
+          import subprocess
+          import sys
+
+          packages = json.loads(os.environ["PACKAGES_JSON"])
+
+          for package in packages:
+              name = package["name"]
+              path = package["path"]
+
+              print(f"Installing {name} from {path} in editable mode")
+              subprocess.check_call([
+                  sys.executable,
+                  "-m",
+                  "pip",
+                  "install",
+                  "-e",
+                  path,
+              ])
+          PY
+
+      - name: Show resolved version
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pypz.version import PROJECT_VERSION
+          print(PROJECT_VERSION)
+          PY
+
+      - name: Build Indexes
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python <<'PY'
+          import json
+          import os
+          import pathlib
+          import subprocess
+
+          packages = json.loads(os.environ["PACKAGES_JSON"])
+
+          for package in packages:
+              name = package["name"]
+              source = pathlib.Path(package["source"])
+              docs_index = pathlib.Path(package["docs_index"])
+
+              if not source.exists():
+                  print(f"Skipping {name}: source path does not exist: {source}")
+                  continue
+
+              docs_index.mkdir(parents=True, exist_ok=True)
+
+              print(f"Building Sphinx API index for {name}")
+              subprocess.check_call([
+                  "sphinx-apidoc",
+                  "--implicit-namespaces",
+                  "-e",
+                  "-f",
+                  "--private",
+                  "-o",
+                  str(docs_index),
+                  str(source),
+              ])
+          PY
+
+      - name: Build HTML
+        shell: bash
+        run: |
+          set -euo pipefail
+          sphinx-build ./docs ./docs/_build
+
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: ./docs/_build
+
+  publish_docs:
+    needs: build_docs
+    name: "Publish Docs"
+    runs-on: ubuntu-latest
+
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
