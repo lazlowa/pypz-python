@@ -15,7 +15,7 @@ jobs:
     name: Discover Python packages
     runs-on: ubuntu-latest
     outputs:
-      matrix: ${{ steps.discover.outputs.matrix }}
+      packages: ${{ steps.discover.outputs.packages }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
@@ -49,19 +49,22 @@ jobs:
               project = data.get("project", {})
               name = project.get("name")
 
-              # Only include actual Python distributions.
               if not name:
                   continue
 
+              path = pyproject.parent
+
               packages.append({
                   "name": name,
-                  "path": f"./{pyproject.parent}",
+                  "path": f"./{path}",
+                  "source": f"./{path}/src/pypz",
+                  "docs_index": f"./docs/indexes/{path}",
               })
 
           if not packages:
               raise SystemExit("No publishable packages found")
 
-          print("matrix=" + json.dumps(packages, separators=(",", ":")))
+          print("packages=" + json.dumps(packages, separators=(",", ":")))
           PY
 
       - name: Show discovered matrix
@@ -75,7 +78,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        package: ${{ fromJSON(needs.discover_packages.outputs.matrix) }}
+        package: ${{ fromJSON(needs.discover_packages.outputs.packages) }}
 
     environment:
       name: test
