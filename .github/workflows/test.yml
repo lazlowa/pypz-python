@@ -115,7 +115,7 @@ jobs:
     - name: Waiting
       run: sleep 5
     - name: Build Test Image
-      run: docker build -t pypz-test-base -f deployers/k8s/test/resources/docker/Dockerfile .
+      run: docker build -t pypz-test-base --build-arg BUILD_VERSION=0.0.0 -f deployers/k8s/test/resources/docker/Dockerfile .
     - name: Load Test Image
       run: kind load docker-image pypz-test-base
     - name: Test
