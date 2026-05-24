@@ -80,8 +80,7 @@ jobs:
       matrix:
         package: ${{ fromJSON(needs.discover_packages.outputs.packages) }}
 
-    environment:
-      name: test
+    environment: release
 
     steps:
       - name: Checkout repository
@@ -122,7 +121,7 @@ jobs:
     needs: publish_artifacts
     name: "Publish Docker Image :: ${{ matrix.revision }}"
     runs-on: ubuntu-latest
-    environment: test
+    environment: release
     strategy:
       fail-fast: false
       matrix:
@@ -171,7 +170,7 @@ jobs:
     needs: discover_packages
     name: "Build Docs"
     runs-on: ubuntu-latest
-    environment: test
+    environment: release
 
     permissions:
       contents: write
