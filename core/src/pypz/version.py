@@ -14,4 +14,19 @@
 # limitations under the License.
 # =============================================================================
 
-PROJECT_VERSION = "0.9.6"
+import os
+from importlib.metadata import PackageNotFoundError, version
+
+
+def resolve_project_version(dist_name: str) -> str:
+    override = os.getenv("PYPZ_VERSION_OVERRIDE")
+    if override:
+        return override.removeprefix("v")
+
+    try:
+        return version(dist_name)
+    except PackageNotFoundError:
+        return "0.0.0"
+
+
+PROJECT_VERSION = resolve_project_version("pypz-core")

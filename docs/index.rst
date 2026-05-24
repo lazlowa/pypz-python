@@ -6,6 +6,8 @@
 Welcome to pypz's documentation!
 ================================
 
+Version: |release|
+
 .. toctree::
    :maxdepth: 1
    :caption: General
