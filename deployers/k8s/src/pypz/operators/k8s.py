@@ -14,13 +14,17 @@
 # limitations under the License.
 # =============================================================================
 from abc import ABC
+from typing import cast
 
+import yaml
 from pypz.core.commons.parameters import OptionalParameter
+from pypz.core.specs.dtos import OperatorInstanceDTO
+from pypz.core.specs.instance import Instance, RegisteredInterface
 from pypz.core.specs.operator import Operator
 from pypz.plugins.misc.health_check import HttpHealthCheckPlugin
 
 
-class KubernetesOperator(Operator, ABC):
+class KubernetesOperator(Operator, RegisteredInterface, ABC):
     image_pull_policy = OptionalParameter(str, alt_name="imagePullPolicy")
     restart_policy = OptionalParameter(str, alt_name="restartPolicy")
     env = OptionalParameter(list[dict], alt_name="env")
@@ -101,3 +105,19 @@ class KubernetesOperator(Operator, ABC):
             "timeoutSeconds": 5,
             "failureThreshold": 20,
         }
+
+    # ========= static methods ==========
+
+    @staticmethod
+    def create_from_dto(
+        instance_dto: OperatorInstanceDTO, *args, **kwargs
+    ) -> "Operator":
+        return cast(
+            KubernetesOperator, Instance.create_from_dto(instance_dto, *args, **kwargs)
+        )
+
+    @staticmethod
+    def create_from_string(source, *args, **kwargs) -> "Operator":
+        return KubernetesOperator.create_from_dto(
+            OperatorInstanceDTO(**yaml.safe_load(source)), *args, **kwargs
+        )
