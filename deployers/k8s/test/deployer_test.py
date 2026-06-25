@@ -27,6 +27,7 @@ from kubernetes.client import (
     V1Secret,
 )
 from pypz.core.specs.operator import Operator
+from pypz.core.specs.pipeline import Pipeline
 from pypz.core.specs.utils import Internals
 from pypz.deployers.base import DeploymentState
 from pypz.deployers.k8s import DeploymentConflictException, KubernetesDeployer
@@ -371,6 +372,76 @@ class KubernetesDeployerTest(unittest.TestCase):
         )
 
         self.assertEqual(pipeline, deployed_pipeline)
+
+    def test_retrieve_deployed_pipeline_with_mock(self):
+        pipeline_json = """
+            dependsOn: []
+            name: pipeline112
+            parameters: {}
+            spec:
+              expectedParameters: {}
+              location: null
+              name: dummy:DemoPipeline
+              nestedInstanceType: <class 'pypz.core.specs.operator.Operator'>
+              nestedInstances:
+              - connections: []
+                dependsOn: []
+                name: operator
+                parameters:
+                  operatorImageName: pypz-test-base
+                  replicationFactor: 0
+                spec:
+                  expectedParameters:
+                    operatorImageName:
+                      currentValue: pypz-test-base
+                      description: The image containing the operator's resources. It will be used
+                        mainly by the deployers.
+                      required: false
+                      type: str
+                    replicationFactor:
+                      currentValue: 0
+                      description: Determines, how many replicas shall be created from the original.
+                      required: false
+                      type: int
+                  location: null
+                  name: dummy:DemoOperator
+                  nestedInstanceType: <class 'pypz.core.specs.plugin.Plugin'>
+                  nestedInstances: []
+                  types:
+                  - <class 'pypz.operators.k8s.Operator'>
+                  - <class 'pypz.operators.k8s.KubernetesOperator'>
+              types:
+              - <class 'pypz.core.specs.pipeline.Pipeline'>
+        """
+
+        pipeline = Pipeline.create_from_string(pipeline_json, mock_nonexistent=True)
+        pipeline.set_parameter(">imagePullPolicy", "Never")
+
+        kubernetes_deployer_no_mock: KubernetesDeployer = KubernetesDeployer(
+            namespace=KubernetesDeployerTest.test_namespace,
+            configuration=Configuration.get_default_copy(),
+        )
+
+        kubernetes_deployer_with_mock: KubernetesDeployer = KubernetesDeployer(
+            namespace=KubernetesDeployerTest.test_namespace,
+            configuration=Configuration.get_default_copy(),
+            mock_nonexistent_at_retrieval=True,
+        )
+
+        kubernetes_deployer_with_mock.deploy(pipeline)
+
+        time.sleep(1)
+
+        with self.assertRaises(ModuleNotFoundError):
+            kubernetes_deployer_no_mock.retrieve_deployed_pipeline(
+                pipeline.get_full_name()
+            )
+
+        deployed_pipeline = kubernetes_deployer_with_mock.retrieve_deployed_pipeline(
+            pipeline.get_full_name()
+        )
+
+        self.assertTrue(pipeline.is_equivalent_to(deployed_pipeline))
 
     def test_retrieve_operator_state_all_normal(self):
         pipeline = TestSimpleKubernetesPipeline("pipeline12")

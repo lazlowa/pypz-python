@@ -15,6 +15,7 @@
 # =============================================================================
 import base64
 import time
+import traceback
 from typing import Any, Optional
 
 import certifi
@@ -71,7 +72,12 @@ class KubernetesDeployer(Deployer):
         configuration: Configuration = None,
         config_file: Any = None,
         verify_ssl: bool = True,
+        mock_nonexistent_at_retrieval: bool = False,
     ):
+        # If true, then the retrieval will mock modules not existing in the
+        # deployer's session
+        self._mock_nonexistent_at_retrieval: bool = mock_nonexistent_at_retrieval
+
         if configuration is None:
             config.load_kube_config(config_file=config_file)
             configuration = Configuration.get_default_copy()
@@ -185,6 +191,8 @@ class KubernetesDeployer(Deployer):
         except Exception as e:
             if isinstance(e, ApiException):
                 self._logger.error(f"Status: {e.status}; Reason: {e.reason}")
+            else:
+                self._logger.error(f"Deployment error:\n{traceback.format_exc()}")
 
             self._logger.error("Rolling back deployment ...")
 
@@ -436,7 +444,8 @@ class KubernetesDeployer(Deployer):
             )
 
         return Pipeline.create_from_string(
-            base64.b64decode(secret.data[pipeline_config_secret_key])
+            base64.b64decode(secret.data[pipeline_config_secret_key]),
+            mock_nonexistent=self._mock_nonexistent_at_retrieval,
         )
 
     def _retrieve_operator_pod(self, operator_full_name: str) -> Optional[V1Pod]:

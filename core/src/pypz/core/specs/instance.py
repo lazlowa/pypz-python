@@ -567,7 +567,7 @@ class Instance(
 
         :param other: other instance to compare
         """
-        if not isinstance(other, type(self)):
+        if not isinstance(other, Instance):
             return False
 
         if self.__spec_name != other.__spec_name:
