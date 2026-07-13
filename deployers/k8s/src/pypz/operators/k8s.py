@@ -41,8 +41,8 @@ class KubernetesOperator(Operator, RegisteredInterface, ABC):
         dict, alt_name="containerSecurityContext"
     )
     pod_security_context = OptionalParameter(dict, alt_name="podSecurityContext")
-    host_affinity = OptionalParameter(dict, alt_name="hostAffinity")
-    host_anti_affinity = OptionalParameter(dict, alt_name="hostAntiAffinity")
+    host_affinity = OptionalParameter(list, alt_name="hostAffinity")
+    host_anti_affinity = OptionalParameter(list, alt_name="hostAntiAffinity")
     node_affinity = OptionalParameter(dict, alt_name="nodeAffinity")
     node_anti_affinity = OptionalParameter(dict, alt_name="nodeAntiAffinity")
     node_selector = OptionalParameter(dict, alt_name="nodeSelector")
